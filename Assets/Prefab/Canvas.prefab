@@ -862,6 +862,7 @@ MonoBehaviour:
   stopButton: {fileID: 7103286392124410578}
   moveSpeed: 300
   greenZoneWidth: 100
+  popupResultPrefab: {fileID: 6792498514303082991, guid: ef1022d52a2a5d147a3c0c5a32a9c133, type: 3}
 --- !u!1 &6558269749255491187
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
+
 public class PopupO2 : MonoBehaviour
 {
     public static PopupO2 Instance;
@@ -9,16 +10,19 @@ public class PopupO2 : MonoBehaviour
     [Header("UI References")]
     public GameObject popupPanel;
     public Button offOnButton;
-    public TextMeshProUGUI buttonText;               // Jika pakai Text biasa, ganti dengan TMPro jika perlu
+    public TextMeshProUGUI buttonText;
     public GameObject timingPanel;
-    public RectTransform barCursor;       // Cursor (garis)
-    public RectTransform barBackground;   // GameObject Merah (background bar)
-    public RectTransform greenZone;       // GameObject Ijo (zona hijau)
+    public RectTransform barCursor;
+    public RectTransform barBackground;
+    public RectTransform greenZone;
     public Button stopButton;
 
     [Header("Timing Settings")]
-    public float moveSpeed = 300f;        // Kecepatan gerak (pixel/detik)
-    public float greenZoneWidth = 100f;   // Lebar zona hijau (jika tidak otomatis dari Ijo)
+    public float moveSpeed = 300f;
+    public float greenZoneWidth = 100f;
+
+    [Header("Popup Result Prefab")]
+    public GameObject popupResultPrefab;   // Assign prefab PopupResultO2
 
     private bool isOn = false;
     private bool isPlaying = false;
@@ -26,6 +30,7 @@ public class PopupO2 : MonoBehaviour
     private float leftBound, rightBound;
     private int direction = 1;
     private TambakController currentTambak;
+    private bool isStopped = false; // mencegah double stop
 
     void Awake()
     {
@@ -50,14 +55,10 @@ public class PopupO2 : MonoBehaviour
 
         if (barBackground != null && barCursor != null)
         {
-            // Pastikan cursor dan background memiliki parent yang sama
-            // Hitung batas kiri dan kanan background (dalam koordinat parent)
             float bgLeft = barBackground.anchoredPosition.x - (barBackground.rect.width / 2f);
             float bgRight = barBackground.anchoredPosition.x + (barBackground.rect.width / 2f);
             leftBound = bgLeft;
             rightBound = bgRight;
-            
-            // Posisikan cursor di batas kiri
             cursorPosX = leftBound;
             barCursor.anchoredPosition = new Vector2(cursorPosX, barCursor.anchoredPosition.y);
         }
@@ -72,11 +73,11 @@ public class PopupO2 : MonoBehaviour
         currentTambak = tambak;
         isOn = false;
         isPlaying = false;
+        isStopped = false;
         buttonText.text = "OFF";
         timingPanel.SetActive(false);
         stopButton.interactable = false;
         popupPanel.SetActive(true);
-        // Reset posisi cursor ke kiri
         cursorPosX = leftBound;
         barCursor.anchoredPosition = new Vector2(cursorPosX, barCursor.anchoredPosition.y);
     }
@@ -121,12 +122,13 @@ public class PopupO2 : MonoBehaviour
 
     void OnStopClicked()
     {
-        if (!isPlaying) return;
+        if (!isPlaying || isStopped) return;
         isPlaying = false;
+        isStopped = true;
         StopAllCoroutines();
 
+        // Tentukan apakah sukses
         bool success = false;
-        // Menentukan apakah posisi cursor berada di dalam zona hijau
         if (greenZone != null)
         {
             float greenLeft = greenZone.anchoredPosition.x - (greenZone.rect.width / 2);
@@ -135,21 +137,52 @@ public class PopupO2 : MonoBehaviour
         }
         else
         {
-            // Fallback: zona hijau di tengah dengan lebar greenZoneWidth
             float center = (leftBound + rightBound) / 2f;
             float greenLeft = center - greenZoneWidth / 2f;
             float greenRight = center + greenZoneWidth / 2f;
             success = (cursorPosX >= greenLeft && cursorPosX <= greenRight);
         }
 
-        popupPanel.SetActive(false);
+        // Sembunyikan panel minigame dulu (biar fokus ke popup hasil)
+        timingPanel.SetActive(false);
+        stopButton.interactable = false;
 
-        if (currentTambak != null)
+        // Tampilkan popup hasil
+        if (popupResultPrefab != null)
         {
-            if (success)
-                currentTambak.OnO2MinigameSuccess();
-            else
-                currentTambak.OnO2MinigameFail();
+            // Cari canvas utama (bisa dari popupPanel parent canvas)
+            Canvas canvas = popupPanel.GetComponentInParent<Canvas>();
+            if (canvas == null) canvas = FindObjectOfType<Canvas>();
+
+            GameObject resultObj = Instantiate(popupResultPrefab, canvas.transform);
+            var resultScript = resultObj.GetComponent<PopupResultO2>();
+            if (resultScript != null)
+            {
+                resultScript.Setup(success, () => {
+                    // Callback setelah tombol "Kembali" ditekan
+                    popupPanel.SetActive(false); // tutup popup minigame
+                    if (currentTambak != null)
+                    {
+                        if (success)
+                            currentTambak.OnO2MinigameSuccess();
+                        else
+                            currentTambak.OnO2MinigameFail();
+                    }
+                });
+            }
+        }
+        else
+        {
+            // Fallback jika prefab tidak di-assign: langsung callback
+            Debug.LogWarning("PopupResultPrefab tidak di-assign, langsung callback.");
+            popupPanel.SetActive(false);
+            if (currentTambak != null)
+            {
+                if (success)
+                    currentTambak.OnO2MinigameSuccess();
+                else
+                    currentTambak.OnO2MinigameFail();
+            }
         }
     }
 }
