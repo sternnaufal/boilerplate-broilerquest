@@ -1,0 +1,10 @@
+# Unity generated folders
+Temp/
+Library/
+Logs/
+Obj/
+Build/
+.vs/
+*.user
+*.csproj
+*.sln
