@@ -6,7 +6,19 @@ using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance { get; private set; }
+    private static UIManager _instance;
+    public static UIManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject go = new GameObject("UIManager");
+                _instance = go.AddComponent<UIManager>();
+            }
+            return _instance;
+        }
+    }
 
     [Header("UI Panels")]
     public GameObject mainMenuPanel;
@@ -34,35 +46,19 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton pattern
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
+        if (_instance != null && _instance != this)
         {
             Destroy(gameObject);
             return;
         }
-
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
         InitializeUI();
     }
 
     private void InitializeUI()
     {
-        // Create UI if not assigned via inspector
-        if (mainMenuPanel == null)
-        {
-            CreateMainMenuUI();
-        }
-        else
-        {
-            // Set up button listeners if references exist
-            SetupButtonListeners();
-        }
-
-        // Start with main menu visible
+        CreateMainMenuUI();
         ShowMainMenu();
     }
 
