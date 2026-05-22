@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.gladekit.mcp-bridge": "file:C:/Users/ASUS/Downloads/glade-mcp-unity-0.6.3/glade-mcp-unity-0.6.3/unity-bridge",
     "com.unity.2d.animation": "13.0.4",
     "com.unity.2d.aseprite": "3.0.1",
     "com.unity.2d.psdimporter": "12.0.1",

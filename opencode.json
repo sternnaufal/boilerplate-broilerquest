@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "gladekit": {
+      "type": "local",
+      "command": ["uvx", "gladekit-mcp"],
+      "enabled": true
+    }
+  }
+}

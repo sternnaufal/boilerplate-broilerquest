@@ -140,11 +140,12 @@ public class UIManager : MonoBehaviour
     {
         GameObject panel = new GameObject(name);
         panel.transform.SetParent(parent, false);
-        panel.AddComponent<RectTransform>().anchorMin = Vector2.zero;
-        panel.GetComponent<RectTransform>().anchorMax = Vector2.one;
-        panel.GetComponent<RectTransform>().offsetMin = Vector2.zero;
-        panel.GetComponent<RectTransform>().offsetMax = Vector2.zero;
-        panel.AddComponent<Image>().color = new Color(0, 0, 0, 0.5f); // semi-transparent black
+        panel.AddComponent<Image>().color = new Color(0, 0, 0, 0.5f);
+        RectTransform rt = panel.GetComponent<RectTransform>();
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
         return panel;
     }
 
@@ -237,13 +238,13 @@ public class UIManager : MonoBehaviour
     {
         GameObject go = new GameObject(name);
         go.transform.SetParent(parent, false);
-        RectTransform rt = go.AddComponent<RectTransform>();
+        Text uiText = go.AddComponent<Text>();
+        RectTransform rt = go.GetComponent<RectTransform>();
         rt.anchorMin = new Vector2(0.5f, 0.5f);
         rt.anchorMax = new Vector2(0.5f, 0.5f);
         rt.anchoredPosition = anchoredPosition;
         rt.sizeDelta = new Vector2(400, 50);
 
-        Text uiText = go.AddComponent<Text>();
         uiText.text = text;
         uiText.fontSize = fontSize;
         uiText.alignment = alignment;
@@ -256,13 +257,13 @@ public class UIManager : MonoBehaviour
     {
         GameObject go = new GameObject(name);
         go.transform.SetParent(parent, false);
-        RectTransform rt = go.AddComponent<RectTransform>();
+        go.AddComponent<Image>().color = new Color(0.2f, 0.2f, 0.2f, 0.8f);
+        RectTransform rt = go.GetComponent<RectTransform>();
         rt.anchorMin = new Vector2(0.5f, 0.5f);
         rt.anchorMax = new Vector2(0.5f, 0.5f);
         rt.anchoredPosition = anchoredPosition;
         rt.sizeDelta = size;
 
-        go.AddComponent<Image>().color = new Color(0.2f, 0.2f, 0.2f, 0.8f);
         Button btn = go.AddComponent<Button>();
         if (onClick != null)
             btn.onClick.AddListener(onClick);
@@ -270,12 +271,12 @@ public class UIManager : MonoBehaviour
         // Button label
         GameObject labelGo = new GameObject("Label");
         labelGo.transform.SetParent(go.transform, false);
-        RectTransform labelRt = labelGo.AddComponent<RectTransform>();
+        Text labelText = labelGo.AddComponent<Text>();
+        RectTransform labelRt = labelGo.GetComponent<RectTransform>();
         labelRt.anchorMin = Vector2.zero;
         labelRt.anchorMax = Vector2.one;
         labelRt.offsetMin = Vector2.zero;
         labelRt.offsetMax = Vector2.zero;
-        Text labelText = labelGo.AddComponent<Text>();
         labelText.text = buttonText;
         labelText.fontSize = 24;
         labelText.alignment = TextAnchor.MiddleCenter;
@@ -288,48 +289,47 @@ public class UIManager : MonoBehaviour
     {
         GameObject go = new GameObject(name);
         go.transform.SetParent(parent, false);
-        RectTransform rt = go.AddComponent<RectTransform>();
+
+        Slider slider = go.AddComponent<Slider>();
+        RectTransform rt = go.GetComponent<RectTransform>();
         rt.anchorMin = new Vector2(0.5f, 0.5f);
         rt.anchorMax = new Vector2(0.5f, 0.5f);
         rt.anchoredPosition = anchoredPosition;
         rt.sizeDelta = size;
 
-        Slider slider = go.AddComponent<Slider>();
         // Background
         GameObject bgGo = new GameObject("Background");
         bgGo.transform.SetParent(go.transform, false);
         Image bgImg = bgGo.AddComponent<Image>();
+        RectTransform bgRt = bgGo.GetComponent<RectTransform>();
         bgImg.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-        RectTransform bgRt = bgGo.AddComponent<RectTransform>();
         bgRt.anchorMin = Vector2.zero;
         bgRt.anchorMax = Vector2.one;
         bgRt.offsetMin = Vector2.zero;
         bgRt.offsetMax = Vector2.zero;
-        slider.targetGraphic = bgImg;
-        slider.fillRect = bgGo.GetComponent<RectTransform>();
 
         // Fill Area
         GameObject fillGo = new GameObject("Fill Area");
         fillGo.transform.SetParent(go.transform, false);
         Image fillImg = fillGo.AddComponent<Image>();
+        RectTransform fillRt = fillGo.GetComponent<RectTransform>();
         fillImg.color = new Color(0.8f, 0.8f, 0.8f, 1f);
-        RectTransform fillRt = fillGo.AddComponent<RectTransform>();
         fillRt.anchorMin = Vector2.zero;
         fillRt.anchorMax = Vector2.one;
         fillRt.offsetMin = Vector2.zero;
         fillRt.offsetMax = Vector2.zero;
-        slider.fillRect = fillGo.GetComponent<RectTransform>();
+        slider.fillRect = fillRt;
 
         // Handle
         GameObject handleGo = new GameObject("Handle");
         handleGo.transform.SetParent(go.transform, false);
         Image handleImg = handleGo.AddComponent<Image>();
+        RectTransform handleRt = handleGo.GetComponent<RectTransform>();
         handleImg.color = Color.white;
-        RectTransform handleRt = handleGo.AddComponent<RectTransform>();
-        handleRt.anchorMin = Vector2.zero;
-        handleRt.anchorMax = Vector2.one;
-        handleRt.sizeDelta = new Vector2(20, 20);
-        slider.handleRect = handleGo.GetComponent<RectTransform>();
+        handleRt.anchorMin = new Vector2(0f, 0f);
+        handleRt.anchorMax = new Vector2(0f, 1f);
+        handleRt.sizeDelta = new Vector2(20, 0);
+        slider.handleRect = handleRt;
 
         return slider;
     }
