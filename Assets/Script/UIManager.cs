@@ -1,0 +1,411 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Collections;
+
+public class UIManager : MonoBehaviour
+{
+    public static UIManager Instance { get; private set; }
+
+    [Header("UI Panels")]
+    public GameObject mainMenuPanel;
+    public GameObject optionsPanel;
+    public GameObject pausePanel;
+    public GameObject hudPanel; // HUD during gameplay
+
+    [Header("Main Menu Buttons")]
+    public Button startButton;
+    public Button optionsButton;
+    public Button exitButton;
+
+    [Header("Options Menu")]
+    public Button backToMainButton;
+    public Slider musicVolumeSlider;
+    public Slider sfxVolumeSlider;
+
+    [Header("Pause Menu")]
+    public Button resumeButton;
+    public Button pauseOptionsButton;
+    public Button pauseMainMenuButton;
+
+    [Header("HUD")]
+    public Button pauseButton;
+
+    private void Awake()
+    {
+        // Singleton pattern
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        InitializeUI();
+    }
+
+    private void InitializeUI()
+    {
+        // Create UI if not assigned via inspector
+        if (mainMenuPanel == null)
+        {
+            CreateMainMenuUI();
+        }
+        else
+        {
+            // Set up button listeners if references exist
+            SetupButtonListeners();
+        }
+
+        // Start with main menu visible
+        ShowMainMenu();
+    }
+
+    private void CreateMainMenuUI()
+    {
+        // Create Canvas if not exists
+        GameObject canvasObj = GameObject.Find("Canvas");
+        Canvas canvas;
+        if (canvasObj == null)
+        {
+            canvasObj = new GameObject("Canvas");
+            canvas = canvasObj.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvasObj.AddComponent<CanvasScaler>();
+            canvasObj.AddComponent<GraphicRaycaster>();
+        }
+        else
+        {
+            canvas = canvasObj.GetComponent<Canvas>();
+        }
+
+        // Create UIManager object if not exists (this gameObject)
+        if (this.gameObject.name != "UIManager")
+        {
+            this.gameObject.name = "UIManager";
+        }
+
+        // Create panels
+        mainMenuPanel = CreatePanel("MainMenuPanel", canvasObj.transform);
+        optionsPanel = CreatePanel("OptionsPanel", canvasObj.transform);
+        pausePanel = CreatePanel("PausePanel", canvasObj.transform);
+        hudPanel = CreatePanel("HUDPanel", canvasObj.transform);
+
+        // Setup Main Menu
+        SetupMainMenu(mainMenuPanel.transform);
+        // Setup Options Menu
+        SetupOptionsMenu(optionsPanel.transform);
+        // Setup Pause Menu
+        SetupPauseMenu(pausePanel.transform);
+        // Setup HUD
+        SetupHUD(hudPanel.transform);
+
+        // Hide all panels initially
+        HideAllPanels();
+    }
+
+    private GameObject CreatePanel(string name, Transform parent)
+    {
+        GameObject panel = new GameObject(name);
+        panel.transform.SetParent(parent, false);
+        panel.AddComponent<RectTransform>().anchorMin = Vector2.zero;
+        panel.GetComponent<RectTransform>().anchorMax = Vector2.one;
+        panel.GetComponent<RectTransform>().offsetMin = Vector2.zero;
+        panel.GetComponent<RectTransform>().offsetMax = Vector2.zero;
+        panel.AddComponent<Image>().color = new Color(0, 0, 0, 0.5f); // semi-transparent black
+        return panel;
+    }
+
+    private void SetupButtonListeners()
+    {
+        if (startButton != null)
+            startButton.onClick.AddListener(StartGame);
+        if (optionsButton != null)
+            optionsButton.onClick.AddListener(ShowOptions);
+        if (exitButton != null)
+            exitButton.onClick.AddListener(ExitGame);
+        if (backToMainButton != null)
+            backToMainButton.onClick.AddListener(ShowMainMenu);
+        if (resumeButton != null)
+            resumeButton.onClick.AddListener(ResumeGame);
+        if (pauseOptionsButton != null)
+            pauseOptionsButton.onClick.AddListener(ShowOptionsFromPause);
+        if (pauseMainMenuButton != null)
+            pauseMainMenuButton.onClick.AddListener(ReturnToMainMenuFromPause);
+        if (pauseButton != null)
+            pauseButton.onClick.AddListener(PauseGame);
+
+        if (musicVolumeSlider != null)
+            musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
+        if (sfxVolumeSlider != null)
+            sfxVolumeSlider.onValueChanged.AddListener(SetSFXVolume);
+    }
+
+    private void SetupMainMenu(Transform panelTransform)
+    {
+        // Title
+        CreateUIText(panelTransform, "Main Title", "BoilerQuest", 48, new Vector2(0, 200), TextAnchor.MiddleCenter);
+
+        // Start Button
+        startButton = CreateUIButton(panelTransform, "Start Button", "Start Game", new Vector2(0, 0), new Vector2(200, 50), onClick: StartGame);
+
+        // Options Button
+        optionsButton = CreateUIButton(panelTransform, "Options Button", "Options", new Vector2(0, -80), new Vector2(200, 50), onClick: ShowOptions);
+
+        // Exit Button
+        exitButton = CreateUIButton(panelTransform, "Exit Button", "Exit", new Vector2(0, -160), new Vector2(200, 50), onClick: ExitGame);
+    }
+
+    private void SetupOptionsMenu(Transform panelTransform)
+    {
+        // Title
+        CreateUIText(panelTransform, "Options Title", "Options", 36, new Vector2(0, 200), TextAnchor.MiddleCenter);
+
+        // Music Volume
+        CreateUIText(panelTransform, "MusicLabel", "Music Volume", 24, new Vector2(-200, 100), TextAnchor.MiddleLeft);
+        musicVolumeSlider = CreateUISlider(panelTransform, "MusicSlider", new Vector2(0, 100), new Vector2(200, 20));
+        musicVolumeSlider.minValue = 0f;
+        musicVolumeSlider.maxValue = 1f;
+        musicVolumeSlider.value = 0.8f;
+
+        // SFX Volume
+        CreateUIText(panelTransform, "SFXLabel", "SFX Volume", 24, new Vector2(-200, 0), TextAnchor.MiddleLeft);
+        sfxVolumeSlider = CreateUISlider(panelTransform, "SFXSlider", new Vector2(0, 0), new Vector2(200, 20));
+        sfxVolumeSlider.minValue = 0f;
+        sfxVolumeSlider.maxValue = 1f;
+        sfxVolumeSlider.value = 0.8f;
+
+        // Back Button
+        backToMainButton = CreateUIButton(panelTransform, "BackButton", "Back", new Vector2(0, -160), new Vector2(200, 50), onClick: ShowMainMenu);
+    }
+
+    private void SetupPauseMenu(Transform panelTransform)
+    {
+        // Title
+        CreateUIText(panelTransform, "PauseTitle", "Paused", 36, new Vector2(0, 200), TextAnchor.MiddleCenter);
+
+        // Resume Button
+        resumeButton = CreateUIButton(panelTransform, "ResumeButton", "Resume", new Vector2(0, 0), new Vector2(200, 50), onClick: ResumeGame);
+
+        // Options Button
+        pauseOptionsButton = CreateUIButton(panelTransform, "PauseOptionsButton", "Options", new Vector2(0, -80), new Vector2(200, 50), onClick: ShowOptionsFromPause);
+
+        // Main Menu Button
+        pauseMainMenuButton = CreateUIButton(panelTransform, "PauseMainMenuButton", "Main Menu", new Vector2(0, -160), new Vector2(200, 50), onClick: ReturnToMainMenuFromPause);
+    }
+
+    private void SetupHUD(Transform panelTransform)
+    {
+        // Pause Button (top-right corner)
+        pauseButton = CreateUIButton(panelTransform, "PauseButton", "||", new Vector2(180, 180), new Vector2(60, 60), onClick: PauseGame);
+        // Optionally, you can add coin display, timer, etc. here
+    }
+
+    private void CreateUIText(Transform parent, string name, string text, int fontSize, Vector2 anchoredPosition, TextAnchor alignment)
+    {
+        GameObject go = new GameObject(name);
+        go.transform.SetParent(parent, false);
+        RectTransform rt = go.AddComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0.5f, 0.5f);
+        rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = anchoredPosition;
+        rt.sizeDelta = new Vector2(400, 50);
+
+        Text uiText = go.AddComponent<Text>();
+        uiText.text = text;
+        uiText.fontSize = fontSize;
+        uiText.alignment = alignment;
+        uiText.color = Color.white;
+        uiText.horizontalOverflow = HorizontalWrapMode.Overflow;
+        uiText.verticalOverflow = VerticalWrapMode.Truncate;
+    }
+
+    private Button CreateUIButton(Transform parent, string name, string buttonText, Vector2 anchoredPosition, Vector2 size, UnityEngine.Events.UnityAction onClick = null)
+    {
+        GameObject go = new GameObject(name);
+        go.transform.SetParent(parent, false);
+        RectTransform rt = go.AddComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0.5f, 0.5f);
+        rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = anchoredPosition;
+        rt.sizeDelta = size;
+
+        go.AddComponent<Image>().color = new Color(0.2f, 0.2f, 0.2f, 0.8f);
+        Button btn = go.AddComponent<Button>();
+        if (onClick != null)
+            btn.onClick.AddListener(onClick);
+
+        // Button label
+        GameObject labelGo = new GameObject("Label");
+        labelGo.transform.SetParent(go.transform, false);
+        RectTransform labelRt = labelGo.AddComponent<RectTransform>();
+        labelRt.anchorMin = Vector2.zero;
+        labelRt.anchorMax = Vector2.one;
+        labelRt.offsetMin = Vector2.zero;
+        labelRt.offsetMax = Vector2.zero;
+        Text labelText = labelGo.AddComponent<Text>();
+        labelText.text = buttonText;
+        labelText.fontSize = 24;
+        labelText.alignment = TextAnchor.MiddleCenter;
+        labelText.color = Color.white;
+
+        return btn;
+    }
+
+    private Slider CreateUISlider(Transform parent, string name, Vector2 anchoredPosition, Vector2 size)
+    {
+        GameObject go = new GameObject(name);
+        go.transform.SetParent(parent, false);
+        RectTransform rt = go.AddComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0.5f, 0.5f);
+        rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = anchoredPosition;
+        rt.sizeDelta = size;
+
+        Slider slider = go.AddComponent<Slider>();
+        // Background
+        GameObject bgGo = new GameObject("Background");
+        bgGo.transform.SetParent(go.transform, false);
+        Image bgImg = bgGo.AddComponent<Image>();
+        bgImg.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+        RectTransform bgRt = bgGo.AddComponent<RectTransform>();
+        bgRt.anchorMin = Vector2.zero;
+        bgRt.anchorMax = Vector2.one;
+        bgRt.offsetMin = Vector2.zero;
+        bgRt.offsetMax = Vector2.zero;
+        slider.targetGraphic = bgImg;
+        slider.fillRect = bgGo.GetComponent<RectTransform>();
+
+        // Fill Area
+        GameObject fillGo = new GameObject("Fill Area");
+        fillGo.transform.SetParent(go.transform, false);
+        Image fillImg = fillGo.AddComponent<Image>();
+        fillImg.color = new Color(0.8f, 0.8f, 0.8f, 1f);
+        RectTransform fillRt = fillGo.AddComponent<RectTransform>();
+        fillRt.anchorMin = Vector2.zero;
+        fillRt.anchorMax = Vector2.one;
+        fillRt.offsetMin = Vector2.zero;
+        fillRt.offsetMax = Vector2.zero;
+        slider.fillRect = fillGo.GetComponent<RectTransform>();
+
+        // Handle
+        GameObject handleGo = new GameObject("Handle");
+        handleGo.transform.SetParent(go.transform, false);
+        Image handleImg = handleGo.AddComponent<Image>();
+        handleImg.color = Color.white;
+        RectTransform handleRt = handleGo.AddComponent<RectTransform>();
+        handleRt.anchorMin = Vector2.zero;
+        handleRt.anchorMax = Vector2.one;
+        handleRt.sizeDelta = new Vector2(20, 20);
+        slider.handleRect = handleGo.GetComponent<RectTransform>();
+
+        return slider;
+    }
+
+    private void StartGame()
+    {
+        HideAllPanels();
+        // Reset game state
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SetGameActive(true);
+            // Optionally re-initialize the scene for a fresh start
+            GameManager.Instance.InitializeForCurrentScene();
+        }
+        hudPanel.SetActive(true);
+    }
+
+    private void ShowOptions()
+    {
+        HideAllPanels();
+        optionsPanel.SetActive(true);
+    }
+
+    private void ShowOptionsFromPause()
+    {
+        HideAllPanels();
+        optionsPanel.SetActive(true);
+    }
+
+    private void ShowMainMenu()
+    {
+        HideAllPanels();
+        mainMenuPanel.SetActive(true);
+        Time.timeScale = 1f; // Ensure time is normal
+    }
+
+    private void PauseGame()
+    {
+        HideAllPanels();
+        pausePanel.SetActive(true);
+        Time.timeScale = 0f; // Pause game
+    }
+
+    private void ResumeGame()
+    {
+        HideAllPanels();
+        hudPanel.SetActive(true);
+        Time.timeScale = 1f; // Resume game
+    }
+
+    private void ReturnToMainMenuFromPause()
+    {
+        HideAllPanels();
+        mainMenuPanel.SetActive(true);
+        Time.timeScale = 1f;
+        // Reset game state
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ReturnToMainMenu();
+        }
+    }
+
+    private void ExitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    private void HideAllPanels()
+    {
+        if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
+        if (optionsPanel != null) optionsPanel.SetActive(false);
+        if (pausePanel != null) pausePanel.SetActive(false);
+        if (hudPanel != null) hudPanel.SetActive(false);
+    }
+
+    private void SetMusicVolume(float volume)
+    {
+        // Implement your music volume setting here
+        AudioListener.volume = volume; // Simple implementation
+    }
+
+    private void SetSFXVolume(float volume)
+    {
+        // Implement your SFX volume setting here
+        // This would typically affect your audio mixer or individual audio sources
+    }
+
+    private void Update()
+    {
+        // Allow pausing with Escape key
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (hudPanel.activeSelf && Time.timeScale > 0)
+            {
+                PauseGame();
+            }
+            else if (pausePanel.activeSelf)
+            {
+                ResumeGame();
+            }
+        }
+    }
+}

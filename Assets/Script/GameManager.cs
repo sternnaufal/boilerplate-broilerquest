@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         InitializeForCurrentScene();
     }
 
-    void InitializeForCurrentScene()
+    public void InitializeForCurrentScene()
     {
         // Hentikan coroutine lama jika ada
         if (timerCoroutine != null)
@@ -169,6 +169,18 @@ public class GameManager : MonoBehaviour
     public bool IsGameActive()
     {
         return isGameActive && !isPopupShowing;
+    }
+
+    /// <summary>
+    /// Sets the game to active state (used when starting/resuming gameplay)
+    /// </summary>
+    public void SetGameActive(bool active)
+    {
+        isGameActive = active;
+        if (!active && isPopupShowing)
+        {
+            isPopupShowing = false;
+        }
     }
 
     void OnDestroy()

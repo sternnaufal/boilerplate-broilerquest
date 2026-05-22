@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 
-public class PopupO2 : MonoBehaviour
+public class PopupKesehatan : MonoBehaviour
 {
-    public static PopupO2 Instance;
+    public static PopupKesehatan Instance;
 
     [Header("UI References")]
     public GameObject popupPanel;
@@ -22,14 +22,14 @@ public class PopupO2 : MonoBehaviour
     public float greenZoneWidth = 100f;
 
     [Header("Popup Result Prefab")]
-    public GameObject popupResultPrefab;   // Assign prefab PopupResultO2
+    public GameObject popupResultPrefab;   // Assign prefab PopupHasilKesehatan
 
     private bool isOn = false;
     private bool isPlaying = false;
     private float cursorPosX;
     private float leftBound, rightBound;
     private int direction = 1;
-    private TambakController currentTambak;
+    private KandangController currentKandang;
     private bool isStopped = false; // mencegah double stop
 
     void Awake()
@@ -64,13 +64,13 @@ public class PopupO2 : MonoBehaviour
         }
         else
         {
-            Debug.LogError("PopupO2: barBackground atau barCursor tidak di-assign!");
+            Debug.LogError("PopupKesehatan: barBackground atau barCursor tidak di-assign!");
         }
     }
 
-    public void TampilkanPopup(TambakController tambak)
+    public void TampilkanPopup(KandangController kandang)
     {
-        currentTambak = tambak;
+        currentKandang = kandang;
         isOn = false;
         isPlaying = false;
         isStopped = false;
@@ -155,18 +155,18 @@ public class PopupO2 : MonoBehaviour
             if (canvas == null) canvas = FindObjectOfType<Canvas>();
 
             GameObject resultObj = Instantiate(popupResultPrefab, canvas.transform);
-            var resultScript = resultObj.GetComponent<PopupResultO2>();
+            var resultScript = resultObj.GetComponent<PopupHasilKesehatan>();
             if (resultScript != null)
             {
                 resultScript.Setup(success, () => {
                     // Callback setelah tombol "Kembali" ditekan
                     popupPanel.SetActive(false); // tutup popup minigame
-                    if (currentTambak != null)
+                    if (currentKandang != null)
                     {
                         if (success)
-                            currentTambak.OnO2MinigameSuccess();
+                            currentKandang.OnKesehatanMinigameSuccess();
                         else
-                            currentTambak.OnO2MinigameFail();
+                            currentKandang.OnKesehatanMinigameFail();
                     }
                 });
             }
@@ -176,12 +176,12 @@ public class PopupO2 : MonoBehaviour
             // Fallback jika prefab tidak di-assign: langsung callback
             Debug.LogWarning("PopupResultPrefab tidak di-assign, langsung callback.");
             popupPanel.SetActive(false);
-            if (currentTambak != null)
+            if (currentKandang != null)
             {
                 if (success)
-                    currentTambak.OnO2MinigameSuccess();
+                    currentKandang.OnKesehatanMinigameSuccess();
                 else
-                    currentTambak.OnO2MinigameFail();
+                    currentKandang.OnKesehatanMinigameFail();
             }
         }
     }
