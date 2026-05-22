@@ -152,7 +152,7 @@ public class PopupKesehatan : MonoBehaviour
         {
             // Cari canvas utama (bisa dari popupPanel parent canvas)
             Canvas canvas = popupPanel.GetComponentInParent<Canvas>();
-            if (canvas == null) canvas = FindObjectOfType<Canvas>();
+            if (canvas == null) canvas = FindFirstObjectByType<Canvas>();
 
             GameObject resultObj = Instantiate(popupResultPrefab, canvas.transform);
             var resultScript = resultObj.GetComponent<PopupHasilKesehatan>();

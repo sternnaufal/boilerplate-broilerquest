@@ -162,8 +162,11 @@ public class GameManager : MonoBehaviour
     {
         isPopupShowing = false;
         currentLevelIndex = 0;
-        // Reset coin? bisa diatur nanti
-        SceneManager.LoadScene("MainMenu");
+        // Instead of loading a separate MainMenu scene, UIManager handles the main menu overlay
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowMainMenu();
+        }
     }
 
     public bool IsGameActive()

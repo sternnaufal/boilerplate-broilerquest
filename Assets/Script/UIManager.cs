@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections;
 
 public class UIManager : MonoBehaviour
@@ -67,6 +68,27 @@ public class UIManager : MonoBehaviour
 
     private void CreateMainMenuUI()
     {
+        // Create Camera if not exists
+        if (Camera.main == null)
+        {
+            GameObject cameraObj = new GameObject("Main Camera");
+            Camera cam = cameraObj.AddComponent<Camera>();
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = new Color(0.5f, 0.8f, 0.5f); // hijau muda tema peternakan
+            cam.orthographic = true;
+            cam.orthographicSize = 5f;
+            cameraObj.tag = "MainCamera";
+            cameraObj.transform.position = new Vector3(0, 0, -10);
+        }
+
+        // Create EventSystem if not exists
+        if (FindFirstObjectByType<EventSystem>() == null)
+        {
+            GameObject esObj = new GameObject("EventSystem");
+            esObj.AddComponent<EventSystem>();
+            esObj.AddComponent<StandaloneInputModule>();
+        }
+
         // Create Canvas if not exists
         GameObject canvasObj = GameObject.Find("Canvas");
         Canvas canvas;
@@ -331,7 +353,7 @@ public class UIManager : MonoBehaviour
         optionsPanel.SetActive(true);
     }
 
-    private void ShowMainMenu()
+    public void ShowMainMenu()
     {
         HideAllPanels();
         mainMenuPanel.SetActive(true);
