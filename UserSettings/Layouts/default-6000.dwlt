@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 772.8
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Game
   m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 168}
   m_MaxSize: {x: 24288, y: 24288}
   vertical: 1
-  controlID: 70
+  controlID: 71
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 112}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 71
+  controlID: 72
   draggingID: 0
 --- !u!114 &9
 MonoBehaviour:
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 556
+    y: 611.2
     width: 1536
     height: 158.79999
   m_SerializedDataModeController:
@@ -365,7 +365,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 0
+    y: 43.2
     width: 1536
     height: 36
   m_SerializedDataModeController:
@@ -631,7 +631,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 24
+    y: 79.200005
     width: 306.2
     height: 329.2
   m_SerializedDataModeController:
@@ -650,17 +650,18 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: []
+      m_SelectedIDs:
+      - m_Data: -2018
       m_LastClickedID:
-        m_Data: 0
+        m_Data: -2018
       m_ExpandedIDs:
-      - m_Data: -1966
-      - m_Data: -1936
       - m_Data: -1372
+      - m_Data: 69392
+      - m_Data: 69402
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Background
+        m_OriginalName: Background
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
@@ -668,10 +669,10 @@ MonoBehaviour:
           width: 0
           height: 0
         m_UserData:
-          m_Data: 0
+          m_Data: 69358
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_TrimLeadingAndTrailingWhitespace: 0
         m_ClientGUIView: {fileID: 12}
@@ -703,8 +704,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1193
-    y: 24
+    x: 1192
+    y: 79.200005
     width: 343
     height: 506
   m_SerializedDataModeController:
@@ -755,7 +756,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 379.2
+    y: 434.4
     width: 306.2
     height: 150.79999
   m_SerializedDataModeController:
@@ -832,7 +833,7 @@ MonoBehaviour:
   m_AssetTreeState:
     scrollPos: {x: 0, y: 8.800018}
     m_SelectedIDs:
-    - m_Data: -2678
+    - m_Data: -2018
     m_LastClickedID:
       m_Data: 0
     m_ExpandedIDs:
@@ -865,8 +866,8 @@ MonoBehaviour:
       m_ResourceFile: 
   m_ListAreaState:
     m_SelectedInstanceIDs:
-    - m_Data: -2678
-    m_LastClickedInstanceID: -2678
+    - m_Data: -2018
+    m_LastClickedInstanceID: -2018
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: []
     m_RenameOverlay:
@@ -1630,8 +1631,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 308.2
-    y: 24
+    x: 307.2
+    y: 79.200005
     width: 882.8
     height: 506
   m_SerializedDataModeController:
@@ -1693,18 +1694,18 @@ MonoBehaviour:
       y: 21
       width: 882.8
       height: 485
-    m_Scale: {x: 2.2869515, y: 2.2869515}
-    m_Translation: {x: 479.0872, y: 196.94583}
+    m_Scale: {x: 1.2516155, y: 1.2516155}
+    m_Translation: {x: 388.0076, y: 240.56227}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -209.48724
-      y: -86.11719
-      width: 386.01605
-      height: 212.07271
+      x: -310.00543
+      y: -192.20142
+      width: 705.3284
+      height: 387.49918
     m_MinimalGUI: 1
   m_defaultScale: 1
   m_LastWindowPixelSize: {x: 1103.5, y: 632.5}
