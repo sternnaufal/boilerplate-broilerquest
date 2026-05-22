@@ -1,13 +1,14 @@
 {
   "dependencies": {
-    "com.gladekit.mcp-bridge": {
-      "version": "file:C:/Users/ASUS/Downloads/glade-mcp-unity-0.6.3/glade-mcp-unity-0.6.3/unity-bridge",
+    "com.coplaydev.unity-mcp": {
+      "version": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main",
       "depth": 0,
-      "source": "local",
+      "source": "git",
       "dependencies": {
-        "com.unity.inputsystem": "1.0.0",
-        "com.unity.ai.navigation": "1.0.0"
-      }
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.unity.test-framework": "1.1.31"
+      },
+      "hash": "b92c05a25820cfc9f59ce4094eb46aaec8632ea2"
     },
     "com.unity.2d.animation": {
       "version": "13.0.4",
@@ -132,15 +133,6 @@
         "com.unity.collections": "2.4.3",
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.modules.imageconversion": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.ai.navigation": {
-      "version": "2.0.12",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.ai": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
