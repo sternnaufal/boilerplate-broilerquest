@@ -44,6 +44,16 @@ public class UIManager : MonoBehaviour
     [Header("HUD")]
     public Button pauseButton;
 
+    [RuntimeInitializeOnLoadMethod]
+    private static void Bootstrap()
+    {
+        if (_instance == null)
+        {
+            GameObject go = new GameObject("UIManager");
+            _instance = go.AddComponent<UIManager>();
+        }
+    }
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
