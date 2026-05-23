@@ -3,3 +3,10 @@
 {"ts":"2026-05-22T12:31:31.040Z","version":"6.10.0","fileCount":7,"droppedCount":0,"rawTokens":7676,"finalTokens":311,"reductionPct":95.9,"overBudget":false,"budgetLimit":4000}
 {"ts":"2026-05-22T12:40:49.154Z","version":"6.10.0","fileCount":7,"droppedCount":0,"rawTokens":7676,"finalTokens":311,"reductionPct":95.9,"overBudget":false,"budgetLimit":4000}
 {"ts":"2026-05-22T12:42:56.134Z","version":"6.10.0","fileCount":7,"droppedCount":0,"rawTokens":7676,"finalTokens":311,"reductionPct":95.9,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-05-23T03:57:47.922Z","version":"6.10.0","fileCount":11,"droppedCount":0,"rawTokens":10586,"finalTokens":542,"reductionPct":94.9,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-05-23T03:58:49.650Z","version":"6.10.0","fileCount":11,"droppedCount":0,"rawTokens":10561,"finalTokens":542,"reductionPct":94.9,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-05-23T04:19:29.048Z","version":"6.10.0","fileCount":11,"droppedCount":0,"rawTokens":10613,"finalTokens":542,"reductionPct":94.9,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-05-23T05:09:12.213Z","version":"6.10.0","fileCount":11,"droppedCount":0,"rawTokens":11456,"finalTokens":555,"reductionPct":95.2,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-05-23T05:19:33.042Z","version":"6.10.0","fileCount":11,"droppedCount":0,"rawTokens":12170,"finalTokens":555,"reductionPct":95.4,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-05-23T05:23:48.713Z","version":"6.10.0","fileCount":11,"droppedCount":0,"rawTokens":12248,"finalTokens":555,"reductionPct":95.5,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-05-23T05:27:38.692Z","version":"6.10.0","fileCount":11,"droppedCount":0,"rawTokens":12338,"finalTokens":555,"reductionPct":95.5,"overBudget":false,"budgetLimit":4000}

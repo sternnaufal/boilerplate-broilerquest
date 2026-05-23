@@ -62,6 +62,10 @@ class UIManager
 ```
 class CoinManager
   AddCoin(int amount) → void
+  CanAfford(int amount) → bool
+  SpendCoin(int amount) → bool
+  SetTotalCoin(int amount) → void
+  BindCoinText(TextMeshProUGUI text) → void
   GetTotalCoin() → int
 ```
 
@@ -81,6 +85,15 @@ class KandangController
   OnPointerClick(PointerEventData eventData) → void
 ```
 
+### Assets\Script\LevelSelectController.cs
+```
+class LevelSelectController
+  PlayStarter() → void
+  PlayBeginner() → void
+  PlayIntermediate() → void
+  ShowLockedMessage(string levelName) → void
+```
+
 ### Assets\Script\PopupHasilKesehatan.cs
 ```
 class PopupHasilKesehatan
@@ -91,6 +104,35 @@ class PopupHasilKesehatan
 ```
 class PopupKesehatan
   TampilkanPopup(KandangController kandang) → void
+```
+
+### Assets\Script\StarterChickenShop.cs
+```
+class StarterChickenOption
+class StarterChickenShop
+  BuyOption0() → void
+  BuyOption1() → void
+  BuyOption2() → void
+  TryBuyChicken(int optionIndex) → bool
+  RefreshShopState() → void
+```
+
+### Assets\Script\StarterGameplayUI.cs
+```
+class StarterGameplayUI
+  PauseGame() → void
+  ResumeGame() → void
+  ToggleHpPanel() → void
+  CloseHpPanel() → void
+  ShowHpPanel(bool visible) → void
+```
+
+### Assets\Script\StarterKandangSlot.cs
+```
+class StarterKandangSlot
+  TryPlaceChicken(GameObject chickenPrefab) → bool
+  ClearChicken() → void
+  OnPointerClick(PointerEventData eventData) → void
 ```
 
 ### Assets\Script\TimeUpPopup.cs
