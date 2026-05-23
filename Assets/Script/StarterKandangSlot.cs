@@ -16,34 +16,53 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Sprite[] careBubbleSprites;
     [SerializeField] private Sprite harvestBubbleSprite;
     [SerializeField] private TextMeshProUGUI bubbleLabel;
-    [SerializeField] private string careBubbleText = "RAWAT";
-    [SerializeField] private string harvestBubbleText = "PANEN";
+    [SerializeField] private string feedBubbleText = "MAKAN";
+    [SerializeField] private string coolingBubbleText = "KIPAS";
+    [SerializeField] private string heatingBubbleText = "HEATER";
+    [SerializeField] private string sellBubbleText = "JUAL";
     [SerializeField] private Vector2 bubbleSize = new Vector2(130f, 56f);
     [SerializeField] private Vector2 bubbleOffset = new Vector2(0f, 68f);
-    [SerializeField] private Color careBubbleColor = new Color(0.95f, 0.78f, 0.22f, 1f);
-    [SerializeField] private Color harvestBubbleColor = new Color(0.31f, 0.78f, 0.32f, 1f);
-    [SerializeField] private float minEventDelay = 3f;
-    [SerializeField] private float maxEventDelay = 8f;
-    [SerializeField] private int harvestReward = 10;
+    [SerializeField] private Color feedBubbleColor = new Color(0.95f, 0.78f, 0.22f, 1f);
+    [SerializeField] private Color coolingBubbleColor = new Color(0.25f, 0.65f, 0.95f, 1f);
+    [SerializeField] private Color heatingBubbleColor = new Color(0.95f, 0.45f, 0.22f, 1f);
+    [SerializeField] private Color sellBubbleColor = new Color(0.31f, 0.78f, 0.32f, 1f);
+    [SerializeField] private float needInterval = 5f;
+    [SerializeField] private float notificationDelay = 1f;
+    [SerializeField] private int baseSellReward = 20;
+    [SerializeField] private int careBonus = 10;
 
     private GameObject spawnedChicken;
     private Coroutine eventCoroutine;
     private bool occupied;
+    private bool feedSatisfied;
+    private bool coolingSatisfied;
+    private bool heatingSatisfied;
+    private int sellReward;
+    private ChickenNeed currentNeed;
     private SlotState currentState;
+
+    private enum ChickenNeed
+    {
+        Feed,
+        Cooling,
+        Heating
+    }
 
     private enum SlotState
     {
         Empty,
         WaitingForCareEvent,
         WaitingForCareClick,
-        WaitingForHarvestClick
+        WaitingForSellClick
     }
 
     public bool IsEmpty => currentState == SlotState.Empty;
 
     private void Awake()
     {
+        PrepareSlotHitbox();
         EnsureBubbleVisual();
+        ResetChickenProgress();
         SetOccupied(startsOccupied);
 
         if (chickenVisual != null)
@@ -52,7 +71,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         HideBubble();
 
         if (occupied)
-            StartCareEventTimer();
+            StartNeedTimer();
     }
 
     public bool TryPlaceChicken(GameObject chickenPrefab)
@@ -83,8 +102,9 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
             Debug.LogWarning($"{name}: Tidak ada prefab atau visual ayam untuk ditampilkan.");
         }
 
+        ResetChickenProgress();
         SetOccupied(true);
-        StartCareEventTimer();
+        StartNeedTimer();
         return true;
     }
 
@@ -102,6 +122,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
             chickenVisual.SetActive(false);
 
         HideBubble();
+        ResetChickenProgress();
         SetOccupied(false);
     }
 
@@ -112,16 +133,16 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
 
         if (currentState == SlotState.WaitingForCareClick)
         {
-            ShowHarvestBubble();
+            CompleteCurrentNeed();
             return;
         }
 
-        if (currentState == SlotState.WaitingForHarvestClick)
+        if (currentState == SlotState.WaitingForSellClick)
         {
             if (CoinManager.Instance != null)
-                CoinManager.Instance.AddCoin(harvestReward);
+                CoinManager.Instance.AddCoin(sellReward);
 
-            Debug.Log($"{name}: Ayam dipanen, +{harvestReward} coin.");
+            Debug.Log($"{name}: Ayam dijual, +{sellReward} coin.");
             ClearChicken();
         }
     }
@@ -132,11 +153,11 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         currentState = occupied ? SlotState.WaitingForCareEvent : SlotState.Empty;
     }
 
-    private void StartCareEventTimer()
+    private void StartNeedTimer()
     {
         StopEventTimer();
         currentState = SlotState.WaitingForCareEvent;
-        eventCoroutine = StartCoroutine(CareEventDelay());
+        eventCoroutine = StartCoroutine(NeedEventDelay());
     }
 
     private void StopEventTimer()
@@ -148,31 +169,113 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         eventCoroutine = null;
     }
 
-    private System.Collections.IEnumerator CareEventDelay()
+    private System.Collections.IEnumerator NeedEventDelay()
     {
-        float delay = Random.Range(minEventDelay, maxEventDelay);
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(needInterval + notificationDelay);
 
         if (currentState == SlotState.WaitingForCareEvent)
-            ShowCareBubble();
+            ShowNextNeedBubble();
     }
 
-    private void ShowCareBubble()
+    private void ShowNextNeedBubble()
     {
         Sprite bubbleSprite = null;
         if (careBubbleSprites != null && careBubbleSprites.Length > 0)
             bubbleSprite = careBubbleSprites[Random.Range(0, careBubbleSprites.Length)];
 
-        ShowBubble(bubbleSprite, careBubbleText, careBubbleColor);
+        currentNeed = GetNextNeed();
+        ShowBubble(bubbleSprite, GetNeedText(currentNeed), GetNeedColor(currentNeed));
         currentState = SlotState.WaitingForCareClick;
-        Debug.Log($"{name}: Bubble perawatan muncul.");
+        Debug.Log($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
     }
 
-    private void ShowHarvestBubble()
+    private void CompleteCurrentNeed()
     {
-        ShowBubble(harvestBubbleSprite, harvestBubbleText, harvestBubbleColor);
-        currentState = SlotState.WaitingForHarvestClick;
-        Debug.Log($"{name}: Perawatan selesai, bubble coin muncul.");
+        switch (currentNeed)
+        {
+            case ChickenNeed.Feed:
+                feedSatisfied = true;
+                break;
+            case ChickenNeed.Cooling:
+                coolingSatisfied = true;
+                break;
+            case ChickenNeed.Heating:
+                heatingSatisfied = true;
+                break;
+        }
+
+        sellReward += careBonus;
+
+        if (IsReadyToSell())
+        {
+            ShowSellBubble();
+            return;
+        }
+
+        HideBubble();
+        StartNeedTimer();
+        Debug.Log($"{name}: Kebutuhan {GetNeedText(currentNeed)} terpenuhi.");
+    }
+
+    private void ShowSellBubble()
+    {
+        ShowBubble(harvestBubbleSprite, sellBubbleText, sellBubbleColor);
+        currentState = SlotState.WaitingForSellClick;
+        Debug.Log($"{name}: Semua kebutuhan terpenuhi, ayam siap dijual.");
+    }
+
+    private ChickenNeed GetNextNeed()
+    {
+        if (!feedSatisfied)
+            return ChickenNeed.Feed;
+
+        if (!coolingSatisfied)
+            return ChickenNeed.Cooling;
+
+        return ChickenNeed.Heating;
+    }
+
+    private string GetNeedText(ChickenNeed need)
+    {
+        switch (need)
+        {
+            case ChickenNeed.Feed:
+                return feedBubbleText;
+            case ChickenNeed.Cooling:
+                return coolingBubbleText;
+            case ChickenNeed.Heating:
+                return heatingBubbleText;
+            default:
+                return feedBubbleText;
+        }
+    }
+
+    private Color GetNeedColor(ChickenNeed need)
+    {
+        switch (need)
+        {
+            case ChickenNeed.Feed:
+                return feedBubbleColor;
+            case ChickenNeed.Cooling:
+                return coolingBubbleColor;
+            case ChickenNeed.Heating:
+                return heatingBubbleColor;
+            default:
+                return feedBubbleColor;
+        }
+    }
+
+    private bool IsReadyToSell()
+    {
+        return feedSatisfied && coolingSatisfied && heatingSatisfied;
+    }
+
+    private void ResetChickenProgress()
+    {
+        feedSatisfied = false;
+        coolingSatisfied = false;
+        heatingSatisfied = false;
+        sellReward = baseSellReward;
     }
 
     private void ShowBubble(Sprite sprite, string label, Color fallbackColor)
@@ -254,5 +357,15 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         bubbleLabel.fontStyle = FontStyles.Bold;
         bubbleLabel.color = new Color(0.12f, 0.16f, 0.10f, 1f);
         bubbleLabel.raycastTarget = false;
+    }
+
+    private void PrepareSlotHitbox()
+    {
+        Image slotImage = GetComponent<Image>();
+        if (slotImage == null)
+            return;
+
+        slotImage.color = new Color(1f, 1f, 1f, 0f);
+        slotImage.raycastTarget = true;
     }
 }

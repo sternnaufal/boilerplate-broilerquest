@@ -765,15 +765,20 @@ MonoBehaviour:
   careBubbleSprites: []
   harvestBubbleSprite: {fileID: 0}
   bubbleLabel: {fileID: 0}
-  careBubbleText: RAWAT
-  harvestBubbleText: PANEN
+  feedBubbleText: MAKAN
+  coolingBubbleText: KIPAS
+  heatingBubbleText: HEATER
+  sellBubbleText: JUAL
   bubbleSize: {x: 130, y: 56}
   bubbleOffset: {x: 0, y: 68}
-  careBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
-  harvestBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
-  minEventDelay: 3
-  maxEventDelay: 8
-  harvestReward: 10
+  feedBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
+  coolingBubbleColor: {r: 0.25, g: 0.65, b: 0.95, a: 1}
+  heatingBubbleColor: {r: 0.95, g: 0.45, b: 0.22, a: 1}
+  sellBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
+  needInterval: 5
+  notificationDelay: 1
+  baseSellReward: 20
+  careBonus: 10
 --- !u!224 &178053817
 RectTransform:
   m_ObjectHideFlags: 0
@@ -808,7 +813,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5, g: 0.34, b: 0.18, a: 0.96}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2137,15 +2142,20 @@ MonoBehaviour:
   careBubbleSprites: []
   harvestBubbleSprite: {fileID: 0}
   bubbleLabel: {fileID: 0}
-  careBubbleText: RAWAT
-  harvestBubbleText: PANEN
+  feedBubbleText: MAKAN
+  coolingBubbleText: KIPAS
+  heatingBubbleText: HEATER
+  sellBubbleText: JUAL
   bubbleSize: {x: 130, y: 56}
   bubbleOffset: {x: 0, y: 68}
-  careBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
-  harvestBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
-  minEventDelay: 3
-  maxEventDelay: 8
-  harvestReward: 10
+  feedBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
+  coolingBubbleColor: {r: 0.25, g: 0.65, b: 0.95, a: 1}
+  heatingBubbleColor: {r: 0.95, g: 0.45, b: 0.22, a: 1}
+  sellBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
+  needInterval: 5
+  notificationDelay: 1
+  baseSellReward: 20
+  careBonus: 10
 --- !u!224 &663794905
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2180,7 +2190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5, g: 0.34, b: 0.18, a: 0.96}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2360,7 +2370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &747566858
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2542,15 +2552,20 @@ MonoBehaviour:
   careBubbleSprites: []
   harvestBubbleSprite: {fileID: 0}
   bubbleLabel: {fileID: 0}
-  careBubbleText: RAWAT
-  harvestBubbleText: PANEN
+  feedBubbleText: MAKAN
+  coolingBubbleText: KIPAS
+  heatingBubbleText: HEATER
+  sellBubbleText: JUAL
   bubbleSize: {x: 130, y: 56}
   bubbleOffset: {x: 0, y: 68}
-  careBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
-  harvestBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
-  minEventDelay: 3
-  maxEventDelay: 8
-  harvestReward: 10
+  feedBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
+  coolingBubbleColor: {r: 0.25, g: 0.65, b: 0.95, a: 1}
+  heatingBubbleColor: {r: 0.95, g: 0.45, b: 0.22, a: 1}
+  sellBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
+  needInterval: 5
+  notificationDelay: 1
+  baseSellReward: 20
+  careBonus: 10
 --- !u!224 &851145077
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2585,7 +2600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5, g: 0.34, b: 0.18, a: 0.96}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4519,15 +4534,20 @@ MonoBehaviour:
   careBubbleSprites: []
   harvestBubbleSprite: {fileID: 0}
   bubbleLabel: {fileID: 0}
-  careBubbleText: RAWAT
-  harvestBubbleText: PANEN
+  feedBubbleText: MAKAN
+  coolingBubbleText: KIPAS
+  heatingBubbleText: HEATER
+  sellBubbleText: JUAL
   bubbleSize: {x: 130, y: 56}
   bubbleOffset: {x: 0, y: 68}
-  careBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
-  harvestBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
-  minEventDelay: 3
-  maxEventDelay: 8
-  harvestReward: 10
+  feedBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
+  coolingBubbleColor: {r: 0.25, g: 0.65, b: 0.95, a: 1}
+  heatingBubbleColor: {r: 0.95, g: 0.45, b: 0.22, a: 1}
+  sellBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
+  needInterval: 5
+  notificationDelay: 1
+  baseSellReward: 20
+  careBonus: 10
 --- !u!224 &1368360116
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4562,7 +4582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5, g: 0.34, b: 0.18, a: 0.96}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5019,15 +5039,20 @@ MonoBehaviour:
   careBubbleSprites: []
   harvestBubbleSprite: {fileID: 0}
   bubbleLabel: {fileID: 0}
-  careBubbleText: RAWAT
-  harvestBubbleText: PANEN
+  feedBubbleText: MAKAN
+  coolingBubbleText: KIPAS
+  heatingBubbleText: HEATER
+  sellBubbleText: JUAL
   bubbleSize: {x: 130, y: 56}
   bubbleOffset: {x: 0, y: 68}
-  careBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
-  harvestBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
-  minEventDelay: 3
-  maxEventDelay: 8
-  harvestReward: 10
+  feedBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
+  coolingBubbleColor: {r: 0.25, g: 0.65, b: 0.95, a: 1}
+  heatingBubbleColor: {r: 0.95, g: 0.45, b: 0.22, a: 1}
+  sellBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
+  needInterval: 5
+  notificationDelay: 1
+  baseSellReward: 20
+  careBonus: 10
 --- !u!224 &1687482166
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5062,7 +5087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5, g: 0.34, b: 0.18, a: 0.96}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5614,15 +5639,20 @@ MonoBehaviour:
   careBubbleSprites: []
   harvestBubbleSprite: {fileID: 0}
   bubbleLabel: {fileID: 0}
-  careBubbleText: RAWAT
-  harvestBubbleText: PANEN
+  feedBubbleText: MAKAN
+  coolingBubbleText: KIPAS
+  heatingBubbleText: HEATER
+  sellBubbleText: JUAL
   bubbleSize: {x: 130, y: 56}
   bubbleOffset: {x: 0, y: 68}
-  careBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
-  harvestBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
-  minEventDelay: 3
-  maxEventDelay: 8
-  harvestReward: 10
+  feedBubbleColor: {r: 0.95, g: 0.78, b: 0.22, a: 1}
+  coolingBubbleColor: {r: 0.25, g: 0.65, b: 0.95, a: 1}
+  heatingBubbleColor: {r: 0.95, g: 0.45, b: 0.22, a: 1}
+  sellBubbleColor: {r: 0.31, g: 0.78, b: 0.32, a: 1}
+  needInterval: 5
+  notificationDelay: 1
+  baseSellReward: 20
+  careBonus: 10
 --- !u!224 &1876209029
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5657,7 +5687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5, g: 0.34, b: 0.18, a: 0.96}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

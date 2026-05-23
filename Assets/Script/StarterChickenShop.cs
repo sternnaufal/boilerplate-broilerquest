@@ -23,6 +23,7 @@ public class StarterChickenShop : MonoBehaviour
 
     [Header("Feedback")]
     [SerializeField] private TextMeshProUGUI messageText;
+    [SerializeField] private string startupMessage = "Beli ayam. Ayam akan masuk ke kandang kosong pertama.";
     [SerializeField] private string noCoinMessage = "Coin belum cukup.";
     [SerializeField] private string noSlotMessage = "Semua kandang sudah terisi.";
     [SerializeField] private string boughtMessage = "Ayam berhasil dibeli.";
@@ -33,7 +34,11 @@ public class StarterChickenShop : MonoBehaviour
     {
         RegisterButtonListeners();
         UpdateOptionLabels();
+        PolishShopButtons();
         RefreshShopState();
+
+        if (messageText != null && string.IsNullOrWhiteSpace(messageText.text))
+            ShowMessage(startupMessage);
     }
 
     private void Update()
@@ -107,7 +112,7 @@ public class StarterChickenShop : MonoBehaviour
             return false;
         }
 
-        ShowMessage($"{option.displayName}: {boughtMessage}");
+        ShowMessage($"{option.displayName}: {boughtMessage}. Tunggu notif di kandang.");
         RefreshShopState();
         return true;
     }
@@ -128,8 +133,10 @@ public class StarterChickenShop : MonoBehaviour
             bool canAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(option.price);
 
             if (option.buyButton != null)
+            {
                 option.buyButton.interactable = hasEmptySlot && canAfford;
-
+                StyleButtonState(option.buyButton, hasEmptySlot && canAfford);
+            }
         }
     }
 
@@ -144,6 +151,48 @@ public class StarterChickenShop : MonoBehaviour
             if (option != null && option.labelText != null)
                 option.labelText.text = $"{option.displayName} - {option.price}";
         }
+    }
+
+    private void PolishShopButtons()
+    {
+        if (options == null)
+            return;
+
+        for (int i = 0; i < options.Length; i++)
+        {
+            StarterChickenOption option = options[i];
+            if (option == null)
+                continue;
+
+            if (option.buyButton != null)
+                StyleButtonState(option.buyButton, true);
+
+            if (option.labelText != null)
+            {
+                option.labelText.color = new Color(0.12f, 0.15f, 0.08f, 1f);
+                option.labelText.fontSize = Mathf.Max(option.labelText.fontSize, 24f);
+                option.labelText.fontStyle = FontStyles.Bold;
+                option.labelText.alignment = TextAlignmentOptions.Center;
+            }
+        }
+
+        if (messageText != null)
+        {
+            messageText.color = new Color(1f, 0.96f, 0.78f, 1f);
+            messageText.fontSize = Mathf.Max(messageText.fontSize, 24f);
+            messageText.alignment = TextAlignmentOptions.Center;
+        }
+    }
+
+    private static void StyleButtonState(Button button, bool interactable)
+    {
+        Image image = button.GetComponent<Image>();
+        if (image == null)
+            return;
+
+        image.color = interactable
+            ? new Color(0.95f, 0.72f, 0.22f, 1f)
+            : new Color(0.48f, 0.42f, 0.28f, 0.82f);
     }
 
     private StarterChickenOption GetOption(int optionIndex)

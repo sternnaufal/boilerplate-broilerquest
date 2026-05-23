@@ -45,19 +45,6 @@
 Always run `npx sigmap --query` before searching for files relevant to a task.
 ## Assets
 
-### Assets\Script\UIManager.cs
-```
-class UIManager
-  ShowMainMenu() → void
-  ShowMainScreen() → void
-  StartGame() → void
-  PauseGame() → void
-  ResumeGame() → void
-  ShowOptionsFromMain() → void
-  ShowOptionsFromPause() → void
-  BackFromOptions() → void
-```
-
 ### Assets\Script\CoinManager.cs
 ```
 class CoinManager
@@ -69,22 +56,6 @@ class CoinManager
   GetTotalCoin() → int
 ```
 
-### Assets\Script\GameManager.cs
-```
-class GameManager
-  InitializeForCurrentScene() → void
-  GoToNextLevel() → void
-  ReturnToMainMenu() → void
-  IsGameActive() → bool
-  SetGameActive(bool active) → void
-```
-
-### Assets\Script\KandangController.cs
-```
-class KandangController
-  OnPointerClick(PointerEventData eventData) → void
-```
-
 ### Assets\Script\LevelSelectController.cs
 ```
 class LevelSelectController
@@ -92,18 +63,6 @@ class LevelSelectController
   PlayBeginner() → void
   PlayIntermediate() → void
   ShowLockedMessage(string levelName) → void
-```
-
-### Assets\Script\PopupHasilKesehatan.cs
-```
-class PopupHasilKesehatan
-  Setup(bool isSuccess, System.Action onBackCallback) → void
-```
-
-### Assets\Script\PopupKesehatan.cs
-```
-class PopupKesehatan
-  TampilkanPopup(KandangController kandang) → void
 ```
 
 ### Assets\Script\StarterChickenShop.cs
@@ -133,6 +92,47 @@ class StarterKandangSlot
   TryPlaceChicken(GameObject chickenPrefab) → bool
   ClearChicken() → void
   OnPointerClick(PointerEventData eventData) → void
+```
+
+### Assets\Script\UIManager.cs
+```
+class UIManager
+  ShowMainMenu() → void
+  ShowMainScreen() → void
+  StartGame() → void
+  PauseGame() → void
+  ResumeGame() → void
+  ShowOptionsFromMain() → void
+  ShowOptionsFromPause() → void
+  BackFromOptions() → void
+```
+
+### Assets\Script\GameManager.cs
+```
+class GameManager
+  InitializeForCurrentScene() → void
+  GoToNextLevel() → void
+  ReturnToMainMenu() → void
+  IsGameActive() → bool
+  SetGameActive(bool active) → void
+```
+
+### Assets\Script\KandangController.cs
+```
+class KandangController
+  OnPointerClick(PointerEventData eventData) → void
+```
+
+### Assets\Script\PopupHasilKesehatan.cs
+```
+class PopupHasilKesehatan
+  Setup(bool isSuccess, System.Action onBackCallback) → void
+```
+
+### Assets\Script\PopupKesehatan.cs
+```
+class PopupKesehatan
+  TampilkanPopup(KandangController kandang) → void
 ```
 
 ### Assets\Script\TimeUpPopup.cs
