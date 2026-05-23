@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -33,18 +32,10 @@ public class LevelSelectController : MonoBehaviour
         if (listenersRegistered)
             return;
 
-        RegisterButton(starterButton, PlayStarter);
-        RegisterButton(beginnerButton, PlayBeginner);
-        RegisterButton(intermediateButton, PlayIntermediate);
+        ButtonHelper.AddListenerOnce(starterButton, PlayStarter);
+        ButtonHelper.AddListenerOnce(beginnerButton, PlayBeginner);
+        ButtonHelper.AddListenerOnce(intermediateButton, PlayIntermediate);
         listenersRegistered = true;
-    }
-
-    private static void RegisterButton(Button button, UnityAction action)
-    {
-        if (button == null || button.onClick.GetPersistentEventCount() > 0)
-            return;
-
-        button.onClick.AddListener(action);
     }
 
     private void ConfigureLockedButtons()
@@ -86,7 +77,7 @@ public class LevelSelectController : MonoBehaviour
         if (messageText != null)
             messageText.text = string.IsNullOrWhiteSpace(levelName) ? lockedMessage : $"{levelName}: {lockedMessage}";
 
-        Debug.Log($"{levelName} belum bisa dimainkan.");
+        GameLog.Info($"{levelName} belum bisa dimainkan.");
     }
 
     private void ClearMessage()

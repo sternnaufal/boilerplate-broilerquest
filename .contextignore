@@ -10,6 +10,9 @@ out/
 coverage/
 target/
 vendor/
+UserSettings/
+Assets/_Recovery/
+Assets/Adaptive Performance/
 *.generated.*
 *.pb.*
 *_pb.*

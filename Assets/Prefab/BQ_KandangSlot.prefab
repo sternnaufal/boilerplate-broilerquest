@@ -112,10 +112,12 @@ MonoBehaviour:
   notificationDelay: 1
   baseSellReward: 20
   careBonus: 10
+  useHealthMinigame: 0
+  clearChickenOnHealthFail: 0
   chickenAnimator: {fileID: 0}
-  idleAnimParam: Normal
-  heatAnimParam: Panas
-  coldAnimParam: Dingin
+  idleAnimParam:
+  heatAnimParam: isbakar
+  coldAnimParam: isdingin
 --- !u!1 &6907016640907362101
 GameObject:
   m_ObjectHideFlags: 0

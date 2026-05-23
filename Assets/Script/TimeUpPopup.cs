@@ -22,8 +22,7 @@ public class TimeUpPopup : MonoBehaviour
 
         if (backButton != null)
         {
-            backButton.onClick.RemoveAllListeners();
-            backButton.onClick.AddListener(() => {
+            ButtonHelper.SetSingleListener(backButton, () => {
                 if (GameManager.Instance != null)
                     GameManager.Instance.ReturnToMainMenu();
 
@@ -34,17 +33,20 @@ public class TimeUpPopup : MonoBehaviour
         bool canContinue = HasLoadableNextLevel();
         if (continueButton != null)
         {
-            continueButton.onClick.RemoveAllListeners();
             continueButton.interactable = canContinue;
 
             if (canContinue)
             {
-                continueButton.onClick.AddListener(() => {
+                ButtonHelper.SetSingleListener(continueButton, () => {
                     if (GameManager.Instance != null)
                         GameManager.Instance.GoToNextLevel();
 
                     Destroy(gameObject);
                 });
+            }
+            else
+            {
+                ButtonHelper.SetSingleListener(continueButton, null);
             }
         }
     }

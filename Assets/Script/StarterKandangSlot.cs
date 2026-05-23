@@ -5,7 +5,7 @@ using TMPro;
 using System.Collections;
 using SlotStateChanged = System.Action<StarterKandangSlot>;
 
-public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
+public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCheckListener
 {
     public event SlotStateChanged StateChanged;
 
@@ -34,16 +34,20 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Vector2 bubbleOffset = new Vector2(0f, 68f);
 
     [Header("Timing & Rewards")]
-    [SerializeField] private float needInterval = 5f;
-    [SerializeField] private float notificationDelay = 1f;
-    [SerializeField] private int baseSellReward = 20;
-    [SerializeField] private int careBonus = 10;
+    [SerializeField] private float needInterval = GameConstants.StarterSlot.NeedInterval;
+    [SerializeField] private float notificationDelay = GameConstants.StarterSlot.NotificationDelay;
+    [SerializeField] private int baseSellReward = GameConstants.StarterSlot.BaseSellReward;
+    [SerializeField] private int careBonus = GameConstants.StarterSlot.CareBonus;
+
+    [Header("Optional Health Minigame")]
+    [SerializeField] private bool useHealthMinigame;
+    [SerializeField] private bool clearChickenOnHealthFail;
 
     [Header("Animation")]
-    [SerializeField] private Animator chickenAnimator;      // assign ke Animator di GameObject Ayam
-    [SerializeField] private string idleAnimParam = "Normal";     // trigger untuk kembali normal
-    [SerializeField] private string heatAnimParam = "Panas";      // trigger untuk panas
-    [SerializeField] private string coldAnimParam = "Dingin";     // trigger untuk dingin
+    [SerializeField] private Animator chickenAnimator;
+    [SerializeField] private string idleAnimParam = "";
+    [SerializeField] private string heatAnimParam = "isbakar";
+    [SerializeField] private string coldAnimParam = "isdingin";
 
     private GameObject spawnedChicken;
     private Coroutine eventCoroutine;
@@ -67,6 +71,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         Empty,
         WaitingForCareEvent,
         WaitingForCareClick,
+        WaitingForHealthMinigame,
         WaitingForSellClick
     }
 
@@ -76,15 +81,16 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
     {
         PrepareSlotHitbox();
         EnsureBubbleVisual();
-        ResetChickenProgress();
         SetOccupied(startsOccupied);
 
         if (chickenVisual != null)
         {
             PositionChickenVisual(chickenVisual.transform);
             chickenVisual.SetActive(occupied);
+            FindAnimator();
         }
 
+        ResetChickenProgress();
         HideBubble();
 
         if (occupied)
@@ -107,11 +113,13 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
             Transform parent = chickenParent != null ? chickenParent : transform;
             spawnedChicken = Instantiate(chickenPrefab, parent);
             PositionChickenVisual(spawnedChicken.transform);
+            AssignChickenAnimator(spawnedChicken);
         }
         else if (chickenVisual != null)
         {
             PositionChickenVisual(chickenVisual.transform);
             chickenVisual.SetActive(true);
+            AssignChickenAnimator(chickenVisual);
         }
         else
         {
@@ -137,6 +145,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         if (chickenVisual != null)
             chickenVisual.SetActive(false);
 
+        chickenAnimator = null;
         HideBubble();
         ResetChickenProgress();
         SetOccupied(false);
@@ -149,6 +158,9 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
 
         if (currentState == SlotState.WaitingForCareClick)
         {
+            if (TryStartHealthMinigame())
+                return;
+
             CompleteCurrentNeed();
             return;
         }
@@ -158,9 +170,35 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
             if (CoinManager.Instance != null)
                 CoinManager.Instance.AddCoin(sellReward);
 
-            Debug.Log($"{name}: Ayam dijual, +{sellReward} coin.");
+            GameLog.Info($"{name}: Ayam dijual, +{sellReward} coin.");
             ClearChicken();
         }
+    }
+
+    public void OnHealthCheckSuccess()
+    {
+        if (currentState != SlotState.WaitingForHealthMinigame)
+            return;
+
+        CompleteCurrentNeed();
+    }
+
+    public void OnHealthCheckFailure()
+    {
+        if (currentState != SlotState.WaitingForHealthMinigame)
+            return;
+
+        ResetAnimationToNormal();
+
+        if (clearChickenOnHealthFail)
+        {
+            ClearChicken();
+            return;
+        }
+
+        HideBubble();
+        StartNeedTimer();
+        GameLog.Info($"{name}: Minigame kesehatan gagal, kebutuhan akan muncul lagi.");
     }
 
     private void SetOccupied(bool value)
@@ -172,19 +210,14 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
 
     private void StartNeedTimer()
     {
-        StopEventTimer();
         currentState = SlotState.WaitingForCareEvent;
         NotifyStateChanged();
-        eventCoroutine = StartCoroutine(NeedEventDelay());
+        CoroutineHelper.StopAndStart(this, ref eventCoroutine, NeedEventDelay());
     }
 
     private void StopEventTimer()
     {
-        if (eventCoroutine == null)
-            return;
-
-        StopCoroutine(eventCoroutine);
-        eventCoroutine = null;
+        CoroutineHelper.StopSafe(this, ref eventCoroutine);
     }
 
     private IEnumerator NeedEventDelay()
@@ -203,7 +236,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         currentState = SlotState.WaitingForCareClick;
         NotifyStateChanged();
         UpdateAnimationByNeed(currentNeed);
-        Debug.Log($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
+        GameLog.Info($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
     }
 
     private void CompleteCurrentNeed()
@@ -233,7 +266,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
 
         HideBubble();
         StartNeedTimer();
-        Debug.Log($"{name}: Kebutuhan {GetNeedText(currentNeed)} terpenuhi.");
+        GameLog.Info($"{name}: Kebutuhan {GetNeedText(currentNeed)} terpenuhi.");
     }
 
     private void ShowSellBubble()
@@ -241,7 +274,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         ShowBubble(sellBubbleSprite, sellBubbleText);
         currentState = SlotState.WaitingForSellClick;
         NotifyStateChanged();
-        Debug.Log($"{name}: Semua kebutuhan terpenuhi, ayam siap dijual.");
+        GameLog.Info($"{name}: Semua kebutuhan terpenuhi, ayam siap dijual.");
     }
 
     private void NotifyStateChanged()
@@ -390,7 +423,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
 
         bubbleLabel = labelObject.GetComponent<TextMeshProUGUI>();
         bubbleLabel.alignment = TextAlignmentOptions.Center;
-        bubbleLabel.fontSize = 22f;
+        bubbleLabel.fontSize = GameConstants.UI.BubbleLabelFontSize;
         bubbleLabel.fontStyle = FontStyles.Bold;
         bubbleLabel.color = new Color(0.12f, 0.16f, 0.10f, 1f);
         bubbleLabel.raycastTarget = false;
@@ -441,38 +474,87 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
     private void FindAnimator()
     {
         if (chickenAnimator == null && chickenVisual != null)
-        {
-            // Cari Animator di child bernama "Ayam"
-            Transform ayam = chickenVisual.transform.Find("Ayam");
-            if (ayam != null)
-                chickenAnimator = ayam.GetComponent<Animator>();
-        }
+            chickenAnimator = chickenVisual.GetComponentInChildren<Animator>(true);
     }
 
-    // Update animasi berdasarkan kebutuhan yang sedang muncul
+    private void AssignChickenAnimator(GameObject source)
+    {
+        chickenAnimator = source != null ? source.GetComponentInChildren<Animator>(true) : null;
+    }
+
     private void UpdateAnimationByNeed(ChickenNeed need)
     {
-        if (chickenAnimator == null) return;
-        
         switch (need)
         {
             case ChickenNeed.Heating:
-                chickenAnimator.SetTrigger(heatAnimParam);
+                TrySetAnimationTrigger(heatAnimParam);
                 break;
             case ChickenNeed.Cooling:
-                chickenAnimator.SetTrigger(coldAnimParam);
+                TrySetAnimationTrigger(coldAnimParam);
                 break;
             case ChickenNeed.Feed:
-                // Feed bisa tetap pakai animasi normal atau makan (opsional)
-                chickenAnimator.SetTrigger(idleAnimParam);
+                ResetAnimationToNormal();
                 break;
         }
     }
 
-    // Reset animasi ke normal setelah kebutuhan dipenuhi
     private void ResetAnimationToNormal()
     {
-        if (chickenAnimator != null)
-            chickenAnimator.SetTrigger(idleAnimParam);
+        if (chickenAnimator == null || !occupied)
+            return;
+
+        ResetAnimationTrigger(heatAnimParam);
+        ResetAnimationTrigger(coldAnimParam);
+        TrySetAnimationTrigger(idleAnimParam);
+    }
+
+    private bool TryStartHealthMinigame()
+    {
+        if (!useHealthMinigame)
+            return false;
+
+        if (PopupKesehatan.Instance == null)
+        {
+            Debug.LogWarning($"{name}: PopupKesehatan belum tersedia, kebutuhan diselesaikan langsung.");
+            return false;
+        }
+
+        currentState = SlotState.WaitingForHealthMinigame;
+        NotifyStateChanged();
+        PopupKesehatan.Instance.ShowHealthCheck(this);
+        return true;
+    }
+
+    private void TrySetAnimationTrigger(string triggerName)
+    {
+        if (chickenAnimator == null || string.IsNullOrWhiteSpace(triggerName))
+            return;
+
+        if (!HasAnimatorParameter(triggerName))
+        {
+            Debug.LogWarning($"{name}: Animator parameter '{triggerName}' tidak ditemukan.");
+            return;
+        }
+
+        chickenAnimator.SetTrigger(triggerName);
+    }
+
+    private void ResetAnimationTrigger(string triggerName)
+    {
+        if (chickenAnimator == null || string.IsNullOrWhiteSpace(triggerName) || !HasAnimatorParameter(triggerName))
+            return;
+
+        chickenAnimator.ResetTrigger(triggerName);
+    }
+
+    private bool HasAnimatorParameter(string parameterName)
+    {
+        foreach (AnimatorControllerParameter parameter in chickenAnimator.parameters)
+        {
+            if (parameter.name == parameterName)
+                return true;
+        }
+
+        return false;
     }
 }

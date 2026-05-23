@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class KandangController : MonoBehaviour, IPointerClickHandler
+public class KandangController : MonoBehaviour, IPointerClickHandler, IHealthCheckListener
 {
     [Header("Indikator Pakan")]
     public GameObject pakanIndikatorSilang;
@@ -59,8 +59,7 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
 
     void MulaiDelayKeAyam()
     {
-        if (delayCoroutine != null) StopCoroutine(delayCoroutine);
-        delayCoroutine = StartCoroutine(DelayMunculEmoteAyam());
+        CoroutineHelper.StopAndStart(this, ref delayCoroutine, DelayMunculEmoteAyam());
     }
 
     IEnumerator DelayMunculEmoteAyam()
@@ -73,7 +72,7 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
         {
             emotAyam.SetActive(true);
             currentState = KandangState.MenungguKlikAyam;
-            Debug.Log($"{name} -> Emot Ayam muncul");
+            GameLog.Info($"{name} -> Emot Ayam muncul");
         }
     }
 
@@ -81,13 +80,13 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
     {
         if (GameManager.Instance != null && !GameManager.Instance.IsGameActive())
         {
-            Debug.Log("Game sedang tidak aktif (timer habis atau popup muncul). Klik diabaikan.");
+            GameLog.Info("Game sedang tidak aktif (timer habis atau popup muncul). Klik diabaikan.");
             return;
         }
         // Cegah klik jika sedang dalam proses delay (tidak ada state yang valid)
         if (currentState == KandangState.Kosong)
         {
-            Debug.Log($"{name} diklik tapi state KOSONG, abaikan.");
+            GameLog.Info($"{name} diklik tapi state KOSONG, abaikan.");
             return;
         }
 
@@ -112,7 +111,7 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
         }
         if (currentState == KandangState.MenungguHasilKesehatan)
         {
-            Debug.Log($"{name} -> Sedang menunggu hasil minigame kesehatan, klik diabaikan.");
+            GameLog.Info($"{name} -> Sedang menunggu hasil minigame kesehatan, klik diabaikan.");
             return;
         }
         if (currentState == KandangState.MenungguKlikPanen && !emotPanen.activeSelf)
@@ -143,7 +142,7 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
                 emotAyam.SetActive(false);
                 emotMakan.SetActive(true);
                 currentState = KandangState.MenungguKlikMakan;
-                Debug.Log($"{name} -> Memberi pakan, muncul emot makan");
+                GameLog.Info($"{name} -> Memberi pakan, muncul emot makan");
                 break;
 
             case KandangState.MenungguKlikMakan:
@@ -152,15 +151,24 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
                 pakanIndikatorCentang.SetActive(true);
                 MulaiDelayKeVitamin();
                 currentState = KandangState.MenungguKlikVitamin;
-                Debug.Log($"{name} -> Selesai makan, centang pakan, delay ke vitamin");
+                GameLog.Info($"{name} -> Selesai makan, centang pakan, delay ke vitamin");
                 break;
 
             case KandangState.MenungguKlikVitamin:
                 // Sembunyikan emote vitamin (opsional)
                 emotVitamin.SetActive(false);
                 // Tampilkan popup
-                PopupKesehatan.Instance.TampilkanPopup(this);
-                currentState = KandangState.MenungguHasilKesehatan;
+                if (PopupKesehatan.Instance != null)
+                {
+                    PopupKesehatan.Instance.ShowHealthCheck(this);
+                    currentState = KandangState.MenungguHasilKesehatan;
+                }
+                else
+                {
+                    Debug.LogWarning("PopupKesehatan.Instance tidak ditemukan. Minigame kesehatan dianggap berhasil.");
+                    currentState = KandangState.MenungguHasilKesehatan;
+                    OnKesehatanMinigameSuccess();
+                }
                 break;
 
             case KandangState.MenungguKlikPanen:
@@ -175,19 +183,18 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
                     Debug.LogError("CoinManager.Instance tidak ditemukan! Pastikan ada GameObject dengan script CoinManager di scene.");
                 }
                 ResetKeAwal();
-                Debug.Log($"{name} -> Dipanen, +10 coin, reset semua");
+                GameLog.Info($"{name} -> Dipanen, +10 coin, reset semua");
                 break;
 
             default:
-                Debug.Log($"{name} diklik tapi state tidak valid: {currentState}");
+                GameLog.Info($"{name} diklik tapi state tidak valid: {currentState}");
                 break;
         }
     }
 
     void MulaiDelayKeVitamin()
     {
-        if (delayCoroutine != null) StopCoroutine(delayCoroutine);
-        delayCoroutine = StartCoroutine(DelayMunculEmoteVitamin());
+        CoroutineHelper.StopAndStart(this, ref delayCoroutine, DelayMunculEmoteVitamin());
     }
 
     IEnumerator DelayMunculEmoteVitamin()
@@ -198,7 +205,7 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
         if (currentState == KandangState.MenungguKlikVitamin)
         {
             emotVitamin.SetActive(true);
-            Debug.Log($"{name} -> Emot vitamin muncul");
+            GameLog.Info($"{name} -> Emot vitamin muncul");
         }
         else
         {
@@ -208,8 +215,7 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
 
     void MulaiDelayKePanen()
     {
-        if (delayCoroutine != null) StopCoroutine(delayCoroutine);
-        delayCoroutine = StartCoroutine(DelayMunculEmotePanen());
+        CoroutineHelper.StopAndStart(this, ref delayCoroutine, DelayMunculEmotePanen());
     }
 
     IEnumerator DelayMunculEmotePanen()
@@ -220,7 +226,7 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
         if (currentState == KandangState.MenungguKlikPanen)
         {
             emotPanen.SetActive(true);
-            Debug.Log($"{name} -> Emot panen muncul");
+            GameLog.Info($"{name} -> Emot panen muncul");
         }
         else
         {
@@ -230,11 +236,11 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
 
     void ResetKeAwal()
     {
-        if (delayCoroutine != null) StopCoroutine(delayCoroutine);
+        CoroutineHelper.StopSafe(this, ref delayCoroutine);
         ResetSemuaIndikatorDanEmote();
         currentState = KandangState.Kosong;
         MulaiDelayKeAyam();
-        Debug.Log($"{name} -> Reset ke awal, mulai delay muncul ayam");
+        GameLog.Info($"{name} -> Reset ke awal, mulai delay muncul ayam");
     }
 
     public void OnKesehatanMinigameSuccess()
@@ -245,7 +251,7 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
             kesehatanIndikatorCentang.SetActive(true);
             MulaiDelayKePanen();
             currentState = KandangState.MenungguKlikPanen;
-            Debug.Log($"{name} -> Minigame kesehatan berhasil, centang kesehatan, delay ke panen");
+            GameLog.Info($"{name} -> Minigame kesehatan berhasil, centang kesehatan, delay ke panen");
         }
     }
 
@@ -253,8 +259,18 @@ public class KandangController : MonoBehaviour, IPointerClickHandler
     {
         if (currentState == KandangState.MenungguHasilKesehatan)
         {
-            Debug.Log($"{name} -> Minigame kesehatan gagal, reset kandang");
+            GameLog.Info($"{name} -> Minigame kesehatan gagal, reset kandang");
             ResetKeAwal();
         }
+    }
+
+    public void OnHealthCheckSuccess()
+    {
+        OnKesehatanMinigameSuccess();
+    }
+
+    public void OnHealthCheckFailure()
+    {
+        OnKesehatanMinigameFail();
     }
 }

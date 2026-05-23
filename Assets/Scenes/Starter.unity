@@ -1489,7 +1489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
   coinText: {fileID: 0}
   resetCoinOnStart: 1
-  startingCoin: 2147483647
+  startingCoin: 100
   usePlayerPrefs: 1
 --- !u!114 &651932099
 MonoBehaviour:

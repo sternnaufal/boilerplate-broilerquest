@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 [System.Serializable]
@@ -64,19 +63,10 @@ public class StarterChickenShop : MonoBehaviour
         {
             int optionIndex = i;
             Button button = options[i] != null ? options[i].buyButton : null;
-            RegisterButton(button, () => TryBuyChicken(optionIndex));
+            ButtonHelper.AddListenerOnce(button, () => TryBuyChicken(optionIndex));
         }
 
         listenersRegistered = true;
-    }
-
-    private static void RegisterButton(Button button, UnityAction action)
-    {
-        if (button == null)
-            return;
-
-        button.onClick.RemoveListener(action);
-        button.onClick.AddListener(action);
     }
 
     public void BuyOption0()
@@ -153,6 +143,14 @@ public class StarterChickenShop : MonoBehaviour
         }
     }
 
+    public void SetKandangSlots(StarterKandangSlot[] slots)
+    {
+        UnsubscribeFromStateChanges();
+        kandangSlots = slots;
+        SubscribeToStateChanges();
+        RefreshShopState();
+    }
+
     private void UpdateOptionLabels()
     {
         if (options == null)
@@ -186,7 +184,7 @@ public class StarterChickenShop : MonoBehaviour
             if (option.labelText != null)
             {
                 option.labelText.color = new Color(0.12f, 0.15f, 0.08f, 1f);
-                option.labelText.fontSize = Mathf.Max(option.labelText.fontSize, 24f);
+                option.labelText.fontSize = Mathf.Max(option.labelText.fontSize, GameConstants.UI.ButtonLabelFontSize);
                 option.labelText.fontStyle = FontStyles.Bold;
                 option.labelText.alignment = TextAlignmentOptions.MidlineLeft;
                 RectTransform labelRect = option.labelText.rectTransform;
@@ -200,7 +198,7 @@ public class StarterChickenShop : MonoBehaviour
         if (messageText != null)
         {
             messageText.color = new Color(1f, 0.96f, 0.78f, 1f);
-            messageText.fontSize = Mathf.Max(messageText.fontSize, 24f);
+            messageText.fontSize = Mathf.Max(messageText.fontSize, GameConstants.UI.ButtonLabelFontSize);
             messageText.alignment = TextAlignmentOptions.Center;
         }
     }
@@ -252,7 +250,25 @@ public class StarterChickenShop : MonoBehaviour
         if (discoveredSlots.Length == 0)
             return;
 
+        if (HasCompleteConfiguredSlots(discoveredSlots.Length))
+            return;
+
         kandangSlots = discoveredSlots;
+    }
+
+    private bool HasCompleteConfiguredSlots(int discoveredSlotCount)
+    {
+        if (kandangSlots == null || kandangSlots.Length == 0)
+            return false;
+
+        int activeConfiguredCount = 0;
+        foreach (StarterKandangSlot slot in kandangSlots)
+        {
+            if (slot != null && slot.gameObject.activeInHierarchy)
+                activeConfiguredCount++;
+        }
+
+        return activeConfiguredCount == kandangSlots.Length && activeConfiguredCount >= discoveredSlotCount;
     }
 
     private void SubscribeToStateChanges()
@@ -391,6 +407,6 @@ public class StarterChickenShop : MonoBehaviour
         if (messageText != null)
             messageText.text = message;
 
-        Debug.Log(message);
+        GameLog.Info(message);
     }
 }

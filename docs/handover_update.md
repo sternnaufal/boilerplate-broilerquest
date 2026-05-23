@@ -175,3 +175,76 @@ The other repeated console entries are Unity MCP bridge trace logs such as disco
 - Prefer event-driven updates for gameplay UI and shop state. Avoid restoring per-frame `RefreshShopState()` polling unless profiling or gameplay behavior requires it.
 - If the older `KandangController` flow is no longer needed, remove it in a dedicated cleanup commit after confirming no scene/prefab references remain.
 - The working tree has Unity-generated changes in scene, project settings, package lock, user settings, and layout files. Review before committing.
+
+## Recommendation Cleanup Follow-up - 24 Mei 2026
+
+- Started implementing the cleanup plan from `docs/recomendation.md`.
+- Slot-system direction is now explicit:
+  - `StarterKandangSlot` is the active/current Starter kandang system.
+  - `KandangController` is kept only as legacy / migration-reference code until old scene or prefab references are confirmed safe to remove.
+- Added shared architecture helpers:
+  - `Assets/Script/IHealthCheckListener.cs`
+  - `Assets/Script/ButtonHelper.cs`
+  - `Assets/Script/CoroutineHelper.cs`
+  - `Assets/Script/GameConstants.cs`
+  - `Assets/Script/GameLog.cs`
+  - `Assets/Script/GameStateManager.cs`
+  - `Assets/Script/PanelManager.cs`
+  - `Assets/Script/StarterSceneInitializer.cs`
+- Decoupled the health popup flow:
+  - `PopupKesehatan` now accepts `IHealthCheckListener` through `ShowHealthCheck(...)`.
+  - `KandangController` implements the interface for backward compatibility.
+  - `StarterKandangSlot` implements the interface and can optionally open the health minigame through `useHealthMinigame`.
+  - Default Starter behavior remains direct bubble-click completion so current gameplay is not blocked by unfinished minigame UI setup.
+- Fixed active animation integration issues in `StarterKandangSlot`:
+  - Animator is discovered from the scene visual and newly spawned shop chicken.
+  - Prefab animation parameters were aligned to the existing controller triggers:
+    `isbakar` and `isdingin`.
+  - `idleAnimParam` is intentionally empty because the current `Ayam.controller` has no normal/idle trigger.
+  - Trigger calls now check that the animator parameter exists before calling `SetTrigger`.
+- Added safer wiring / modularization:
+  - `StarterChickenShop.SetKandangSlots(...)` allows future explicit scene initialization.
+  - Runtime slot discovery remains as a fallback when configured slots are incomplete, preserving the previous disabled-buy fix.
+  - `StarterSceneInitializer` can wire `CoinManager`, `StarterChickenShop`, and `StarterKandangSlot[]` later through the Inspector.
+- Centralized game-state foundation:
+  - `GameStateManager` handles `Menu`, `Playing`, `Paused`, and `GameOver`.
+  - It lazy-creates itself when used, so the scene does not immediately need a manually placed manager object.
+  - `UIManager`, `StarterGameplayUI`, `SceneController`, and `GameManager` now delegate or fallback through this state path.
+- Button listener registration was normalized with `ButtonHelper`.
+- Coroutine cleanup was normalized with `CoroutineHelper`.
+- Noisy normal gameplay logs were moved behind `GameLog.Info(...)`; warnings and errors remain visible.
+- Persistence was cleaned up:
+  - `CoinManager` now supports explicit `Initialize(...)`.
+  - Coin saves under `BroilerQuest.TotalCoin`.
+  - Legacy `TotalCoin` is still read as fallback.
+- Quick project-level fixes:
+  - `ProjectSettings/EditorBuildSettings.asset` now starts with `Assets/Scenes/MainMenu.unity` at build index `0`.
+  - Starter scene debug coin was reduced from `2147483647` to `100`.
+  - `.gitignore` and `.contextignore` now ignore local/generated Unity folders:
+    `UserSettings/`, `Assets/_Recovery/`, and `Assets/Adaptive Performance/`.
+- Updated `docs/recomendation.md` with completed items, remaining playtest needs, and the new helper files.
+
+## Validation - 24 Mei 2026
+
+- Compile check:
+  `dotnet build Assembly-CSharp.csproj --no-restore`
+  - Result: `PASS`, 0 errors, 0 warnings.
+- SigMap check:
+  `npx sigmap validate`
+  - Result: config valid.
+  - Coverage still reports `50%`; this warning is still treated as misleading for this project unless SigMap config is tuned.
+- Scoped whitespace check:
+  `git diff --check -- .contextignore .gitignore Assets/Prefab/BQ_KandangSlot.prefab Assets/Scenes/Starter.unity Assets/Script ProjectSettings/EditorBuildSettings.asset docs/recomendation.md`
+  - Result: no actual whitespace errors; only Git line-ending warnings.
+
+## Remaining Work After 24 Mei Cleanup
+
+- Unity Play Mode test is still needed for:
+  - buy chicken -> bubble -> care -> sell;
+  - animation changes for heating/cooling;
+  - optional `useHealthMinigame` flow on at least one slot.
+- Attach `StarterSceneInitializer` in the Starter scene only after deciding which references should be Inspector-owned.
+- Keep `KandangController` until old scene/prefab references are audited.
+- `docs/recomendation.md` is still untracked and should be explicitly staged if the team wants it committed.
+- New helper scripts and `.meta` files are also untracked until staged.
+- `Assembly-CSharp.csproj` was locally updated for `dotnet build` verification, but it is generated/ignored and Unity may regenerate it.

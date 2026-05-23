@@ -10,7 +10,12 @@ public class GameManager : MonoBehaviour
     [Header("Pengaturan Level")]
     public int currentLevelIndex = 0;
     public string[] sceneNames = { "Starter", "Beginner", "Intermediate" };
-    public float[] levelDurations = { 60f, 120f, 180f };
+    public float[] levelDurations =
+    {
+        GameConstants.LevelDuration.Starter,
+        GameConstants.LevelDuration.Beginner,
+        GameConstants.LevelDuration.Intermediate
+    };
 
     [Header("Timer UI")]
     public TextMeshProUGUI timerText;
@@ -50,12 +55,7 @@ public class GameManager : MonoBehaviour
 
     public void InitializeForCurrentScene()
     {
-        // Hentikan coroutine lama jika ada
-        if (timerCoroutine != null)
-        {
-            StopCoroutine(timerCoroutine);
-            timerCoroutine = null;
-        }
+        CoroutineHelper.StopSafe(this, ref timerCoroutine);
 
         // Cari main canvas
         if (mainCanvas == null)
@@ -125,6 +125,7 @@ public class GameManager : MonoBehaviour
         if (!isGameActive) return;
         isGameActive = false;
         isPopupShowing = true;
+        GameStateManager.TrySetGameState(GameState.GameOver);
 
         if (timeUpPopupPrefab != null && mainCanvas != null)
         {
@@ -161,7 +162,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("Sudah level terakhir! Kembali ke menu utama.");
+        GameLog.Info("Sudah level terakhir! Kembali ke menu utama.");
         ReturnToMainMenu();
     }
 
@@ -169,6 +170,8 @@ public class GameManager : MonoBehaviour
     {
         isPopupShowing = false;
         currentLevelIndex = 0;
+        GameStateManager.TrySetGameState(GameState.Menu);
+
         if (SceneController.Instance != null)
         {
             SceneController.Instance.GoToMainMenu();
@@ -186,14 +189,14 @@ public class GameManager : MonoBehaviour
     public void SetGameActive(bool active)
     {
         isGameActive = active;
-        if (!active && isPopupShowing)
-        {
+
+        if (active)
             isPopupShowing = false;
-        }
     }
 
     void OnDestroy()
     {
+        CoroutineHelper.StopSafe(this, ref timerCoroutine);
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

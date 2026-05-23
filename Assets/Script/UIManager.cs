@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -61,45 +60,26 @@ public class UIManager : MonoBehaviour
         if (buttonsRegistered)
             return;
 
-        RegisterButton(startButton, StartGame);
-        RegisterButton(optionsButton, ShowOptionsFromMain);
-        RegisterButton(exitButton, ExitGame);
-        RegisterButton(koleksiIoTButton, GoToKoleksiIoT);
-        RegisterButton(backToMainButton, BackFromOptions);
-        RegisterButton(resumeButton, ResumeGame);
-        RegisterButton(pauseOptionsButton, ShowOptionsFromPause);
-        RegisterButton(pauseMainMenuButton, ReturnToMainMenuFromPause);
-        RegisterButton(pauseButton, PauseGame);
+        ButtonHelper.AddListenerOnce(startButton, StartGame);
+        ButtonHelper.AddListenerOnce(optionsButton, ShowOptionsFromMain);
+        ButtonHelper.AddListenerOnce(exitButton, ExitGame);
+        ButtonHelper.AddListenerOnce(koleksiIoTButton, GoToKoleksiIoT);
+        ButtonHelper.AddListenerOnce(backToMainButton, BackFromOptions);
+        ButtonHelper.AddListenerOnce(resumeButton, ResumeGame);
+        ButtonHelper.AddListenerOnce(pauseOptionsButton, ShowOptionsFromPause);
+        ButtonHelper.AddListenerOnce(pauseMainMenuButton, ReturnToMainMenuFromPause);
+        ButtonHelper.AddListenerOnce(pauseButton, PauseGame);
 
-        RegisterSlider(musicVolumeSlider, SetMusicVolume);
-        RegisterSlider(sfxVolumeSlider, SetSfxVolume);
+        ButtonHelper.AddListenerOnce(musicVolumeSlider, SetMusicVolume);
+        ButtonHelper.AddListenerOnce(sfxVolumeSlider, SetSfxVolume);
 
         buttonsRegistered = true;
     }
 
-    private static void RegisterButton(Button button, UnityAction action)
-    {
-        if (button == null || button.onClick.GetPersistentEventCount() > 0)
-            return;
-
-        button.onClick.AddListener(action);
-    }
-
-    private static void RegisterSlider(Slider slider, UnityAction<float> action)
-    {
-        if (slider == null || slider.onValueChanged.GetPersistentEventCount() > 0)
-            return;
-
-        slider.onValueChanged.AddListener(action);
-    }
-
     public void ShowMainMenu()
     {
-        Time.timeScale = 1f;
+        SetGameStateOrFallback(GameState.Menu);
         openedFromPause = false;
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.SetGameActive(false);
 
         HideAllPanels();
 
@@ -122,7 +102,7 @@ public class UIManager : MonoBehaviour
     
     public void PauseGame()
     {
-        Time.timeScale = 0f;
+        SetGameStateOrFallback(GameState.Paused);
         openedFromPause = true;
 
         HideAllPanels();
@@ -133,7 +113,7 @@ public class UIManager : MonoBehaviour
 
     public void ResumeGame()
     {
-        Time.timeScale = 1f;
+        SetGameStateOrFallback(GameState.Playing);
         openedFromPause = false;
 
         HideAllPanels();
@@ -207,7 +187,9 @@ public class UIManager : MonoBehaviour
 
     public void SetSfxVolume(float volume)
     {
-        // Hook this to an AudioMixer group when SFX routing exists.
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+        GameLog.Info($"SFX volume requested: {volume}. AudioMixer routing is not set up yet.");
+#endif
     }
 
     public void GoToKoleksiIoT()
@@ -220,13 +202,24 @@ public class UIManager : MonoBehaviour
 
     public void ExitGame()
     {
-        Time.timeScale = 1f;
+        SetGameStateOrFallback(GameState.Menu);
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
         Application.Quit();
 #endif
+    }
+
+    private static void SetGameStateOrFallback(GameState state)
+    {
+        if (GameStateManager.TrySetGameState(state))
+            return;
+
+        Time.timeScale = state == GameState.Paused ? 0f : 1f;
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.SetGameActive(state == GameState.Playing);
     }
 
     private void Update()

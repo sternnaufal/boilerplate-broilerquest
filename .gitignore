@@ -8,3 +8,8 @@ Build/
 *.user
 *.csproj
 *.sln
+UserSettings/
+Assets/_Recovery/
+Assets/_Recovery.meta
+Assets/Adaptive Performance/
+Assets/Adaptive Performance.meta

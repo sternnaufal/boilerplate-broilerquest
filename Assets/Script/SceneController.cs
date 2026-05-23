@@ -41,19 +41,19 @@ public class SceneController : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        Time.timeScale = 1f;
+        SetGameStateOrFallback(GameState.Menu);
         SceneManager.LoadScene(mainMenuScene);
     }
 
     public void GoToSelectLevel()
     {
-        Time.timeScale = 1f;
+        SetGameStateOrFallback(GameState.Menu);
         SceneManager.LoadScene(selectLevelScene);
     }
 
     public void GoToKoleksiIoT()
     {
-        Time.timeScale = 1f;
+        SetGameStateOrFallback(GameState.Menu);
         SceneManager.LoadScene(koleksiIoTScene);
     }
 
@@ -82,6 +82,15 @@ public class SceneController : MonoBehaviour
             GameManager.Instance.SetGameActive(true);
         }
 
+        SetGameStateOrFallback(GameState.Playing);
         SceneManager.LoadScene(sceneName);
+    }
+
+    private static void SetGameStateOrFallback(GameState state)
+    {
+        if (GameStateManager.TrySetGameState(state))
+            return;
+
+        Time.timeScale = state == GameState.Paused ? 0f : 1f;
     }
 }

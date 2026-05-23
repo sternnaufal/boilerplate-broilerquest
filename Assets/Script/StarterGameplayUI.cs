@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class StarterGameplayUI : MonoBehaviour
@@ -36,7 +35,7 @@ public class StarterGameplayUI : MonoBehaviour
         PolishStarterUi();
 
         if (CoinManager.Instance != null && coinText != null)
-            CoinManager.Instance.BindCoinText(coinText);
+            CoinManager.Instance.Initialize(coinText);
 
         ResumeGame();
         ShowHpPanel(showBuyPanelOnStart);
@@ -47,29 +46,17 @@ public class StarterGameplayUI : MonoBehaviour
         if (listenersRegistered)
             return;
 
-        RegisterButton(pauseButton, PauseGame);
-        RegisterButton(resumeButton, ResumeGame);
-        RegisterButton(hpToggleButton, ToggleHpPanel);
-        RegisterButton(closeHpButton, CloseHpPanel);
+        ButtonHelper.AddListenerOnce(pauseButton, PauseGame);
+        ButtonHelper.AddListenerOnce(resumeButton, ResumeGame);
+        ButtonHelper.AddListenerOnce(hpToggleButton, ToggleHpPanel);
+        ButtonHelper.AddListenerOnce(closeHpButton, CloseHpPanel);
 
         listenersRegistered = true;
     }
 
-    private static void RegisterButton(Button button, UnityAction action)
-    {
-        if (button == null)
-            return;
-
-        button.onClick.RemoveListener(action);
-        button.onClick.AddListener(action);
-    }
-
     public void PauseGame()
     {
-        Time.timeScale = 0f;
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.SetGameActive(false);
+        SetGameStateOrFallback(GameState.Paused);
 
         if (hudPanel != null)
             hudPanel.SetActive(false);
@@ -80,10 +67,7 @@ public class StarterGameplayUI : MonoBehaviour
 
     public void ResumeGame()
     {
-        Time.timeScale = 1f;
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.SetGameActive(true);
+        SetGameStateOrFallback(GameState.Playing);
 
         if (pausePanel != null)
             pausePanel.SetActive(false);
@@ -128,7 +112,7 @@ public class StarterGameplayUI : MonoBehaviour
         {
             coinText.gameObject.SetActive(true);
             coinText.color = new Color(1f, 0.96f, 0.70f, 1f);
-            coinText.fontSize = Mathf.Max(coinText.fontSize, 34f);
+            coinText.fontSize = Mathf.Max(coinText.fontSize, GameConstants.UI.CoinTextFontSize);
             coinText.fontStyle = FontStyles.Bold;
             coinText.alignment = TextAlignmentOptions.MidlineLeft;
         }
@@ -150,7 +134,7 @@ public class StarterGameplayUI : MonoBehaviour
         labelText.gameObject.SetActive(true);
         labelText.text = label;
         labelText.color = new Color(0.12f, 0.15f, 0.08f, 1f);
-        labelText.fontSize = Mathf.Max(labelText.fontSize, 24f);
+        labelText.fontSize = Mathf.Max(labelText.fontSize, GameConstants.UI.ButtonLabelFontSize);
         labelText.fontStyle = FontStyles.Bold;
         labelText.alignment = TextAlignmentOptions.Center;
         labelText.raycastTarget = false;
@@ -194,5 +178,16 @@ public class StarterGameplayUI : MonoBehaviour
         rect.pivot = new Vector2(1f, 0.5f);
         rect.sizeDelta = new Vector2(620f, 500f);
         rect.anchoredPosition = new Vector2(-42f, -18f);
+    }
+
+    private static void SetGameStateOrFallback(GameState state)
+    {
+        if (GameStateManager.TrySetGameState(state))
+            return;
+
+        Time.timeScale = state == GameState.Paused ? 0f : 1f;
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.SetGameActive(state == GameState.Playing);
     }
 }

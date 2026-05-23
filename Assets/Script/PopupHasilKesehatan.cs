@@ -41,8 +41,7 @@ public class PopupHasilKesehatan : MonoBehaviour
                 ayamImage.sprite = ayamSakitSprite;
         }
         
-        backButton.onClick.RemoveAllListeners();
-        backButton.onClick.AddListener(() => {
+        ButtonHelper.SetSingleListener(backButton, () => {
             Destroy(gameObject);
             onBack?.Invoke();
         });

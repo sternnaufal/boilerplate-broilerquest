@@ -29,7 +29,7 @@ public class PopupKesehatan : MonoBehaviour
     private float cursorPosX;
     private float leftBound, rightBound;
     private int direction = 1;
-    private KandangController currentKandang;
+    private IHealthCheckListener currentListener;
     private bool isStopped = false; // mencegah double stop
 
     void Awake()
@@ -48,8 +48,8 @@ public class PopupKesehatan : MonoBehaviour
 
     void Start()
     {
-        offOnButton.onClick.AddListener(ToggleOffOn);
-        stopButton.onClick.AddListener(OnStopClicked);
+        ButtonHelper.AddListenerOnce(offOnButton, ToggleOffOn);
+        ButtonHelper.AddListenerOnce(stopButton, OnStopClicked);
         stopButton.interactable = false;
         timingPanel.SetActive(false);
 
@@ -70,7 +70,12 @@ public class PopupKesehatan : MonoBehaviour
 
     public void TampilkanPopup(KandangController kandang)
     {
-        currentKandang = kandang;
+        ShowHealthCheck(kandang);
+    }
+
+    public void ShowHealthCheck(IHealthCheckListener listener)
+    {
+        currentListener = listener;
         isOn = false;
         isPlaying = false;
         isStopped = false;
@@ -161,13 +166,7 @@ public class PopupKesehatan : MonoBehaviour
                 resultScript.Setup(success, () => {
                     // Callback setelah tombol "Kembali" ditekan
                     popupPanel.SetActive(false); // tutup popup minigame
-                    if (currentKandang != null)
-                    {
-                        if (success)
-                            currentKandang.OnKesehatanMinigameSuccess();
-                        else
-                            currentKandang.OnKesehatanMinigameFail();
-                    }
+                    NotifyResult(success);
                 });
             }
         }
@@ -176,13 +175,20 @@ public class PopupKesehatan : MonoBehaviour
             // Fallback jika prefab tidak di-assign: langsung callback
             Debug.LogWarning("PopupResultPrefab tidak di-assign, langsung callback.");
             popupPanel.SetActive(false);
-            if (currentKandang != null)
-            {
-                if (success)
-                    currentKandang.OnKesehatanMinigameSuccess();
-                else
-                    currentKandang.OnKesehatanMinigameFail();
-            }
+            NotifyResult(success);
         }
+    }
+
+    private void NotifyResult(bool success)
+    {
+        if (currentListener == null)
+            return;
+
+        if (success)
+            currentListener.OnHealthCheckSuccess();
+        else
+            currentListener.OnHealthCheckFailure();
+
+        currentListener = null;
     }
 }

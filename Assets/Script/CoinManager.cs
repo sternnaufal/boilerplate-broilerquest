@@ -16,6 +16,7 @@ public class CoinManager : MonoBehaviour
     [SerializeField] private bool usePlayerPrefs = true;
 
     private int totalCoin = 0;
+    private bool hasInitialized;
 
     void Awake()
     {
@@ -39,16 +40,29 @@ public class CoinManager : MonoBehaviour
 
     void Start()
     {
-        if (usePlayerPrefs && !resetCoinOnStart)
-            totalCoin = PlayerPrefs.GetInt("TotalCoin", 0);
-        else if (resetCoinOnStart)
-            totalCoin = Mathf.Max(0, startingCoin);
-        else
-            totalCoin = 0;
+        Initialize(coinText);
+    }
+
+    public void Initialize(TextMeshProUGUI uiText = null)
+    {
+        if (uiText != null)
+            coinText = uiText;
+
+        if (!hasInitialized)
+        {
+            if (usePlayerPrefs && !resetCoinOnStart)
+                totalCoin = LoadSavedCoin();
+            else if (resetCoinOnStart)
+                totalCoin = Mathf.Max(0, startingCoin);
+            else
+                totalCoin = 0;
+
+            hasInitialized = true;
+            SaveCoin();
+        }
 
         if (coinText == null) TryFindCoinText();
         UpdateCoinUI();
-        SaveCoin();
     }
 
     public void AddCoin(int amount)
@@ -59,7 +73,7 @@ public class CoinManager : MonoBehaviour
         totalCoin = nextTotal > int.MaxValue ? int.MaxValue : (int)nextTotal;
         UpdateCoinUI();
         SaveCoin();
-        Debug.Log($"Coin +{amount}, total: {totalCoin}");
+        GameLog.Info($"Coin +{amount}, total: {totalCoin}");
     }
 
     public bool CanAfford(int amount)
@@ -73,7 +87,7 @@ public class CoinManager : MonoBehaviour
         totalCoin -= amount;
         UpdateCoinUI();
         SaveCoin();
-        Debug.Log($"Coin -{amount}, total: {totalCoin}");
+        GameLog.Info($"Coin -{amount}, total: {totalCoin}");
         return true;
     }
 
@@ -122,8 +136,16 @@ public class CoinManager : MonoBehaviour
     {
         if (usePlayerPrefs)
         {
-            PlayerPrefs.SetInt("TotalCoin", totalCoin);
+            PlayerPrefs.SetInt(GameConstants.Persistence.TotalCoinKey, totalCoin);
             PlayerPrefs.Save();
         }
+    }
+
+    private static int LoadSavedCoin()
+    {
+        if (PlayerPrefs.HasKey(GameConstants.Persistence.TotalCoinKey))
+            return PlayerPrefs.GetInt(GameConstants.Persistence.TotalCoinKey, 0);
+
+        return PlayerPrefs.GetInt(GameConstants.Persistence.LegacyTotalCoinKey, 0);
     }
 }
