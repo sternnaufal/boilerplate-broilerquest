@@ -112,19 +112,11 @@ public class UIManager : MonoBehaviour
 
     public void StartGame()
     {
-        Time.timeScale = 1f;
-        openedFromPause = false;
-
-        HideAllPanels();
-
-        if (hudPanel != null)
-            hudPanel.SetActive(true);
-
-        if (GameManager.Instance != null)
+        if (SceneController.Instance != null)
         {
-            GameManager.Instance.SetGameActive(true);
-            GameManager.Instance.InitializeForCurrentScene();
+            SceneController.Instance.GoToSelectLevel();
         }
+    }
     }
 
     public void PauseGame()
