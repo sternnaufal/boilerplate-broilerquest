@@ -37,12 +37,11 @@
 
 | When | Command |
 |------|---------|
-| Before answering a question | `npx sigmap --query "<your question>"` |
-| After code changes | `npx sigmap --track` |
-| To verify coverage | `npx sigmap --report` |
-| To query by topic | `npx sigmap --query "<topic>"` |
+| Before answering a question | `sigmap ask "<your question>"` |
+| After code changes | `sigmap validate` |
+| To query by topic | `sigmap --query "<topic>"` |
 
-Always run `npx sigmap --query` before searching for files relevant to a task.
+Always run `sigmap ask` or `sigmap --query` before searching for files relevant to a task.
 ## Assets
 
 ### Assets\Script\CoinManager.cs
@@ -56,6 +55,16 @@ class CoinManager
   GetTotalCoin() → int
 ```
 
+### Assets\Script\GameManager.cs
+```
+class GameManager
+  InitializeForCurrentScene() → void
+  GoToNextLevel() → void
+  ReturnToMainMenu() → void
+  IsGameActive() → bool
+  SetGameActive(bool active) → void
+```
+
 ### Assets\Script\LevelSelectController.cs
 ```
 class LevelSelectController
@@ -63,6 +72,15 @@ class LevelSelectController
   PlayBeginner() → void
   PlayIntermediate() → void
   ShowLockedMessage(string levelName) → void
+```
+
+### Assets\Script\SceneController.cs
+```
+class SceneController
+  GoToMainMenu() → void
+  GoToSelectLevel() → void
+  GoToKoleksiIoT() → void
+  GoToLevel(int levelIndex) → void
 ```
 
 ### Assets\Script\StarterChickenShop.cs
@@ -105,16 +123,6 @@ class UIManager
   ShowOptionsFromMain() → void
   ShowOptionsFromPause() → void
   BackFromOptions() → void
-```
-
-### Assets\Script\GameManager.cs
-```
-class GameManager
-  InitializeForCurrentScene() → void
-  GoToNextLevel() → void
-  ReturnToMainMenu() → void
-  IsGameActive() → bool
-  SetGameActive(bool active) → void
 ```
 
 ### Assets\Script\KandangController.cs
