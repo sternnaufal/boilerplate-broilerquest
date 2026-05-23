@@ -25,6 +25,7 @@ public class SceneController : MonoBehaviour
     [Header("Scene Names")]
     [SerializeField] private string mainMenuScene = "MainMenu";
     [SerializeField] private string selectLevelScene = "SelectLevel";
+    [SerializeField] private string koleksiIoTScene = "KoleksiIoT";
 
     private void Awake()
     {
@@ -48,6 +49,12 @@ public class SceneController : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(selectLevelScene);
+    }
+
+    public void GoToKoleksiIoT()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(koleksiIoTScene);
     }
 
     public void GoToLevel(int levelIndex)

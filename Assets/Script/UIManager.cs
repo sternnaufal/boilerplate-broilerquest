@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     [Header("Main Menu Buttons")]
     [SerializeField] private Button startButton;
     [SerializeField] private Button optionsButton;
-    [SerializeField] private Button exitButton;
+    [SerializeField] private Button koleksiIoTButton;
 
     [Header("Options Menu")]
     [SerializeField] private Button backToMainButton;
@@ -62,7 +62,7 @@ public class UIManager : MonoBehaviour
 
         RegisterButton(startButton, StartGame);
         RegisterButton(optionsButton, ShowOptionsFromMain);
-        RegisterButton(exitButton, ExitGame);
+        RegisterButton(koleksiIoTButton, GoToKoleksiIoT);
         RegisterButton(backToMainButton, BackFromOptions);
         RegisterButton(resumeButton, ResumeGame);
         RegisterButton(pauseOptionsButton, ShowOptionsFromPause);
@@ -208,13 +208,12 @@ public class UIManager : MonoBehaviour
         // Hook this to an AudioMixer group when SFX routing exists.
     }
 
-    public void ExitGame()
+    public void GoToKoleksiIoT()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        if (SceneController.Instance != null)
+        {
+            SceneController.Instance.GoToKoleksiIoT();
+        }
     }
 
     private void Update()
