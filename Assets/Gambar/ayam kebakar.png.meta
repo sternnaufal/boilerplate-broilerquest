@@ -1,0 +1,949 @@
+fileFormatVersion: 2
+guid: cd07eca0589f22d478d2d8d3d998bd2e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6579984958523618120
+    second: ayam kebakar_0
+  - first:
+      213: 4579592539165840707
+    second: ayam kebakar_1
+  - first:
+      213: 6023959709076114947
+    second: ayam kebakar_2
+  - first:
+      213: -7784097641799673798
+    second: ayam kebakar_3
+  - first:
+      213: -2905734471071527187
+    second: ayam kebakar_4
+  - first:
+      213: -5959637309193378772
+    second: ayam kebakar_5
+  - first:
+      213: 373318093483726365
+    second: ayam kebakar_6
+  - first:
+      213: 849085316464277966
+    second: ayam kebakar_7
+  - first:
+      213: 7611797548647532834
+    second: ayam kebakar_8
+  - first:
+      213: -1529272225624334505
+    second: ayam kebakar_9
+  - first:
+      213: 6843882636351490086
+    second: ayam kebakar_10
+  - first:
+      213: 6707194585300325229
+    second: ayam kebakar_11
+  - first:
+      213: -313773214412326098
+    second: ayam kebakar_12
+  - first:
+      213: 2057971388578366603
+    second: ayam kebakar_13
+  - first:
+      213: -8412712972625518204
+    second: ayam kebakar_14
+  - first:
+      213: -8240686905178733557
+    second: ayam kebakar_15
+  - first:
+      213: -3855743868213365280
+    second: ayam kebakar_16
+  - first:
+      213: -3422410262071350659
+    second: ayam kebakar_17
+  - first:
+      213: -7863195352253568457
+    second: ayam kebakar_18
+  - first:
+      213: 408374287936722624
+    second: ayam kebakar_19
+  - first:
+      213: 3675791741662962656
+    second: ayam kebakar_20
+  - first:
+      213: -8896176102571495803
+    second: ayam kebakar_21
+  - first:
+      213: -503685596027057879
+    second: ayam kebakar_22
+  - first:
+      213: 4415342363781255568
+    second: ayam kebakar_23
+  - first:
+      213: 8383997070449751018
+    second: ayam kebakar_24
+  - first:
+      213: 5828341177846127045
+    second: ayam kebakar_25
+  - first:
+      213: 1537415062259330386
+    second: ayam kebakar_26
+  - first:
+      213: -1066081701095582148
+    second: ayam kebakar_27
+  - first:
+      213: 4777597925237572063
+    second: ayam kebakar_28
+  - first:
+      213: 975122695786415288
+    second: ayam kebakar_29
+  - first:
+      213: 1185303971825372421
+    second: ayam kebakar_30
+  - first:
+      213: -6723097508691724577
+    second: ayam kebakar_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ayam kebakar_0
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 1815
+        width: 74
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bc49cfda823fa4a0800000000000000
+      internalID: -6579984958523618120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_1
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 1817
+        width: 73
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3455201962bfd8f30800000000000000
+      internalID: 4579592539165840707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_2
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 1820
+        width: 74
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30e4fb86077699350800000000000000
+      internalID: 6023959709076114947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_3
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 1819
+        width: 73
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a38139bcf6459f390800000000000000
+      internalID: -7784097641799673798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_4
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 1620
+        width: 74
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dee8c20d4e1cca7d0800000000000000
+      internalID: -2905734471071527187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_5
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 1615
+        width: 74
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c242d5b517d1b4da0800000000000000
+      internalID: -5959637309193378772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_6
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 1616
+        width: 73
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d16d25ef3da4e2500800000000000000
+      internalID: 373318093483726365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_7
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 1615
+        width: 73
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec97adfb89e88cb00800000000000000
+      internalID: 849085316464277966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_8
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 1614
+        width: 22
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 229435d9a8982a960800000000000000
+      internalID: 7611797548647532834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_9
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 1414
+        width: 75
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75f5ac2630fe6cae0800000000000000
+      internalID: -1529272225624334505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_10
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 1414
+        width: 74
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 628c1305ffa5afe50800000000000000
+      internalID: 6843882636351490086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_11
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 1414
+        width: 74
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d63df3860fdb41d50800000000000000
+      internalID: 6707194585300325229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_12
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 1412
+        width: 72
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2bbbe68ce045abf0800000000000000
+      internalID: -313773214412326098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_13
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 1211
+        width: 74
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b84812603126f8c10800000000000000
+      internalID: 2057971388578366603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_14
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 1212
+        width: 72
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 481e555bf1a004b80800000000000000
+      internalID: -8412712972625518204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_15
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 1213
+        width: 72
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b04cb97bbe233ad80800000000000000
+      internalID: -8240686905178733557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_16
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 1215
+        width: 73
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e570466165ad7ac0800000000000000
+      internalID: -3855743868213365280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_17
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 1213
+        width: 38
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7ae595dff72180d0800000000000000
+      internalID: -3422410262071350659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_18
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 1014
+        width: 74
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73a6c65fc7150e290800000000000000
+      internalID: -7863195352253568457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_19
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 1014
+        width: 73
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c61fdf4046daa500800000000000000
+      internalID: 408374287936722624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_20
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 1014
+        width: 73
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e3a2262d19030330800000000000000
+      internalID: 3675791741662962656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_21
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 1014
+        width: 73
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58e28eaf7fe6a8480800000000000000
+      internalID: -8896176102571495803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_22
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 819
+        width: 74
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 929835a7e9c8209f0800000000000000
+      internalID: -503685596027057879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_23
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 813
+        width: 31
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0915ae28c72764d30800000000000000
+      internalID: 4415342363781255568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_24
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 813
+        width: 73
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae3b21e4ae0f95470800000000000000
+      internalID: 8383997070449751018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_25
+      rect:
+        serializedVersion: 2
+        x: 838
+        y: 813
+        width: 75
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c9dc4fdb6d62e050800000000000000
+      internalID: 5828341177846127045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_26
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 813
+        width: 73
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25d6d428adef55510800000000000000
+      internalID: 1537415062259330386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_27
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 613
+        width: 74
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3657a857548431f0800000000000000
+      internalID: -1066081701095582148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_28
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 612
+        width: 73
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd1cd6d00007d4240800000000000000
+      internalID: 4777597925237572063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_29
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 612
+        width: 73
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b445c6ece4588d00800000000000000
+      internalID: 975122695786415288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_30
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 613
+        width: 72
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50dc28faeab037010800000000000000
+      internalID: 1185303971825372421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kebakar_31
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 413
+        width: 74
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd6bd14bf62c2b2a0800000000000000
+      internalID: -6723097508691724577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ayam kebakar_0: -6579984958523618120
+      ayam kebakar_1: 4579592539165840707
+      ayam kebakar_10: 6843882636351490086
+      ayam kebakar_11: 6707194585300325229
+      ayam kebakar_12: -313773214412326098
+      ayam kebakar_13: 2057971388578366603
+      ayam kebakar_14: -8412712972625518204
+      ayam kebakar_15: -8240686905178733557
+      ayam kebakar_16: -3855743868213365280
+      ayam kebakar_17: -3422410262071350659
+      ayam kebakar_18: -7863195352253568457
+      ayam kebakar_19: 408374287936722624
+      ayam kebakar_2: 6023959709076114947
+      ayam kebakar_20: 3675791741662962656
+      ayam kebakar_21: -8896176102571495803
+      ayam kebakar_22: -503685596027057879
+      ayam kebakar_23: 4415342363781255568
+      ayam kebakar_24: 8383997070449751018
+      ayam kebakar_25: 5828341177846127045
+      ayam kebakar_26: 1537415062259330386
+      ayam kebakar_27: -1066081701095582148
+      ayam kebakar_28: 4777597925237572063
+      ayam kebakar_29: 975122695786415288
+      ayam kebakar_3: -7784097641799673798
+      ayam kebakar_30: 1185303971825372421
+      ayam kebakar_31: -6723097508691724577
+      ayam kebakar_4: -2905734471071527187
+      ayam kebakar_5: -5959637309193378772
+      ayam kebakar_6: 373318093483726365
+      ayam kebakar_7: 849085316464277966
+      ayam kebakar_8: 7611797548647532834
+      ayam kebakar_9: -1529272225624334505
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

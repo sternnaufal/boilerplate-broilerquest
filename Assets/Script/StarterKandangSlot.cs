@@ -36,6 +36,12 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
     [SerializeField] private int baseSellReward = 20;
     [SerializeField] private int careBonus = 10;
 
+    [Header("Animation")]
+    [SerializeField] private Animator chickenAnimator;      // assign ke Animator di GameObject Ayam
+    [SerializeField] private string idleAnimParam = "Normal";     // trigger untuk kembali normal
+    [SerializeField] private string heatAnimParam = "Panas";      // trigger untuk panas
+    [SerializeField] private string coldAnimParam = "Dingin";     // trigger untuk dingin
+
     private GameObject spawnedChicken;
     private Coroutine eventCoroutine;
     private bool occupied;
@@ -190,11 +196,14 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         Sprite needSprite = GetNeedSprite(currentNeed);
         ShowBubble(needSprite, GetNeedText(currentNeed));
         currentState = SlotState.WaitingForCareClick;
+        UpdateAnimationByNeed(currentNeed);
         Debug.Log($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
     }
 
     private void CompleteCurrentNeed()
     {
+        ResetAnimationToNormal();
+
         switch (currentNeed)
         {
             case ChickenNeed.Feed:
@@ -291,6 +300,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         coolingSatisfied = false;
         heatingSatisfied = false;
         sellReward = baseSellReward;
+        ResetAnimationToNormal();
     }
 
     private void ShowBubble(Sprite sprite, string label)
@@ -414,5 +424,43 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         TextMeshProUGUI[] labels = visual.GetComponentsInChildren<TextMeshProUGUI>(true);
         foreach (TextMeshProUGUI label in labels)
             label.raycastTarget = false;
+    }
+
+    private void FindAnimator()
+    {
+        if (chickenAnimator == null && chickenVisual != null)
+        {
+            // Cari Animator di child bernama "Ayam"
+            Transform ayam = chickenVisual.transform.Find("Ayam");
+            if (ayam != null)
+                chickenAnimator = ayam.GetComponent<Animator>();
+        }
+    }
+
+    // Update animasi berdasarkan kebutuhan yang sedang muncul
+    private void UpdateAnimationByNeed(ChickenNeed need)
+    {
+        if (chickenAnimator == null) return;
+        
+        switch (need)
+        {
+            case ChickenNeed.Heating:
+                chickenAnimator.SetTrigger(heatAnimParam);
+                break;
+            case ChickenNeed.Cooling:
+                chickenAnimator.SetTrigger(coldAnimParam);
+                break;
+            case ChickenNeed.Feed:
+                // Feed bisa tetap pakai animasi normal atau makan (opsional)
+                chickenAnimator.SetTrigger(idleAnimParam);
+                break;
+        }
+    }
+
+    // Reset animasi ke normal setelah kebutuhan dipenuhi
+    private void ResetAnimationToNormal()
+    {
+        if (chickenAnimator != null)
+            chickenAnimator.SetTrigger(idleAnimParam);
     }
 }

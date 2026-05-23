@@ -1,0 +1,845 @@
+fileFormatVersion: 2
+guid: 73dc7557d44abf34c9e6bf8ff13efef0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8499929383396311288
+    second: ayam biasa_0
+  - first:
+      213: -3739482370382217303
+    second: ayam biasa_1
+  - first:
+      213: -6267097072006223768
+    second: ayam biasa_2
+  - first:
+      213: 2601626954061312167
+    second: ayam biasa_3
+  - first:
+      213: 4448009314344648473
+    second: ayam biasa_4
+  - first:
+      213: 142353731187877778
+    second: ayam biasa_5
+  - first:
+      213: 7990217421854202360
+    second: ayam biasa_6
+  - first:
+      213: 2003572017216684562
+    second: ayam biasa_7
+  - first:
+      213: 2748820715372256200
+    second: ayam biasa_8
+  - first:
+      213: 1740205466546041777
+    second: ayam biasa_9
+  - first:
+      213: -680811933503810279
+    second: ayam biasa_10
+  - first:
+      213: 4676476374582736257
+    second: ayam biasa_11
+  - first:
+      213: 6715974199636866160
+    second: ayam biasa_12
+  - first:
+      213: 638846215810214704
+    second: ayam biasa_13
+  - first:
+      213: 8906053698818058991
+    second: ayam biasa_14
+  - first:
+      213: 5072129453040495449
+    second: ayam biasa_15
+  - first:
+      213: 8798122103681475011
+    second: ayam biasa_16
+  - first:
+      213: 993222365596853561
+    second: ayam biasa_17
+  - first:
+      213: -8280761056397534148
+    second: ayam biasa_18
+  - first:
+      213: 6928003255077096243
+    second: ayam biasa_19
+  - first:
+      213: 8503436149717127246
+    second: ayam biasa_20
+  - first:
+      213: 8076293012310269463
+    second: ayam biasa_21
+  - first:
+      213: -5764722022926602234
+    second: ayam biasa_22
+  - first:
+      213: -3213747180356654588
+    second: ayam biasa_23
+  - first:
+      213: 107507813368181749
+    second: ayam biasa_24
+  - first:
+      213: -3214915470304735563
+    second: ayam biasa_25
+  - first:
+      213: 9181017860372498775
+    second: ayam biasa_26
+  - first:
+      213: 1411802775294322123
+    second: ayam biasa_27
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ayam biasa_0
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 1820
+        width: 83
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80ff1c6a24f2a0a80800000000000000
+      internalID: -8499929383396311288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_1
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 1820
+        width: 84
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9af3885c890ba1cc0800000000000000
+      internalID: -3739482370382217303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_2
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 1820
+        width: 84
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 868ad22ea6cc609a0800000000000000
+      internalID: -6267097072006223768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_3
+      rect:
+        serializedVersion: 2
+        x: 1185
+        y: 1821
+        width: 83
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a0f7e24ee5da1420800000000000000
+      internalID: 2601626954061312167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_4
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 1620
+        width: 83
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91f3423a7e08abd30800000000000000
+      internalID: 4448009314344648473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_5
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 1621
+        width: 84
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 297a7ebd6fdb9f100800000000000000
+      internalID: 142353731187877778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_6
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 1620
+        width: 83
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f9d1c34964f2ee60800000000000000
+      internalID: 7990217421854202360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_7
+      rect:
+        serializedVersion: 2
+        x: 1185
+        y: 1620
+        width: 82
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2120d10622e1ecb10800000000000000
+      internalID: 2003572017216684562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_8
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 1420
+        width: 83
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cb9ff270e5c52620800000000000000
+      internalID: 2748820715372256200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_9
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 1420
+        width: 84
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b37badd6a3762810800000000000000
+      internalID: 1740205466546041777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_10
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 1420
+        width: 83
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91598a057254d86f0800000000000000
+      internalID: -680811933503810279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_11
+      rect:
+        serializedVersion: 2
+        x: 1185
+        y: 1420
+        width: 82
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 185b2835c7e26e040800000000000000
+      internalID: 4676476374582736257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_12
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 1219
+        width: 83
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0743b0aa3fee33d50800000000000000
+      internalID: 6715974199636866160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_13
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 1220
+        width: 84
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03b687f9f33add800800000000000000
+      internalID: 638846215810214704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_14
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 1220
+        width: 83
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: feaaa9c17a8a89b70800000000000000
+      internalID: 8906053698818058991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_15
+      rect:
+        serializedVersion: 2
+        x: 1185
+        y: 1220
+        width: 82
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95b664f3dd2d36640800000000000000
+      internalID: 5072129453040495449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_16
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 1019
+        width: 83
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c162785075391a70800000000000000
+      internalID: 8798122103681475011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_17
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 1019
+        width: 83
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 935af5caa72a8cd00800000000000000
+      internalID: 993222365596853561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_18
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 1019
+        width: 83
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3c598b41b3d41d80800000000000000
+      internalID: -8280761056397534148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_19
+      rect:
+        serializedVersion: 2
+        x: 1185
+        y: 1019
+        width: 82
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33bce9d1146352060800000000000000
+      internalID: 6928003255077096243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_20
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 818
+        width: 83
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e40da120026420670800000000000000
+      internalID: 8503436149717127246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_21
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 818
+        width: 84
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71e19b464b1c41070800000000000000
+      internalID: 8076293012310269463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_22
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 818
+        width: 83
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 600b69aecd79fffa0800000000000000
+      internalID: -5764722022926602234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_23
+      rect:
+        serializedVersion: 2
+        x: 1184
+        y: 818
+        width: 83
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40aade477f97663d0800000000000000
+      internalID: -3213747180356654588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_24
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 618
+        width: 83
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f3b36269c1fd7100800000000000000
+      internalID: 107507813368181749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_25
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 617
+        width: 84
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5be0491c9635263d0800000000000000
+      internalID: -3214915470304735563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_26
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 618
+        width: 83
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7590504d917896f70800000000000000
+      internalID: 9181017860372498775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam biasa_27
+      rect:
+        serializedVersion: 2
+        x: 1185
+        y: 618
+        width: 82
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc52452e42bb79310800000000000000
+      internalID: 1411802775294322123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ayam biasa_0: -8499929383396311288
+      ayam biasa_1: -3739482370382217303
+      ayam biasa_10: -680811933503810279
+      ayam biasa_11: 4676476374582736257
+      ayam biasa_12: 6715974199636866160
+      ayam biasa_13: 638846215810214704
+      ayam biasa_14: 8906053698818058991
+      ayam biasa_15: 5072129453040495449
+      ayam biasa_16: 8798122103681475011
+      ayam biasa_17: 993222365596853561
+      ayam biasa_18: -8280761056397534148
+      ayam biasa_19: 6928003255077096243
+      ayam biasa_2: -6267097072006223768
+      ayam biasa_20: 8503436149717127246
+      ayam biasa_21: 8076293012310269463
+      ayam biasa_22: -5764722022926602234
+      ayam biasa_23: -3213747180356654588
+      ayam biasa_24: 107507813368181749
+      ayam biasa_25: -3214915470304735563
+      ayam biasa_26: 9181017860372498775
+      ayam biasa_27: 1411802775294322123
+      ayam biasa_3: 2601626954061312167
+      ayam biasa_4: 4448009314344648473
+      ayam biasa_5: 142353731187877778
+      ayam biasa_6: 7990217421854202360
+      ayam biasa_7: 2003572017216684562
+      ayam biasa_8: 2748820715372256200
+      ayam biasa_9: 1740205466546041777
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
