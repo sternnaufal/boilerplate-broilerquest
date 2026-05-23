@@ -64,7 +64,11 @@ public class LevelSelectController : MonoBehaviour
         if (SceneController.Instance != null)
         {
             SceneController.Instance.GoToLevel(0);
+            return;
         }
+
+        if (!string.IsNullOrWhiteSpace(starterSceneName))
+            SceneManager.LoadScene(starterSceneName);
     }
 
     public void PlayBeginner()

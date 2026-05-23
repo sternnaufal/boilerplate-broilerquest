@@ -20,17 +20,41 @@ public class TimeUpPopup : MonoBehaviour
         if (scoreText != null)
             scoreText.text = $"Score: {finalCoin}";
 
-        // Pasang listener tombol
-        backButton.onClick.AddListener(() => {
-            GameManager.Instance.ReturnToMainMenu();
-            Destroy(gameObject);
-        });
+        if (backButton != null)
+        {
+            backButton.onClick.RemoveAllListeners();
+            backButton.onClick.AddListener(() => {
+                if (GameManager.Instance != null)
+                    GameManager.Instance.ReturnToMainMenu();
 
-        continueButton.onClick.AddListener(() => {
-            // SEMENTARA DI-COMMENT: karena scene Beginner belum dibuat
-            // GameManager.Instance.GoToNextLevel();
-            Debug.Log("Tombol Continue ditekan. (Fitur lanjut ke level berikutnya masih di-comment)");
-            // Destroy(gameObject); // Uncomment jika ingin popup hilang
-        });
+                Destroy(gameObject);
+            });
+        }
+
+        bool canContinue = HasLoadableNextLevel();
+        if (continueButton != null)
+        {
+            continueButton.onClick.RemoveAllListeners();
+            continueButton.interactable = canContinue;
+
+            if (canContinue)
+            {
+                continueButton.onClick.AddListener(() => {
+                    if (GameManager.Instance != null)
+                        GameManager.Instance.GoToNextLevel();
+
+                    Destroy(gameObject);
+                });
+            }
+        }
+    }
+
+    private bool HasLoadableNextLevel()
+    {
+        int nextLevelIndex = currentLevelIndex + 1;
+        return sceneNames != null
+            && nextLevelIndex >= 0
+            && nextLevelIndex < sceneNames.Length
+            && Application.CanStreamedLevelBeLoaded(sceneNames[nextLevelIndex]);
     }
 }

@@ -1,9 +1,11 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 public class CoinManager : MonoBehaviour
 {
     public static CoinManager Instance { get; private set; }
+    public event Action<int> CoinsChanged;
 
     [Header("UI Reference")]
     public TextMeshProUGUI coinText;
@@ -24,6 +26,12 @@ public class CoinManager : MonoBehaviour
         }
         else
         {
+            if (resetCoinOnStart)
+                Instance.SetTotalCoin(startingCoin);
+
+            if (coinText != null)
+                Instance.BindCoinText(coinText);
+
             Destroy(gameObject);
             return;
         }
@@ -40,11 +48,15 @@ public class CoinManager : MonoBehaviour
 
         if (coinText == null) TryFindCoinText();
         UpdateCoinUI();
+        SaveCoin();
     }
 
     public void AddCoin(int amount)
     {
-        totalCoin += amount;
+        if (amount < 0) return;
+
+        long nextTotal = (long)totalCoin + amount;
+        totalCoin = nextTotal > int.MaxValue ? int.MaxValue : (int)nextTotal;
         UpdateCoinUI();
         SaveCoin();
         Debug.Log($"Coin +{amount}, total: {totalCoin}");
@@ -86,12 +98,16 @@ public class CoinManager : MonoBehaviour
         if (coinText == null) TryFindCoinText();
         if (coinText != null)
             coinText.text = totalCoin.ToString();
+
+        CoinsChanged?.Invoke(totalCoin);
     }
 
     private void TryFindCoinText()
     {
-        // Cari semua TextMeshProUGUI di scene, cari yang nama GameObject-nya "CoinText"
-        TextMeshProUGUI[] allTexts = FindObjectsOfType<TextMeshProUGUI>();
+        TextMeshProUGUI[] allTexts = FindObjectsByType<TextMeshProUGUI>(
+            FindObjectsInactive.Exclude,
+            FindObjectsSortMode.None);
+
         foreach (var txt in allTexts)
         {
             if (txt.gameObject.name == "CoinText")

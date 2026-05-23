@@ -59,23 +59,29 @@ public class SceneController : MonoBehaviour
 
     public void GoToLevel(int levelIndex)
     {
+        string[] sceneNames = GameManager.Instance != null
+            ? GameManager.Instance.sceneNames
+            : new string[] { "Starter", "Beginner", "Intermediate" };
+
+        if (levelIndex < 0 || levelIndex >= sceneNames.Length)
+        {
+            Debug.LogError($"Level index {levelIndex} is out of range.");
+            return;
+        }
+
+        string sceneName = sceneNames[levelIndex];
+        if (!Application.CanStreamedLevelBeLoaded(sceneName))
+        {
+            Debug.LogError($"Scene '{sceneName}' is not in Build Settings or cannot be loaded.");
+            return;
+        }
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.currentLevelIndex = levelIndex;
             GameManager.Instance.SetGameActive(true);
         }
 
-        string[] sceneNames = GameManager.Instance != null
-            ? GameManager.Instance.sceneNames
-            : new string[] { "Starter", "Beginner", "Intermediate" };
-
-        if (levelIndex >= 0 && levelIndex < sceneNames.Length)
-        {
-            SceneManager.LoadScene(sceneNames[levelIndex]);
-        }
-        else
-        {
-            Debug.LogError($"Level index {levelIndex} is out of range.");
-        }
+        SceneManager.LoadScene(sceneName);
     }
 }

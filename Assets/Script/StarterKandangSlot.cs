@@ -3,9 +3,12 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using SlotStateChanged = System.Action<StarterKandangSlot>;
 
 public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
 {
+    public event SlotStateChanged StateChanged;
+
     [Header("Chicken Visual")]
     [SerializeField] private GameObject chickenVisual;
     [SerializeField] private Transform chickenParent;
@@ -164,12 +167,14 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
     {
         occupied = value;
         currentState = occupied ? SlotState.WaitingForCareEvent : SlotState.Empty;
+        NotifyStateChanged();
     }
 
     private void StartNeedTimer()
     {
         StopEventTimer();
         currentState = SlotState.WaitingForCareEvent;
+        NotifyStateChanged();
         eventCoroutine = StartCoroutine(NeedEventDelay());
     }
 
@@ -196,6 +201,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         Sprite needSprite = GetNeedSprite(currentNeed);
         ShowBubble(needSprite, GetNeedText(currentNeed));
         currentState = SlotState.WaitingForCareClick;
+        NotifyStateChanged();
         UpdateAnimationByNeed(currentNeed);
         Debug.Log($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
     }
@@ -234,7 +240,13 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
     {
         ShowBubble(sellBubbleSprite, sellBubbleText);
         currentState = SlotState.WaitingForSellClick;
+        NotifyStateChanged();
         Debug.Log($"{name}: Semua kebutuhan terpenuhi, ayam siap dijual.");
+    }
+
+    private void NotifyStateChanged()
+    {
+        StateChanged?.Invoke(this);
     }
 
     private ChickenNeed GetNextNeed()

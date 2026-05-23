@@ -30,9 +30,17 @@ public class StarterChickenShop : MonoBehaviour
     [SerializeField] private string boughtMessage = "Ayam berhasil dibeli.";
 
     private bool listenersRegistered;
+    private bool isSubscribedToSlots;
+
+    private void Awake()
+    {
+        ResolveKandangSlots();
+    }
 
     private void OnEnable()
     {
+        ResolveKandangSlots();
+        SubscribeToStateChanges();
         RegisterButtonListeners();
         UpdateOptionLabels();
         PolishShopButtons();
@@ -42,9 +50,9 @@ public class StarterChickenShop : MonoBehaviour
             ShowMessage(startupMessage);
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        RefreshShopState();
+        UnsubscribeFromStateChanges();
     }
 
     private void RegisterButtonListeners()
@@ -121,6 +129,9 @@ public class StarterChickenShop : MonoBehaviour
 
     public void RefreshShopState()
     {
+        ResolveKandangSlots();
+        SubscribeToStateChanges();
+
         if (options == null)
             return;
 
@@ -218,6 +229,8 @@ public class StarterChickenShop : MonoBehaviour
 
     private StarterKandangSlot FindEmptyKandang()
     {
+        ResolveKandangSlots();
+
         if (kandangSlots == null)
             return null;
 
@@ -228,6 +241,68 @@ public class StarterChickenShop : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void ResolveKandangSlots()
+    {
+        StarterKandangSlot[] discoveredSlots = FindObjectsByType<StarterKandangSlot>(
+            FindObjectsInactive.Exclude,
+            FindObjectsSortMode.InstanceID);
+
+        if (discoveredSlots.Length == 0)
+            return;
+
+        kandangSlots = discoveredSlots;
+    }
+
+    private void SubscribeToStateChanges()
+    {
+        if (isSubscribedToSlots)
+            UnsubscribeFromStateChanges();
+
+        if (CoinManager.Instance != null)
+            CoinManager.Instance.CoinsChanged += HandleCoinsChanged;
+
+        if (kandangSlots != null)
+        {
+            foreach (StarterKandangSlot slot in kandangSlots)
+            {
+                if (slot != null)
+                    slot.StateChanged += HandleSlotStateChanged;
+            }
+        }
+
+        isSubscribedToSlots = true;
+    }
+
+    private void UnsubscribeFromStateChanges()
+    {
+        if (!isSubscribedToSlots)
+            return;
+
+        if (CoinManager.Instance != null)
+            CoinManager.Instance.CoinsChanged -= HandleCoinsChanged;
+
+        if (kandangSlots != null)
+        {
+            foreach (StarterKandangSlot slot in kandangSlots)
+            {
+                if (slot != null)
+                    slot.StateChanged -= HandleSlotStateChanged;
+            }
+        }
+
+        isSubscribedToSlots = false;
+    }
+
+    private void HandleCoinsChanged(int _)
+    {
+        RefreshShopState();
+    }
+
+    private void HandleSlotStateChanged(StarterKandangSlot _)
+    {
+        RefreshShopState();
     }
 
     private int GetEmptySlotCount()

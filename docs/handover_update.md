@@ -114,6 +114,45 @@ Date: 22 Mei 2026
   open HP panel -> buy Ayam Kampung -> care bubble -> harvest bubble -> harvest.
   Result: `PASS`, coin changed `100 -> 85`, slot returned empty, no console errors or warnings.
 
+## Cleanup / Modularization Follow-up - 23 Mei 2026
+
+- Re-analyzed the latest pulled work after the Starter shop stayed disabled even when the player had enough coin.
+- Root cause for disabled buy button:
+  `Assets/Prefab/BQ_KandangSlot.prefab` had its prefab root inactive:
+  `m_IsActive: 0`.
+  Because `StarterChickenShop` checks `slot.gameObject.activeInHierarchy && slot.IsEmpty`, inactive slot prefab instances made the shop think no empty kandang slot existed.
+- Fixed prefab state:
+  `Assets/Prefab/BQ_KandangSlot.prefab` root is now active by default.
+- Cleaned the Starter shop flow from previous-attempt conflicts:
+  - `StarterChickenShop` no longer refreshes button state every frame.
+  - Shop button state now reacts to coin and kandang-slot state changes.
+  - The shop discovers active `StarterKandangSlot` objects at runtime, so stale or partially assigned Inspector arrays do not block buying.
+- Modularized Starter economy / slot communication:
+  - `CoinManager` now exposes `CoinsChanged`.
+  - `StarterKandangSlot` now exposes `StateChanged`.
+  - `StarterChickenShop` subscribes to those events and refreshes only when relevant game state changes.
+- Hardened `CoinManager`:
+  - Duplicate persistent instances can transfer scene reset coin values and UI bindings before destroying themselves.
+  - Coin is saved after startup initialization.
+  - `AddCoin` ignores negative input and clamps overflow at `int.MaxValue`.
+  - Deprecated `FindObjectsOfType` usage was replaced with `FindObjectsByType`.
+- Kept the older `KandangController` / `PopupKesehatan` flow intact because it is not wired into the current Starter scene and may still be useful for another level. It should be treated as a legacy/alternate level mechanic until the team decides to remove or migrate it.
+- Validation:
+  - `dotnet build Assembly-CSharp.csproj --no-restore`
+  - Result: `PASS`, 0 errors, 0 warnings.
+  - `npx sigmap validate`
+  - Result: config valid, but reports 50% coverage. Continue treating `sigmap validate` coverage as unreliable for this project; use `npx sigmap --track` / `npx sigmap --report` for source-of-truth coverage.
+
+## Current Code Architecture Notes
+
+- `SceneController`: scene navigation only.
+- `GameManager`: level timer, game-active state, time-up popup.
+- `CoinManager`: persistent coin state, coin UI binding, `CoinsChanged` event.
+- `StarterGameplayUI`: Starter-specific pause / HP panel UI.
+- `StarterChickenShop`: Starter shop purchase logic and button interactability.
+- `StarterKandangSlot`: one kandang slot state machine, care events, sell/harvest flow.
+- `UIManager`: MainMenu scene UI only. Avoid reusing it for Starter gameplay UI to prevent menu/gameplay responsibility overlap.
+
 ## Current Console State
 
 No active BroilerQuest script errors were found after the UI smoke test.
@@ -132,4 +171,7 @@ The other repeated console entries are Unity MCP bridge trace logs such as disco
 - Use `npx sigmap --track` after code changes.
 - Use `npx sigmap --report` to verify coverage.
 - The old `sigmap validate` command reports misleading coverage in this project and should not be used as the source of truth.
+- Before future Starter shop work, check that `BQ_KandangSlot.prefab` root remains active and that scene kandang slots are active under `BQ_KandangArea`.
+- Prefer event-driven updates for gameplay UI and shop state. Avoid restoring per-frame `RefreshShopState()` polling unless profiling or gameplay behavior requires it.
+- If the older `KandangController` flow is no longer needed, remove it in a dedicated cleanup commit after confirming no scene/prefab references remain.
 - The working tree has Unity-generated changes in scene, project settings, package lock, user settings, and layout files. Review before committing.

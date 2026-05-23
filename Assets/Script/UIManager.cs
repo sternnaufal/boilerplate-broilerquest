@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
     [Header("Main Menu Buttons")]
     [SerializeField] private Button startButton;
     [SerializeField] private Button optionsButton;
+    [SerializeField] private Button exitButton;
     [SerializeField] private Button koleksiIoTButton;
 
     [Header("Options Menu")]
@@ -62,6 +63,7 @@ public class UIManager : MonoBehaviour
 
         RegisterButton(startButton, StartGame);
         RegisterButton(optionsButton, ShowOptionsFromMain);
+        RegisterButton(exitButton, ExitGame);
         RegisterButton(koleksiIoTButton, GoToKoleksiIoT);
         RegisterButton(backToMainButton, BackFromOptions);
         RegisterButton(resumeButton, ResumeGame);
@@ -214,6 +216,17 @@ public class UIManager : MonoBehaviour
         {
             SceneController.Instance.GoToKoleksiIoT();
         }
+    }
+
+    public void ExitGame()
+    {
+        Time.timeScale = 1f;
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     private void Update()

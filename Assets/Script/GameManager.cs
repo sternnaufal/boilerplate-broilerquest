@@ -146,16 +146,23 @@ public class GameManager : MonoBehaviour
     {
         isPopupShowing = false;
         int nextLevel = currentLevelIndex + 1;
-        if (nextLevel < sceneNames.Length)
+
+        while (nextLevel < sceneNames.Length)
         {
+            if (!Application.CanStreamedLevelBeLoaded(sceneNames[nextLevel]))
+            {
+                Debug.LogWarning($"Scene '{sceneNames[nextLevel]}' is not available. Skipping next level.");
+                nextLevel++;
+                continue;
+            }
+
             currentLevelIndex = nextLevel;
             SceneManager.LoadScene(sceneNames[nextLevel]);
+            return;
         }
-        else
-        {
-            Debug.Log("Sudah level terakhir! Kembali ke menu utama.");
-            ReturnToMainMenu();
-        }
+
+        Debug.Log("Sudah level terakhir! Kembali ke menu utama.");
+        ReturnToMainMenu();
     }
 
     public void ReturnToMainMenu()
