@@ -162,10 +162,9 @@ public class GameManager : MonoBehaviour
     {
         isPopupShowing = false;
         currentLevelIndex = 0;
-        // Instead of loading a separate MainMenu scene, UIManager handles the main menu overlay
-        if (UIManager.Instance != null)
+        if (SceneController.Instance != null)
         {
-            UIManager.Instance.ShowMainMenu();
+            SceneController.Instance.GoToMainMenu();
         }
     }
 

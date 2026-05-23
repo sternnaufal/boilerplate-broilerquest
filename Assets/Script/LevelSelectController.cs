@@ -61,15 +61,10 @@ public class LevelSelectController : MonoBehaviour
 
     public void PlayStarter()
     {
-        Time.timeScale = 1f;
-
-        if (GameManager.Instance != null)
+        if (SceneController.Instance != null)
         {
-            GameManager.Instance.currentLevelIndex = 0;
-            GameManager.Instance.SetGameActive(true);
+            SceneController.Instance.GoToLevel(0);
         }
-
-        SceneManager.LoadScene(starterSceneName);
     }
 
     public void PlayBeginner()
