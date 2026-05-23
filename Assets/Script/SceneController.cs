@@ -3,7 +3,24 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    public static SceneController Instance { get; private set; }
+    private static SceneController _instance;
+
+    public static SceneController Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindFirstObjectByType<SceneController>();
+                if (_instance == null)
+                {
+                    GameObject go = new GameObject("SceneController");
+                    _instance = go.AddComponent<SceneController>();
+                }
+            }
+            return _instance;
+        }
+    }
 
     [Header("Scene Names")]
     [SerializeField] private string mainMenuScene = "MainMenu";
@@ -11,13 +28,13 @@ public class SceneController : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (_instance != null && _instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
-        Instance = this;
+        _instance = this;
         DontDestroyOnLoad(gameObject);
     }
 

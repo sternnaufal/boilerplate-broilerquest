@@ -117,8 +117,7 @@ public class UIManager : MonoBehaviour
             SceneController.Instance.GoToSelectLevel();
         }
     }
-    }
-
+    
     public void PauseGame()
     {
         Time.timeScale = 0f;
