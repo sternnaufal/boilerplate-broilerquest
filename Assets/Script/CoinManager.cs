@@ -8,6 +8,9 @@ public class CoinManager : MonoBehaviour
     [Header("UI Reference")]
     public TextMeshProUGUI coinText; // drag CoinText dari Canvas ke sini
 
+    [Header("Display")]
+    [SerializeField] private string coinPrefix = "Coin: ";
+
     [Header("Starting Coin")]
     [SerializeField] private bool resetCoinOnStart;
     [SerializeField] private int startingCoin;
@@ -80,7 +83,7 @@ public class CoinManager : MonoBehaviour
     private void UpdateCoinUI()
     {
         if (coinText != null)
-            coinText.text = totalCoin.ToString();
+            coinText.text = $"{coinPrefix}{totalCoin}";
     }
 
     public int GetTotalCoin()

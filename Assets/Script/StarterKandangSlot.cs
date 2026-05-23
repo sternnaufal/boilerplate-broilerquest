@@ -9,6 +9,8 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
     [SerializeField] private GameObject chickenVisual;
     [SerializeField] private Transform chickenParent;
     [SerializeField] private bool startsOccupied;
+    [SerializeField] private Vector2 chickenVisualSize = new Vector2(108f, 118f);
+    [SerializeField] private Vector2 chickenVisualOffset = new Vector2(0f, -8f);
 
     [Header("Bubble Event")]
     [SerializeField] private GameObject bubbleVisual;
@@ -66,7 +68,10 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         SetOccupied(startsOccupied);
 
         if (chickenVisual != null)
+        {
+            PositionChickenVisual(chickenVisual.transform);
             chickenVisual.SetActive(occupied);
+        }
 
         HideBubble();
 
@@ -89,12 +94,11 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         {
             Transform parent = chickenParent != null ? chickenParent : transform;
             spawnedChicken = Instantiate(chickenPrefab, parent);
-            spawnedChicken.transform.localPosition = Vector3.zero;
-            spawnedChicken.transform.localRotation = Quaternion.identity;
-            spawnedChicken.transform.localScale = Vector3.one;
+            PositionChickenVisual(spawnedChicken.transform);
         }
         else if (chickenVisual != null)
         {
+            PositionChickenVisual(chickenVisual.transform);
             chickenVisual.SetActive(true);
         }
         else
@@ -367,5 +371,37 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
 
         slotImage.color = new Color(1f, 1f, 1f, 0f);
         slotImage.raycastTarget = true;
+    }
+
+    private void PositionChickenVisual(Transform visual)
+    {
+        if (visual == null)
+            return;
+
+        visual.SetAsLastSibling();
+        visual.localRotation = Quaternion.identity;
+        visual.localScale = Vector3.one;
+
+        RectTransform rect = visual as RectTransform;
+        if (rect != null)
+        {
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.sizeDelta = chickenVisualSize;
+            rect.anchoredPosition = chickenVisualOffset;
+        }
+        else
+        {
+            visual.localPosition = new Vector3(chickenVisualOffset.x, chickenVisualOffset.y, 0f);
+        }
+
+        Image[] images = visual.GetComponentsInChildren<Image>(true);
+        foreach (Image image in images)
+            image.raycastTarget = false;
+
+        TextMeshProUGUI[] labels = visual.GetComponentsInChildren<TextMeshProUGUI>(true);
+        foreach (TextMeshProUGUI label in labels)
+            label.raycastTarget = false;
     }
 }

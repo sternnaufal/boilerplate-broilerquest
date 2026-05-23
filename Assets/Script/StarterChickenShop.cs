@@ -9,6 +9,7 @@ public class StarterChickenOption
     public string displayName = "Ayam";
     public int price = 25;
     public GameObject chickenPrefab;
+    public Sprite icon;
     public Button buyButton;
     public TextMeshProUGUI labelText;
 }
@@ -63,9 +64,10 @@ public class StarterChickenShop : MonoBehaviour
 
     private static void RegisterButton(Button button, UnityAction action)
     {
-        if (button == null || button.onClick.GetPersistentEventCount() > 0)
+        if (button == null)
             return;
 
+        button.onClick.RemoveListener(action);
         button.onClick.AddListener(action);
     }
 
@@ -112,7 +114,7 @@ public class StarterChickenShop : MonoBehaviour
             return false;
         }
 
-        ShowMessage($"{option.displayName}: {boughtMessage}. Tunggu notif di kandang.");
+        ShowMessage($"{option.displayName}: {boughtMessage}. Slot kosong: {GetEmptySlotCount()}.");
         RefreshShopState();
         return true;
     }
@@ -165,14 +167,22 @@ public class StarterChickenShop : MonoBehaviour
                 continue;
 
             if (option.buyButton != null)
+            {
                 StyleButtonState(option.buyButton, true);
+                EnsureOptionIcon(option);
+            }
 
             if (option.labelText != null)
             {
                 option.labelText.color = new Color(0.12f, 0.15f, 0.08f, 1f);
                 option.labelText.fontSize = Mathf.Max(option.labelText.fontSize, 24f);
                 option.labelText.fontStyle = FontStyles.Bold;
-                option.labelText.alignment = TextAlignmentOptions.Center;
+                option.labelText.alignment = TextAlignmentOptions.MidlineLeft;
+                RectTransform labelRect = option.labelText.rectTransform;
+                labelRect.anchorMin = Vector2.zero;
+                labelRect.anchorMax = Vector2.one;
+                labelRect.offsetMin = new Vector2(86f, 8f);
+                labelRect.offsetMax = new Vector2(-12f, -8f);
             }
         }
 
@@ -215,6 +225,87 @@ public class StarterChickenShop : MonoBehaviour
         {
             if (slot != null && slot.gameObject.activeInHierarchy && slot.IsEmpty)
                 return slot;
+        }
+
+        return null;
+    }
+
+    private int GetEmptySlotCount()
+    {
+        if (kandangSlots == null)
+            return 0;
+
+        int emptyCount = 0;
+        foreach (StarterKandangSlot slot in kandangSlots)
+        {
+            if (slot != null && slot.gameObject.activeInHierarchy && slot.IsEmpty)
+                emptyCount++;
+        }
+
+        return emptyCount;
+    }
+
+    private void EnsureOptionIcon(StarterChickenOption option)
+    {
+        if (option == null || option.buyButton == null)
+            return;
+
+        Sprite sprite = option.icon != null ? option.icon : FindFallbackIcon(option);
+        if (sprite == null)
+            return;
+
+        Transform buttonTransform = option.buyButton.transform;
+        Transform existing = buttonTransform.Find("ItemIcon");
+        Image iconImage;
+
+        if (existing != null)
+        {
+            iconImage = existing.GetComponent<Image>();
+        }
+        else
+        {
+            GameObject iconObject = new GameObject("ItemIcon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            iconObject.transform.SetParent(buttonTransform, false);
+            iconObject.transform.SetAsFirstSibling();
+            iconImage = iconObject.GetComponent<Image>();
+        }
+
+        RectTransform rect = iconImage.rectTransform;
+        rect.anchorMin = new Vector2(0f, 0.5f);
+        rect.anchorMax = new Vector2(0f, 0.5f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = new Vector2(44f, 0f);
+        rect.sizeDelta = new Vector2(62f, 62f);
+
+        iconImage.sprite = sprite;
+        iconImage.preserveAspect = true;
+        iconImage.color = Color.white;
+        iconImage.raycastTarget = false;
+    }
+
+    private Sprite FindFallbackIcon(StarterChickenOption option)
+    {
+        if (option != null && option.chickenPrefab != null)
+        {
+            Image prefabImage = option.chickenPrefab.GetComponentInChildren<Image>(true);
+            if (prefabImage != null && prefabImage.sprite != null)
+                return prefabImage.sprite;
+        }
+
+        if (kandangSlots == null)
+            return null;
+
+        foreach (StarterKandangSlot slot in kandangSlots)
+        {
+            if (slot == null)
+                continue;
+
+            Image[] slotImages = slot.GetComponentsInChildren<Image>(true);
+            foreach (Image slotImage in slotImages)
+            {
+                if (slotImage != null && slotImage.sprite != null)
+                    return slotImage.sprite;
+            }
         }
 
         return null;

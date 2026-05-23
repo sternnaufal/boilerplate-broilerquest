@@ -57,9 +57,10 @@ public class StarterGameplayUI : MonoBehaviour
 
     private static void RegisterButton(Button button, UnityAction action)
     {
-        if (button == null || button.onClick.GetPersistentEventCount() > 0)
+        if (button == null)
             return;
 
+        button.onClick.RemoveListener(action);
         button.onClick.AddListener(action);
     }
 
@@ -119,11 +120,13 @@ public class StarterGameplayUI : MonoBehaviour
         StyleButton(hpToggleButton, "HP", new Color(0.95f, 0.72f, 0.22f, 1f));
         StyleButton(closeHpButton, "TUTUP", new Color(0.95f, 0.72f, 0.22f, 1f));
 
-        StylePanel(hpPanel, new Color(0.10f, 0.22f, 0.14f, 0.96f));
+        StylePanel(hpPanel, new Color(0.10f, 0.22f, 0.14f, 0.88f));
         StylePanel(pausePanel, new Color(0.05f, 0.11f, 0.07f, 0.90f));
+        PositionHpPanel();
 
         if (coinText != null)
         {
+            coinText.gameObject.SetActive(true);
             coinText.color = new Color(1f, 0.96f, 0.70f, 1f);
             coinText.fontSize = Mathf.Max(coinText.fontSize, 34f);
             coinText.fontStyle = FontStyles.Bold;
@@ -175,5 +178,21 @@ public class StarterGameplayUI : MonoBehaviour
         Image image = panel.GetComponent<Image>();
         if (image != null)
             image.color = color;
+    }
+
+    private void PositionHpPanel()
+    {
+        if (hpPanel == null)
+            return;
+
+        RectTransform rect = hpPanel.GetComponent<RectTransform>();
+        if (rect == null)
+            return;
+
+        rect.anchorMin = new Vector2(1f, 0.5f);
+        rect.anchorMax = new Vector2(1f, 0.5f);
+        rect.pivot = new Vector2(1f, 0.5f);
+        rect.sizeDelta = new Vector2(620f, 500f);
+        rect.anchoredPosition = new Vector2(-42f, -18f);
     }
 }
