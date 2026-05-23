@@ -1,0 +1,663 @@
+fileFormatVersion: 2
+guid: cbaf6830830be4440acf88c8e9cbe92f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8624710855206185374
+    second: ayam kedinginan_0
+  - first:
+      213: 7863889249395770180
+    second: ayam kedinginan_1
+  - first:
+      213: 8608698605415688572
+    second: ayam kedinginan_2
+  - first:
+      213: 4970829544781503342
+    second: ayam kedinginan_3
+  - first:
+      213: 5084397138268665540
+    second: ayam kedinginan_4
+  - first:
+      213: -6351278241032639916
+    second: ayam kedinginan_5
+  - first:
+      213: -4236072746946586722
+    second: ayam kedinginan_6
+  - first:
+      213: 969713677925421547
+    second: ayam kedinginan_7
+  - first:
+      213: 1976447857731377706
+    second: ayam kedinginan_8
+  - first:
+      213: -4343550192483056042
+    second: ayam kedinginan_9
+  - first:
+      213: 3694895128963295429
+    second: ayam kedinginan_10
+  - first:
+      213: 1284509215871219104
+    second: ayam kedinginan_11
+  - first:
+      213: 2324951890646638227
+    second: ayam kedinginan_12
+  - first:
+      213: 2677882877894420781
+    second: ayam kedinginan_13
+  - first:
+      213: -8729721475871277678
+    second: ayam kedinginan_14
+  - first:
+      213: -4506847262437436663
+    second: ayam kedinginan_15
+  - first:
+      213: -2826698699357667881
+    second: ayam kedinginan_16
+  - first:
+      213: -7340710198517942802
+    second: ayam kedinginan_17
+  - first:
+      213: 2981449590781979134
+    second: ayam kedinginan_18
+  - first:
+      213: -7029427534611962974
+    second: ayam kedinginan_19
+  - first:
+      213: 7856643360619710002
+    second: ayam kedinginan_20
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ayam kedinginan_0
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 1798
+        width: 118
+        height: 168
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e99250fb3d021b770800000000000000
+      internalID: 8624710855206185374
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_1
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 1799
+        width: 118
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4438f3f8b95222d60800000000000000
+      internalID: 7863889249395770180
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_2
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 1796
+        width: 118
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c79e33255cd387770800000000000000
+      internalID: 8608698605415688572
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_3
+      rect:
+        serializedVersion: 2
+        x: 1161
+        y: 1798
+        width: 118
+        height: 168
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6bd7b7622febf440800000000000000
+      internalID: 4970829544781503342
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_4
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 1597
+        width: 117
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c6348b42486f8640800000000000000
+      internalID: 5084397138268665540
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_5
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 1599
+        width: 118
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45ae49d171abbd7a0800000000000000
+      internalID: -6351278241032639916
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_6
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 1599
+        width: 119
+        height: 168
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e971983c7427635c0800000000000000
+      internalID: -4236072746946586722
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_7
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 1597
+        width: 119
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be1159ac37d157d00800000000000000
+      internalID: 969713677925421547
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_8
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 1398
+        width: 118
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2a192ddad0cd6b10800000000000000
+      internalID: 1976447857731377706
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_9
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 1396
+        width: 118
+        height: 168
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 656c7f0fc1c98b3c0800000000000000
+      internalID: -4343550192483056042
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_10
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 1396
+        width: 119
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c8ad2c1b87e64330800000000000000
+      internalID: 3694895128963295429
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_11
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 1398
+        width: 118
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a538b2835e73d110800000000000000
+      internalID: 1284509215871219104
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_12
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 1196
+        width: 118
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39e9dd92d63e34020800000000000000
+      internalID: 2324951890646638227
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_13
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 1197
+        width: 119
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d296ff61a40c92520800000000000000
+      internalID: 2677882877894420781
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_14
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 1196
+        width: 118
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29df79ad19cc9d680800000000000000
+      internalID: -8729721475871277678
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_15
+      rect:
+        serializedVersion: 2
+        x: 1160
+        y: 1197
+        width: 118
+        height: 168
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90399790b467471c0800000000000000
+      internalID: -4506847262437436663
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_16
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 997
+        width: 118
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dd3ab9628c85c8d0800000000000000
+      internalID: -2826698699357667881
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_17
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 997
+        width: 118
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee5304a97fe802a90800000000000000
+      internalID: -7340710198517942802
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_18
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 997
+        width: 118
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef92b4e3b9c306920800000000000000
+      internalID: 2981449590781979134
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_19
+      rect:
+        serializedVersion: 2
+        x: 1160
+        y: 997
+        width: 119
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a3aa1996e4727e90800000000000000
+      internalID: -7029427534611962974
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ayam kedinginan_20
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 795
+        width: 119
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2364bac9287680d60800000000000000
+      internalID: 7856643360619710002
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ayam kedinginan_0: 8624710855206185374
+      ayam kedinginan_1: 7863889249395770180
+      ayam kedinginan_10: 3694895128963295429
+      ayam kedinginan_11: 1284509215871219104
+      ayam kedinginan_12: 2324951890646638227
+      ayam kedinginan_13: 2677882877894420781
+      ayam kedinginan_14: -8729721475871277678
+      ayam kedinginan_15: -4506847262437436663
+      ayam kedinginan_16: -2826698699357667881
+      ayam kedinginan_17: -7340710198517942802
+      ayam kedinginan_18: 2981449590781979134
+      ayam kedinginan_19: -7029427534611962974
+      ayam kedinginan_2: 8608698605415688572
+      ayam kedinginan_20: 7856643360619710002
+      ayam kedinginan_3: 4970829544781503342
+      ayam kedinginan_4: 5084397138268665540
+      ayam kedinginan_5: -6351278241032639916
+      ayam kedinginan_6: -4236072746946586722
+      ayam kedinginan_7: 969713677925421547
+      ayam kedinginan_8: 1976447857731377706
+      ayam kedinginan_9: -4343550192483056042
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

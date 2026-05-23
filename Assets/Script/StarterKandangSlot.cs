@@ -487,10 +487,10 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         switch (need)
         {
             case ChickenNeed.Heating:
-                TrySetAnimationTrigger(heatAnimParam);
+                TrySetAnimationBool(heatAnimParam, true);
                 break;
             case ChickenNeed.Cooling:
-                TrySetAnimationTrigger(coldAnimParam);
+                TrySetAnimationBool(coldAnimParam, true);
                 break;
             case ChickenNeed.Feed:
                 ResetAnimationToNormal();
@@ -503,9 +503,9 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         if (chickenAnimator == null || !occupied)
             return;
 
-        ResetAnimationTrigger(heatAnimParam);
-        ResetAnimationTrigger(coldAnimParam);
-        TrySetAnimationTrigger(idleAnimParam);
+        TrySetAnimationBool(heatAnimParam, false);
+        TrySetAnimationBool(coldAnimParam, false);
+        TrySetAnimationBool(idleAnimParam, true);
     }
 
     private bool TryStartHealthMinigame()
@@ -525,26 +525,18 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         return true;
     }
 
-    private void TrySetAnimationTrigger(string triggerName)
+    private void TrySetAnimationBool(string paramName, bool value)
     {
-        if (chickenAnimator == null || string.IsNullOrWhiteSpace(triggerName))
+        if (chickenAnimator == null || string.IsNullOrWhiteSpace(paramName))
             return;
 
-        if (!HasAnimatorParameter(triggerName))
+        if (!HasAnimatorParameter(paramName))
         {
-            Debug.LogWarning($"{name}: Animator parameter '{triggerName}' tidak ditemukan.");
+            Debug.LogWarning($"{name}: Animator parameter '{paramName}' tidak ditemukan.");
             return;
         }
 
-        chickenAnimator.SetTrigger(triggerName);
-    }
-
-    private void ResetAnimationTrigger(string triggerName)
-    {
-        if (chickenAnimator == null || string.IsNullOrWhiteSpace(triggerName) || !HasAnimatorParameter(triggerName))
-            return;
-
-        chickenAnimator.ResetTrigger(triggerName);
+        chickenAnimator.SetBool(paramName, value);
     }
 
     private bool HasAnimatorParameter(string parameterName)
