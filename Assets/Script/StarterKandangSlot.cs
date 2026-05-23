@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
 {
@@ -12,11 +13,15 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Vector2 chickenVisualSize = new Vector2(108f, 118f);
     [SerializeField] private Vector2 chickenVisualOffset = new Vector2(0f, -8f);
 
-    [Header("Bubble Event")]
+    [Header("Bubble Sprites (Images)")]
+    [SerializeField] private Sprite feedBubbleSprite;
+    [SerializeField] private Sprite coolingBubbleSprite;
+    [SerializeField] private Sprite heatingBubbleSprite;
+    [SerializeField] private Sprite sellBubbleSprite;
+
+    [Header("Bubble Visual")]
     [SerializeField] private GameObject bubbleVisual;
     [SerializeField] private Image bubbleImage;
-    [SerializeField] private Sprite[] careBubbleSprites;
-    [SerializeField] private Sprite harvestBubbleSprite;
     [SerializeField] private TextMeshProUGUI bubbleLabel;
     [SerializeField] private string feedBubbleText = "MAKAN";
     [SerializeField] private string coolingBubbleText = "KIPAS";
@@ -24,10 +29,8 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
     [SerializeField] private string sellBubbleText = "JUAL";
     [SerializeField] private Vector2 bubbleSize = new Vector2(130f, 56f);
     [SerializeField] private Vector2 bubbleOffset = new Vector2(0f, 68f);
-    [SerializeField] private Color feedBubbleColor = new Color(0.95f, 0.78f, 0.22f, 1f);
-    [SerializeField] private Color coolingBubbleColor = new Color(0.25f, 0.65f, 0.95f, 1f);
-    [SerializeField] private Color heatingBubbleColor = new Color(0.95f, 0.45f, 0.22f, 1f);
-    [SerializeField] private Color sellBubbleColor = new Color(0.31f, 0.78f, 0.32f, 1f);
+
+    [Header("Timing & Rewards")]
     [SerializeField] private float needInterval = 5f;
     [SerializeField] private float notificationDelay = 1f;
     [SerializeField] private int baseSellReward = 20;
@@ -173,7 +176,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         eventCoroutine = null;
     }
 
-    private System.Collections.IEnumerator NeedEventDelay()
+    private IEnumerator NeedEventDelay()
     {
         yield return new WaitForSeconds(needInterval + notificationDelay);
 
@@ -183,12 +186,9 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
 
     private void ShowNextNeedBubble()
     {
-        Sprite bubbleSprite = null;
-        if (careBubbleSprites != null && careBubbleSprites.Length > 0)
-            bubbleSprite = careBubbleSprites[Random.Range(0, careBubbleSprites.Length)];
-
         currentNeed = GetNextNeed();
-        ShowBubble(bubbleSprite, GetNeedText(currentNeed), GetNeedColor(currentNeed));
+        Sprite needSprite = GetNeedSprite(currentNeed);
+        ShowBubble(needSprite, GetNeedText(currentNeed));
         currentState = SlotState.WaitingForCareClick;
         Debug.Log($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
     }
@@ -223,20 +223,46 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
 
     private void ShowSellBubble()
     {
-        ShowBubble(harvestBubbleSprite, sellBubbleText, sellBubbleColor);
+        ShowBubble(sellBubbleSprite, sellBubbleText);
         currentState = SlotState.WaitingForSellClick;
         Debug.Log($"{name}: Semua kebutuhan terpenuhi, ayam siap dijual.");
     }
 
     private ChickenNeed GetNextNeed()
     {
+        // Feed always first
         if (!feedSatisfied)
             return ChickenNeed.Feed;
 
+        // If both cooling and heating are still unsatisfied, pick randomly
+        if (!coolingSatisfied && !heatingSatisfied)
+        {
+            return Random.Range(0, 2) == 0 ? ChickenNeed.Cooling : ChickenNeed.Heating;
+        }
+
+        // Otherwise return the only unsatisfied need
         if (!coolingSatisfied)
             return ChickenNeed.Cooling;
+        if (!heatingSatisfied)
+            return ChickenNeed.Heating;
 
-        return ChickenNeed.Heating;
+        // Should never reach here (sell bubble will be shown instead)
+        return ChickenNeed.Feed;
+    }
+
+    private Sprite GetNeedSprite(ChickenNeed need)
+    {
+        switch (need)
+        {
+            case ChickenNeed.Feed:
+                return feedBubbleSprite;
+            case ChickenNeed.Cooling:
+                return coolingBubbleSprite;
+            case ChickenNeed.Heating:
+                return heatingBubbleSprite;
+            default:
+                return feedBubbleSprite;
+        }
     }
 
     private string GetNeedText(ChickenNeed need)
@@ -254,21 +280,6 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    private Color GetNeedColor(ChickenNeed need)
-    {
-        switch (need)
-        {
-            case ChickenNeed.Feed:
-                return feedBubbleColor;
-            case ChickenNeed.Cooling:
-                return coolingBubbleColor;
-            case ChickenNeed.Heating:
-                return heatingBubbleColor;
-            default:
-                return feedBubbleColor;
-        }
-    }
-
     private bool IsReadyToSell()
     {
         return feedSatisfied && coolingSatisfied && heatingSatisfied;
@@ -282,7 +293,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         sellReward = baseSellReward;
     }
 
-    private void ShowBubble(Sprite sprite, string label, Color fallbackColor)
+    private void ShowBubble(Sprite sprite, string label)
     {
         EnsureBubbleVisual();
 
@@ -292,7 +303,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler
         if (bubbleImage != null)
         {
             bubbleImage.sprite = sprite;
-            bubbleImage.color = sprite != null ? Color.white : fallbackColor;
+            bubbleImage.color = Color.white; // Use sprite's original colors
             bubbleImage.enabled = true;
         }
 
