@@ -4,6 +4,7 @@ public static class GameConstants
     {
         public const string TotalCoinKey = "BroilerQuest.TotalCoin";
         public const string LegacyTotalCoinKey = "TotalCoin";
+        public const string KoleksiIoTPurchasedPrefix = "KoleksiIoT.Purchased.";
     }
 
     public static class LevelDuration
