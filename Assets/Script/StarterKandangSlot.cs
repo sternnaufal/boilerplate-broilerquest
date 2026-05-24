@@ -43,6 +43,11 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     [SerializeField] private bool useHealthMinigame;
     [SerializeField] private bool clearChickenOnHealthFail;
 
+    [Header("Jigsaw Puzzle Textures")]
+    [SerializeField] private Texture jigsawFeedTexture;
+    [SerializeField] private Texture jigsawCoolingTexture;
+    [SerializeField] private Texture jigsawHeatingTexture;
+
     [Header("Animation")]
     [SerializeField] private Animator chickenAnimator;
     [SerializeField] private string idleAnimParam = "";
@@ -513,6 +518,26 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         if (!useHealthMinigame)
             return false;
 
+        if (JigsawMinigameController.Instance != null && JigsawMinigameController.Instance.IsPlaying)
+            return true;
+
+        JigsawMinigameController jigsawController = JigsawMinigameController.GetOrCreateInstance();
+        if (jigsawController != null)
+        {
+            Texture puzzleTexture = GetNeedPuzzleTexture(currentNeed);
+            if (puzzleTexture != null)
+            {
+                currentState = SlotState.WaitingForHealthMinigame;
+                NotifyStateChanged();
+
+                if (jigsawController.ShowJigsaw(this, puzzleTexture, GetNeedTitle(currentNeed)))
+                    return true;
+
+                currentState = SlotState.WaitingForCareClick;
+                NotifyStateChanged();
+            }
+        }
+
         if (PopupKesehatan.Instance == null)
         {
             Debug.LogWarning($"{name}: PopupKesehatan belum tersedia, kebutuhan diselesaikan langsung.");
@@ -523,6 +548,48 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         NotifyStateChanged();
         PopupKesehatan.Instance.ShowHealthCheck(this);
         return true;
+    }
+
+    private Texture GetNeedPuzzleTexture(ChickenNeed need)
+    {
+        Texture configuredTexture = null;
+        Sprite fallbackSprite = null;
+
+        switch (need)
+        {
+            case ChickenNeed.Feed:
+                configuredTexture = jigsawFeedTexture;
+                fallbackSprite = feedBubbleSprite;
+                break;
+            case ChickenNeed.Cooling:
+                configuredTexture = jigsawCoolingTexture;
+                fallbackSprite = coolingBubbleSprite;
+                break;
+            case ChickenNeed.Heating:
+                configuredTexture = jigsawHeatingTexture;
+                fallbackSprite = heatingBubbleSprite;
+                break;
+        }
+
+        if (configuredTexture != null)
+            return configuredTexture;
+
+        return fallbackSprite != null ? fallbackSprite.texture : null;
+    }
+
+    private string GetNeedTitle(ChickenNeed need)
+    {
+        switch (need)
+        {
+            case ChickenNeed.Feed:
+                return "Susun Puzzle Pakan";
+            case ChickenNeed.Cooling:
+                return "Susun Puzzle Dingin";
+            case ChickenNeed.Heating:
+                return "Susun Puzzle Panas";
+            default:
+                return "Susun Puzzle";
+        }
     }
 
     private void TrySetAnimationBool(string paramName, bool value)

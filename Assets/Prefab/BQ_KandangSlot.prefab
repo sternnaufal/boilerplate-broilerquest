@@ -112,8 +112,11 @@ MonoBehaviour:
   notificationDelay: 1
   baseSellReward: 20
   careBonus: 10
-  useHealthMinigame: 0
+  useHealthMinigame: 1
   clearChickenOnHealthFail: 0
+  jigsawFeedTexture: {fileID: 2800000, guid: bbd815325669c924e8ec066b3c03d886, type: 3}
+  jigsawCoolingTexture: {fileID: 2800000, guid: 17982749c62e46e4e97920e37c7a4ec5, type: 3}
+  jigsawHeatingTexture: {fileID: 2800000, guid: f1434960ddd0bcb449d68fb5a5ec9a82, type: 3}
   chickenAnimator: {fileID: 0}
   idleAnimParam:
   heatAnimParam: isbakar

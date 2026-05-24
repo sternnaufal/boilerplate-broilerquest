@@ -28,4 +28,14 @@ public static class GameConstants
         public const float NeedInterval = 5f;
         public const float NotificationDelay = 1f;
     }
+
+    public static class JigsawMinigame
+    {
+        public const int GridSize = 3;
+        public const float TimeLimit = 30f;
+        public const float TileSize = 150f;
+        public const float TileSpacing = 4f;
+        public const float SwapDuration = 0.15f;
+        public const float WarningThreshold = 10f;
+    }
 }
