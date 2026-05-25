@@ -248,3 +248,29 @@ The other repeated console entries are Unity MCP bridge trace logs such as disco
 - `docs/recomendation.md` is still untracked and should be explicitly staged if the team wants it committed.
 - New helper scripts and `.meta` files are also untracked until staged.
 - `Assembly-CSharp.csproj` was locally updated for `dotnet build` verification, but it is generated/ignored and Unity may regenerate it.
+
+## UI Invisibility & Font Migration Fixes - 25 Mei 2026
+
+- **Solved Jigsaw Minigame Invisibility**:
+  - Root cause: Dynamic canvas was a child of the non-UI `JigsawMinigameController` transform inside `DontDestroyOnLoad`. In URP, nested canvases under non-UI transforms undergo coordinate and projection clipping, rendering them invisible.
+  - Fix: Configured the canvas as a **root GameObject** and added persistent lifecycle management with `DontDestroyOnLoad(canvasObject)`.
+  - Text mesh generation fix: Dynamic canvases default to `additionalShaderChannels = None`. TextMeshProUGUI requires `TexCoord1 | Normal | Tangent` channels to construct/render distance-field geometry. Explicitly assigned these URP shader channels on the canvas component in `EnsureRuntimeUi()`.
+
+- **Solved Broken Default Font Asset**:
+  - Root cause: The project's default `LiberationSans SDF` font asset was corrupt or incompatible in this build, causing all TMPro texts utilizing it (such as the minigame texts and the level timer HUD) to render as completely transparent. Only the `LiberationSans SDF - Fallback` asset worked correctly (e.g., `CoinText`).
+  - Fix: Statically migrated all 14 `TextMeshProUGUI` components in the `Starter.unity` scene to use `LiberationSans SDF - Fallback`, and dynamically loaded/assigned this working font inside `JigsawMinigameController.CreateText()`.
+
+- **Solved Screen-Scaling Layout Issues for HUD Timer**:
+  - Root cause: The level `TimerText` in `Starter.unity` was anchored to the center `(0.5, 0.5)` with a large fixed height offset of `470`. On varying aspect ratios or resolutions, the timer was pushed entirely off-screen.
+  - Fix: Anchored and pivoted `TimerText` to **Top-Center** `(0.5, 1.0)` at position `(0, -70)` so that it scales seamlessly and remains visible on all screen sizes.
+
+- **Fast Git Integration**:
+  - Pulled and merged updates from `origin/dev/Hylmi` cleanly.
+  - Successfully committed and pushed the UI, script, and font asset changes directly to `dev/Hylmi` branch.
+
+### Verification
+- Tested in Unity Play Mode:
+  - Countdown level timer now renders beautifully at the top-center.
+  - Jigsaw Minigame triggers successfully, rendering its backdrop, white grid tiles, title text, countdown, and close button label flawlessly.
+  - Result: `PASS`
+
