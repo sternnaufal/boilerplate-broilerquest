@@ -54,8 +54,17 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     [SerializeField] private string heatAnimParam = "isbakar";
     [SerializeField] private string coldAnimParam = "isdingin";
 
+    [Header("Chicken Wander")]
+    [SerializeField] private bool enableWander = true;
+    [SerializeField] private Vector2 wanderRadius = new Vector2(50f, 20f);
+    [SerializeField] private float wanderSpeed = 40f;
+    [SerializeField] private float wanderPauseMin = 1.5f;
+    [SerializeField] private float wanderPauseMax = 3.5f;
+
     private GameObject spawnedChicken;
     private Coroutine eventCoroutine;
+    private Coroutine wanderCoroutine;
+    private bool isWanderingPaused;
     private bool occupied;
     private bool feedSatisfied;
     private bool coolingSatisfied;
@@ -99,7 +108,10 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         HideBubble();
 
         if (occupied)
+        {
             StartNeedTimer();
+            if (enableWander) StartWander();
+        }
     }
 
     public bool TryPlaceChicken(GameObject chickenPrefab)
@@ -134,12 +146,14 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         ResetChickenProgress();
         SetOccupied(true);
         StartNeedTimer();
+        if (enableWander) StartWander();
         return true;
     }
 
     public void ClearChicken()
     {
         StopEventTimer();
+        StopWander();
 
         if (spawnedChicken != null)
         {
@@ -202,6 +216,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         }
 
         HideBubble();
+        isWanderingPaused = false;
         StartNeedTimer();
         GameLog.Info($"{name}: Minigame kesehatan gagal, kebutuhan akan muncul lagi.");
     }
@@ -241,12 +256,14 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         currentState = SlotState.WaitingForCareClick;
         NotifyStateChanged();
         UpdateAnimationByNeed(currentNeed);
+        PauseWander();
         GameLog.Info($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
     }
 
     private void CompleteCurrentNeed()
     {
         ResetAnimationToNormal();
+        isWanderingPaused = false;
 
         switch (currentNeed)
         {
@@ -279,6 +296,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         ShowBubble(sellBubbleSprite, sellBubbleText);
         currentState = SlotState.WaitingForSellClick;
         NotifyStateChanged();
+        PauseWander();
         GameLog.Info($"{name}: Semua kebutuhan terpenuhi, ayam siap dijual.");
     }
 
@@ -485,6 +503,66 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     private void AssignChickenAnimator(GameObject source)
     {
         chickenAnimator = source != null ? source.GetComponentInChildren<Animator>(true) : null;
+    }
+
+    private void StartWander()
+    {
+        StopWander();
+        isWanderingPaused = false;
+        wanderCoroutine = StartCoroutine(WanderRoutine());
+    }
+
+    private void StopWander()
+    {
+        CoroutineHelper.StopSafe(this, ref wanderCoroutine);
+    }
+
+    private void PauseWander()
+    {
+        isWanderingPaused = true;
+    }
+
+    private IEnumerator WanderRoutine()
+    {
+        RectTransform visualRect = GetActiveVisualRect();
+        if (visualRect == null)
+            yield break;
+
+        Vector2 startPos = chickenVisualOffset;
+        Vector2 target = startPos;
+
+        while (true)
+        {
+            if (!isWanderingPaused && occupied)
+            {
+                float dist = Vector2.Distance(visualRect.anchoredPosition, target);
+
+                if (dist < 2f)
+                {
+                    target = new Vector2(
+                        startPos.x + Random.Range(-wanderRadius.x, wanderRadius.x),
+                        startPos.y + Random.Range(-wanderRadius.y, wanderRadius.y)
+                    );
+
+                    float pause = Random.Range(wanderPauseMin, wanderPauseMax);
+                    yield return new WaitForSeconds(pause);
+                }
+                else
+                {
+                    visualRect.anchoredPosition = Vector2.MoveTowards(
+                        visualRect.anchoredPosition, target, wanderSpeed * Time.deltaTime
+                    );
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    private RectTransform GetActiveVisualRect()
+    {
+        Transform visual = spawnedChicken != null ? spawnedChicken.transform : (chickenVisual != null ? chickenVisual.transform : null);
+        return visual != null ? visual as RectTransform : null;
     }
 
     private void UpdateAnimationByNeed(ChickenNeed need)

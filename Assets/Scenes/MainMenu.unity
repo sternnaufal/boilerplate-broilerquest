@@ -2920,6 +2920,7 @@ MonoBehaviour:
   startButton: {fileID: 1116706445}
   optionsButton: {fileID: 1712268779}
   exitButton: {fileID: 502428232}
+  koleksiIoTButton: {fileID: 0}
   backToMainButton: {fileID: 2038806545}
   musicVolumeSlider: {fileID: 527589730}
   sfxVolumeSlider: {fileID: 1034620202}
