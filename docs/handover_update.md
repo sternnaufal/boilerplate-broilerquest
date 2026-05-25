@@ -259,6 +259,7 @@ The other repeated console entries are Unity MCP bridge trace logs such as disco
 - **Solved Broken Default Font Asset**:
   - Root cause: The project's default `LiberationSans SDF` font asset was corrupt or incompatible in this build, causing all TMPro texts utilizing it (such as the minigame texts and the level timer HUD) to render as completely transparent. Only the `LiberationSans SDF - Fallback` asset worked correctly (e.g., `CoinText`).
   - Fix: Statically migrated all 14 `TextMeshProUGUI` components in the `Starter.unity` scene to use `LiberationSans SDF - Fallback`, and dynamically loaded/assigned this working font inside `JigsawMinigameController.CreateText()`.
+  - Follow-up verification found the fallback asset itself had been left in a corrupted merge-conflict state. The fallback font asset was restored to a valid YAML asset; Unity now loads it correctly and all 14 Starter scene TMP objects have assigned fonts.
 
 - **Solved Screen-Scaling Layout Issues for HUD Timer**:
   - Root cause: The level `TimerText` in `Starter.unity` was anchored to the center `(0.5, 0.5)` with a large fixed height offset of `470`. On varying aspect ratios or resolutions, the timer was pushed entirely off-screen.
@@ -274,3 +275,16 @@ The other repeated console entries are Unity MCP bridge trace logs such as disco
   - Jigsaw Minigame triggers successfully, rendering its backdrop, white grid tiles, title text, countdown, and close button label flawlessly.
   - Result: `PASS`
 
+## Docs Cleanup - 25 Mei 2026
+
+- Removed obsolete jigsaw planning/research documents after the jigsaw minigame was implemented and its current status moved into this handover:
+  - `docs/jigsaw-minigame-implementation-new-plan.md`
+  - `docs/jigsaw-minigame-new-plan-analysis.md`
+  - `docs/jigsaw-minigame-implementation-plan.md`
+  - `docs/jigsaw-minigame-research-and-recommendations.md`
+- Kept the durable project docs:
+  - `docs/handover_update.md`
+  - `docs/recomendation.md`
+  - `docs/broilerquest-sigmap.md`
+  - `docs/broilerquest-ui-handover-codex.md`
+  - `docs/GDD_CoopQuest.docx`
