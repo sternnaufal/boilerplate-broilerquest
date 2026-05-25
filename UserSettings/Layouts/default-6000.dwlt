@@ -20,11 +20,143 @@ MonoBehaviour:
     height: 772.8
   m_ShowMode: 4
   m_Title: Game
-  m_RootView: {fileID: 2}
+  m_RootView: {fileID: 7}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 1
 --- !u!114 &2
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: SceneHierarchyWindow
+  m_EditorClassIdentifier: 
+  m_Children: []
+  m_Position:
+    serializedVersion: 2
+    x: 940
+    y: 0
+    width: 231.19995
+    height: 489.6
+  m_MinSize: {x: 202, y: 226}
+  m_MaxSize: {x: 4002, y: 4026}
+  m_ActualView: {fileID: 17}
+  m_Panes:
+  - {fileID: 17}
+  m_Selected: 0
+  m_LastSelected: 0
+--- !u!114 &3
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12010, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Children:
+  - {fileID: 11}
+  - {fileID: 2}
+  m_Position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1171.2
+    height: 489.6
+  m_MinSize: {x: 200, y: 56}
+  m_MaxSize: {x: 16192, y: 8096}
+  vertical: 0
+  controlID: 21
+  draggingID: 0
+--- !u!114 &4
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 1
+  m_Script: {fileID: 12010, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Children:
+  - {fileID: 10}
+  - {fileID: 5}
+  m_Position:
+    serializedVersion: 2
+    x: 0
+    y: 36
+    width: 1536
+    height: 716.8
+  m_MinSize: {x: 300, y: 112}
+  m_MaxSize: {x: 24288, y: 16192}
+  vertical: 0
+  controlID: 19
+  draggingID: 0
+--- !u!114 &5
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 1
+  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: InspectorWindow
+  m_EditorClassIdentifier: 
+  m_Children: []
+  m_Position:
+    serializedVersion: 2
+    x: 1171.2
+    y: 0
+    width: 364.80005
+    height: 716.8
+  m_MinSize: {x: 276, y: 76}
+  m_MaxSize: {x: 4001, y: 4026}
+  m_ActualView: {fileID: 16}
+  m_Panes:
+  - {fileID: 16}
+  - {fileID: 14}
+  m_Selected: 0
+  m_LastSelected: 1
+--- !u!114 &6
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 1
+  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: ConsoleWindow
+  m_EditorClassIdentifier: 
+  m_Children: []
+  m_Position:
+    serializedVersion: 2
+    x: 0
+    y: 489.6
+    width: 1171.2
+    height: 227.19998
+  m_MinSize: {x: 101, y: 126}
+  m_MaxSize: {x: 4001, y: 4026}
+  m_ActualView: {fileID: 19}
+  m_Panes:
+  - {fileID: 15}
+  - {fileID: 19}
+  m_Selected: 1
+  m_LastSelected: 0
+--- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,7 +276,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 112}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 42
+  controlID: 20
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -670,72 +802,31 @@ MonoBehaviour:
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
-      - m_Data: -52982
-      - m_Data: -52814
-      - m_Data: -52544
-      - m_Data: -52390
-      - m_Data: -52232
-      - m_Data: -51940
-      - m_Data: -51772
-      - m_Data: -51494
-      - m_Data: -51340
-      - m_Data: -51188
-      - m_Data: -51032
-      - m_Data: -50880
-      - m_Data: -50724
-      - m_Data: -48898
-      - m_Data: -45724
-      - m_Data: -44226
-      - m_Data: -41496
-      - m_Data: -41202
-      - m_Data: -41046
-      - m_Data: -40774
-      - m_Data: -40416
-      - m_Data: -39600
-      - m_Data: -39114
-      - m_Data: -38784
-      - m_Data: -32222
-      - m_Data: -31928
-      - m_Data: -30488
-      - m_Data: -29052
-      - m_Data: -25518
-      - m_Data: -23716
-      - m_Data: -21462
-      - m_Data: -18430
-      - m_Data: -14404
-      - m_Data: -3290
-      - m_Data: -2612
-      - m_Data: -1750
+      - m_Data: -12024
+      - m_Data: -8856
+      - m_Data: -8802
+      - m_Data: -7718
+      - m_Data: -5918
+      - m_Data: -5804
+      - m_Data: -5688
+      - m_Data: -5214
+      - m_Data: -1358
       - m_Data: -12
-      - m_Data: 52660
-      - m_Data: 52682
-      - m_Data: 52812
-      - m_Data: 52846
-      - m_Data: 57674
-      - m_Data: 60660
-      - m_Data: 60714
-      - m_Data: 61248
-      - m_Data: 61302
-      - m_Data: 62578
-      - m_Data: 62632
-      - m_Data: 63652
-      - m_Data: 63782
-      - m_Data: 65826
-      - m_Data: 65846
-      - m_Data: 65856
-      - m_Data: 66856
-      - m_Data: 66886
-      - m_Data: 67922
-      - m_Data: 68052
-      - m_Data: 74320
-      - m_Data: 74350
-      - m_Data: 74574
-      - m_Data: 74604
-      - m_Data: 75610
-      - m_Data: 75630
-      - m_Data: 75800
-      - m_Data: 76320
-      - m_Data: 76450
+      - m_Data: 51574
+      - m_Data: 51584
+      - m_Data: 51594
+      - m_Data: 51604
+      - m_Data: 51702
+      - m_Data: 54050
+      - m_Data: 54180
+      - m_Data: 56480
+      - m_Data: 56562
+      - m_Data: 56692
+      - m_Data: 57194
+      - m_Data: 57290
+      - m_Data: 57300
+      - m_Data: 57306
+      - m_Data: 57396
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 

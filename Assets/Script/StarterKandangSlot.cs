@@ -57,7 +57,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     [Header("Chicken Wander")]
     [SerializeField] private bool enableWander = true;
     [SerializeField] private Vector2 wanderRadius = new Vector2(50f, 20f);
-    [SerializeField] private float wanderSpeed = 40f;
+    [SerializeField] private float wanderSpeed = 80f;
     [SerializeField] private float wanderPauseMin = 1.5f;
     [SerializeField] private float wanderPauseMax = 3.5f;
 
@@ -256,14 +256,12 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         currentState = SlotState.WaitingForCareClick;
         NotifyStateChanged();
         UpdateAnimationByNeed(currentNeed);
-        PauseWander();
         GameLog.Info($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
     }
 
     private void CompleteCurrentNeed()
     {
         ResetAnimationToNormal();
-        isWanderingPaused = false;
 
         switch (currentNeed)
         {
@@ -296,7 +294,6 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         ShowBubble(sellBubbleSprite, sellBubbleText);
         currentState = SlotState.WaitingForSellClick;
         NotifyStateChanged();
-        PauseWander();
         GameLog.Info($"{name}: Semua kebutuhan terpenuhi, ayam siap dijual.");
     }
 
@@ -535,28 +532,79 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         {
             if (!isWanderingPaused && occupied)
             {
+                float speedMult = 1f;
+                float radiusMult = 1f;
+                float pauseMin = wanderPauseMin;
+                float pauseMax = wanderPauseMax;
+                bool canMove = true;
+
+                if (currentState == SlotState.WaitingForCareClick)
+                {
+                    if (currentNeed == ChickenNeed.Feed)
+                        canMove = false;
+                    else
+                    {
+                        speedMult = 3f;
+                        radiusMult = 2f;
+                        pauseMin = 0.1f;
+                        pauseMax = 0.4f;
+                    }
+                }
+                else if (currentState == SlotState.WaitingForSellClick)
+                {
+                    canMove = false;
+                }
+
+                if (!canMove)
+                {
+                    yield return null;
+                    continue;
+                }
+
                 float dist = Vector2.Distance(visualRect.anchoredPosition, target);
 
                 if (dist < 2f)
                 {
                     target = new Vector2(
-                        startPos.x + Random.Range(-wanderRadius.x, wanderRadius.x),
-                        startPos.y + Random.Range(-wanderRadius.y, wanderRadius.y)
+                        startPos.x + Random.Range(-wanderRadius.x * radiusMult, wanderRadius.x * radiusMult),
+                        startPos.y + Random.Range(-wanderRadius.y * radiusMult, wanderRadius.y * radiusMult)
                     );
 
-                    float pause = Random.Range(wanderPauseMin, wanderPauseMax);
+                    float pause = Random.Range(pauseMin, pauseMax);
                     yield return new WaitForSeconds(pause);
                 }
                 else
                 {
+                    Vector2 oldPos = visualRect.anchoredPosition;
                     visualRect.anchoredPosition = Vector2.MoveTowards(
-                        visualRect.anchoredPosition, target, wanderSpeed * Time.deltaTime
+                        oldPos, target, wanderSpeed * speedMult * Time.deltaTime
                     );
+                    UpdateChickenFacing(oldPos, visualRect.anchoredPosition);
                 }
             }
 
             yield return null;
         }
+    }
+
+    private void UpdateChickenFacing(Vector2 from, Vector2 to)
+    {
+        RectTransform visualRect = GetActiveVisualRect();
+        if (visualRect == null) return;
+
+        float dirX = to.x - from.x;
+        if (Mathf.Abs(dirX) < 0.01f) return;
+
+        Vector3 scale = visualRect.localScale;
+        bool facingRight = scale.x < 0;
+        bool movingRight = dirX > 0;
+
+        if (movingRight && !facingRight)
+            scale.x = -Mathf.Abs(scale.x);
+        else if (!movingRight && facingRight)
+            scale.x = Mathf.Abs(scale.x);
+
+        visualRect.localScale = scale;
     }
 
     private RectTransform GetActiveVisualRect()

@@ -123,7 +123,7 @@ MonoBehaviour:
   coldAnimParam: isdingin
   enableWander: 1
   wanderRadius: {x: 50, y: 20}
-  wanderSpeed: 40
+  wanderSpeed: 80
   wanderPauseMin: 1.5
   wanderPauseMax: 3.5
 --- !u!1 &6907016640907362101
