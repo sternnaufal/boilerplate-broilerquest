@@ -1481,7 +1481,7 @@ MonoBehaviour:
   - Beginner
   - Intermediate
   levelDurations:
-  - 60
+  - 300
   - 120
   - 180
   timerText: {fileID: 500846619}

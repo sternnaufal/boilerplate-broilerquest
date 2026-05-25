@@ -23,7 +23,7 @@ public class StarterChickenShop : MonoBehaviour
 
     [Header("Feedback")]
     [SerializeField] private TextMeshProUGUI messageText;
-    [SerializeField] private string startupMessage = "Beli ayam. Ayam akan masuk ke kandang kosong pertama.";
+    [SerializeField] private string startupMessage = "Beli ayam. Satu pembelian mengisi satu kandang dengan beberapa ayam.";
     [SerializeField] private string noCoinMessage = "Coin belum cukup.";
     [SerializeField] private string noSlotMessage = "Semua kandang sudah terisi.";
     [SerializeField] private string boughtMessage = "Ayam berhasil dibeli.";
@@ -90,8 +90,8 @@ public class StarterChickenShop : MonoBehaviour
         if (option == null)
             return false;
 
-        StarterKandangSlot emptySlot = FindEmptyKandang();
-        if (emptySlot == null)
+        StarterKandangSlot availableSlot = FindAvailableKandang();
+        if (availableSlot == null)
         {
             ShowMessage(noSlotMessage);
             return false;
@@ -104,7 +104,7 @@ public class StarterChickenShop : MonoBehaviour
             return false;
         }
 
-        if (!emptySlot.TryPlaceChicken(option.chickenPrefab))
+        if (!availableSlot.TryPlaceChicken(option.chickenPrefab))
         {
             CoinManager.Instance.AddCoin(option.price);
             ShowMessage(noSlotMessage);
@@ -112,7 +112,7 @@ public class StarterChickenShop : MonoBehaviour
             return false;
         }
 
-        ShowMessage($"{option.displayName}: {boughtMessage}. Slot kosong: {GetEmptySlotCount()}.");
+        ShowMessage($"{option.displayName}: {boughtMessage}. Kandang kosong: {GetAvailableKandangCount()}.");
         RefreshShopState();
         return true;
     }
@@ -125,7 +125,7 @@ public class StarterChickenShop : MonoBehaviour
         if (options == null)
             return;
 
-        bool hasEmptySlot = FindEmptyKandang() != null;
+        bool hasAvailableSlot = FindAvailableKandang() != null;
 
         for (int i = 0; i < options.Length; i++)
         {
@@ -137,8 +137,8 @@ public class StarterChickenShop : MonoBehaviour
 
             if (option.buyButton != null)
             {
-                option.buyButton.interactable = hasEmptySlot && canAfford;
-                StyleButtonState(option.buyButton, hasEmptySlot && canAfford);
+                option.buyButton.interactable = hasAvailableSlot && canAfford;
+                StyleButtonState(option.buyButton, hasAvailableSlot && canAfford);
             }
         }
     }
@@ -225,7 +225,7 @@ public class StarterChickenShop : MonoBehaviour
         return options[optionIndex];
     }
 
-    private StarterKandangSlot FindEmptyKandang()
+    private StarterKandangSlot FindAvailableKandang()
     {
         ResolveKandangSlots();
 
@@ -321,19 +321,19 @@ public class StarterChickenShop : MonoBehaviour
         RefreshShopState();
     }
 
-    private int GetEmptySlotCount()
+    private int GetAvailableKandangCount()
     {
         if (kandangSlots == null)
             return 0;
 
-        int emptyCount = 0;
+        int availableCount = 0;
         foreach (StarterKandangSlot slot in kandangSlots)
         {
             if (slot != null && slot.gameObject.activeInHierarchy && slot.IsEmpty)
-                emptyCount++;
+                availableCount++;
         }
 
-        return emptyCount;
+        return availableCount;
     }
 
     private void EnsureOptionIcon(StarterChickenOption option)

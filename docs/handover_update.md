@@ -297,3 +297,39 @@ The other repeated console entries are Unity MCP bridge trace logs such as disco
   - Retained "JUAL" (Sell) Label: The "JUAL" label still renders its text overlay perfectly as it does not overlap with any complex graphic.
   - Verification: Ran Unity in Play Mode, triggered care events on slots, and confirmed that only the beautiful event icons render inside the speech bubbles with zero overlapping text.
 
+## Starter Kandang Batch Visual Update - 25 Mei 2026
+
+- **Extended Starter Level Timer**:
+  - Updated the Starter scene `GameManager.levelDurations[0]` from `60` seconds to `300` seconds.
+  - Aligned `GameConstants.LevelDuration.Starter` to `300f`, so code defaults and scene data both represent a 5-minute Starter session.
+
+- **Dynamic Kandang Labels**:
+  - Added automatic slot-label numbering in `StarterKandangSlot`.
+  - Each slot now resolves its own `Kandang` text and renders `KANDANG {index + 1}` based on its order among sibling `StarterKandangSlot` objects.
+  - This prevents all four Starter kandang slots from displaying `KANDANG 1`.
+
+- **Batch Chicken Visuals Per Purchase**:
+  - Changed the Starter kandang purchase behavior so one shop purchase still fills only one empty kandang.
+  - A single filled kandang now displays a batch of multiple chicken visuals instead of one large chicken.
+  - Default batch count is serialized on `Assets/Prefab/BQ_KandangSlot.prefab` as `chickensPerPurchase: 8`.
+  - Batch chicken visuals were reduced to `42 x 50` with `44 x 34` spacing so the group fits inside the kandang.
+  - Synced the new serialized fields into `BQ_KandangSlot.prefab`; without this prefab update, Unity could keep using old/default serialized values and show only one chicken.
+
+- **Random Movement For Batch Chickens**:
+  - Reworked `StarterKandangSlot` wandering so every active chicken visual in the kandang gets its own target and pause timer.
+  - Chickens now move independently within the kandang bounds instead of a single visual moving alone.
+  - Movement pauses during feed care and sell states, while heat/cold care states still allow faster movement.
+
+- **Shop Behavior Kept One Purchase Per Kandang**:
+  - `StarterChickenShop` continues to look for empty kandang slots only.
+  - The shop feedback now reports remaining empty kandang count, not remaining chicken capacity.
+  - Existing coin spending/refund behavior is preserved.
+
+### Verification - 25 Mei 2026
+
+- Compile check:
+  `dotnet build Assembly-CSharp.csproj --no-restore`
+  - Result: `PASS`, 0 errors, 0 warnings after the prefab serialization fix.
+- SigMap check:
+  `npx sigmap --track`
+  - Result: `PASS`, Coverage A / 100%, 23 of 23 source files included.

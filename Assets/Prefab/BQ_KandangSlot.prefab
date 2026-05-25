@@ -93,8 +93,14 @@ MonoBehaviour:
   chickenVisual: {fileID: 6907016640907362101}
   chickenParent: {fileID: 0}
   startsOccupied: 0
+  chickensPerPurchase: 8
   chickenVisualSize: {x: 108, y: 118}
+  packedChickenVisualSize: {x: 42, y: 50}
   chickenVisualOffset: {x: 0, y: -8}
+  packedChickenSpacing: {x: 44, y: 34}
+  slotLabel: {fileID: 4371668064095381656}
+  slotLabelFormat: KANDANG {0}
+  autoNumberSlotLabel: 1
   feedBubbleSprite: {fileID: 5143672823471664202, guid: 2257351556cdd154796e4cad6a84e4ef, type: 3}
   coolingBubbleSprite: {fileID: -5408195563160022079, guid: 2257351556cdd154796e4cad6a84e4ef, type: 3}
   heatingBubbleSprite: {fileID: 7172106370599629312, guid: 2257351556cdd154796e4cad6a84e4ef, type: 3}
