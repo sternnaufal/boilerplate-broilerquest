@@ -15,6 +15,9 @@ public class StarterGameplayUI : MonoBehaviour
     [SerializeField] private Button hpToggleButton;
     [SerializeField] private Button closeHpButton;
 
+    [Header("Button Sprites")]
+    [SerializeField] private Sprite[] buttonSprites;
+
     [Header("Starter References")]
     [SerializeField] private TextMeshProUGUI coinText;
     [SerializeField] private StarterChickenShop chickenShop;
@@ -99,10 +102,10 @@ public class StarterGameplayUI : MonoBehaviour
 
     private void PolishStarterUi()
     {
-        StyleButton(pauseButton, "PAUSE", new Color(0.95f, 0.72f, 0.22f, 1f));
-        StyleButton(resumeButton, "RESUME", new Color(0.95f, 0.72f, 0.22f, 1f));
-        StyleButton(hpToggleButton, "HP", new Color(0.95f, 0.72f, 0.22f, 1f));
-        StyleButton(closeHpButton, "TUTUP", new Color(0.95f, 0.72f, 0.22f, 1f));
+        StyleButton(pauseButton, "PAUSE", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(0));
+        StyleButton(resumeButton, "RESUME", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(1));
+        StyleButton(hpToggleButton, "HP", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(2));
+        StyleButton(closeHpButton, "TUTUP", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(3));
 
         StylePanel(hpPanel, new Color(0.10f, 0.22f, 0.14f, 0.88f));
         StylePanel(pausePanel, new Color(0.05f, 0.11f, 0.07f, 0.90f));
@@ -118,14 +121,29 @@ public class StarterGameplayUI : MonoBehaviour
         }
     }
 
-    private static void StyleButton(Button button, string label, Color color)
+    private Sprite GetSpriteSafe(int index)
+    {
+        return buttonSprites != null && index < buttonSprites.Length ? buttonSprites[index] : null;
+    }
+
+    private static void StyleButton(Button button, string label, Color color, Sprite sprite = null)
     {
         if (button == null)
             return;
 
         Image buttonImage = button.GetComponent<Image>();
         if (buttonImage != null)
-            buttonImage.color = color;
+        {
+            if (sprite != null)
+            {
+                buttonImage.sprite = sprite;
+                buttonImage.color = Color.white;
+            }
+            else
+            {
+                buttonImage.color = color;
+            }
+        }
 
         TextMeshProUGUI labelText = button.GetComponentInChildren<TextMeshProUGUI>(true);
         if (labelText == null)
