@@ -381,12 +381,13 @@ public class JigsawMinigameController : MonoBehaviour
             return;
 
         GameObject canvasObject = new GameObject("JigsawMinigameCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-        canvasObject.transform.SetParent(transform, false);
+        DontDestroyOnLoad(canvasObject);
         popupRoot = canvasObject;
 
         Canvas canvas = canvasObject.GetComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 500;
+        canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.Normal | AdditionalCanvasShaderChannels.Tangent;
 
         CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
@@ -453,6 +454,7 @@ public class JigsawMinigameController : MonoBehaviour
         rect.sizeDelta = size;
 
         TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
+        text.font = Resources.Load<TMPro.TMP_FontAsset>("Fonts & Materials/LiberationSans SDF - Fallback");
         text.alignment = alignment;
         text.fontSize = fontSize;
         text.fontStyle = FontStyles.Bold;
