@@ -118,7 +118,7 @@ MonoBehaviour:
   jigsawCoolingTexture: {fileID: 2800000, guid: 17982749c62e46e4e97920e37c7a4ec5, type: 3}
   jigsawHeatingTexture: {fileID: 2800000, guid: f1434960ddd0bcb449d68fb5a5ec9a82, type: 3}
   chickenAnimator: {fileID: 0}
-  idleAnimParam:
+  idleAnimParam: isIdle
   heatAnimParam: isbakar
   coldAnimParam: isdingin
   enableWander: 1

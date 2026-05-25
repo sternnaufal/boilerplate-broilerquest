@@ -538,8 +538,12 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
         while (true)
         {
-            if (!isWanderingPaused && occupied)
+            if (isWanderingPaused || !occupied)
             {
+                TrySetAnimationBool(idleAnimParam, true);
+                yield return null;
+                continue;
+            }
                 float speedMult = 1f;
                 float radiusMult = 1f;
                 float pauseMin = wanderPauseMin;
@@ -565,6 +569,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
                 if (!canMove)
                 {
+                    TrySetAnimationBool(idleAnimParam, true);
                     yield return null;
                     continue;
                 }
@@ -573,6 +578,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
                 if (dist < 2f)
                 {
+                    TrySetAnimationBool(idleAnimParam, true);
                     target = new Vector2(
                         startPos.x + Random.Range(-wanderRadius.x * radiusMult, wanderRadius.x * radiusMult),
                         startPos.y + Random.Range(-wanderRadius.y * radiusMult, wanderRadius.y * radiusMult)
@@ -588,8 +594,8 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
                         oldPos, target, wanderSpeed * speedMult * Time.deltaTime
                     );
                     UpdateChickenFacing(oldPos, visualRect.anchoredPosition);
+                    TrySetAnimationBool(idleAnimParam, false);
                 }
-            }
 
             yield return null;
         }
@@ -644,7 +650,6 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
         TrySetAnimationBool(heatAnimParam, false);
         TrySetAnimationBool(coldAnimParam, false);
-        TrySetAnimationBool(idleAnimParam, true);
     }
 
     private bool TryStartHealthMinigame()
