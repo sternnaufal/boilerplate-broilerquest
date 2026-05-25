@@ -675,6 +675,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 918832665}
     m_Modifications:
     - target: {fileID: 4371668064095381656, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4371668064095381656, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -712,11 +716,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6988348761874558131, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 250
+      value: 247
       objectReference: {fileID: 0}
     - target: {fileID: 6988348761874558131, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 160
+      value: 165.8
       objectReference: {fileID: 0}
     - target: {fileID: 6988348761874558131, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -748,11 +752,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6988348761874558131, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 183
+      value: 177.4
       objectReference: {fileID: 0}
     - target: {fileID: 6988348761874558131, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 93
+      value: 99.6
       objectReference: {fileID: 0}
     - target: {fileID: 6988348761874558131, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1830,6 +1834,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 918832665}
     m_Modifications:
+    - target: {fileID: 4371668064095381656, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4371668064095381656, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -2968,6 +2976,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 918832665}
     m_Modifications:
     - target: {fileID: 4371668064095381656, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4371668064095381656, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3440,6 +3452,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4371668064095381656, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4371668064095381656, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3451,9 +3467,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: BQ_KandangSlot
       objectReference: {fileID: 0}
+    - target: {fileID: 6698141666270671029, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6698141666270671029, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6698141666270671029, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6698141666270671029, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6907016640907362101, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6988348761874558131, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_Pivot.x
