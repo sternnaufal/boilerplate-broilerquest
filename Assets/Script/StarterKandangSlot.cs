@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 using SlotStateChanged = System.Action<StarterKandangSlot>;
 
 public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCheckListener
@@ -13,8 +14,16 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     [SerializeField] private GameObject chickenVisual;
     [SerializeField] private Transform chickenParent;
     [SerializeField] private bool startsOccupied;
+    [SerializeField] private int chickensPerPurchase = 8;
     [SerializeField] private Vector2 chickenVisualSize = new Vector2(108f, 118f);
+    [SerializeField] private Vector2 packedChickenVisualSize = new Vector2(42f, 50f);
     [SerializeField] private Vector2 chickenVisualOffset = new Vector2(0f, -8f);
+    [SerializeField] private Vector2 packedChickenSpacing = new Vector2(44f, 34f);
+
+    [Header("Slot Label")]
+    [SerializeField] private TextMeshProUGUI slotLabel;
+    [SerializeField] private string slotLabelFormat = "KANDANG {0}";
+    [SerializeField] private bool autoNumberSlotLabel = true;
 
     [Header("Bubble Sprites (Images)")]
     [SerializeField] private Sprite feedBubbleSprite;
@@ -61,7 +70,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     [SerializeField] private float wanderPauseMin = 1.5f;
     [SerializeField] private float wanderPauseMax = 3.5f;
 
-    private GameObject spawnedChicken;
+    private readonly List<GameObject> spawnedChickens = new List<GameObject>();
     private Coroutine eventCoroutine;
     private Coroutine wanderCoroutine;
     private bool isWanderingPaused;
@@ -69,6 +78,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     private bool feedSatisfied;
     private bool coolingSatisfied;
     private bool heatingSatisfied;
+    private int completedCareCount;
     private int sellReward;
     private ChickenNeed currentNeed;
     private SlotState currentState;
@@ -90,28 +100,37 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     }
 
     public bool IsEmpty => currentState == SlotState.Empty;
+    public bool CanAcceptChicken => IsEmpty;
+    public int CurrentChickenCount => GetActiveChickenVisuals().Count;
 
     private void Awake()
     {
+        RefreshSlotLabel();
         PrepareSlotHitbox();
         EnsureBubbleVisual();
         SetOccupied(startsOccupied);
 
         if (chickenVisual != null)
         {
-            PositionChickenVisual(chickenVisual.transform);
+            PositionChickenVisual(chickenVisual.transform, chickenVisualOffset, chickenVisualSize);
             chickenVisual.SetActive(occupied);
             FindAnimator();
         }
 
         ResetChickenProgress();
+        PositionAllChickenVisuals();
         HideBubble();
 
         if (occupied)
         {
             StartNeedTimer();
-            if (enableWander) StartWander();
+            UpdateWanderState();
         }
+    }
+
+    private void OnTransformParentChanged()
+    {
+        RefreshSlotLabel();
     }
 
     public bool TryPlaceChicken(GameObject chickenPrefab)
@@ -122,31 +141,29 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
             return false;
         }
 
-        if (!IsEmpty)
+        if (!CanAcceptChicken)
             return false;
 
-        if (chickenPrefab != null)
+        int visualCount = Mathf.Max(1, chickensPerPurchase);
+        int placedCount = 0;
+        for (int i = 0; i < visualCount; i++)
         {
-            Transform parent = chickenParent != null ? chickenParent : transform;
-            spawnedChicken = Instantiate(chickenPrefab, parent);
-            PositionChickenVisual(spawnedChicken.transform);
-            AssignChickenAnimator(spawnedChicken);
-        }
-        else if (chickenVisual != null)
-        {
-            PositionChickenVisual(chickenVisual.transform);
-            chickenVisual.SetActive(true);
-            AssignChickenAnimator(chickenVisual);
-        }
-        else
-        {
-            Debug.LogWarning($"{name}: Tidak ada prefab atau visual ayam untuk ditampilkan.");
+            if (CreateChickenVisual(chickenPrefab) != null)
+                placedCount++;
         }
 
+        if (placedCount == 0)
+        {
+            Debug.LogWarning($"{name}: Tidak ada prefab atau visual ayam untuk ditampilkan.");
+            return false;
+        }
+
+        PositionAllChickenVisuals();
         ResetChickenProgress();
         SetOccupied(true);
         StartNeedTimer();
-        if (enableWander) StartWander();
+
+        UpdateWanderState();
         return true;
     }
 
@@ -155,11 +172,12 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         StopEventTimer();
         StopWander();
 
-        if (spawnedChicken != null)
+        foreach (GameObject spawnedChicken in spawnedChickens)
         {
-            Destroy(spawnedChicken);
-            spawnedChicken = null;
+            if (spawnedChicken != null)
+                Destroy(spawnedChicken);
         }
+        spawnedChickens.Clear();
 
         if (chickenVisual != null)
             chickenVisual.SetActive(false);
@@ -186,10 +204,11 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
         if (currentState == SlotState.WaitingForSellClick)
         {
+            int finalReward = sellReward;
             if (CoinManager.Instance != null)
                 CoinManager.Instance.AddCoin(sellReward);
 
-            GameLog.Info($"{name}: Ayam dijual, +{sellReward} coin.");
+            GameLog.Info($"{name}: {CurrentChickenCount} ayam dijual, +{finalReward} coin.");
             ClearChicken();
         }
     }
@@ -276,7 +295,8 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
                 break;
         }
 
-        sellReward += careBonus;
+        completedCareCount++;
+        RecalculateSellReward();
 
         if (IsReadyToSell())
         {
@@ -300,6 +320,131 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     private void NotifyStateChanged()
     {
         StateChanged?.Invoke(this);
+    }
+
+    private GameObject CreateChickenVisual(GameObject chickenPrefab)
+    {
+        Transform parent = chickenParent != null ? chickenParent : transform;
+        GameObject visual = null;
+
+        if (chickenPrefab != null)
+        {
+            visual = Instantiate(chickenPrefab, parent);
+            spawnedChickens.Add(visual);
+        }
+        else if (chickenVisual != null && !chickenVisual.activeSelf)
+        {
+            visual = chickenVisual;
+            visual.SetActive(true);
+        }
+        else if (chickenVisual != null)
+        {
+            visual = Instantiate(chickenVisual, parent);
+            visual.SetActive(true);
+            spawnedChickens.Add(visual);
+        }
+
+        if (visual == null)
+            return null;
+
+        AssignChickenAnimator(visual);
+        return visual;
+    }
+
+    private List<GameObject> GetActiveChickenVisuals()
+    {
+        spawnedChickens.RemoveAll(chicken => chicken == null);
+
+        List<GameObject> visuals = new List<GameObject>();
+        if (chickenVisual != null && chickenVisual.activeSelf)
+            visuals.Add(chickenVisual);
+
+        foreach (GameObject spawnedChicken in spawnedChickens)
+        {
+            if (spawnedChicken != null && spawnedChicken.activeSelf)
+                visuals.Add(spawnedChicken);
+        }
+
+        return visuals;
+    }
+
+    private void PositionAllChickenVisuals()
+    {
+        List<GameObject> visuals = GetActiveChickenVisuals();
+        int count = visuals.Count;
+
+        for (int i = 0; i < count; i++)
+        {
+            Vector2 size = count > 1 ? packedChickenVisualSize : chickenVisualSize;
+            Vector2 offset = count > 1 ? GetPackedChickenOffset(i, count) : chickenVisualOffset;
+            PositionChickenVisual(visuals[i].transform, offset, size);
+        }
+    }
+
+    private Vector2 GetPackedChickenOffset(int index, int count)
+    {
+        int columnCount = Mathf.Min(2, Mathf.Max(1, count));
+        int rowCount = Mathf.CeilToInt(count / (float)columnCount);
+        int row = index / columnCount;
+        int column = index % columnCount;
+
+        float x = (column - (columnCount - 1) * 0.5f) * packedChickenSpacing.x;
+        float y = ((rowCount - 1) * 0.5f - row) * packedChickenSpacing.y;
+        return chickenVisualOffset + new Vector2(x, y - 10f);
+    }
+
+    private void RecalculateSellReward()
+    {
+        sellReward = baseSellReward + completedCareCount * careBonus;
+    }
+
+    private void RefreshSlotLabel()
+    {
+        if (!autoNumberSlotLabel)
+            return;
+
+        if (slotLabel == null)
+            slotLabel = FindSlotLabel();
+
+        if (slotLabel == null)
+            return;
+
+        int slotNumber = GetSlotIndexInParent() + 1;
+        slotLabel.text = string.Format(slotLabelFormat, slotNumber);
+    }
+
+    private TextMeshProUGUI FindSlotLabel()
+    {
+        TextMeshProUGUI[] labels = GetComponentsInChildren<TextMeshProUGUI>(true);
+        foreach (TextMeshProUGUI label in labels)
+        {
+            if (label != null && label.gameObject.name == "Kandang")
+                return label;
+        }
+
+        return labels.Length > 0 ? labels[0] : null;
+    }
+
+    private int GetSlotIndexInParent()
+    {
+        if (transform.parent == null)
+            return transform.GetSiblingIndex();
+
+        int slotIndex = 0;
+        for (int i = 0; i < transform.parent.childCount; i++)
+        {
+            Transform sibling = transform.parent.GetChild(i);
+            StarterKandangSlot siblingSlot = sibling.GetComponent<StarterKandangSlot>();
+            if (siblingSlot == null)
+                continue;
+
+            if (siblingSlot == this)
+                return slotIndex;
+
+            slotIndex++;
+        }
+
+        return transform.GetSiblingIndex();
     }
 
     private ChickenNeed GetNextNeed()
@@ -364,7 +509,8 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         feedSatisfied = false;
         coolingSatisfied = false;
         heatingSatisfied = false;
-        sellReward = baseSellReward;
+        completedCareCount = 0;
+        RecalculateSellReward();
         ResetAnimationToNormal();
     }
 
@@ -467,7 +613,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         slotImage.raycastTarget = true;
     }
 
-    private void PositionChickenVisual(Transform visual)
+    private void PositionChickenVisual(Transform visual, Vector2 anchoredOffset, Vector2 visualSize)
     {
         if (visual == null)
             return;
@@ -482,12 +628,12 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.sizeDelta = chickenVisualSize;
-            rect.anchoredPosition = chickenVisualOffset;
+            rect.sizeDelta = visualSize;
+            rect.anchoredPosition = anchoredOffset;
         }
         else
         {
-            visual.localPosition = new Vector3(chickenVisualOffset.x, chickenVisualOffset.y, 0f);
+            visual.localPosition = new Vector3(anchoredOffset.x, anchoredOffset.y, 0f);
         }
 
         Image[] images = visual.GetComponentsInChildren<Image>(true);
@@ -512,6 +658,12 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
     private void StartWander()
     {
+        if (!ShouldUseWander())
+        {
+            StopWander();
+            return;
+        }
+
         StopWander();
         isWanderingPaused = false;
         wanderCoroutine = StartCoroutine(WanderRoutine());
@@ -527,14 +679,35 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         isWanderingPaused = true;
     }
 
+    private bool ShouldUseWander()
+    {
+        return enableWander && CurrentChickenCount > 0;
+    }
+
+    private void UpdateWanderState()
+    {
+        if (ShouldUseWander())
+            StartWander();
+        else
+            StopWander();
+    }
+
     private IEnumerator WanderRoutine()
     {
-        RectTransform visualRect = GetActiveVisualRect();
-        if (visualRect == null)
+        List<RectTransform> visualRects = GetActiveVisualRects();
+        if (visualRects.Count == 0)
             yield break;
 
-        Vector2 startPos = chickenVisualOffset;
-        Vector2 target = startPos;
+        Vector2[] startPositions = new Vector2[visualRects.Count];
+        Vector2[] targets = new Vector2[visualRects.Count];
+        float[] pauses = new float[visualRects.Count];
+
+        for (int i = 0; i < visualRects.Count; i++)
+        {
+            startPositions[i] = visualRects[i].anchoredPosition;
+            targets[i] = GetRandomWanderTarget(startPositions[i], 1f);
+            pauses[i] = Random.Range(wanderPauseMin, wanderPauseMax);
+        }
 
         while (true)
         {
@@ -544,66 +717,83 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
                 yield return null;
                 continue;
             }
-                float speedMult = 1f;
-                float radiusMult = 1f;
-                float pauseMin = wanderPauseMin;
-                float pauseMax = wanderPauseMax;
-                bool canMove = true;
 
-                if (currentState == SlotState.WaitingForCareClick)
-                {
-                    if (currentNeed == ChickenNeed.Feed)
-                        canMove = false;
-                    else
-                    {
-                        speedMult = 3f;
-                        radiusMult = 2f;
-                        pauseMin = 0.1f;
-                        pauseMax = 0.4f;
-                    }
-                }
-                else if (currentState == SlotState.WaitingForSellClick)
-                {
+            float speedMult = 1f;
+            float radiusMult = 1f;
+            float pauseMin = wanderPauseMin;
+            float pauseMax = wanderPauseMax;
+            bool canMove = true;
+
+            if (currentState == SlotState.WaitingForCareClick)
+            {
+                if (currentNeed == ChickenNeed.Feed)
                     canMove = false;
-                }
-
-                if (!canMove)
+                else
                 {
-                    TrySetAnimationBool(idleAnimParam, true);
-                    yield return null;
+                    speedMult = 2.2f;
+                    radiusMult = 1.5f;
+                    pauseMin = 0.1f;
+                    pauseMax = 0.45f;
+                }
+            }
+            else if (currentState == SlotState.WaitingForSellClick)
+            {
+                canMove = false;
+            }
+
+            if (!canMove)
+            {
+                TrySetAnimationBool(idleAnimParam, true);
+                yield return null;
+                continue;
+            }
+
+            bool anyMoving = false;
+            for (int i = 0; i < visualRects.Count; i++)
+            {
+                RectTransform visualRect = visualRects[i];
+                if (visualRect == null)
+                    continue;
+
+                if (pauses[i] > 0f)
+                {
+                    pauses[i] -= Time.deltaTime;
                     continue;
                 }
 
-                float dist = Vector2.Distance(visualRect.anchoredPosition, target);
-
+                float dist = Vector2.Distance(visualRect.anchoredPosition, targets[i]);
                 if (dist < 2f)
                 {
-                    TrySetAnimationBool(idleAnimParam, true);
-                    target = new Vector2(
-                        startPos.x + Random.Range(-wanderRadius.x * radiusMult, wanderRadius.x * radiusMult),
-                        startPos.y + Random.Range(-wanderRadius.y * radiusMult, wanderRadius.y * radiusMult)
-                    );
-
-                    float pause = Random.Range(pauseMin, pauseMax);
-                    yield return new WaitForSeconds(pause);
+                    targets[i] = GetRandomWanderTarget(startPositions[i], radiusMult);
+                    pauses[i] = Random.Range(pauseMin, pauseMax);
                 }
                 else
                 {
                     Vector2 oldPos = visualRect.anchoredPosition;
                     visualRect.anchoredPosition = Vector2.MoveTowards(
-                        oldPos, target, wanderSpeed * speedMult * Time.deltaTime
+                        oldPos, targets[i], wanderSpeed * speedMult * Time.deltaTime
                     );
-                    UpdateChickenFacing(oldPos, visualRect.anchoredPosition);
-                    TrySetAnimationBool(idleAnimParam, false);
+                    UpdateChickenFacing(visualRect, oldPos, visualRect.anchoredPosition);
+                    anyMoving = true;
                 }
+            }
+
+            TrySetAnimationBool(idleAnimParam, !anyMoving);
 
             yield return null;
         }
     }
 
-    private void UpdateChickenFacing(Vector2 from, Vector2 to)
+    private Vector2 GetRandomWanderTarget(Vector2 startPos, float radiusMult)
     {
-        RectTransform visualRect = GetActiveVisualRect();
+        return new Vector2(
+            startPos.x + Random.Range(-wanderRadius.x * radiusMult, wanderRadius.x * radiusMult),
+            startPos.y + Random.Range(-wanderRadius.y * radiusMult, wanderRadius.y * radiusMult)
+        );
+    }
+
+    private void UpdateChickenFacing(RectTransform visualRect, Vector2 from, Vector2 to)
+    {
         if (visualRect == null) return;
 
         float dirX = to.x - from.x;
@@ -621,10 +811,18 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         visualRect.localScale = scale;
     }
 
-    private RectTransform GetActiveVisualRect()
+    private List<RectTransform> GetActiveVisualRects()
     {
-        Transform visual = spawnedChicken != null ? spawnedChicken.transform : (chickenVisual != null ? chickenVisual.transform : null);
-        return visual != null ? visual as RectTransform : null;
+        List<RectTransform> rects = new List<RectTransform>();
+        List<GameObject> visuals = GetActiveChickenVisuals();
+        foreach (GameObject visual in visuals)
+        {
+            RectTransform rect = visual != null ? visual.transform as RectTransform : null;
+            if (rect != null)
+                rects.Add(rect);
+        }
+
+        return rects;
     }
 
     private void UpdateAnimationByNeed(ChickenNeed need)
@@ -645,7 +843,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
     private void ResetAnimationToNormal()
     {
-        if (chickenAnimator == null || !occupied)
+        if (!occupied)
             return;
 
         TrySetAnimationBool(heatAnimParam, false);
@@ -733,21 +931,49 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
     private void TrySetAnimationBool(string paramName, bool value)
     {
-        if (chickenAnimator == null || string.IsNullOrWhiteSpace(paramName))
+        if (string.IsNullOrWhiteSpace(paramName))
             return;
 
-        if (!HasAnimatorParameter(paramName))
-        {
-            Debug.LogWarning($"{name}: Animator parameter '{paramName}' tidak ditemukan.");
+        List<Animator> animators = GetActiveChickenAnimators();
+        if (animators.Count == 0)
             return;
+
+        bool anyAnimatorHandled = false;
+        foreach (Animator animator in animators)
+        {
+            if (!HasAnimatorParameter(animator, paramName))
+                continue;
+
+            animator.SetBool(paramName, value);
+            anyAnimatorHandled = true;
         }
 
-        chickenAnimator.SetBool(paramName, value);
+        if (!anyAnimatorHandled)
+            Debug.LogWarning($"{name}: Animator parameter '{paramName}' tidak ditemukan.");
     }
 
-    private bool HasAnimatorParameter(string parameterName)
+    private List<Animator> GetActiveChickenAnimators()
     {
-        foreach (AnimatorControllerParameter parameter in chickenAnimator.parameters)
+        List<Animator> animators = new List<Animator>();
+        foreach (GameObject visual in GetActiveChickenVisuals())
+        {
+            Animator animator = visual != null ? visual.GetComponentInChildren<Animator>(true) : null;
+            if (animator != null)
+                animators.Add(animator);
+        }
+
+        if (animators.Count == 0 && chickenAnimator != null)
+            animators.Add(chickenAnimator);
+
+        return animators;
+    }
+
+    private bool HasAnimatorParameter(Animator animator, string parameterName)
+    {
+        if (animator == null)
+            return false;
+
+        foreach (AnimatorControllerParameter parameter in animator.parameters)
         {
             if (parameter.name == parameterName)
                 return true;
