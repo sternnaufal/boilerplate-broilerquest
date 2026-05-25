@@ -384,8 +384,16 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
         if (bubbleLabel != null)
         {
-            bubbleLabel.text = label;
-            bubbleLabel.enabled = true;
+            if (label == feedBubbleText || label == coolingBubbleText || label == heatingBubbleText)
+            {
+                bubbleLabel.text = "";
+                bubbleLabel.enabled = false;
+            }
+            else
+            {
+                bubbleLabel.text = label;
+                bubbleLabel.enabled = !string.IsNullOrEmpty(label);
+            }
         }
     }
 

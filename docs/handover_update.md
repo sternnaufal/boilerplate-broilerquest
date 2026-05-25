@@ -288,3 +288,12 @@ The other repeated console entries are Unity MCP bridge trace logs such as disco
   - `docs/broilerquest-sigmap.md`
   - `docs/broilerquest-ui-handover-codex.md`
   - `docs/GDD_CoopQuest.docx`
+
+## Care Event Speech Bubble Text Cleanup - 25 Mei 2026
+
+- **Removed Overlapping Text on Event Speech Bubbles**:
+  - Root cause: In the chicken care events (Feed/memberikan makan, Heating/ayam kedinginan, Cooling/ayam kepanasan), the speech bubbles display beautiful icons (seeds, fire, fan) but also rendered text overlays ("MAKAN", "HEATER", "KIPAS") directly on top of them. This overlapped with the icons and looked visually redundant and cluttered.
+  - Fix: Modified `StarterKandangSlot.ShowBubble()` to detect if the incoming label matches any of the care event texts (`feedBubbleText`, `coolingBubbleText`, or `heatingBubbleText`). If it does, the text mesh label (`bubbleLabel`) is disabled (`enabled = false`) and set to empty (`text = ""`), leaving only the clean event icon bubble visible.
+  - Retained "JUAL" (Sell) Label: The "JUAL" label still renders its text overlay perfectly as it does not overlap with any complex graphic.
+  - Verification: Ran Unity in Play Mode, triggered care events on slots, and confirmed that only the beautiful event icons render inside the speech bubbles with zero overlapping text.
+
