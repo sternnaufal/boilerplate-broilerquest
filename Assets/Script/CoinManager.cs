@@ -4,7 +4,25 @@ using System;
 
 public class CoinManager : MonoBehaviour
 {
-    public static CoinManager Instance { get; private set; }
+    private static CoinManager _instance;
+    public static CoinManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindFirstObjectByType<CoinManager>();
+                if (_instance == null)
+                {
+                    GameObject go = new GameObject("CoinManager");
+                    _instance = go.AddComponent<CoinManager>();
+                    DontDestroyOnLoad(go);
+                }
+            }
+            return _instance;
+        }
+    }
+
     public event Action<int> CoinsChanged;
 
     [Header("UI Reference")]
@@ -12,7 +30,7 @@ public class CoinManager : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private bool resetCoinOnStart = false;
-    [SerializeField] private int startingCoin = 0;
+    [SerializeField] private int startingCoin = 100;
     [SerializeField] private bool usePlayerPrefs = true;
 
     private int totalCoin = 0;
@@ -20,18 +38,18 @@ public class CoinManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
+        if (_instance == null)
         {
-            Instance = this;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
         {
             if (resetCoinOnStart)
-                Instance.SetTotalCoin(startingCoin);
+                _instance.SetTotalCoin(startingCoin);
 
             if (coinText != null)
-                Instance.BindCoinText(coinText);
+                _instance.BindCoinText(coinText);
 
             Destroy(gameObject);
             return;
@@ -146,6 +164,9 @@ public class CoinManager : MonoBehaviour
         if (PlayerPrefs.HasKey(GameConstants.Persistence.TotalCoinKey))
             return PlayerPrefs.GetInt(GameConstants.Persistence.TotalCoinKey, 0);
 
-        return PlayerPrefs.GetInt(GameConstants.Persistence.LegacyTotalCoinKey, 0);
+        if (PlayerPrefs.HasKey(GameConstants.Persistence.LegacyTotalCoinKey))
+            return PlayerPrefs.GetInt(GameConstants.Persistence.LegacyTotalCoinKey, 0);
+
+        return 100;
     }
 }

@@ -4,22 +4,39 @@ using TMPro;
 
 public class KoleksiIoTController : MonoBehaviour
 {
-    [Header("Product Settings")]
-    [SerializeField] private string productKey = "SmartSilo";
-    [SerializeField] private string productName = "Smart Silo";
-    [SerializeField] private int productPrice = 100;
+    [System.Serializable]
+    public class IoTProduct
+    {
+        public string productKey = "SmartSilo";
+        public string productName = "Smart Silo";
+        public int productPrice = 100;
+        public Texture productImage;
+    }
 
-    private TextMeshProUGUI statusText;
-    private Button buyButton;
-    private GameObject ownedContainer;
-    private Button backButton;
+    [Header("Product Settings")]
+    [SerializeField] private IoTProduct product = new IoTProduct();
+
+    [Header("UI References")]
+    [SerializeField] private RawImage productImage;
+    [SerializeField] private TextMeshProUGUI productNameText;
+    [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private Button buyButton;
+    [SerializeField] private GameObject ownedContainer;
+    [SerializeField] private Button backButton;
+
+    private void Awake()
+    {
+        if (CoinManager.Instance != null)
+            CoinManager.Instance.CoinsChanged += OnCoinsChanged;
+    }
 
     private void Start()
     {
-        statusText = GameObject.Find("StatusText")?.GetComponent<TextMeshProUGUI>();
-        ownedContainer = GameObject.Find("OwnedContainer");
-        buyButton = GameObject.Find("BuyButton")?.GetComponent<Button>();
-        backButton = GameObject.Find("BackButton")?.GetComponent<Button>();
+        if (productImage != null && product.productImage != null)
+            productImage.texture = product.productImage;
+
+        if (productNameText != null)
+            productNameText.text = product.productName;
 
         if (CoinManager.Instance != null)
         {
@@ -29,37 +46,50 @@ public class KoleksiIoTController : MonoBehaviour
         }
 
         if (buyButton != null)
-            buyButton.onClick.AddListener(BuyProduct);
+            ButtonHelper.AddListenerOnce(buyButton, BuyProduct);
 
         if (backButton != null)
-            backButton.onClick.AddListener(GoBack);
+            ButtonHelper.AddListenerOnce(backButton, GoBack);
 
         RefreshUI();
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        if (buyButton != null && buyButton.gameObject.activeSelf)
-        {
-            bool canAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(productPrice);
-            buyButton.interactable = canAfford;
-        }
+        if (CoinManager.Instance != null)
+            CoinManager.Instance.CoinsChanged -= OnCoinsChanged;
+    }
+
+    private void OnCoinsChanged(int totalCoin)
+    {
+        UpdateBuyButtonState();
+    }
+
+    private void UpdateBuyButtonState()
+    {
+        if (buyButton == null || !buyButton.gameObject.activeSelf)
+            return;
+
+        bool canAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(product.productPrice);
+        buyButton.interactable = canAfford;
     }
 
     private bool IsPurchased()
     {
-        return PlayerPrefs.GetInt("KoleksiIoT.Purchased." + productKey, 0) == 1;
+        return PlayerPrefs.GetInt(GameConstants.Persistence.KoleksiIoTPurchasedPrefix + product.productKey, 0) == 1;
     }
 
-    private void BuyProduct()
+    public void BuyProduct()
     {
-        if (CoinManager.Instance != null && CoinManager.Instance.CanAfford(productPrice))
-        {
-            CoinManager.Instance.SpendCoin(productPrice);
-            PlayerPrefs.SetInt("KoleksiIoT.Purchased." + productKey, 1);
-            PlayerPrefs.Save();
-            RefreshUI();
-        }
+        if (CoinManager.Instance == null || !CoinManager.Instance.CanAfford(product.productPrice))
+            return;
+
+        if (!CoinManager.Instance.SpendCoin(product.productPrice))
+            return;
+
+        PlayerPrefs.SetInt(GameConstants.Persistence.KoleksiIoTPurchasedPrefix + product.productKey, 1);
+        PlayerPrefs.Save();
+        RefreshUI();
     }
 
     private void RefreshUI()
@@ -67,10 +97,14 @@ public class KoleksiIoTController : MonoBehaviour
         bool purchased = IsPurchased();
 
         if (statusText != null)
-            statusText.text = purchased ? "Sudah Dibeli" : "Harga: " + productPrice + " Koin";
+            statusText.text = purchased ? "Sudah Dibeli" : "Harga: " + product.productPrice + " Koin";
 
         if (buyButton != null)
+        {
             buyButton.gameObject.SetActive(!purchased);
+            if (!purchased)
+                UpdateBuyButtonState();
+        }
 
         if (ownedContainer != null)
             ownedContainer.SetActive(purchased);

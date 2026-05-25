@@ -325,27 +325,14 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     private GameObject CreateChickenVisual(GameObject chickenPrefab)
     {
         Transform parent = chickenParent != null ? chickenParent : transform;
-        GameObject visual = null;
 
-        if (chickenPrefab != null)
-        {
-            visual = Instantiate(chickenPrefab, parent);
-            spawnedChickens.Add(visual);
-        }
-        else if (chickenVisual != null && !chickenVisual.activeSelf)
-        {
-            visual = chickenVisual;
-            visual.SetActive(true);
-        }
-        else if (chickenVisual != null)
-        {
-            visual = Instantiate(chickenVisual, parent);
-            visual.SetActive(true);
-            spawnedChickens.Add(visual);
-        }
-
-        if (visual == null)
+        GameObject prefabToInstantiate = chickenPrefab != null ? chickenPrefab : chickenVisual;
+        if (prefabToInstantiate == null)
             return null;
+
+        GameObject visual = Instantiate(prefabToInstantiate, parent);
+        visual.SetActive(true);
+        spawnedChickens.Add(visual);
 
         AssignChickenAnimator(visual);
         return visual;
@@ -356,9 +343,6 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         spawnedChickens.RemoveAll(chicken => chicken == null);
 
         List<GameObject> visuals = new List<GameObject>();
-        if (chickenVisual != null && chickenVisual.activeSelf)
-            visuals.Add(chickenVisual);
-
         foreach (GameObject spawnedChicken in spawnedChickens)
         {
             if (spawnedChicken != null && spawnedChicken.activeSelf)
