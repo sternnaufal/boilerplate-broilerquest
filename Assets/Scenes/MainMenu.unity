@@ -119,6 +119,26 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &4567128 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6384904773509121494, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+  m_PrefabInstance: {fileID: 1630023752}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4567132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4567128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db44c2d49f9ba6643aef2c9012fa49bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CoinManager
+  coinText: {fileID: 0}
+  resetCoinOnStart: 0
+  usePlayerPrefs: 1
 --- !u!1 &19759540
 GameObject:
   m_ObjectHideFlags: 0
@@ -3318,6 +3338,78 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1612109207}
   m_CullTransparentMesh: 1
+--- !u!1001 &1630023752
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1925916746256750119, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: coinText
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1925916746256750119, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: feedText
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6384904773509121494, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_Name
+      value: Managers
+      objectReference: {fileID: 0}
+    - target: {fileID: 6384904773509121494, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 224.02385
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 283.88928
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6384904773509121494, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4567132}
+  m_SourcePrefab: {fileID: 100100000, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
 --- !u!1 &1663083527
 GameObject:
   m_ObjectHideFlags: 0
@@ -5085,3 +5177,4 @@ SceneRoots:
   - {fileID: 1182004547}
   - {fileID: 1528800869}
   - {fileID: 1510875143}
+  - {fileID: 1630023752}

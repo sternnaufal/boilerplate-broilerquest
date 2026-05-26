@@ -36,17 +36,8 @@ public class GlobalUIOverlay : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         instance = this;
         DontDestroyOnLoad(gameObject);
-        CreateCanvas();
-        CreateUIElements();
-
-        if (CoinManager.Instance != null)
-            BindCoin();
-
-        if (FeedManager.Instance != null)
-            BindFeed();
     }
 
     private void Start()
