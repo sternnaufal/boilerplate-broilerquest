@@ -90,10 +90,39 @@ public class KoleksiIoTController : MonoBehaviour
         RefreshAllCards();
     }
 
+    private void EnsureProductContainer()
+    {
+        if (productContainer != null)
+            return;
+
+        Transform existing = transform.Find("ProductContainer");
+        if (existing != null)
+        {
+            productContainer = existing;
+            return;
+        }
+
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas == null)
+            canvas = FindFirstObjectByType<Canvas>();
+
+        GameObject containerObj = new GameObject("ProductContainer", typeof(RectTransform));
+        containerObj.transform.SetParent(canvas != null ? canvas.transform : transform, false);
+        RectTransform rect = containerObj.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0f, 0f);
+        rect.anchorMax = new Vector2(1f, 0.6f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = Vector2.zero;
+
+        productContainer = containerObj.transform;
+    }
+
     private void BuildProductCards()
     {
         ClearCards();
 
+        EnsureProductContainer();
         if (products == null || productContainer == null)
             return;
 

@@ -14,6 +14,23 @@ public class StarterChickenOption
     public TextMeshProUGUI labelText;
 }
 
+[System.Serializable]
+public class ShopButtonStyleConfig
+{
+    public Color interactableColor = new Color(0.95f, 0.72f, 0.22f, 1f);
+    public Color disabledColor = new Color(0.48f, 0.42f, 0.28f, 0.82f);
+    public Color labelColor = new Color(0.12f, 0.15f, 0.08f, 1f);
+    public float labelFontSize = 24f;
+    public Color messageColor = new Color(1f, 0.96f, 0.78f, 1f);
+}
+
+[System.Serializable]
+public class OptionIconConfig
+{
+    public Vector2 iconAnchoredPosition = new Vector2(44f, 0f);
+    public Vector2 iconSize = new Vector2(62f, 62f);
+}
+
 public class StarterChickenShop : MonoBehaviour
 {
     [Header("Shop Options")]
@@ -21,6 +38,12 @@ public class StarterChickenShop : MonoBehaviour
 
     [Header("Kandang Slots")]
     [SerializeField] private StarterKandangSlot[] kandangSlots;
+
+    [Header("Button Styles")]
+    [SerializeField] private ShopButtonStyleConfig buttonStyle = new ShopButtonStyleConfig();
+
+    [Header("Option Icon")]
+    [SerializeField] private OptionIconConfig iconStyle = new OptionIconConfig();
 
     [Header("Feed Purchase")]
     [SerializeField] private Button feedBuyButton;
@@ -255,8 +278,8 @@ public class StarterChickenShop : MonoBehaviour
 
             if (option.labelText != null)
             {
-                option.labelText.color = new Color(0.12f, 0.15f, 0.08f, 1f);
-                option.labelText.fontSize = Mathf.Max(option.labelText.fontSize, GameConstants.UI.ButtonLabelFontSize);
+                option.labelText.color = buttonStyle.labelColor;
+                option.labelText.fontSize = Mathf.Max(option.labelText.fontSize, buttonStyle.labelFontSize);
                 option.labelText.fontStyle = FontStyles.Bold;
                 option.labelText.alignment = TextAlignmentOptions.MidlineLeft;
                 RectTransform labelRect = option.labelText.rectTransform;
@@ -269,21 +292,21 @@ public class StarterChickenShop : MonoBehaviour
 
         if (messageText != null)
         {
-            messageText.color = new Color(1f, 0.96f, 0.78f, 1f);
-            messageText.fontSize = Mathf.Max(messageText.fontSize, GameConstants.UI.ButtonLabelFontSize);
+            messageText.color = buttonStyle.messageColor;
+            messageText.fontSize = Mathf.Max(messageText.fontSize, buttonStyle.labelFontSize);
             messageText.alignment = TextAlignmentOptions.Center;
         }
     }
 
-    private static void StyleButtonState(Button button, bool interactable)
+    private void StyleButtonState(Button button, bool interactable)
     {
         Image image = button.GetComponent<Image>();
         if (image == null)
             return;
 
         image.color = interactable
-            ? new Color(0.95f, 0.72f, 0.22f, 1f)
-            : new Color(0.48f, 0.42f, 0.28f, 0.82f);
+            ? buttonStyle.interactableColor
+            : buttonStyle.disabledColor;
     }
 
     private StarterChickenOption GetOption(int optionIndex)
@@ -449,8 +472,8 @@ public class StarterChickenShop : MonoBehaviour
         rect.anchorMin = new Vector2(0f, 0.5f);
         rect.anchorMax = new Vector2(0f, 0.5f);
         rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = new Vector2(44f, 0f);
-        rect.sizeDelta = new Vector2(62f, 62f);
+        rect.anchoredPosition = iconStyle.iconAnchoredPosition;
+        rect.sizeDelta = iconStyle.iconSize;
 
         iconImage.sprite = sprite;
         iconImage.preserveAspect = true;

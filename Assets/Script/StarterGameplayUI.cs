@@ -2,12 +2,36 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class PanelStyleConfig
+{
+    public Color color = new Color(0.10f, 0.22f, 0.14f, 0.88f);
+}
+
+[System.Serializable]
+public class ButtonStyleConfig
+{
+    public string label = "";
+    public Color color = new Color(0.95f, 0.72f, 0.22f, 1f);
+}
+
 public class StarterGameplayUI : MonoBehaviour
 {
     [Header("Panels")]
     [SerializeField] private GameObject hudPanel;
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject hpPanel;
+
+    [Header("Panel Styles")]
+    [SerializeField] private PanelStyleConfig hpPanelStyle = new PanelStyleConfig { color = new Color(0.10f, 0.22f, 0.14f, 0.88f) };
+    [SerializeField] private PanelStyleConfig pausePanelStyle = new PanelStyleConfig { color = new Color(0.05f, 0.11f, 0.07f, 0.90f) };
+
+    [Header("HP Panel Position")]
+    [SerializeField] private Vector2 hpPanelAnchorMin = new Vector2(1f, 0.5f);
+    [SerializeField] private Vector2 hpPanelAnchorMax = new Vector2(1f, 0.5f);
+    [SerializeField] private Vector2 hpPanelPivot = new Vector2(1f, 0.5f);
+    [SerializeField] private Vector2 hpPanelSizeDelta = new Vector2(620f, 580f);
+    [SerializeField] private Vector2 hpPanelAnchoredPosition = new Vector2(-42f, -18f);
 
     [Header("Buttons")]
     [SerializeField] private Button pauseButton;
@@ -16,12 +40,22 @@ public class StarterGameplayUI : MonoBehaviour
     [SerializeField] private Button closeHpButton;
     [SerializeField] private Button mainMenuButton;
 
+    [Header("Button Styles")]
+    [SerializeField] private ButtonStyleConfig pauseButtonStyle = new ButtonStyleConfig { label = "PAUSE" };
+    [SerializeField] private ButtonStyleConfig resumeButtonStyle = new ButtonStyleConfig { label = "RESUME" };
+    [SerializeField] private ButtonStyleConfig hpToggleButtonStyle = new ButtonStyleConfig { label = "HP" };
+    [SerializeField] private ButtonStyleConfig closeHpButtonStyle = new ButtonStyleConfig { label = "TUTUP" };
+    [SerializeField] private ButtonStyleConfig mainMenuButtonStyle = new ButtonStyleConfig { label = "MAIN MENU", color = new Color(0.85f, 0.35f, 0.35f, 1f) };
+
     [Header("Button Sprites")]
     [SerializeField] private Sprite[] buttonSprites;
 
     [Header("Starter References")]
     [SerializeField] private TextMeshProUGUI coinText;
     [SerializeField] private StarterChickenShop chickenShop;
+
+    [Header("Coin Text Style")]
+    [SerializeField] private Color coinTextColor = new Color(1f, 0.96f, 0.70f, 1f);
 
     [Header("IoT")]
     [SerializeField] private StarterIoTController iotController;
@@ -120,7 +154,7 @@ public class StarterGameplayUI : MonoBehaviour
 
         if (iotController == null && hpPanel != null)
         {
-            GameObject iotObj = new GameObject("StarterIoTController", typeof(StarterIoTController));
+            GameObject iotObj = new GameObject("StarterIoTController", typeof(RectTransform), typeof(StarterIoTController));
             iotObj.transform.SetParent(hpPanel.transform, false);
 
             RectTransform rect = iotObj.GetComponent<RectTransform>();
@@ -166,21 +200,20 @@ public class StarterGameplayUI : MonoBehaviour
 
     private void PolishStarterUi()
     {
-        StyleButton(pauseButton, "PAUSE", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(0));
-        StyleButton(resumeButton, "RESUME", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(1));
-        StyleButton(hpToggleButton, "HP", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(2));
-        StyleButton(closeHpButton, "TUTUP", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(3));
+        StyleButton(pauseButton, pauseButtonStyle.label, pauseButtonStyle.color, GetSpriteSafe(0));
+        StyleButton(resumeButton, resumeButtonStyle.label, resumeButtonStyle.color, GetSpriteSafe(1));
+        StyleButton(hpToggleButton, hpToggleButtonStyle.label, hpToggleButtonStyle.color, GetSpriteSafe(2));
+        StyleButton(closeHpButton, closeHpButtonStyle.label, closeHpButtonStyle.color, GetSpriteSafe(3));
         EnsureMainMenuButton();
-        StyleButton(mainMenuButton, "MAIN MENU", new Color(0.85f, 0.35f, 0.35f, 1f), null);
 
-        StylePanel(hpPanel, new Color(0.10f, 0.22f, 0.14f, 0.88f));
-        StylePanel(pausePanel, new Color(0.05f, 0.11f, 0.07f, 0.90f));
+        StylePanel(hpPanel, hpPanelStyle.color);
+        StylePanel(pausePanel, pausePanelStyle.color);
         PositionHpPanel();
 
         if (coinText != null)
         {
             coinText.gameObject.SetActive(true);
-            coinText.color = new Color(1f, 0.96f, 0.70f, 1f);
+            coinText.color = coinTextColor;
             coinText.fontSize = Mathf.Max(coinText.fontSize, GameConstants.UI.CoinTextFontSize);
             coinText.fontStyle = FontStyles.Bold;
             coinText.alignment = TextAlignmentOptions.MidlineLeft;
@@ -214,6 +247,8 @@ public class StarterGameplayUI : MonoBehaviour
         labelRect.anchorMax = Vector2.one;
         labelRect.offsetMin = Vector2.zero;
         labelRect.offsetMax = Vector2.zero;
+
+        StyleButton(mainMenuButton, mainMenuButtonStyle.label, mainMenuButtonStyle.color, null);
     }
 
     private Sprite GetSpriteSafe(int index)
@@ -286,11 +321,11 @@ public class StarterGameplayUI : MonoBehaviour
         if (rect == null)
             return;
 
-        rect.anchorMin = new Vector2(1f, 0.5f);
-        rect.anchorMax = new Vector2(1f, 0.5f);
-        rect.pivot = new Vector2(1f, 0.5f);
-        rect.sizeDelta = new Vector2(620f, 580f);
-        rect.anchoredPosition = new Vector2(-42f, -18f);
+        rect.anchorMin = hpPanelAnchorMin;
+        rect.anchorMax = hpPanelAnchorMax;
+        rect.pivot = hpPanelPivot;
+        rect.sizeDelta = hpPanelSizeDelta;
+        rect.anchoredPosition = hpPanelAnchoredPosition;
     }
 
     private static void SetGameStateOrFallback(GameState state)

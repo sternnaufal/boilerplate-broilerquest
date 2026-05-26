@@ -962,7 +962,7 @@ GameObject:
   - component: {fileID: 502428230}
   - component: {fileID: 502428232}
   m_Layer: 0
-  m_Name: ExitButton
+  m_Name: IoTButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2919,8 +2919,8 @@ MonoBehaviour:
   hudPanel: {fileID: 163259461}
   startButton: {fileID: 1116706445}
   optionsButton: {fileID: 1712268779}
-  exitButton: {fileID: 502428232}
-  koleksiIoTButton: {fileID: 0}
+  exitButton: {fileID: 0}
+  koleksiIoTButton: {fileID: 502428232}
   backToMainButton: {fileID: 2038806545}
   musicVolumeSlider: {fileID: 527589730}
   sfxVolumeSlider: {fileID: 1034620202}
