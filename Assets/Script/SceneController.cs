@@ -1,43 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneController : MonoBehaviour
+public class SceneController : Singleton<SceneController>
 {
-    private static SceneController _instance;
-
-    public static SceneController Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindFirstObjectByType<SceneController>();
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("SceneController");
-                    _instance = go.AddComponent<SceneController>();
-                }
-            }
-            return _instance;
-        }
-    }
-
     [Header("Scene Names")]
     [SerializeField] private string mainMenuScene = "MainMenu";
     [SerializeField] private string selectLevelScene = "SelectLevel";
     [SerializeField] private string koleksiIoTScene = "KoleksiIoT";
-
-    private void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
 
     public void GoToMainMenu()
     {

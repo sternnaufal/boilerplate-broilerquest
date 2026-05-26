@@ -2,27 +2,8 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class CoinManager : MonoBehaviour
+public class CoinManager : Singleton<CoinManager>
 {
-    private static CoinManager _instance;
-    public static CoinManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindFirstObjectByType<CoinManager>();
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("CoinManager");
-                    _instance = go.AddComponent<CoinManager>();
-                    DontDestroyOnLoad(go);
-                }
-            }
-            return _instance;
-        }
-    }
-
     public event Action<int> CoinsChanged;
 
     [Header("UI Reference")]
@@ -35,25 +16,13 @@ public class CoinManager : MonoBehaviour
 
     private int totalCoin = 0;
     private bool hasInitialized;
+    private bool coinTextSearched;
 
-    void Awake()
+    protected override void Awake()
     {
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            if (resetCoinOnStart)
-                _instance.SetTotalCoin(startingCoin);
-
-            if (coinText != null)
-                _instance.BindCoinText(coinText);
-
-            Destroy(gameObject);
-            return;
-        }
+        base.Awake();
+        if (resetCoinOnStart)
+            SetTotalCoin(startingCoin);
     }
 
     void Start()
@@ -127,7 +96,7 @@ public class CoinManager : MonoBehaviour
 
     private void UpdateCoinUI()
     {
-        if (coinText == null) TryFindCoinText();
+        if (coinText == null && !coinTextSearched) TryFindCoinText();
         if (coinText != null)
             coinText.text = totalCoin.ToString();
 
@@ -136,6 +105,7 @@ public class CoinManager : MonoBehaviour
 
     private void TryFindCoinText()
     {
+        coinTextSearched = true;
         TextMeshProUGUI[] allTexts = FindObjectsByType<TextMeshProUGUI>(
             FindObjectsInactive.Exclude,
             FindObjectsSortMode.None);

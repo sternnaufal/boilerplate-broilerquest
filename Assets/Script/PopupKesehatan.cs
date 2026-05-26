@@ -3,10 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 
-public class PopupKesehatan : MonoBehaviour
+public class PopupKesehatan : Singleton<PopupKesehatan>
 {
-    public static PopupKesehatan Instance;
-
     [Header("UI References")]
     public GameObject popupPanel;
     public Button offOnButton;
@@ -32,17 +30,9 @@ public class PopupKesehatan : MonoBehaviour
     private IHealthCheckListener currentListener;
     private bool isStopped = false; // mencegah double stop
 
-    void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        base.Awake();
         popupPanel.SetActive(false);
     }
 

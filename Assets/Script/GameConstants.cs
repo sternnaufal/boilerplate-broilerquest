@@ -27,12 +27,14 @@ public static class GameConstants
         public const int CareBonus = 10;
         public const float NeedInterval = 5f;
         public const float NotificationDelay = 1f;
+        public const float NeedIntervalMin = 3f;
+        public const float NeedIntervalMax = 8f;
     }
 
     public static class JigsawMinigame
     {
         public const int GridSize = 3;
-        public const float TimeLimit = 30f;
+        public const float TimeLimit = 15f;
         public const float TileSize = 150f;
         public const float TileSpacing = 4f;
         public const float SwapDuration = 0.15f;

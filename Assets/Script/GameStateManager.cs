@@ -9,28 +9,14 @@ public enum GameState
     GameOver
 }
 
-public class GameStateManager : MonoBehaviour
+public class GameStateManager : Singleton<GameStateManager>
 {
-    public static GameStateManager Instance { get; private set; }
-
     public event Action<GameState> StateChanged;
 
     [SerializeField] private GameState initialState = GameState.Menu;
 
     public GameState CurrentState { get; private set; }
     private bool hasState;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
 
     private void Start()
     {
