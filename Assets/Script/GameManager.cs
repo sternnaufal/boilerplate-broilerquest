@@ -125,7 +125,7 @@ public class GameManager : Singleton<GameManager>
             isPopupShowing = false;
     }
 
-    void OnDestroy()
+    protected override void OnDestroy()
     {
         if (levelTimer != null)
             levelTimer.OnTimeUp -= OnTimerUp;

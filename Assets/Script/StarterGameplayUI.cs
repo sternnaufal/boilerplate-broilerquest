@@ -22,11 +22,15 @@ public class StarterGameplayUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI coinText;
     [SerializeField] private StarterChickenShop chickenShop;
 
+    [Header("IoT")]
+    [SerializeField] private StarterIoTController iotController;
+
     [Header("Startup")]
     [SerializeField] private bool showBuyPanelOnStart = true;
 
     private bool listenersRegistered;
     private bool hpVisible;
+    private bool iotCreated;
 
     private void OnEnable()
     {
@@ -94,10 +98,60 @@ public class StarterGameplayUI : MonoBehaviour
         hpVisible = visible;
 
         if (hpPanel != null)
+        {
             hpPanel.SetActive(visible);
+            if (visible)
+                EnsureIotController();
+        }
 
         if (chickenShop != null)
             chickenShop.RefreshShopState();
+    }
+
+    private void EnsureIotController()
+    {
+        if (iotCreated)
+            return;
+
+        if (iotController == null)
+            iotController = FindFirstObjectByType<StarterIoTController>();
+
+        if (iotController == null && hpPanel != null)
+        {
+            GameObject iotObj = new GameObject("StarterIoTController", typeof(StarterIoTController));
+            iotObj.transform.SetParent(hpPanel.transform, false);
+
+            RectTransform rect = iotObj.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0f, 1f);
+            rect.anchorMax = new Vector2(1f, 1f);
+            rect.pivot = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(0f, -360f);
+            rect.sizeDelta = new Vector2(0f, 180f);
+
+            iotController = iotObj.GetComponent<StarterIoTController>();
+
+            StarterIoTController.IoTDeviceDef[] defs = new StarterIoTController.IoTDeviceDef[]
+            {
+                new StarterIoTController.IoTDeviceDef
+                {
+                    productKey = GameConstants.IoT.ProductKeyFeeder,
+                    displayName = GameConstants.IoT.ProductNameFeeder
+                },
+                new StarterIoTController.IoTDeviceDef
+                {
+                    productKey = GameConstants.IoT.ProductKeyFan,
+                    displayName = GameConstants.IoT.ProductNameFan
+                },
+                new StarterIoTController.IoTDeviceDef
+                {
+                    productKey = GameConstants.IoT.ProductKeyHeater,
+                    displayName = GameConstants.IoT.ProductNameHeater
+                }
+            };
+            iotController.devices = defs;
+        }
+
+        iotCreated = true;
     }
 
     private void PolishStarterUi()
@@ -194,7 +248,7 @@ public class StarterGameplayUI : MonoBehaviour
         rect.anchorMin = new Vector2(1f, 0.5f);
         rect.anchorMax = new Vector2(1f, 0.5f);
         rect.pivot = new Vector2(1f, 0.5f);
-        rect.sizeDelta = new Vector2(620f, 500f);
+        rect.sizeDelta = new Vector2(620f, 580f);
         rect.anchoredPosition = new Vector2(-42f, -18f);
     }
 

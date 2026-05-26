@@ -64,15 +64,7 @@ public class GameStateManager : Singleton<GameStateManager>
 
     private static GameStateManager EnsureInstance()
     {
-        if (Instance != null)
-            return Instance;
-
-        Instance = FindFirstObjectByType<GameStateManager>();
-        if (Instance != null)
-            return Instance;
-
-        GameObject go = new GameObject("GameStateManager");
-        return go.AddComponent<GameStateManager>();
+        return Instance;
     }
 
     private static void ApplyTimeScale(GameState state)

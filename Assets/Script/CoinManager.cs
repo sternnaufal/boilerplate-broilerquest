@@ -11,7 +11,6 @@ public class CoinManager : Singleton<CoinManager>
 
     [Header("Settings")]
     [SerializeField] private bool resetCoinOnStart = false;
-    [SerializeField] private int startingCoin = 100;
     [SerializeField] private bool usePlayerPrefs = true;
 
     private int totalCoin = 0;
@@ -22,7 +21,7 @@ public class CoinManager : Singleton<CoinManager>
     {
         base.Awake();
         if (resetCoinOnStart)
-            SetTotalCoin(startingCoin);
+            SetTotalCoin(GameConstants.Economy.StartingCoin);
     }
 
     void Start()
@@ -40,7 +39,7 @@ public class CoinManager : Singleton<CoinManager>
             if (usePlayerPrefs && !resetCoinOnStart)
                 totalCoin = LoadSavedCoin();
             else if (resetCoinOnStart)
-                totalCoin = Mathf.Max(0, startingCoin);
+                totalCoin = Mathf.Max(0, GameConstants.Economy.StartingCoin);
             else
                 totalCoin = 0;
 
@@ -137,6 +136,6 @@ public class CoinManager : Singleton<CoinManager>
         if (PlayerPrefs.HasKey(GameConstants.Persistence.LegacyTotalCoinKey))
             return PlayerPrefs.GetInt(GameConstants.Persistence.LegacyTotalCoinKey, 0);
 
-        return 100;
+        return GameConstants.Economy.StartingCoin;
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class StarterChickenOption
 {
     public string displayName = "Ayam";
-    public int price = 25;
+    [NonSerialized] public int price = GameConstants.Economy.ChickenPrice;
     public GameObject chickenPrefab;
     public Sprite icon;
     public Button buyButton;
@@ -41,6 +41,7 @@ public class StarterChickenShop : MonoBehaviour
         ResolveKandangSlots();
         SubscribeToStateChanges();
         RegisterButtonListeners();
+        OverridePrices();
         UpdateOptionLabels();
         PolishShopButtons();
         RefreshShopState();
@@ -319,6 +320,18 @@ public class StarterChickenShop : MonoBehaviour
     private void HandleSlotStateChanged(StarterKandangSlot _)
     {
         RefreshShopState();
+    }
+
+    private void OverridePrices()
+    {
+        if (options == null)
+            return;
+
+        foreach (StarterChickenOption option in options)
+        {
+            if (option != null)
+                option.price = GameConstants.Economy.ChickenPrice;
+        }
     }
 
     private int GetAvailableKandangCount()

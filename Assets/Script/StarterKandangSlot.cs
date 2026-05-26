@@ -43,12 +43,9 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private Vector2 bubbleOffset = new Vector2(0f, 68f);
 
     [Header("Timing & Rewards")]
-    [SerializeField] private float needInterval = GameConstants.StarterSlot.NeedInterval;
     [SerializeField] private float notificationDelay = GameConstants.StarterSlot.NotificationDelay;
     [SerializeField] private float needIntervalMin = GameConstants.StarterSlot.NeedIntervalMin;
     [SerializeField] private float needIntervalMax = GameConstants.StarterSlot.NeedIntervalMax;
-    [SerializeField] private int baseSellReward = GameConstants.StarterSlot.BaseSellReward;
-    [SerializeField] private int careBonus = GameConstants.StarterSlot.CareBonus;
 
     [Header("Optional Health Minigame")]
     [SerializeField] private bool useHealthMinigame;
@@ -270,12 +267,51 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     private void ShowNextNeedBubble()
     {
         currentNeed = GetNextNeed();
+
+        if (TryAutoCompleteByIoT())
+            return;
+
         Sprite needSprite = GetNeedSprite(currentNeed);
         ShowBubble(needSprite, GetNeedText(currentNeed));
         currentState = SlotState.WaitingForCareClick;
         NotifyStateChanged();
         UpdateAnimationByNeed(currentNeed);
         GameLog.Info($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
+    }
+
+    private bool TryAutoCompleteByIoT()
+    {
+        if (StarterIoTController.Instance == null)
+            return false;
+
+        string iotKey = GetIoTKeyForNeed(currentNeed);
+        if (string.IsNullOrEmpty(iotKey))
+            return false;
+
+        if (StarterIoTController.Instance.IsActiveForNeed(iotKey))
+        {
+            GameLog.Info($"{name}: IoT {iotKey} aktif, kebutuhan {GetNeedText(currentNeed)} otomatis terpenuhi.");
+            UpdateAnimationByNeed(currentNeed);
+            CompleteCurrentNeed();
+            return true;
+        }
+
+        return false;
+    }
+
+    private static string GetIoTKeyForNeed(ChickenNeed need)
+    {
+        switch (need)
+        {
+            case ChickenNeed.Feed:
+                return GameConstants.IoT.ProductKeyFeeder;
+            case ChickenNeed.Cooling:
+                return GameConstants.IoT.ProductKeyFan;
+            case ChickenNeed.Heating:
+                return GameConstants.IoT.ProductKeyHeater;
+            default:
+                return null;
+        }
     }
 
     private void CompleteCurrentNeed()
@@ -380,21 +416,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     private void RecalculateSellReward()
     {
         int failCount = (feedFailed ? 1 : 0) + (coolingFailed ? 1 : 0) + (heatingFailed ? 1 : 0);
-        switch (failCount)
-        {
-            case 0:
-                sellReward = baseSellReward + completedCareCount * careBonus;
-                break;
-            case 1:
-                sellReward = 25;
-                break;
-            case 2:
-                sellReward = 10;
-                break;
-            default:
-                sellReward = 0;
-                break;
-        }
+        sellReward = Mathf.Max(0, GameConstants.Economy.BaseSellPrice - failCount * GameConstants.Economy.FailPenalty);
     }
 
     private void RefreshSlotLabel()
