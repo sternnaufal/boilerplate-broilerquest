@@ -1038,7 +1038,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &494029675
@@ -1484,7 +1484,7 @@ MonoBehaviour:
   - 300
   - 120
   - 180
-  timerText: {fileID: 500846619}
+  levelTimer: {fileID: 0}
   timeUpPopupPrefab: {fileID: 5686620739718393810, guid: e3f959814f1d81344b175c04511ef24b, type: 3}
   mainCanvas: {fileID: 1086103076}
 --- !u!114 &651932098
@@ -1501,7 +1501,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
   coinText: {fileID: 0}
   resetCoinOnStart: 1
-  startingCoin: 100
   usePlayerPrefs: 1
 --- !u!114 &651932099
 MonoBehaviour:
@@ -1522,9 +1521,11 @@ MonoBehaviour:
   resumeButton: {fileID: 1289705273}
   hpToggleButton: {fileID: 72372731}
   closeHpButton: {fileID: 1031492086}
+  mainMenuButton: {fileID: 0}
   buttonSprites: []
   coinText: {fileID: 0}
   chickenShop: {fileID: 747566859}
+  iotController: {fileID: 0}
   showBuyPanelOnStart: 1
 --- !u!4 &651932100
 Transform:
@@ -1734,7 +1735,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StarterChickenShop
   options:
   - displayName: Ayam
-    price: 25
     chickenPrefab: {fileID: 0}
     icon: {fileID: 887113903218096245, guid: 2257351556cdd154796e4cad6a84e4ef, type: 3}
     buyButton: {fileID: 2085166909}
@@ -1746,6 +1746,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  feedBuyButton: {fileID: 0}
+  feedBuyLabel: {fileID: 0}
+  feedBuyButtonText: Beli Pakan
+  feedBoughtMessage: Pakan berhasil dibeli!
+  noCoinFeedMessage: Duitmu tidak cukup!
   messageText: {fileID: 1171002132}
   startupMessage: Beli ayam. Ayam akan masuk ke kandang kosong pertama.
   noCoinMessage: Coin belum cukup.
@@ -2507,7 +2512,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1171002133
@@ -2860,7 +2865,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1227698325
@@ -3372,7 +3377,7 @@ GameObject:
   - component: {fileID: 2085166910}
   - component: {fileID: 2085166909}
   m_Layer: 0
-  m_Name: AYAM KAMPUNG - 25
+  m_Name: Ayam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

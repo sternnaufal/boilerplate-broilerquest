@@ -7,6 +7,7 @@ public static class GameConstants
         public const string KoleksiIoTPurchasedPrefix = "KoleksiIoT.Purchased.";
         public const string LevelUnlockBeginnerKey = "Level.Beginner.Unlocked";
         public const string LevelUnlockIntermediateKey = "Level.Intermediate.Unlocked";
+        public const string FeedCountKey = "BroilerQuest.FeedCount";
     }
 
     public static class LevelDuration

@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,13 @@ public class StarterChickenShop : MonoBehaviour
     [Header("Kandang Slots")]
     [SerializeField] private StarterKandangSlot[] kandangSlots;
 
+    [Header("Feed Purchase")]
+    [SerializeField] private Button feedBuyButton;
+    [SerializeField] private TextMeshProUGUI feedBuyLabel;
+    [SerializeField] private string feedBuyButtonText = "Beli Pakan";
+    [SerializeField] private string feedBoughtMessage = "Pakan berhasil dibeli!";
+    [SerializeField] private string noCoinFeedMessage = "Duitmu tidak cukup!";
+
     [Header("Feedback")]
     [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private string startupMessage = "Beli ayam. Satu pembelian mengisi satu kandang dengan beberapa ayam.";
@@ -41,6 +49,7 @@ public class StarterChickenShop : MonoBehaviour
         ResolveKandangSlots();
         SubscribeToStateChanges();
         RegisterButtonListeners();
+        RegisterFeedButton();
         OverridePrices();
         UpdateOptionLabels();
         PolishShopButtons();
@@ -68,6 +77,55 @@ public class StarterChickenShop : MonoBehaviour
         }
 
         listenersRegistered = true;
+    }
+
+    private void RegisterFeedButton()
+    {
+        EnsureFeedButton();
+        if (feedBuyButton != null)
+            ButtonHelper.AddListenerOnce(feedBuyButton, TryBuyFeed);
+    }
+
+    private void EnsureFeedButton()
+    {
+        if (feedBuyButton != null)
+            return;
+
+        GameObject btnObj = new GameObject("FeedBuyButton", typeof(RectTransform), typeof(Image), typeof(Button));
+        btnObj.transform.SetParent(transform, false);
+        RectTransform btnRect = btnObj.GetComponent<RectTransform>();
+        btnRect.anchorMin = new Vector2(0f, 1f);
+        btnRect.anchorMax = new Vector2(1f, 1f);
+        btnRect.pivot = new Vector2(0.5f, 1f);
+        btnRect.sizeDelta = new Vector2(0f, 50f);
+
+        feedBuyButton = btnObj.GetComponent<Button>();
+
+        GameObject labelObj = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
+        labelObj.transform.SetParent(btnObj.transform, false);
+        RectTransform labelRect = labelObj.GetComponent<RectTransform>();
+        labelRect.anchorMin = Vector2.zero;
+        labelRect.anchorMax = Vector2.one;
+        labelRect.offsetMin = Vector2.zero;
+        labelRect.offsetMax = Vector2.zero;
+        feedBuyLabel = labelObj.GetComponent<TextMeshProUGUI>();
+    }
+
+    public void TryBuyFeed()
+    {
+        int cost = GameConstants.Economy.FeedCost;
+        int increment = GameConstants.Economy.FeedIncrement;
+
+        if (CoinManager.Instance == null || !CoinManager.Instance.CanAfford(cost))
+        {
+            ShowMessage(noCoinFeedMessage);
+            return;
+        }
+
+        CoinManager.Instance.SpendCoin(cost);
+        FeedManager.Instance.AddFeed(increment);
+        ShowMessage(feedBoughtMessage);
+        RefreshShopState();
     }
 
     public void BuyOption0()
@@ -141,6 +199,19 @@ public class StarterChickenShop : MonoBehaviour
                 option.buyButton.interactable = hasAvailableSlot && canAfford;
                 StyleButtonState(option.buyButton, hasAvailableSlot && canAfford);
             }
+        }
+
+        if (feedBuyButton != null)
+        {
+            bool canAffordFeed = CoinManager.Instance != null && CoinManager.Instance.CanAfford(GameConstants.Economy.FeedCost);
+            feedBuyButton.interactable = canAffordFeed;
+            StyleButtonState(feedBuyButton, canAffordFeed);
+        }
+
+        if (feedBuyLabel != null)
+        {
+            int feedCount = FeedManager.Instance != null ? FeedManager.Instance.GetFeedCount() : 0;
+            feedBuyLabel.text = $"{feedBuyButtonText} - {GameConstants.Economy.FeedCost} ({feedCount})";
         }
     }
 

@@ -188,6 +188,15 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
         if (currentState == SlotState.WaitingForCareClick)
         {
+            if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.CanUseFeed(1)))
+            {
+                GameLog.Info($"{name}: Pakan tidak cukup! Beli pakan dulu.");
+                return;
+            }
+
+            if (currentNeed == ChickenNeed.Feed)
+                FeedManager.Instance.UseFeed(1);
+
             if (TryStartHealthMinigame())
                 return;
 

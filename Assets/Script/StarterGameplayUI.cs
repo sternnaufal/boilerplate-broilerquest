@@ -14,6 +14,7 @@ public class StarterGameplayUI : MonoBehaviour
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button hpToggleButton;
     [SerializeField] private Button closeHpButton;
+    [SerializeField] private Button mainMenuButton;
 
     [Header("Button Sprites")]
     [SerializeField] private Sprite[] buttonSprites;
@@ -57,6 +58,7 @@ public class StarterGameplayUI : MonoBehaviour
         ButtonHelper.AddListenerOnce(resumeButton, ResumeGame);
         ButtonHelper.AddListenerOnce(hpToggleButton, ToggleHpPanel);
         ButtonHelper.AddListenerOnce(closeHpButton, CloseHpPanel);
+        ButtonHelper.AddListenerOnce(mainMenuButton, ReturnToMainMenu);
 
         listenersRegistered = true;
     }
@@ -154,12 +156,22 @@ public class StarterGameplayUI : MonoBehaviour
         iotCreated = true;
     }
 
+    public void ReturnToMainMenu()
+    {
+        SetGameStateOrFallback(GameState.Menu);
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.ReturnToMainMenu();
+    }
+
     private void PolishStarterUi()
     {
         StyleButton(pauseButton, "PAUSE", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(0));
         StyleButton(resumeButton, "RESUME", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(1));
         StyleButton(hpToggleButton, "HP", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(2));
         StyleButton(closeHpButton, "TUTUP", new Color(0.95f, 0.72f, 0.22f, 1f), GetSpriteSafe(3));
+        EnsureMainMenuButton();
+        StyleButton(mainMenuButton, "MAIN MENU", new Color(0.85f, 0.35f, 0.35f, 1f), null);
 
         StylePanel(hpPanel, new Color(0.10f, 0.22f, 0.14f, 0.88f));
         StylePanel(pausePanel, new Color(0.05f, 0.11f, 0.07f, 0.90f));
@@ -173,6 +185,35 @@ public class StarterGameplayUI : MonoBehaviour
             coinText.fontStyle = FontStyles.Bold;
             coinText.alignment = TextAlignmentOptions.MidlineLeft;
         }
+    }
+
+    private void EnsureMainMenuButton()
+    {
+        if (mainMenuButton != null)
+            return;
+
+        if (pausePanel == null)
+            return;
+
+        GameObject btnObj = new GameObject("MainMenuButton", typeof(RectTransform), typeof(Image), typeof(Button));
+        btnObj.transform.SetParent(pausePanel.transform, false);
+        RectTransform btnRect = btnObj.GetComponent<RectTransform>();
+        btnRect.anchorMin = new Vector2(0.5f, 0f);
+        btnRect.anchorMax = new Vector2(0.5f, 0f);
+        btnRect.pivot = new Vector2(0.5f, 0f);
+        btnRect.anchoredPosition = new Vector2(0f, 80f);
+        btnRect.sizeDelta = new Vector2(220f, 52f);
+
+        mainMenuButton = btnObj.GetComponent<Button>();
+        ButtonHelper.AddListenerOnce(mainMenuButton, ReturnToMainMenu);
+
+        GameObject labelObj = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
+        labelObj.transform.SetParent(btnObj.transform, false);
+        RectTransform labelRect = labelObj.GetComponent<RectTransform>();
+        labelRect.anchorMin = Vector2.zero;
+        labelRect.anchorMax = Vector2.one;
+        labelRect.offsetMin = Vector2.zero;
+        labelRect.offsetMax = Vector2.zero;
     }
 
     private Sprite GetSpriteSafe(int index)
