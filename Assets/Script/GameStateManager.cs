@@ -58,8 +58,13 @@ public class GameStateManager : Singleton<GameStateManager>
 
     public static bool TrySetGameState(GameState newState)
     {
-        EnsureInstance().SetGameState(newState);
-        return true;
+        var instance = EnsureInstance();
+        if (instance != null)
+        {
+            instance.SetGameState(newState);
+            return true;
+        }
+        return false;
     }
 
     private static GameStateManager EnsureInstance()

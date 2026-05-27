@@ -1,16 +1,26 @@
 using UnityEngine;
 
+public static class SingletonQuittingDetector
+{
+    public static bool IsQuitting { get; set; }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetState()
+    {
+        IsQuitting = false;
+    }
+}
+
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
     private static readonly object _lock = new object();
-    private static bool applicationQuitting;
 
     public static T Instance
     {
         get
         {
-            if (applicationQuitting)
+            if (SingletonQuittingDetector.IsQuitting)
                 return null;
 
             lock (_lock)
@@ -54,6 +64,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void OnApplicationQuit()
     {
-        applicationQuitting = true;
+        SingletonQuittingDetector.IsQuitting = true;
     }
 }
