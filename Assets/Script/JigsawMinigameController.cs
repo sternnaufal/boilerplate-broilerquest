@@ -380,8 +380,8 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         panelRect.anchorMin = new Vector2(0.5f, 0.5f);
         panelRect.anchorMax = new Vector2(0.5f, 0.5f);
         panelRect.pivot = new Vector2(0.5f, 0.5f);
-        panelRect.sizeDelta = new Vector2(560f, 650f);
-        panelRect.anchoredPosition = Vector2.zero;
+        panelRect.sizeDelta = new Vector2(500f, 600f);
+        panelRect.anchoredPosition = new Vector2(350f, 0f);
 
         Image panelImage = panelObject.GetComponent<Image>();
         panelImage.color = new Color(0.08f, 0.22f, 0.12f, 0.96f);

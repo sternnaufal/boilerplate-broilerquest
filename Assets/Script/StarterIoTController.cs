@@ -21,7 +21,7 @@ public class StarterIoTController : MonoBehaviour
         public string productKey;                     // harus cocok dengan productKey di devices
         public Button toggleButton;                   // tombol untuk toggle ON/OFF
         public TextMeshProUGUI statusText;            // teks status (BELI/ON/OFF)
-        public Image backgroundImage;                 // background untuk warna status
+        //public Image backgroundImage;                 // background untuk warna status
     }
 
     [Header("Device Definitions")]
@@ -152,19 +152,26 @@ public class StarterIoTController : MonoBehaviour
             bool active = IsActive(ui.productKey);
             IoTDeviceDef def = GetDeviceDef(ui.productKey);
 
-            // Update button interactable
             if (ui.toggleButton != null)
+            {
                 ui.toggleButton.interactable = purchased;
 
-            // Update background color
-            if (ui.backgroundImage != null)
-            {
-                if (!purchased) ui.backgroundImage.color = def?.lockedColor ?? Color.gray;
-                else if (active) ui.backgroundImage.color = def?.activeColor ?? ownedColor;
-                else ui.backgroundImage.color = def?.inactiveColor ?? Color.gray;
+                Image buttonImage = ui.toggleButton.GetComponent<Image>();
+                if (buttonImage != null)
+                {
+                    Color targetColor;
+                    if (!purchased)
+                        targetColor = def?.lockedColor ?? Color.gray;
+                    else if (active)
+                        targetColor = def?.activeColor ?? ownedColor;
+                    else
+                        targetColor = def?.inactiveColor ?? Color.gray;
+
+                    targetColor.a = 1f;  // paksa alpha penuh
+                    buttonImage.color = targetColor;
+                }
             }
 
-            // Update status text
             if (ui.statusText != null)
             {
                 if (!purchased) ui.statusText.text = "BELI";
