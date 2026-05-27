@@ -16,6 +16,7 @@ public class LevelSelectController : MonoBehaviour
     [Header("Locked Level Feedback")]
     [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private string lockedMessage = "Level ini belum tersedia.";
+    [SerializeField] private string insufficientCoinMessage = "Coin tidak cukup!";
     [SerializeField] private bool disableLockedButtons = true;
 
     private bool listenersRegistered;
@@ -23,7 +24,7 @@ public class LevelSelectController : MonoBehaviour
     private void OnEnable()
     {
         RegisterButtonListeners();
-        ConfigureLockedButtons();
+        RefreshButtonStates();
         ClearMessage();
     }
 
@@ -38,16 +39,36 @@ public class LevelSelectController : MonoBehaviour
         listenersRegistered = true;
     }
 
-    private void ConfigureLockedButtons()
+    private void RefreshButtonStates()
     {
-        if (!disableLockedButtons)
+        if (!disableLockedButtons || beginnerButton == null || intermediateButton == null)
             return;
 
-        if (beginnerButton != null)
-            beginnerButton.interactable = false;
+        bool beginnerUnlocked = IsBeginnerUnlocked();
+        bool intermediateUnlocked = IsIntermediateUnlocked();
 
-        if (intermediateButton != null)
-            intermediateButton.interactable = false;
+        beginnerButton.interactable = beginnerUnlocked;
+        intermediateButton.interactable = intermediateUnlocked;
+
+        UpdateButtonLabel(beginnerButton, beginnerUnlocked, GameConstants.LevelUnlock.BeginnerCost, "Beginner");
+        UpdateButtonLabel(intermediateButton, intermediateUnlocked, GameConstants.LevelUnlock.IntermediateCost, "Intermediate");
+    }
+
+    private void UpdateButtonLabel(Button button, bool unlocked, int cost, string name)
+    {
+        TextMeshProUGUI label = button.GetComponentInChildren<TextMeshProUGUI>(true);
+        if (label == null)
+            return;
+
+        if (unlocked)
+        {
+            label.text = name;
+        }
+        else
+        {
+            label.text = $"{name}\n({cost} coin)";
+            label.fontSize = Mathf.Max(label.fontSize - 4, 16);
+        }
     }
 
     public void PlayStarter()
@@ -64,12 +85,36 @@ public class LevelSelectController : MonoBehaviour
 
     public void PlayBeginner()
     {
-        ShowLockedMessage("Beginner");
+        if (IsBeginnerUnlocked())
+        {
+            if (SceneController.Instance != null)
+            {
+                SceneController.Instance.GoToLevel(1);
+                return;
+            }
+        }
+
+        TryUnlockLevel(GameConstants.LevelUnlock.BeginnerCost, GameConstants.Persistence.LevelUnlockBeginnerKey, "Beginner", () => {
+            if (SceneController.Instance != null)
+                SceneController.Instance.GoToLevel(1);
+        });
     }
 
     public void PlayIntermediate()
     {
-        ShowLockedMessage("Intermediate");
+        if (IsIntermediateUnlocked())
+        {
+            if (SceneController.Instance != null)
+            {
+                SceneController.Instance.GoToLevel(2);
+                return;
+            }
+        }
+
+        TryUnlockLevel(GameConstants.LevelUnlock.IntermediateCost, GameConstants.Persistence.LevelUnlockIntermediateKey, "Intermediate", () => {
+            if (SceneController.Instance != null)
+                SceneController.Instance.GoToLevel(2);
+        });
     }
 
     public void ShowLockedMessage(string levelName)
@@ -78,6 +123,41 @@ public class LevelSelectController : MonoBehaviour
             messageText.text = string.IsNullOrWhiteSpace(levelName) ? lockedMessage : $"{levelName}: {lockedMessage}";
 
         GameLog.Info($"{levelName} belum bisa dimainkan.");
+    }
+
+    private void TryUnlockLevel(int cost, string playerPrefsKey, string levelName, System.Action onSuccess)
+    {
+        if (CoinManager.Instance == null)
+        {
+            ShowLockedMessage(levelName);
+            return;
+        }
+
+        if (CoinManager.Instance.SpendCoin(cost))
+        {
+            PlayerPrefs.SetInt(playerPrefsKey, 1);
+            PlayerPrefs.Save();
+            GameLog.Info($"{levelName} berhasil dibuka! -{cost} coin.");
+            RefreshButtonStates();
+            onSuccess?.Invoke();
+        }
+        else
+        {
+            if (messageText != null)
+                messageText.text = $"{levelName}: {insufficientCoinMessage} ({cost} coin)";
+
+            GameLog.Info($"Coin tidak cukup untuk membuka {levelName}.");
+        }
+    }
+
+    private static bool IsBeginnerUnlocked()
+    {
+        return PlayerPrefs.GetInt(GameConstants.Persistence.LevelUnlockBeginnerKey, 0) == 1;
+    }
+
+    private static bool IsIntermediateUnlocked()
+    {
+        return PlayerPrefs.GetInt(GameConstants.Persistence.LevelUnlockIntermediateKey, 0) == 1;
     }
 
     private void ClearMessage()

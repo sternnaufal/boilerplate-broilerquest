@@ -5,6 +5,9 @@ public static class GameConstants
         public const string TotalCoinKey = "BroilerQuest.TotalCoin";
         public const string LegacyTotalCoinKey = "TotalCoin";
         public const string KoleksiIoTPurchasedPrefix = "KoleksiIoT.Purchased.";
+        public const string LevelUnlockBeginnerKey = "Level.Beginner.Unlocked";
+        public const string LevelUnlockIntermediateKey = "Level.Intermediate.Unlocked";
+        public const string FeedCountKey = "BroilerQuest.FeedCount";
     }
 
     public static class LevelDuration
@@ -27,12 +30,43 @@ public static class GameConstants
         public const int CareBonus = 10;
         public const float NeedInterval = 5f;
         public const float NotificationDelay = 1f;
+        public const float NeedIntervalMin = 3f;
+        public const float NeedIntervalMax = 8f;
+    }
+
+    public static class Economy
+    {
+        public const int StartingCoin = 400;
+        public const int ChickenPrice = 40;
+        public const int BaseSellPrice = 90;
+        public const int FailPenalty = 30;
+        public const int FeedCost = 50;
+        public const int FeedIncrement = 10;
+        public const int AutoFeederCost = 200;
+        public const int AutoFanCost = 300;
+        public const int AutoHeaterCost = 300;
+    }
+
+    public static class LevelUnlock
+    {
+        public const int BeginnerCost = 1000;
+        public const int IntermediateCost = 2500;
+    }
+
+    public static class IoT
+    {
+        public const string ProductKeyFeeder = "AutoFeeder";
+        public const string ProductKeyFan = "AutoFan";
+        public const string ProductKeyHeater = "AutoHeater";
+        public const string ProductNameFeeder = "Auto Feeder";
+        public const string ProductNameFan = "Auto Fan";
+        public const string ProductNameHeater = "Auto Heater";
     }
 
     public static class JigsawMinigame
     {
         public const int GridSize = 3;
-        public const float TimeLimit = 30f;
+        public const float TimeLimit = 25f;
         public const float TileSize = 150f;
         public const float TileSpacing = 4f;
         public const float SwapDuration = 0.15f;

@@ -4,16 +4,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class JigsawMinigameController : MonoBehaviour
+public class JigsawMinigameController : Singleton<JigsawMinigameController>
 {
-    public static JigsawMinigameController Instance { get; private set; }
-
     [Header("UI References")]
     [SerializeField] private GameObject popupRoot;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private Transform gridContainer;
-    [SerializeField] private Button closeButton;
 
     [Header("Tile Prefab")]
     [SerializeField] private GameObject tilePrefab;
@@ -41,33 +38,11 @@ public class JigsawMinigameController : MonoBehaviour
 
     public bool IsPlaying => isPlaying;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        base.Awake();
         EnsureRuntimeUi();
         HidePopup();
-    }
-
-    private void OnDestroy()
-    {
-        if (Instance == this)
-            Instance = null;
-    }
-
-    public static JigsawMinigameController GetOrCreateInstance()
-    {
-        if (Instance != null)
-            return Instance;
-
-        GameObject controllerObject = new GameObject("JigsawMinigameController");
-        return controllerObject.AddComponent<JigsawMinigameController>();
     }
 
     public bool ShowJigsaw(IHealthCheckListener listener, Texture puzzleTexture, string eventTitle = "")
@@ -405,8 +380,8 @@ public class JigsawMinigameController : MonoBehaviour
         panelRect.anchorMin = new Vector2(0.5f, 0.5f);
         panelRect.anchorMax = new Vector2(0.5f, 0.5f);
         panelRect.pivot = new Vector2(0.5f, 0.5f);
-        panelRect.sizeDelta = new Vector2(560f, 650f);
-        panelRect.anchoredPosition = Vector2.zero;
+        panelRect.sizeDelta = new Vector2(500f, 600f);
+        panelRect.anchoredPosition = new Vector2(350f, 0f);
 
         Image panelImage = panelObject.GetComponent<Image>();
         panelImage.color = new Color(0.08f, 0.22f, 0.12f, 0.96f);
@@ -424,8 +399,6 @@ public class JigsawMinigameController : MonoBehaviour
         gridRect.anchoredPosition = new Vector2(0f, -35f);
         gridContainer = gridObject.transform;
 
-        closeButton = CreateCloseButton(panelObject.transform);
-        ButtonHelper.SetSingleListener(closeButton, CompleteWithFailure);
     }
 
     private void CreateBackdrop(Transform parent)
@@ -461,28 +434,6 @@ public class JigsawMinigameController : MonoBehaviour
         text.color = Color.white;
         text.raycastTarget = false;
         return text;
-    }
-
-    private Button CreateCloseButton(Transform parent)
-    {
-        GameObject buttonObject = new GameObject("CloseButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-        buttonObject.transform.SetParent(parent, false);
-
-        RectTransform rect = buttonObject.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(1f, 1f);
-        rect.anchorMax = new Vector2(1f, 1f);
-        rect.pivot = new Vector2(1f, 1f);
-        rect.anchoredPosition = new Vector2(-18f, -18f);
-        rect.sizeDelta = new Vector2(44f, 44f);
-
-        Image image = buttonObject.GetComponent<Image>();
-        image.color = new Color(0.95f, 0.72f, 0.20f, 1f);
-
-        TextMeshProUGUI label = CreateText(buttonObject.transform, "Label", Vector2.zero, new Vector2(44f, 44f), 24f, TextAlignmentOptions.Center);
-        label.text = "X";
-        label.color = new Color(0.08f, 0.16f, 0.08f, 1f);
-
-        return buttonObject.GetComponent<Button>();
     }
 
     private void StretchToParent(RectTransform rect)

@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SlotStateChanged = System.Action<StarterKandangSlot>;
 
-public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCheckListener
+public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCheckListener
 {
     public event SlotStateChanged StateChanged;
 
@@ -43,10 +43,9 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     [SerializeField] private Vector2 bubbleOffset = new Vector2(0f, 68f);
 
     [Header("Timing & Rewards")]
-    [SerializeField] private float needInterval = GameConstants.StarterSlot.NeedInterval;
     [SerializeField] private float notificationDelay = GameConstants.StarterSlot.NotificationDelay;
-    [SerializeField] private int baseSellReward = GameConstants.StarterSlot.BaseSellReward;
-    [SerializeField] private int careBonus = GameConstants.StarterSlot.CareBonus;
+    [SerializeField] private float needIntervalMin = GameConstants.StarterSlot.NeedIntervalMin;
+    [SerializeField] private float needIntervalMax = GameConstants.StarterSlot.NeedIntervalMax;
 
     [Header("Optional Health Minigame")]
     [SerializeField] private bool useHealthMinigame;
@@ -63,21 +62,15 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     [SerializeField] private string heatAnimParam = "isbakar";
     [SerializeField] private string coldAnimParam = "isdingin";
 
-    [Header("Chicken Wander")]
-    [SerializeField] private bool enableWander = true;
-    [SerializeField] private Vector2 wanderRadius = new Vector2(50f, 20f);
-    [SerializeField] private float wanderSpeed = 80f;
-    [SerializeField] private float wanderPauseMin = 1.5f;
-    [SerializeField] private float wanderPauseMax = 3.5f;
-
     private readonly List<GameObject> spawnedChickens = new List<GameObject>();
     private Coroutine eventCoroutine;
-    private Coroutine wanderCoroutine;
-    private bool isWanderingPaused;
     private bool occupied;
     private bool feedSatisfied;
     private bool coolingSatisfied;
     private bool heatingSatisfied;
+    private bool feedFailed;
+    private bool coolingFailed;
+    private bool heatingFailed;
     private int completedCareCount;
     private int sellReward;
     private ChickenNeed currentNeed;
@@ -195,6 +188,15 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
         if (currentState == SlotState.WaitingForCareClick)
         {
+            if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.CanUseFeed(1)))
+            {
+                GameLog.Info($"{name}: Pakan tidak cukup! Beli pakan dulu.");
+                return;
+            }
+
+            if (currentNeed == ChickenNeed.Feed)
+                FeedManager.Instance.UseFeed(1);
+
             if (TryStartHealthMinigame())
                 return;
 
@@ -227,17 +229,20 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
             return;
 
         ResetAnimationToNormal();
+        MarkCurrentNeedFailed();
+        completedCareCount++;
+        RecalculateSellReward();
 
-        if (clearChickenOnHealthFail)
+        if (IsReadyToSell())
         {
-            ClearChicken();
+            ShowSellBubble();
             return;
         }
 
         HideBubble();
         isWanderingPaused = false;
         StartNeedTimer();
-        GameLog.Info($"{name}: Minigame kesehatan gagal, kebutuhan akan muncul lagi.");
+        GameLog.Info($"{name}: Kebutuhan {GetNeedText(currentNeed)} gagal, lanjut kebutuhan berikutnya.");
     }
 
     private void SetOccupied(bool value)
@@ -261,7 +266,8 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
     private IEnumerator NeedEventDelay()
     {
-        yield return new WaitForSeconds(needInterval + notificationDelay);
+        float randomDelay = Random.Range(needIntervalMin, needIntervalMax) + notificationDelay;
+        yield return new WaitForSeconds(randomDelay);
 
         if (currentState == SlotState.WaitingForCareEvent)
             ShowNextNeedBubble();
@@ -270,12 +276,51 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     private void ShowNextNeedBubble()
     {
         currentNeed = GetNextNeed();
+
+        if (TryAutoCompleteByIoT())
+            return;
+
         Sprite needSprite = GetNeedSprite(currentNeed);
         ShowBubble(needSprite, GetNeedText(currentNeed));
         currentState = SlotState.WaitingForCareClick;
         NotifyStateChanged();
         UpdateAnimationByNeed(currentNeed);
         GameLog.Info($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
+    }
+
+    private bool TryAutoCompleteByIoT()
+    {
+        if (StarterIoTController.Instance == null)
+            return false;
+
+        string iotKey = GetIoTKeyForNeed(currentNeed);
+        if (string.IsNullOrEmpty(iotKey))
+            return false;
+
+        if (StarterIoTController.Instance.IsActiveForNeed(iotKey))
+        {
+            GameLog.Info($"{name}: IoT {iotKey} aktif, kebutuhan {GetNeedText(currentNeed)} otomatis terpenuhi.");
+            UpdateAnimationByNeed(currentNeed);
+            CompleteCurrentNeed();
+            return true;
+        }
+
+        return false;
+    }
+
+    private static string GetIoTKeyForNeed(ChickenNeed need)
+    {
+        switch (need)
+        {
+            case ChickenNeed.Feed:
+                return GameConstants.IoT.ProductKeyFeeder;
+            case ChickenNeed.Cooling:
+                return GameConstants.IoT.ProductKeyFan;
+            case ChickenNeed.Heating:
+                return GameConstants.IoT.ProductKeyHeater;
+            default:
+                return null;
+        }
     }
 
     private void CompleteCurrentNeed()
@@ -325,27 +370,14 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
     private GameObject CreateChickenVisual(GameObject chickenPrefab)
     {
         Transform parent = chickenParent != null ? chickenParent : transform;
-        GameObject visual = null;
 
-        if (chickenPrefab != null)
-        {
-            visual = Instantiate(chickenPrefab, parent);
-            spawnedChickens.Add(visual);
-        }
-        else if (chickenVisual != null && !chickenVisual.activeSelf)
-        {
-            visual = chickenVisual;
-            visual.SetActive(true);
-        }
-        else if (chickenVisual != null)
-        {
-            visual = Instantiate(chickenVisual, parent);
-            visual.SetActive(true);
-            spawnedChickens.Add(visual);
-        }
-
-        if (visual == null)
+        GameObject prefabToInstantiate = chickenPrefab != null ? chickenPrefab : chickenVisual;
+        if (prefabToInstantiate == null)
             return null;
+
+        GameObject visual = Instantiate(prefabToInstantiate, parent);
+        visual.SetActive(true);
+        spawnedChickens.Add(visual);
 
         AssignChickenAnimator(visual);
         return visual;
@@ -356,9 +388,6 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         spawnedChickens.RemoveAll(chicken => chicken == null);
 
         List<GameObject> visuals = new List<GameObject>();
-        if (chickenVisual != null && chickenVisual.activeSelf)
-            visuals.Add(chickenVisual);
-
         foreach (GameObject spawnedChicken in spawnedChickens)
         {
             if (spawnedChicken != null && spawnedChicken.activeSelf)
@@ -395,7 +424,8 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
     private void RecalculateSellReward()
     {
-        sellReward = baseSellReward + completedCareCount * careBonus;
+        int failCount = (feedFailed ? 1 : 0) + (coolingFailed ? 1 : 0) + (heatingFailed ? 1 : 0);
+        sellReward = Mathf.Max(0, GameConstants.Economy.BaseSellPrice - failCount * GameConstants.Economy.FailPenalty);
     }
 
     private void RefreshSlotLabel()
@@ -449,20 +479,24 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
     private ChickenNeed GetNextNeed()
     {
+        bool feedDone = feedSatisfied || feedFailed;
+        bool coolingDone = coolingSatisfied || coolingFailed;
+        bool heatingDone = heatingSatisfied || heatingFailed;
+
         // Feed always first
-        if (!feedSatisfied)
+        if (!feedDone)
             return ChickenNeed.Feed;
 
-        // If both cooling and heating are still unsatisfied, pick randomly
-        if (!coolingSatisfied && !heatingSatisfied)
+        // If both cooling and heating are still not done, pick randomly
+        if (!coolingDone && !heatingDone)
         {
             return Random.Range(0, 2) == 0 ? ChickenNeed.Cooling : ChickenNeed.Heating;
         }
 
-        // Otherwise return the only unsatisfied need
-        if (!coolingSatisfied)
+        // Otherwise return the only not-done need
+        if (!coolingDone)
             return ChickenNeed.Cooling;
-        if (!heatingSatisfied)
+        if (!heatingDone)
             return ChickenNeed.Heating;
 
         // Should never reach here (sell bubble will be shown instead)
@@ -501,7 +535,26 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
 
     private bool IsReadyToSell()
     {
-        return feedSatisfied && coolingSatisfied && heatingSatisfied;
+        bool feedDone = feedSatisfied || feedFailed;
+        bool coolingDone = coolingSatisfied || coolingFailed;
+        bool heatingDone = heatingSatisfied || heatingFailed;
+        return feedDone && coolingDone && heatingDone;
+    }
+
+    private void MarkCurrentNeedFailed()
+    {
+        switch (currentNeed)
+        {
+            case ChickenNeed.Feed:
+                feedFailed = true;
+                break;
+            case ChickenNeed.Cooling:
+                coolingFailed = true;
+                break;
+            case ChickenNeed.Heating:
+                heatingFailed = true;
+                break;
+        }
     }
 
     private void ResetChickenProgress()
@@ -509,6 +562,9 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         feedSatisfied = false;
         coolingSatisfied = false;
         heatingSatisfied = false;
+        feedFailed = false;
+        coolingFailed = false;
+        heatingFailed = false;
         completedCareCount = 0;
         RecalculateSellReward();
         ResetAnimationToNormal();
@@ -656,175 +712,6 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         chickenAnimator = source != null ? source.GetComponentInChildren<Animator>(true) : null;
     }
 
-    private void StartWander()
-    {
-        if (!ShouldUseWander())
-        {
-            StopWander();
-            return;
-        }
-
-        StopWander();
-        isWanderingPaused = false;
-        wanderCoroutine = StartCoroutine(WanderRoutine());
-    }
-
-    private void StopWander()
-    {
-        CoroutineHelper.StopSafe(this, ref wanderCoroutine);
-    }
-
-    private void PauseWander()
-    {
-        isWanderingPaused = true;
-    }
-
-    private bool ShouldUseWander()
-    {
-        return enableWander && CurrentChickenCount > 0;
-    }
-
-    private void UpdateWanderState()
-    {
-        if (ShouldUseWander())
-            StartWander();
-        else
-            StopWander();
-    }
-
-    private IEnumerator WanderRoutine()
-    {
-        List<RectTransform> visualRects = GetActiveVisualRects();
-        if (visualRects.Count == 0)
-            yield break;
-
-        Vector2[] startPositions = new Vector2[visualRects.Count];
-        Vector2[] targets = new Vector2[visualRects.Count];
-        float[] pauses = new float[visualRects.Count];
-
-        for (int i = 0; i < visualRects.Count; i++)
-        {
-            startPositions[i] = visualRects[i].anchoredPosition;
-            targets[i] = GetRandomWanderTarget(startPositions[i], 1f);
-            pauses[i] = Random.Range(wanderPauseMin, wanderPauseMax);
-        }
-
-        while (true)
-        {
-            if (isWanderingPaused || !occupied)
-            {
-                TrySetAnimationBool(idleAnimParam, true);
-                yield return null;
-                continue;
-            }
-
-            float speedMult = 1f;
-            float radiusMult = 1f;
-            float pauseMin = wanderPauseMin;
-            float pauseMax = wanderPauseMax;
-            bool canMove = true;
-
-            if (currentState == SlotState.WaitingForCareClick)
-            {
-                if (currentNeed == ChickenNeed.Feed)
-                    canMove = false;
-                else
-                {
-                    speedMult = 2.2f;
-                    radiusMult = 1.5f;
-                    pauseMin = 0.1f;
-                    pauseMax = 0.45f;
-                }
-            }
-            else if (currentState == SlotState.WaitingForSellClick)
-            {
-                canMove = false;
-            }
-
-            if (!canMove)
-            {
-                TrySetAnimationBool(idleAnimParam, true);
-                yield return null;
-                continue;
-            }
-
-            bool anyMoving = false;
-            for (int i = 0; i < visualRects.Count; i++)
-            {
-                RectTransform visualRect = visualRects[i];
-                if (visualRect == null)
-                    continue;
-
-                if (pauses[i] > 0f)
-                {
-                    pauses[i] -= Time.deltaTime;
-                    continue;
-                }
-
-                float dist = Vector2.Distance(visualRect.anchoredPosition, targets[i]);
-                if (dist < 2f)
-                {
-                    targets[i] = GetRandomWanderTarget(startPositions[i], radiusMult);
-                    pauses[i] = Random.Range(pauseMin, pauseMax);
-                }
-                else
-                {
-                    Vector2 oldPos = visualRect.anchoredPosition;
-                    visualRect.anchoredPosition = Vector2.MoveTowards(
-                        oldPos, targets[i], wanderSpeed * speedMult * Time.deltaTime
-                    );
-                    UpdateChickenFacing(visualRect, oldPos, visualRect.anchoredPosition);
-                    anyMoving = true;
-                }
-            }
-
-            TrySetAnimationBool(idleAnimParam, !anyMoving);
-
-            yield return null;
-        }
-    }
-
-    private Vector2 GetRandomWanderTarget(Vector2 startPos, float radiusMult)
-    {
-        return new Vector2(
-            startPos.x + Random.Range(-wanderRadius.x * radiusMult, wanderRadius.x * radiusMult),
-            startPos.y + Random.Range(-wanderRadius.y * radiusMult, wanderRadius.y * radiusMult)
-        );
-    }
-
-    private void UpdateChickenFacing(RectTransform visualRect, Vector2 from, Vector2 to)
-    {
-        if (visualRect == null) return;
-
-        float dirX = to.x - from.x;
-        if (Mathf.Abs(dirX) < 0.01f) return;
-
-        Vector3 scale = visualRect.localScale;
-        bool facingRight = scale.x < 0;
-        bool movingRight = dirX > 0;
-
-        if (movingRight && !facingRight)
-            scale.x = -Mathf.Abs(scale.x);
-        else if (!movingRight && facingRight)
-            scale.x = Mathf.Abs(scale.x);
-
-        visualRect.localScale = scale;
-    }
-
-    private List<RectTransform> GetActiveVisualRects()
-    {
-        List<RectTransform> rects = new List<RectTransform>();
-        List<GameObject> visuals = GetActiveChickenVisuals();
-        foreach (GameObject visual in visuals)
-        {
-            RectTransform rect = visual != null ? visual.transform as RectTransform : null;
-            if (rect != null)
-                rects.Add(rect);
-        }
-
-        return rects;
-    }
-
     private void UpdateAnimationByNeed(ChickenNeed need)
     {
         switch (need)
@@ -858,7 +745,7 @@ public class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCh
         if (JigsawMinigameController.Instance != null && JigsawMinigameController.Instance.IsPlaying)
             return true;
 
-        JigsawMinigameController jigsawController = JigsawMinigameController.GetOrCreateInstance();
+        JigsawMinigameController jigsawController = JigsawMinigameController.Instance;
         if (jigsawController != null)
         {
             Texture puzzleTexture = GetNeedPuzzleTexture(currentNeed);

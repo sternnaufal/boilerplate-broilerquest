@@ -2,9 +2,8 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class CoinManager : MonoBehaviour
+public class CoinManager : Singleton<CoinManager>
 {
-    public static CoinManager Instance { get; private set; }
     public event Action<int> CoinsChanged;
 
     [Header("UI Reference")]
@@ -12,30 +11,17 @@ public class CoinManager : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private bool resetCoinOnStart = false;
-    [SerializeField] private int startingCoin = 0;
     [SerializeField] private bool usePlayerPrefs = true;
 
     private int totalCoin = 0;
     private bool hasInitialized;
+    private bool coinTextSearched;
 
-    void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            if (resetCoinOnStart)
-                Instance.SetTotalCoin(startingCoin);
-
-            if (coinText != null)
-                Instance.BindCoinText(coinText);
-
-            Destroy(gameObject);
-            return;
-        }
+        base.Awake();
+        if (resetCoinOnStart)
+            SetTotalCoin(GameConstants.Economy.StartingCoin);
     }
 
     void Start()
@@ -53,7 +39,7 @@ public class CoinManager : MonoBehaviour
             if (usePlayerPrefs && !resetCoinOnStart)
                 totalCoin = LoadSavedCoin();
             else if (resetCoinOnStart)
-                totalCoin = Mathf.Max(0, startingCoin);
+                totalCoin = Mathf.Max(0, GameConstants.Economy.StartingCoin);
             else
                 totalCoin = 0;
 
@@ -109,7 +95,7 @@ public class CoinManager : MonoBehaviour
 
     private void UpdateCoinUI()
     {
-        if (coinText == null) TryFindCoinText();
+        if (coinText == null && !coinTextSearched) TryFindCoinText();
         if (coinText != null)
             coinText.text = totalCoin.ToString();
 
@@ -118,6 +104,7 @@ public class CoinManager : MonoBehaviour
 
     private void TryFindCoinText()
     {
+        coinTextSearched = true;
         TextMeshProUGUI[] allTexts = FindObjectsByType<TextMeshProUGUI>(
             FindObjectsInactive.Exclude,
             FindObjectsSortMode.None);
@@ -146,6 +133,9 @@ public class CoinManager : MonoBehaviour
         if (PlayerPrefs.HasKey(GameConstants.Persistence.TotalCoinKey))
             return PlayerPrefs.GetInt(GameConstants.Persistence.TotalCoinKey, 0);
 
-        return PlayerPrefs.GetInt(GameConstants.Persistence.LegacyTotalCoinKey, 0);
+        if (PlayerPrefs.HasKey(GameConstants.Persistence.LegacyTotalCoinKey))
+            return PlayerPrefs.GetInt(GameConstants.Persistence.LegacyTotalCoinKey, 0);
+
+        return GameConstants.Economy.StartingCoin;
     }
 }
