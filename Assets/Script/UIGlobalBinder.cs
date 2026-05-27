@@ -21,23 +21,7 @@ public class UIGlobalBinder : MonoBehaviour
 
     private void Start()
     {
-        // Cari referensi jika belum di-assign (opsional)
-        if (coinText == null)
-            coinText = GameObject.Find("CoinText")?.GetComponent<TextMeshProUGUI>();
-        if (feedText == null)
-            feedText = GameObject.Find("PakanText")?.GetComponent<TextMeshProUGUI>();
-
-        // Daftarkan event
-        if (CoinManager.Instance != null)
-            CoinManager.Instance.CoinsChanged += UpdateCoinDisplay;
-        if (FeedManager.Instance != null)
-            FeedManager.Instance.FeedChanged += UpdateFeedDisplay;
-
-        // Tampilkan nilai awal
-        if (CoinManager.Instance != null)
-            UpdateCoinDisplay(CoinManager.Instance.GetTotalCoin());
-        if (FeedManager.Instance != null)
-            UpdateFeedDisplay(FeedManager.Instance.GetFeedCount());
+        FindUIReferences();
     }
 
     private void UpdateCoinDisplay(int totalCoin)
@@ -52,19 +36,34 @@ public class UIGlobalBinder : MonoBehaviour
             feedText.text = totalFeed.ToString();
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
-        // Lepas event saat dihancurkan
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+        
+        // Daftarkan event
+        if (CoinManager.Instance != null)
+            CoinManager.Instance.CoinsChanged += UpdateCoinDisplay;
+        if (FeedManager.Instance != null)
+            FeedManager.Instance.FeedChanged += UpdateFeedDisplay;
+
+        FindUIReferences();
+    }
+
+    private void OnDisable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+        
+        // Lepas event
         if (CoinManager.Instance != null)
             CoinManager.Instance.CoinsChanged -= UpdateCoinDisplay;
         if (FeedManager.Instance != null)
             FeedManager.Instance.FeedChanged -= UpdateFeedDisplay;
     }
 
-    private void OnEnable()
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
     {
-        if (coinText == null) coinText = GameObject.Find("CoinText")?.GetComponent<TextMeshProUGUI>();
-        if (feedText == null) feedText = GameObject.Find("PakanText")?.GetComponent<TextMeshProUGUI>();
+        coinText = null;
+        feedText = null;
         FindUIReferences();
     }
 

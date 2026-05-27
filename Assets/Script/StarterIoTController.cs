@@ -47,7 +47,6 @@ public class StarterIoTController : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject); // opsional, tergantung kebutuhan
 
         BuildDeviceMap();
     }

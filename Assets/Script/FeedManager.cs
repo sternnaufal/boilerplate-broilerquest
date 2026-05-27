@@ -6,19 +6,16 @@ public class FeedManager : Singleton<FeedManager>
     public event Action<int> FeedChanged;
 
     private int feedCount;
-    private bool hasInitialized;
 
     protected override void Awake()
     {
         base.Awake();
         LoadFeed();
-        GlobalUIOverlay overlay = GlobalUIOverlay.Instance;
     }
 
     private void LoadFeed()
     {
         feedCount = PlayerPrefs.GetInt(GameConstants.Persistence.FeedCountKey, 0);
-        hasInitialized = true;
     }
 
     private void SaveFeed()

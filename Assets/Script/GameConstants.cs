@@ -37,7 +37,7 @@ public static class GameConstants
     public static class Economy
     {
         public const int StartingCoin = 400;
-        public const int ChickenPrice = 50;
+        public const int ChickenPrice = 40;
         public const int BaseSellPrice = 90;
         public const int FailPenalty = 30;
         public const int FeedCost = 50;
@@ -49,8 +49,8 @@ public static class GameConstants
 
     public static class LevelUnlock
     {
-        public const int BeginnerCost = 750;
-        public const int IntermediateCost = 1500;
+        public const int BeginnerCost = 1000;
+        public const int IntermediateCost = 2500;
     }
 
     public static class IoT
@@ -66,7 +66,7 @@ public static class GameConstants
     public static class JigsawMinigame
     {
         public const int GridSize = 3;
-        public const float TimeLimit = 15f;
+        public const float TimeLimit = 25f;
         public const float TileSize = 150f;
         public const float TileSpacing = 4f;
         public const float SwapDuration = 0.15f;

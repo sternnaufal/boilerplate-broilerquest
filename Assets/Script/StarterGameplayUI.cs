@@ -62,6 +62,8 @@ public class StarterGameplayUI : MonoBehaviour
 
     [Header("Startup")]
     [SerializeField] private bool showBuyPanelOnStart = true;
+    [SerializeField] private bool resetFeedOnStart = true;
+    [SerializeField] private int startingFeedCount = 0;
 
     private bool listenersRegistered;
     private bool hpVisible;
@@ -78,6 +80,9 @@ public class StarterGameplayUI : MonoBehaviour
 
         if (CoinManager.Instance != null && coinText != null)
             CoinManager.Instance.Initialize(coinText);
+
+        if (resetFeedOnStart && FeedManager.Instance != null)
+            FeedManager.Instance.SetFeedCount(startingFeedCount);
 
         ResumeGame();
         ShowHpPanel(showBuyPanelOnStart);
@@ -209,6 +214,7 @@ public class StarterGameplayUI : MonoBehaviour
         StylePanel(hpPanel, hpPanelStyle.color);
         StylePanel(pausePanel, pausePanelStyle.color);
         PositionHpPanel();
+        DisableDecorativeRaycasts();
 
         if (coinText != null)
         {
@@ -310,6 +316,43 @@ public class StarterGameplayUI : MonoBehaviour
         Image image = panel.GetComponent<Image>();
         if (image != null)
             image.color = color;
+    }
+
+    private void DisableDecorativeRaycasts()
+    {
+        DisablePanelImageRaycast(hpPanel);
+        DisableNonButtonChildRaycasts(hpPanel);
+        DisableNonButtonChildRaycasts(hudPanel);
+        DisableNonButtonChildRaycasts(pausePanel);
+
+        Transform canvasRoot = hudPanel != null ? hudPanel.transform.parent : null;
+        if (canvasRoot == null && hpPanel != null)
+            canvasRoot = hpPanel.transform.parent;
+
+        Transform background = canvasRoot != null ? canvasRoot.Find("Background") : null;
+        if (background != null && background.TryGetComponent(out Image image))
+            image.raycastTarget = false;
+    }
+
+    private static void DisablePanelImageRaycast(GameObject panel)
+    {
+        if (panel != null && panel.TryGetComponent(out Image image))
+            image.raycastTarget = false;
+    }
+
+    private static void DisableNonButtonChildRaycasts(GameObject root)
+    {
+        if (root == null)
+            return;
+
+        foreach (TextMeshProUGUI text in root.GetComponentsInChildren<TextMeshProUGUI>(true))
+            text.raycastTarget = false;
+
+        foreach (Image image in root.GetComponentsInChildren<Image>(true))
+        {
+            if (image.GetComponentInParent<Button>(true) == null)
+                image.raycastTarget = false;
+        }
     }
 
     private void PositionHpPanel()

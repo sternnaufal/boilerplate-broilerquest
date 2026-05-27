@@ -327,9 +327,56 @@ The other repeated console entries are Unity MCP bridge trace logs such as disco
 
 ### Verification - 25 Mei 2026
 
-- Compile check:
+- Point check:
   `dotnet build Assembly-CSharp.csproj --no-restore`
   - Result: `PASS`, 0 errors, 0 warnings after the prefab serialization fix.
 - SigMap check:
   `npx sigmap --track`
   - Result: `PASS`, Coverage A / 100%, 23 of 23 source files included.
+
+## UI Overlay & Economy Balancing Follow-up - 26-27 Mei 2026
+
+- **Solved Coin and Feed Counter UI Binding Freeze**:
+  - Root cause: The global HUD coin and feed counter text objects (`CoinText` and `PakanText`) were retaining stale references after transitioning between scenes (e.g., Main Menu -> Starter gameplay). Because of these stale references, the runtime updates triggered by Coin and Feed events were not updating the active HUD displays.
+  - Fixes:
+    - Modified `UIGlobalBinder.cs` to hook into Unity's scene transition system using `SceneManager.sceneLoaded`. It now automatically nulls out old references and re-binds them using `FindUIReferences()` upon loading a new scene.
+    - Standardized event listener registration: subscriptions are now registered in `OnEnable` and cleanly released in `OnDisable` to prevent memory leaks.
+    - Updated `Singleton.cs` so duplicate manager instances call `Destroy(this)` instead of `Destroy(gameObject)`. This ensures other critical components on persistent manager gameobjects are not inadvertently destroyed.
+    - Removed redundant direct references to `GlobalUIOverlay.Instance` inside `FeedManager.cs` and `CoinManager.cs`.
+
+- **Decoupled and Hardened Starter Level Feed Initialization**:
+  - Added serialized toggle and count parameters `resetFeedOnStart` and `startingFeedCount` in `StarterGameplayUI.cs`.
+  - Integrated `FeedManager.Instance.SetFeedCount(...)` into `StarterGameplayUI.Start()` to reset feed count to `0` or any defined baseline upon starting the Starter scene, ensuring a clean and repeatable test environment.
+
+- **Economy & Level Cost Balancing (Aligned with `docs/agent_prompt_coopquest_balancing.md`)**:
+  - Tuned core economics parameters in `GameConstants.cs` for a smoother progression curve:
+    - **Chicken Price**: Reduced from `50` to `40` to lower initial player friction.
+    - **Level Unlock Costs**: Increased Beginner level unlock cost from `750` to `1000` and Intermediate from `1500` to `2500` to establish a more satisfying level progression pace.
+    - **Jigsaw Minigame Time Limit**: Increased from `15f` to `25f` to provide a fair but challenging time frame for player actions.
+
+- **Addressed Dynamic Payout & Penalty Behavior on Minigame Failure**:
+  - Explored why wallet coins do not decrease when intentionally failing all 3 care minigames.
+  - Clarified design mechanics: The game's penalty system is designed to affect the selling price of the chicken, not directly withdraw coins from the player's wallet.
+  - Payout is calculated using: `sellReward = Mathf.Max(0, BaseSellPrice (90) - failCount * FailPenalty (30))`.
+    - 0 fails: `90` coins reward (net profit `+50` coins from the `40` purchase price).
+    - 1 fail: `60` coins reward (net profit `+20` coins).
+    - 2 fails: `30` coins reward (net loss `-10` coins).
+    - 3 fails: `0` coins reward (net loss `-40` coins).
+  - The `0` reward clamp means players receive nothing upon selling, losing the entire initial purchase cost of the chicken, which acts as the core economy penalty.
+
+- **UI Interaction & Raycast Target Optimization**:
+  - Added `DisableDecorativeRaycasts()` in `StarterGameplayUI.cs` to dynamically disable `raycastTarget` on decorative panel backgrounds and non-button texts.
+  - This ensures that static backgrounds and text overlays do not block user clicks, leaving buttons, the shop purchase panels, and chicken slots 100% interactive on all device resolutions and screen aspect ratios.
+
+### Verification - 27 Mei 2026
+
+- **Compile check**:
+  `dotnet build Assembly-CSharp.csproj --no-restore`
+  - Result: `PASS`, 0 errors, 0 warnings.
+- **SigMap check**:
+  `npx sigmap --track`
+  - Result: `PASS`, Coverage A (90%), 26 of 29 source files tracked.
+- **Play Mode Smoke Test**:
+  - Verified Coin and Pakan UI counters update correctly when buying chickens, purchasing feed, using feed, and selling chickens.
+  - Verified minigame failure results in 0 coin payout (wallet coin count does not change when selling a 3x failed chicken).
+  - Verified buttons are highly responsive and UI backgrounds do not block interaction.

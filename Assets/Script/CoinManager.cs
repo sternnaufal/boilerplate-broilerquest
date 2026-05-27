@@ -49,8 +49,6 @@ public class CoinManager : Singleton<CoinManager>
 
         if (coinText == null) TryFindCoinText();
         UpdateCoinUI();
-
-        GlobalUIOverlay overlay = GlobalUIOverlay.Instance;
     }
 
     public void AddCoin(int amount)
