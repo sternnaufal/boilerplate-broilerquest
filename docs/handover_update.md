@@ -368,6 +368,13 @@ The other repeated console entries are Unity MCP bridge trace logs such as disco
   - Added `DisableDecorativeRaycasts()` in `StarterGameplayUI.cs` to dynamically disable `raycastTarget` on decorative panel backgrounds and non-button texts.
   - This ensures that static backgrounds and text overlays do not block user clicks, leaving buttons, the shop purchase panels, and chicken slots 100% interactive on all device resolutions and screen aspect ratios.
 
+- **Resolved Play Mode Singleton Destruction Crash (NullReferenceException in GameStateManager)**:
+  - Root cause: In Unity, if "Enter Play Mode Options" is enabled (with domain reload disabled to optimize play mode entry speed), generic static fields persist between play sessions. The `applicationQuitting` static boolean flag in the generic `Singleton<T>` base class was set to `true` when stopping the game, and remained `true` in the next play session. This caused all singletons (including `GameStateManager`, `CoinManager`, etc.) to return `null` immediately upon entry, throwing a `NullReferenceException` in `GameStateManager.TrySetGameState` when `UIManager` tried to open the main menu on subsequent play runs.
+  - Fixes:
+    - Created a non-generic `SingletonQuittingDetector` helper static class with the `[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]` attribute. This automatically resets the quitting state to `false` when entering play mode, regardless of Unity's domain reload settings.
+    - Updated `Singleton<T>` to query `SingletonQuittingDetector.IsQuitting` instead of a generic-specific static field.
+    - Hardened `GameStateManager.TrySetGameState` with a null-safety check to prevent throwing exceptions even in unexpected edge cases.
+
 ### Verification - 27 Mei 2026
 
 - **Compile check**:
@@ -380,3 +387,4 @@ The other repeated console entries are Unity MCP bridge trace logs such as disco
   - Verified Coin and Pakan UI counters update correctly when buying chickens, purchasing feed, using feed, and selling chickens.
   - Verified minigame failure results in 0 coin payout (wallet coin count does not change when selling a 3x failed chicken).
   - Verified buttons are highly responsive and UI backgrounds do not block interaction.
+  - Verified restarting Play Mode in the Unity Editor multiple times works perfectly without any `NullReferenceException` crashes or frozen managers.
