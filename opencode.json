@@ -1,19 +1,36 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
+    "unityMCP": {
+      "type": "remote",
+      "url": "http://127.0.0.1:8080/mcp",
+      "enabled": true
+    },
     "gladekit": {
       "type": "local",
-      "command": ["uvx", "gladekit-mcp"],
+      "command": [
+        "uvx",
+        "gladekit-mcp"
+      ],
       "enabled": true
     },
     "sigmap": {
       "type": "local",
-      "command": ["npx", "sigmap", "--mcp"],
+      "command": [
+        "npx",
+        "sigmap",
+        "--mcp"
+      ],
       "enabled": true
     },
     "semble": {
       "type": "local",
-      "command": ["uvx", "--from", "semble[mcp]", "semble"],
+      "command": [
+        "uvx",
+        "--from",
+        "semble[mcp]",
+        "semble"
+      ],
       "enabled": true
     }
   }
