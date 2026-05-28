@@ -158,10 +158,22 @@ class JigsawMinigameController
   OnPieceClicked(JigsawPiece clicked) → void
 ```
 
-### Assets\Script\KoleksiIoTController.cs
+### Assets\Script\IoT\KoleksiIoTController.cs
 ```
 class KoleksiIoTController
 class IoTProduct
+  Awake() → void
+  Start() → void
+  EnsureDefaultProducts() → void
+  OnDestroy() → void
+  OnCoinsChanged(int totalCoin) → void
+  SetupAllCards() → void
+  SetupCard(GameObject card, IoTProduct product) → void
+  RefreshAllCards() → void
+  RefreshCard(GameObject card, string key, int price, Button buyButton, TextMeshProUGUI priceText, GameObject ownedBadge, Image cardBg) → void
+  BuyProduct(IoTProduct product) → void
+  IsPurchased(string productKey) → bool
+  GoBack() → void
 ```
 
 ### Assets\Script\LevelSelectController.cs

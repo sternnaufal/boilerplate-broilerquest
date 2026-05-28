@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections.Generic;
 
 public class KoleksiIoTController : MonoBehaviour
 {
@@ -19,14 +18,11 @@ public class KoleksiIoTController : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private Transform productContainer;
-    [SerializeField] private GameObject productCardPrefab;
     [SerializeField] private Button backButton;
 
-    [Header("Card Prefab Fallback Colors")]
+    [Header("Card Colors")]
     [SerializeField] private Color ownedColor = new Color(0.2f, 0.6f, 0.3f, 1f);
     [SerializeField] private Color lockedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
-
-    private readonly List<GameObject> cardInstances = new List<GameObject>();
 
     private void Awake()
     {
@@ -48,7 +44,7 @@ public class KoleksiIoTController : MonoBehaviour
                 CoinManager.Instance.BindCoinText(coinDisplay);
         }
 
-        BuildProductCards();
+        SetupAllCards();
     }
 
     private void EnsureDefaultProducts()
@@ -90,58 +86,18 @@ public class KoleksiIoTController : MonoBehaviour
         RefreshAllCards();
     }
 
-    private void EnsureProductContainer()
+    private void SetupAllCards()
     {
-        if (productContainer != null)
-            return;
-
-        Transform existing = transform.Find("ProductContainer");
-        if (existing != null)
-        {
-            productContainer = existing;
-            return;
-        }
-
-        Canvas canvas = GetComponentInParent<Canvas>();
-        if (canvas == null)
-            canvas = FindFirstObjectByType<Canvas>();
-
-        GameObject containerObj = new GameObject("ProductContainer", typeof(RectTransform));
-        containerObj.transform.SetParent(canvas != null ? canvas.transform : transform, false);
-        RectTransform rect = containerObj.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0f, 0f);
-        rect.anchorMax = new Vector2(1f, 0.6f);
-        rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = Vector2.zero;
-        rect.sizeDelta = Vector2.zero;
-
-        productContainer = containerObj.transform;
-    }
-
-    private void BuildProductCards()
-    {
-        ClearCards();
-
-        EnsureProductContainer();
         if (products == null || productContainer == null)
             return;
 
         foreach (IoTProduct product in products)
         {
-            GameObject card;
+            Transform cardTransform = productContainer.Find(product.productKey);
+            if (cardTransform == null)
+                continue;
 
-            if (productCardPrefab != null)
-            {
-                card = Instantiate(productCardPrefab, productContainer);
-            }
-            else
-            {
-                card = CreateFallbackCard(product);
-                card.transform.SetParent(productContainer, false);
-            }
-
-            SetupCard(card, product);
-            cardInstances.Add(card);
+            SetupCard(cardTransform.gameObject, product);
         }
 
         RefreshAllCards();
@@ -165,28 +121,24 @@ public class KoleksiIoTController : MonoBehaviour
         GameObject ownedBadge = FindChildByName(card, "OwnedBadge");
         Image cardBg = card.GetComponent<Image>();
 
-        IoTProduct capturedProduct = product;
-
         if (buyButton != null)
-        {
-            ButtonHelper.AddListenerOnce(buyButton, () => BuyProduct(capturedProduct));
-        }
+            ButtonHelper.AddListenerOnce(buyButton, () => BuyProduct(product));
 
         RefreshCard(card, key, price, buyButton, priceText, ownedBadge, cardBg);
     }
 
     private void RefreshAllCards()
     {
-        if (products == null || cardInstances == null)
+        if (products == null || productContainer == null)
             return;
 
-        for (int i = 0; i < cardInstances.Count && i < products.Length; i++)
+        foreach (IoTProduct product in products)
         {
-            GameObject card = cardInstances[i];
-            IoTProduct product = products[i];
-            if (card == null || product == null)
+            Transform cardTransform = productContainer.Find(product.productKey);
+            if (cardTransform == null)
                 continue;
 
+            GameObject card = cardTransform.gameObject;
             string key = product.productKey;
             int price = product.productPrice;
 
@@ -239,107 +191,6 @@ public class KoleksiIoTController : MonoBehaviour
     private bool IsPurchased(string productKey)
     {
         return StarterIoTController.CheckPurchased(productKey);
-    }
-
-    private GameObject CreateFallbackCard(IoTProduct product)
-    {
-        GameObject card = new GameObject("ProductCard_" + product.productKey, typeof(RectTransform), typeof(Image));
-        RectTransform rect = card.GetComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(280f, 320f);
-
-        GameObject nameObj = new GameObject("NameText", typeof(RectTransform), typeof(TextMeshProUGUI));
-        nameObj.transform.SetParent(card.transform, false);
-        RectTransform nameRect = nameObj.GetComponent<RectTransform>();
-        nameRect.anchorMin = new Vector2(0.5f, 1f);
-        nameRect.anchorMax = new Vector2(0.5f, 1f);
-        nameRect.pivot = new Vector2(0.5f, 1f);
-        nameRect.anchoredPosition = new Vector2(0f, -10f);
-        nameRect.sizeDelta = new Vector2(260f, 40f);
-        TextMeshProUGUI nameText = nameObj.GetComponent<TextMeshProUGUI>();
-        nameText.alignment = TextAlignmentOptions.Center;
-        nameText.fontSize = 22f;
-        nameText.fontStyle = FontStyles.Bold;
-        nameText.color = Color.white;
-        nameObj.name = "NameText";
-
-        GameObject priceObj = new GameObject("PriceText", typeof(RectTransform), typeof(TextMeshProUGUI));
-        priceObj.transform.SetParent(card.transform, false);
-        RectTransform priceRect = priceObj.GetComponent<RectTransform>();
-        priceRect.anchorMin = new Vector2(0.5f, 0.5f);
-        priceRect.anchorMax = new Vector2(0.5f, 0.5f);
-        priceRect.pivot = new Vector2(0.5f, 0.5f);
-        priceRect.anchoredPosition = new Vector2(0f, 0f);
-        priceRect.sizeDelta = new Vector2(200f, 40f);
-        TextMeshProUGUI priceText = priceObj.GetComponent<TextMeshProUGUI>();
-        priceText.alignment = TextAlignmentOptions.Center;
-        priceText.fontSize = 20f;
-        priceText.color = Color.white;
-        priceObj.name = "PriceText";
-
-        GameObject btnObj = new GameObject("BuyButton", typeof(RectTransform), typeof(Image), typeof(Button));
-        btnObj.transform.SetParent(card.transform, false);
-        RectTransform btnRect = btnObj.GetComponent<RectTransform>();
-        btnRect.anchorMin = new Vector2(0.5f, 0f);
-        btnRect.anchorMax = new Vector2(0.5f, 0f);
-        btnRect.pivot = new Vector2(0.5f, 0f);
-        btnRect.anchoredPosition = new Vector2(0f, 15f);
-        btnRect.sizeDelta = new Vector2(200f, 50f);
-        Image btnImage = btnObj.GetComponent<Image>();
-        btnImage.color = new Color(0.95f, 0.72f, 0.22f, 1f);
-        btnObj.name = "BuyButton";
-
-        GameObject btnLabel = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
-        btnLabel.transform.SetParent(btnObj.transform, false);
-        RectTransform labelRect = btnLabel.GetComponent<RectTransform>();
-        labelRect.anchorMin = Vector2.zero;
-        labelRect.anchorMax = Vector2.one;
-        labelRect.offsetMin = Vector2.zero;
-        labelRect.offsetMax = Vector2.zero;
-        TextMeshProUGUI labelText = btnLabel.GetComponent<TextMeshProUGUI>();
-        labelText.text = "BELI";
-        labelText.alignment = TextAlignmentOptions.Center;
-        labelText.fontSize = 24f;
-        labelText.fontStyle = FontStyles.Bold;
-        labelText.color = new Color(0.12f, 0.15f, 0.08f, 1f);
-
-        GameObject badgeObj = new GameObject("OwnedBadge", typeof(RectTransform), typeof(Image));
-        badgeObj.transform.SetParent(card.transform, false);
-        RectTransform badgeRect = badgeObj.GetComponent<RectTransform>();
-        badgeRect.anchorMin = new Vector2(0.5f, 0f);
-        badgeRect.anchorMax = new Vector2(0.5f, 0f);
-        badgeRect.pivot = new Vector2(0.5f, 0f);
-        badgeRect.anchoredPosition = new Vector2(0f, 15f);
-        badgeRect.sizeDelta = new Vector2(200f, 50f);
-        Image badgeImage = badgeObj.GetComponent<Image>();
-        badgeImage.color = new Color(0.2f, 0.7f, 0.3f, 1f);
-        badgeObj.name = "OwnedBadge";
-        badgeObj.SetActive(false);
-
-        GameObject badgeLabel = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
-        badgeLabel.transform.SetParent(badgeObj.transform, false);
-        RectTransform badgeLabelRect = badgeLabel.GetComponent<RectTransform>();
-        badgeLabelRect.anchorMin = Vector2.zero;
-        badgeLabelRect.anchorMax = Vector2.one;
-        badgeLabelRect.offsetMin = Vector2.zero;
-        badgeLabelRect.offsetMax = Vector2.zero;
-        TextMeshProUGUI badgeLabelText = badgeLabel.GetComponent<TextMeshProUGUI>();
-        badgeLabelText.text = "DIMILIKI";
-        badgeLabelText.alignment = TextAlignmentOptions.Center;
-        badgeLabelText.fontSize = 20f;
-        badgeLabelText.fontStyle = FontStyles.Bold;
-        badgeLabelText.color = Color.white;
-
-        return card;
-    }
-
-    private void ClearCards()
-    {
-        foreach (GameObject card in cardInstances)
-        {
-            if (card != null)
-                Destroy(card);
-        }
-        cardInstances.Clear();
     }
 
     private static TextMeshProUGUI FindTextInChildren(GameObject parent, string name)

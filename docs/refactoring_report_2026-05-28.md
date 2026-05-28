@@ -146,21 +146,51 @@ Semua item **🔥 Hapus Dead Code** dari prioritas sebelumnya telah dieksekusi:
 
 ---
 
+## 4. `KoleksiIoTController` — Field Assignment + Scene Cards + Cleanup
+
+### Problem
+- Controller fields (`productContainer`, `productCardPrefab`, `backButton`) null di scene KoleksiIoT
+- Script punya 2 fallback method runtime (`CreateFallbackCard()` 90 baris, `EnsureProductContainer()`) yg melanggar aturan project
+- Hanya 1 ProductCardPrefab child di ProductContainer, bukan 3 kartu terpisah
+
+### Yang Dilakukan (via unityMCP bridge)
+1. **Assign field via Inspector** — `productContainer` (self-ref), `backButton`, `productCardPrefab` (prefab asset)
+2. **Hapus static card AutoHeater & AutoFan** — residu dari pendekatan lama
+3. **Buat 3 kartu dari prefab** — `AutoFeeder`, `AutoHeater`, `AutoFan` di ProductContainer
+4. **Hapus `CreateFallbackCard()`** — -90 baris runtime UI code
+5. **Hapus `EnsureProductContainer()`** — runtime container fallback
+6. **Hapus `productCardPrefab` serialized field** — nggak dipakai lagi
+7. **Hapus `cardInstances` list + `ClearCards()`** — pindah ke pendekatan Find-by-name
+8. **Rewrite `BuildProductCards()` → `SetupAllCards()`** — `productContainer.Find(product.productKey)` instead of `Instantiate()`
+9. **`RefreshAllCards()`** — juga pake `Find()` per produk, bukan iterasi list
+
+### Hasil
+| Metrik | Before | After |
+|--------|--------|-------|
+| `KoleksiIoTController` lines | 380 | 231 |
+| Runtime UI creation (prefab fallback) | 90 lines | 0 |
+| Runtime container creation | 25 lines | 0 |
+| Serialized field `productCardPrefab` | Ada | Dihapus |
+| Cards di scene ProductContainer | 1 (ProductCardPrefab) | 3 (AutoFeeder, AutoHeater, AutoFan) |
+| Compile errors | 0 | 0 |
+| Scene references | Null fields | Fully assigned |
+
+---
+
 ## Pending / Next Priorities
 
 ### 🔥 Hapus Dead Code
-Tidak ada lagi — lihat **Done (Dead Code Cleanup)** di bawah.
+- **`FeedManager.hasInitialized`** — compile warning CS0414 (field assigned but never used)
 
 > **Catatan:** `GlobalUIOverlay` **bukan** dead code — confirmed active di 2 scenes + 1 prefab. Ia bikin UI runtime (melanggar aturan project) berdampingan dengan `UIGlobalBinder` (Inspector-based). Keduanya live.
 
-### 🔧 Refactor UI Code → Prefab
+### 🔧 Refactor UI Code → Prefab (remaining)
 - `JigsawMinigameController.EnsureRuntimeUi()` — buat Canvas + panel dari code
-- `KoleksiIoTController.CreateFallbackCard()` — 90 baris UI code
 - `StarterChickenShop.EnsureFeedButton()`, `PolishShopButtons()`, `EnsureOptionIcon()`
 - `StarterGameplayUI.EnsureMainMenuButton()`, `PolishStarterUi()`
 
-### 🔧 Consolidate IoT
-- `KoleksiIoTController.IsPurchased()` duplikasi identik dengan `StarterIoTController.IsPurchased()`
+### 🔧 Consolidate IoT (done)
+- `KoleksiIoTController.IsPurchased()` → delegasi ke `StarterIoTController.CheckPurchased()` ✅
 
 ---
 
@@ -173,4 +203,6 @@ Tidak ada lagi — lihat **Done (Dead Code Cleanup)** di bawah.
 | `TampilkanPopup()` in PopupKesehatan | Removed method | -4 |
 | `BaseSellReward`, `CareBonus`, `NeedInterval` in GameConstants | Removed 3 constants | -3 |
 | `GameLog.Verbose` field + dead check | Removed field + conditional | -3 |
-| **Total dead code eliminated** | | **-301 lines** |
+| `CreateFallbackCard()` + `EnsureProductContainer()` + `cardInstances` in KoleksiIoTController | Removed runtime UI code | -115 |
+| `productCardPrefab` serialized field | Field + Inspector slot removed | -1 |
+| **Total eliminated** | | **-417 lines** |
