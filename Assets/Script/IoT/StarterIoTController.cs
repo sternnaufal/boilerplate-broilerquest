@@ -74,9 +74,14 @@ public class StarterIoTController : MonoBehaviour
     }
 
     // ========== Public API untuk status ==========
-    public bool IsPurchased(string productKey)
+    public static bool CheckPurchased(string productKey)
     {
         return PlayerPrefs.GetInt(GameConstants.Persistence.KoleksiIoTPurchasedPrefix + productKey, 0) == 1;
+    }
+
+    public bool IsPurchased(string productKey)
+    {
+        return CheckPurchased(productKey);
     }
 
     public bool IsActiveForNeed(string productKey)

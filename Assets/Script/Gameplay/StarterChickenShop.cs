@@ -151,21 +151,6 @@ public class StarterChickenShop : MonoBehaviour
         RefreshShopState();
     }
 
-    public void BuyOption0()
-    {
-        TryBuyChicken(0);
-    }
-
-    public void BuyOption1()
-    {
-        TryBuyChicken(1);
-    }
-
-    public void BuyOption2()
-    {
-        TryBuyChicken(2);
-    }
-
     public bool TryBuyChicken(int optionIndex)
     {
         StarterChickenOption option = GetOption(optionIndex);

@@ -104,7 +104,7 @@ public class StarterGameplayUI : MonoBehaviour
 
     public void PauseGame()
     {
-        SetGameStateOrFallback(GameState.Paused);
+        GameStateManager.ApplyState(GameState.Paused);
 
         if (hudPanel != null)
             hudPanel.SetActive(false);
@@ -115,7 +115,7 @@ public class StarterGameplayUI : MonoBehaviour
 
     public void ResumeGame()
     {
-        SetGameStateOrFallback(GameState.Playing);
+        GameStateManager.ApplyState(GameState.Playing);
 
         if (pausePanel != null)
             pausePanel.SetActive(false);
@@ -197,7 +197,7 @@ public class StarterGameplayUI : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        SetGameStateOrFallback(GameState.Menu);
+        GameStateManager.ApplyState(GameState.Menu);
 
         if (GameManager.Instance != null)
             GameManager.Instance.ReturnToMainMenu();
@@ -371,14 +371,4 @@ public class StarterGameplayUI : MonoBehaviour
         rect.anchoredPosition = hpPanelAnchoredPosition;
     }
 
-    private static void SetGameStateOrFallback(GameState state)
-    {
-        if (GameStateManager.TrySetGameState(state))
-            return;
-
-        Time.timeScale = state == GameState.Paused ? 0f : 1f;
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.SetGameActive(state == GameState.Playing);
-    }
 }

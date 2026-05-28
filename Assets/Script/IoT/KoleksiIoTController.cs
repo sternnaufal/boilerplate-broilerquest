@@ -238,7 +238,7 @@ public class KoleksiIoTController : MonoBehaviour
 
     private bool IsPurchased(string productKey)
     {
-        return PlayerPrefs.GetInt(GameConstants.Persistence.KoleksiIoTPurchasedPrefix + productKey, 0) == 1;
+        return StarterIoTController.CheckPurchased(productKey);
     }
 
     private GameObject CreateFallbackCard(IoTProduct product)

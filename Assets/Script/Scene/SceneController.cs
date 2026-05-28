@@ -10,19 +10,19 @@ public class SceneController : Singleton<SceneController>
 
     public void GoToMainMenu()
     {
-        SetGameStateOrFallback(GameState.Menu);
+        GameStateManager.ApplyState(GameState.Menu);
         SceneManager.LoadScene(mainMenuScene);
     }
 
     public void GoToSelectLevel()
     {
-        SetGameStateOrFallback(GameState.Menu);
+        GameStateManager.ApplyState(GameState.Menu);
         SceneManager.LoadScene(selectLevelScene);
     }
 
     public void GoToKoleksiIoT()
     {
-        SetGameStateOrFallback(GameState.Menu);
+        GameStateManager.ApplyState(GameState.Menu);
         SceneManager.LoadScene(koleksiIoTScene);
     }
 
@@ -51,15 +51,8 @@ public class SceneController : Singleton<SceneController>
             GameManager.Instance.SetGameActive(true);
         }
 
-        SetGameStateOrFallback(GameState.Playing);
+        GameStateManager.ApplyState(GameState.Playing);
         SceneManager.LoadScene(sceneName);
     }
 
-    private static void SetGameStateOrFallback(GameState state)
-    {
-        if (GameStateManager.TrySetGameState(state))
-            return;
-
-        Time.timeScale = state == GameState.Paused ? 0f : 1f;
-    }
 }

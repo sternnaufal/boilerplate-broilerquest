@@ -58,11 +58,6 @@ public class PopupKesehatan : Singleton<PopupKesehatan>
         }
     }
 
-    public void TampilkanPopup(KandangController kandang)
-    {
-        ShowHealthCheck(kandang);
-    }
-
     public void ShowHealthCheck(IHealthCheckListener listener)
     {
         currentListener = listener;

@@ -72,6 +72,16 @@ public class GameStateManager : Singleton<GameStateManager>
         return Instance;
     }
 
+    public static void ApplyState(GameState state)
+    {
+        if (TrySetGameState(state))
+            return;
+
+        Time.timeScale = state == GameState.Paused ? 0f : 1f;
+        if (GameManager.Instance != null)
+            GameManager.Instance.SetGameActive(state == GameState.Playing);
+    }
+
     private static void ApplyTimeScale(GameState state)
     {
         Time.timeScale = state == GameState.Paused ? 0f : 1f;

@@ -26,9 +26,6 @@ public static class GameConstants
 
     public static class StarterSlot
     {
-        public const int BaseSellReward = 20;
-        public const int CareBonus = 10;
-        public const float NeedInterval = 5f;
         public const float NotificationDelay = 1f;
         public const float NeedIntervalMin = 3f;
         public const float NeedIntervalMax = 8f;

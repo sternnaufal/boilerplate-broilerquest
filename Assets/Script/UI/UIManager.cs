@@ -67,7 +67,7 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowMainMenu()
     {
-        SetGameStateOrFallback(GameState.Menu);
+        GameStateManager.ApplyState(GameState.Menu);
         openedFromPause = false;
 
         HideAllPanels();
@@ -91,7 +91,7 @@ public class UIManager : Singleton<UIManager>
     
     public void PauseGame()
     {
-        SetGameStateOrFallback(GameState.Paused);
+        GameStateManager.ApplyState(GameState.Paused);
         openedFromPause = true;
 
         HideAllPanels();
@@ -102,7 +102,7 @@ public class UIManager : Singleton<UIManager>
 
     public void ResumeGame()
     {
-        SetGameStateOrFallback(GameState.Playing);
+        GameStateManager.ApplyState(GameState.Playing);
         openedFromPause = false;
 
         HideAllPanels();
@@ -191,24 +191,13 @@ public class UIManager : Singleton<UIManager>
 
     public void ExitGame()
     {
-        SetGameStateOrFallback(GameState.Menu);
+        GameStateManager.ApplyState(GameState.Menu);
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
         Application.Quit();
 #endif
-    }
-
-    private static void SetGameStateOrFallback(GameState state)
-    {
-        if (GameStateManager.TrySetGameState(state))
-            return;
-
-        Time.timeScale = state == GameState.Paused ? 0f : 1f;
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.SetGameActive(state == GameState.Playing);
     }
 
     private void Update()
