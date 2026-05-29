@@ -5242,6 +5242,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3670630867299237253, guid: b3050683c63c23948a3f8259df691c55, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 8506719879862461893}
+    - target: {fileID: 3670630867299237253, guid: b3050683c63c23948a3f8259df691c55, type: 3}
       propertyPath: obstacleTag
       value: Kandang
       objectReference: {fileID: 0}
@@ -5338,6 +5342,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3050683c63c23948a3f8259df691c55, type: 3}
+--- !u!95 &8506719879862461893 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2275232692710284854, guid: b3050683c63c23948a3f8259df691c55, type: 3}
+  m_PrefabInstance: {fileID: 8506719879862461892}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9054314745270257069
 PrefabInstance:
   m_ObjectHideFlags: 0

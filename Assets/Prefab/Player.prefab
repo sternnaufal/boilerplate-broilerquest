@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5889017082364410524}
   - component: {fileID: 3670630867299237253}
   - component: {fileID: 2029138867827643509}
+  - component: {fileID: 2275232692710284854}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -72,6 +73,8 @@ MonoBehaviour:
   avoidCollision: 1
   collisionMargin: 10
   obstacleTag: KandangSlot
+  animator: {fileID: 0}
+  walkAnimParam: isWalking
   flipOnDirection: 1
 --- !u!114 &2029138867827643509
 MonoBehaviour:
@@ -103,3 +106,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &2275232692710284854
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831664848693844484}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a6d90ec58dd4bc24eb0c9a1349389562, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
