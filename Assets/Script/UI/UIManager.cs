@@ -21,6 +21,9 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Slider musicVolumeSlider;
     [SerializeField] private Slider sfxVolumeSlider;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip navigateSfx;
+
     [Header("Pause Menu")]
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button pauseOptionsButton;
@@ -31,6 +34,11 @@ public class UIManager : Singleton<UIManager>
 
     private bool openedFromPause;
     private bool buttonsRegistered;
+
+    private void PlayNavSfx()
+    {
+        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(navigateSfx);
+    }
 
     protected override bool PersistAcrossScenes => false;
 
@@ -49,15 +57,15 @@ public class UIManager : Singleton<UIManager>
         if (buttonsRegistered)
             return;
 
-        ButtonHelper.AddListenerOnce(startButton, StartGame);
-        ButtonHelper.AddListenerOnce(optionsButton, ShowOptionsFromMain);
-        ButtonHelper.AddListenerOnce(exitButton, ExitGame);
-        ButtonHelper.AddListenerOnce(koleksiIoTButton, GoToKoleksiIoT);
-        ButtonHelper.AddListenerOnce(backToMainButton, BackFromOptions);
-        ButtonHelper.AddListenerOnce(resumeButton, ResumeGame);
-        ButtonHelper.AddListenerOnce(pauseOptionsButton, ShowOptionsFromPause);
-        ButtonHelper.AddListenerOnce(pauseMainMenuButton, ReturnToMainMenuFromPause);
-        ButtonHelper.AddListenerOnce(pauseButton, PauseGame);
+        ButtonHelper.AddListenerOnce(startButton, () => { PlayNavSfx(); StartGame(); });
+        ButtonHelper.AddListenerOnce(optionsButton, () => { PlayNavSfx(); ShowOptionsFromMain(); });
+        ButtonHelper.AddListenerOnce(exitButton, () => { PlayNavSfx(); ExitGame(); });
+        ButtonHelper.AddListenerOnce(koleksiIoTButton, () => { PlayNavSfx(); GoToKoleksiIoT(); });
+        ButtonHelper.AddListenerOnce(backToMainButton, () => { PlayNavSfx(); BackFromOptions(); });
+        ButtonHelper.AddListenerOnce(resumeButton, () => { PlayNavSfx(); ResumeGame(); });
+        ButtonHelper.AddListenerOnce(pauseOptionsButton, () => { PlayNavSfx(); ShowOptionsFromPause(); });
+        ButtonHelper.AddListenerOnce(pauseMainMenuButton, () => { PlayNavSfx(); ReturnToMainMenuFromPause(); });
+        ButtonHelper.AddListenerOnce(pauseButton, () => { PlayNavSfx(); PauseGame(); });
 
         ButtonHelper.AddListenerOnce(musicVolumeSlider, SetMusicVolume);
         ButtonHelper.AddListenerOnce(sfxVolumeSlider, SetSfxVolume);

@@ -47,6 +47,12 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private float needIntervalMin = GameConstants.StarterSlot.NeedIntervalMin;
     [SerializeField] private float needIntervalMax = GameConstants.StarterSlot.NeedIntervalMax;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip careCompleteSfx;
+    [SerializeField] private AudioClip sellCompleteSfx;
+    [SerializeField] private AudioClip healthSuccessSfx;
+    [SerializeField] private AudioClip healthFailSfx;
+
     [Header("Optional Health Minigame")]
     [SerializeField] private bool useHealthMinigame;
     [SerializeField] private bool clearChickenOnHealthFail;
@@ -201,6 +207,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
                 return;
 
             CompleteCurrentNeed();
+            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(careCompleteSfx);
             return;
         }
 
@@ -211,6 +218,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
                 CoinManager.Instance.AddCoin(sellReward);
 
             GameLog.Info($"{name}: {CurrentChickenCount} ayam dijual, +{finalReward} coin.");
+            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(sellCompleteSfx);
             ClearChicken();
         }
     }
@@ -220,6 +228,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         if (currentState != SlotState.WaitingForHealthMinigame)
             return;
 
+        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(healthSuccessSfx);
         CompleteCurrentNeed();
     }
 
@@ -228,6 +237,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         if (currentState != SlotState.WaitingForHealthMinigame)
             return;
 
+        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(healthFailSfx);
         ResetAnimationToNormal();
         MarkCurrentNeedFailed();
         completedCareCount++;

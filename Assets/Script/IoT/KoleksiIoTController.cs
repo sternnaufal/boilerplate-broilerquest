@@ -20,6 +20,10 @@ public class KoleksiIoTController : MonoBehaviour
     [SerializeField] private Transform productContainer;
     [SerializeField] private Button backButton;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip buySuccessSfx;
+    [SerializeField] private AudioClip buyFailSfx;
+
     [Header("Card Colors")]
     [SerializeField] private Color ownedColor = new Color(0.2f, 0.6f, 0.3f, 1f);
     [SerializeField] private Color lockedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
@@ -178,13 +182,20 @@ public class KoleksiIoTController : MonoBehaviour
     private void BuyProduct(IoTProduct product)
     {
         if (CoinManager.Instance == null || !CoinManager.Instance.CanAfford(product.productPrice))
+        {
+            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buyFailSfx);
             return;
+        }
 
         if (!CoinManager.Instance.SpendCoin(product.productPrice))
+        {
+            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buyFailSfx);
             return;
+        }
 
         PlayerPrefs.SetInt(GameConstants.Persistence.KoleksiIoTPurchasedPrefix + product.productKey, 1);
         PlayerPrefs.Save();
+        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buySuccessSfx);
         RefreshAllCards();
     }
 

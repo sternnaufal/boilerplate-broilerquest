@@ -22,6 +22,12 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
     [SerializeField] private float tileSpacing = GameConstants.JigsawMinigame.TileSpacing;
     [SerializeField] private float swapDuration = GameConstants.JigsawMinigame.SwapDuration;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip pieceClickSfx;
+    [SerializeField] private AudioClip pieceSwapSfx;
+    [SerializeField] private AudioClip puzzleCompleteSfx;
+    [SerializeField] private AudioClip puzzleFailSfx;
+
     [Header("Timer Colors")]
     [SerializeField] private Color normalTimerColor = Color.white;
     [SerializeField] private Color warningTimerColor = new Color(1f, 0.25f, 0.15f);
@@ -92,6 +98,7 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         {
             selectedPiece = clicked;
             selectedPiece.SetHighlighted(true);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(pieceClickSfx);
             return;
         }
 
@@ -105,6 +112,7 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         selectedPiece.SetHighlighted(false);
         SwapPieces(selectedPiece, clicked);
         selectedPiece = null;
+        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(pieceSwapSfx);
 
         if (IsSolved())
             CompleteWithSuccess();
@@ -309,6 +317,7 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         if (!isPlaying)
             return;
 
+        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(puzzleCompleteSfx);
         FinishMinigame(true);
     }
 
@@ -317,6 +326,7 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         if (!isPlaying)
             return;
 
+        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(puzzleFailSfx);
         FinishMinigame(false);
     }
 

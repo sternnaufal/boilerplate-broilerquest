@@ -16,6 +16,9 @@ public class GameManager : Singleton<GameManager>
     [Header("Timer")]
     [SerializeField] private LevelTimer levelTimer;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip timeUpSfx;
+
     [Header("Popup Waktu Habis (Prefab)")]
     public GameObject timeUpPopupPrefab;
     public Canvas mainCanvas;
@@ -61,6 +64,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (!isGameActive) return;
         isGameActive = false;
+        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(timeUpSfx);
         isPopupShowing = true;
         GameStateManager.TrySetGameState(GameState.GameOver);
 

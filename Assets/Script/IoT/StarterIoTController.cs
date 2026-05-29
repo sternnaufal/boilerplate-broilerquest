@@ -30,6 +30,10 @@ public class StarterIoTController : MonoBehaviour
     [Header("Manual UI References")]
     public IoTDeviceUI[] deviceUIs;                   // assign manual di Inspector
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip toggleOnSfx;
+    [SerializeField] private AudioClip toggleOffSfx;
+
     [Header("Warna (opsional)")]
     public Color ownedColor = new Color(0.2f, 0.8f, 0.3f, 1f);
 
@@ -99,6 +103,8 @@ public class StarterIoTController : MonoBehaviour
         if (!IsPurchased(productKey)) return;
         bool current = activeStates.ContainsKey(productKey) && activeStates[productKey];
         activeStates[productKey] = !current;
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlaySFX(activeStates[productKey] ? toggleOnSfx : toggleOffSfx);
         RefreshAll();
     }
 
