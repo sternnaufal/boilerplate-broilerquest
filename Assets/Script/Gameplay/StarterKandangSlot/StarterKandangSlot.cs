@@ -194,6 +194,9 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
         if (currentState == SlotState.WaitingForCareClick)
         {
+            if (TryCompleteCurrentNeedByActiveIoT())
+                return;
+
             if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.CanUseFeed(1)))
             {
                 GameLog.Info($"{name}: Pakan tidak cukup! Beli pakan dulu.");
@@ -287,9 +290,6 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     {
         currentNeed = GetNextNeed();
 
-        if (TryAutoCompleteByIoT())
-            return;
-
         Sprite needSprite = GetNeedSprite(currentNeed);
         ShowBubble(needSprite, GetNeedText(currentNeed));
         currentState = SlotState.WaitingForCareClick;
@@ -298,7 +298,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         GameLog.Info($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
     }
 
-    private bool TryAutoCompleteByIoT()
+    private bool TryCompleteCurrentNeedByActiveIoT()
     {
         if (StarterIoTController.Instance == null)
             return false;
@@ -309,9 +309,10 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
         if (StarterIoTController.Instance.IsActiveForNeed(iotKey))
         {
-            GameLog.Info($"{name}: IoT {iotKey} aktif, kebutuhan {GetNeedText(currentNeed)} otomatis terpenuhi.");
+            GameLog.Info($"{name}: IoT {iotKey} aktif, kebutuhan {GetNeedText(currentNeed)} selesai dengan tap tanpa minigame.");
             UpdateAnimationByNeed(currentNeed);
             CompleteCurrentNeed();
+            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(careCompleteSfx);
             return true;
         }
 

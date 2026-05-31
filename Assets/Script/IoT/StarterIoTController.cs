@@ -10,6 +10,7 @@ public class StarterIoTController : MonoBehaviour
     {
         public string productKey;
         public string displayName;
+        public int productPrice;
         public Color activeColor = new Color(0.2f, 0.8f, 0.3f, 1f);
         public Color inactiveColor = new Color(0.5f, 0.5f, 0.5f, 1f);
         public Color lockedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
@@ -72,8 +73,13 @@ public class StarterIoTController : MonoBehaviour
         if (devices == null) return;
         foreach (IoTDeviceDef def in devices)
         {
-            if (def != null && !string.IsNullOrEmpty(def.productKey))
-                deviceDefMap[def.productKey] = def;
+            if (def == null || string.IsNullOrEmpty(def.productKey))
+                continue;
+
+            if (def.productPrice <= 0)
+                def.productPrice = GetDefaultPrice(def.productKey);
+
+            deviceDefMap[def.productKey] = def;
         }
     }
 
@@ -116,15 +122,22 @@ public class StarterIoTController : MonoBehaviour
     }
 
     // ========== Untuk pembelian (dipanggil dari toko IoT) ==========
-    public void PurchaseDevice(string productKey)
+    public bool PurchaseDevice(string productKey)
     {
-        if (string.IsNullOrEmpty(productKey)) return;
+        if (string.IsNullOrEmpty(productKey)) return false;
+        if (IsPurchased(productKey)) return true;
+
+        int price = GetDevicePrice(productKey);
+        if (CoinManager.Instance == null || !CoinManager.Instance.SpendCoin(price))
+            return false;
+
         PlayerPrefs.SetInt(GameConstants.Persistence.KoleksiIoTPurchasedPrefix + productKey, 1);
         PlayerPrefs.Save();
         // Set default active false
         if (!activeStates.ContainsKey(productKey))
             activeStates[productKey] = false;
         RefreshAll();
+        return true;
     }
 
     // ========== Manual UI ==========
@@ -136,7 +149,7 @@ public class StarterIoTController : MonoBehaviour
             if (ui == null || ui.toggleButton == null) continue;
             string key = ui.productKey;
             ui.toggleButton.onClick.RemoveAllListeners();
-            ui.toggleButton.onClick.AddListener(() => ToggleDevice(key));
+            ui.toggleButton.onClick.AddListener(() => HandleDeviceButton(key));
         }
     }
 
@@ -164,7 +177,7 @@ public class StarterIoTController : MonoBehaviour
 
             if (ui.toggleButton != null)
             {
-                ui.toggleButton.interactable = purchased;
+                ui.toggleButton.interactable = true;
 
                 Image buttonImage = ui.toggleButton.GetComponent<Image>();
                 if (buttonImage != null)
@@ -184,16 +197,51 @@ public class StarterIoTController : MonoBehaviour
 
             if (ui.statusText != null)
             {
-                if (!purchased) ui.statusText.text = "BELI";
+                if (!purchased) ui.statusText.text = GetDevicePrice(ui.productKey) + " Koin";
                 else if (active) ui.statusText.text = "ON";
                 else ui.statusText.text = "OFF";
             }
         }
     }
 
+    private void HandleDeviceButton(string productKey)
+    {
+        if (IsPurchased(productKey))
+        {
+            ToggleDevice(productKey);
+            return;
+        }
+
+        PurchaseDevice(productKey);
+    }
+
     private IoTDeviceDef GetDeviceDef(string productKey)
     {
         deviceDefMap.TryGetValue(productKey, out var def);
         return def;
+    }
+
+    private int GetDevicePrice(string productKey)
+    {
+        IoTDeviceDef def = GetDeviceDef(productKey);
+        if (def != null && def.productPrice > 0)
+            return def.productPrice;
+
+        return GetDefaultPrice(productKey);
+    }
+
+    private static int GetDefaultPrice(string productKey)
+    {
+        switch (productKey)
+        {
+            case GameConstants.IoT.ProductKeyFeeder:
+                return GameConstants.Economy.AutoFeederCost;
+            case GameConstants.IoT.ProductKeyFan:
+                return GameConstants.Economy.AutoFanCost;
+            case GameConstants.IoT.ProductKeyHeater:
+                return GameConstants.Economy.AutoHeaterCost;
+            default:
+                return 0;
+        }
     }
 }

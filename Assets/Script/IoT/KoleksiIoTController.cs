@@ -20,13 +20,13 @@ public class KoleksiIoTController : MonoBehaviour
     [SerializeField] private Transform productContainer;
     [SerializeField] private Button backButton;
 
-    [Header("SFX")]
-    [SerializeField] private AudioClip buySuccessSfx;
-    [SerializeField] private AudioClip buyFailSfx;
-
     [Header("Card Colors")]
     [SerializeField] private Color ownedColor = new Color(0.2f, 0.6f, 0.3f, 1f);
     [SerializeField] private Color lockedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+
+    [Header("Locked Placeholder")]
+    [SerializeField] private string lockedPlaceholderText = "?????";
+    [SerializeField] private Color lockedImageColor = new Color(0.2f, 0.2f, 0.2f, 1f);
 
     private void Awake()
     {
@@ -109,26 +109,17 @@ public class KoleksiIoTController : MonoBehaviour
 
     private void SetupCard(GameObject card, IoTProduct product)
     {
-        string key = product.productKey;
-        int price = product.productPrice;
-
         RawImage image = card.GetComponentInChildren<RawImage>(true);
         if (image != null && product.productImage != null)
             image.texture = product.productImage;
 
         TextMeshProUGUI nameText = FindTextInChildren(card, "NameText");
-        if (nameText != null)
-            nameText.text = product.productName;
-
         TextMeshProUGUI priceText = FindTextInChildren(card, "PriceText");
         Button buyButton = FindButtonInChildren(card, "BuyButton");
         GameObject ownedBadge = FindChildByName(card, "OwnedBadge");
         Image cardBg = card.GetComponent<Image>();
 
-        if (buyButton != null)
-            ButtonHelper.AddListenerOnce(buyButton, () => BuyProduct(product));
-
-        RefreshCard(card, key, price, buyButton, priceText, ownedBadge, cardBg);
+        RefreshCard(product, buyButton, nameText, priceText, image, ownedBadge, cardBg);
     }
 
     private void RefreshAllCards()
@@ -143,60 +134,47 @@ public class KoleksiIoTController : MonoBehaviour
                 continue;
 
             GameObject card = cardTransform.gameObject;
-            string key = product.productKey;
-            int price = product.productPrice;
 
             Button buyButton = FindButtonInChildren(card, "BuyButton");
+            TextMeshProUGUI nameText = FindTextInChildren(card, "NameText");
             TextMeshProUGUI priceText = FindTextInChildren(card, "PriceText");
+            RawImage image = card.GetComponentInChildren<RawImage>(true);
             GameObject ownedBadge = FindChildByName(card, "OwnedBadge");
             Image cardBg = card.GetComponent<Image>();
 
-            RefreshCard(card, key, price, buyButton, priceText, ownedBadge, cardBg);
+            RefreshCard(product, buyButton, nameText, priceText, image, ownedBadge, cardBg);
         }
     }
 
-    private void RefreshCard(GameObject card, string key, int price, Button buyButton, TextMeshProUGUI priceText, GameObject ownedBadge, Image cardBg)
+    private void RefreshCard(IoTProduct product, Button buyButton, TextMeshProUGUI nameText, TextMeshProUGUI priceText, RawImage image, GameObject ownedBadge, Image cardBg)
     {
-        bool purchased = IsPurchased(key);
+        if (product == null)
+            return;
+
+        bool purchased = IsPurchased(product.productKey);
 
         if (buyButton != null)
-        {
-            buyButton.gameObject.SetActive(!purchased);
-            if (!purchased)
-            {
-                bool canAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(price);
-                buyButton.interactable = canAfford;
-            }
-        }
+            buyButton.gameObject.SetActive(false);
+
+        if (nameText != null)
+            nameText.text = purchased ? product.productName : lockedPlaceholderText;
 
         if (priceText != null)
-            priceText.text = purchased ? "" : price + " Koin";
+            priceText.text = purchased ? "" : lockedPlaceholderText;
+
+        if (image != null)
+        {
+            if (purchased && product.productImage != null)
+                image.texture = product.productImage;
+
+            image.color = purchased ? Color.white : lockedImageColor;
+        }
 
         if (ownedBadge != null)
             ownedBadge.SetActive(purchased);
 
         if (cardBg != null)
             cardBg.color = purchased ? ownedColor : lockedColor;
-    }
-
-    private void BuyProduct(IoTProduct product)
-    {
-        if (CoinManager.Instance == null || !CoinManager.Instance.CanAfford(product.productPrice))
-        {
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buyFailSfx);
-            return;
-        }
-
-        if (!CoinManager.Instance.SpendCoin(product.productPrice))
-        {
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buyFailSfx);
-            return;
-        }
-
-        PlayerPrefs.SetInt(GameConstants.Persistence.KoleksiIoTPurchasedPrefix + product.productKey, 1);
-        PlayerPrefs.Save();
-        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buySuccessSfx);
-        RefreshAllCards();
     }
 
     private bool IsPurchased(string productKey)

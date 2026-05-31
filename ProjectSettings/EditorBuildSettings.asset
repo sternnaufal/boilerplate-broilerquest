@@ -15,8 +15,14 @@ EditorBuildSettings:
     path: Assets/Scenes/Starter.unity
     guid: 4c1e4373791c2f4489a88d3524946776
   - enabled: 1
+    path: Assets/Scenes/Beginner.unity
+    guid: fdbc945a5e09aa64cae113020572d33f
+  - enabled: 1
+    path: Assets/Scenes/Intermediate.unity
+    guid: 59254b1980398b644856e86ae33fb26d
+  - enabled: 1
     path: Assets/Scenes/KoleksiIoT.unity
-    guid: e55033404f80489da7659d0fc25ad4b7
+    guid: 15aa538a67b4b784fb1d8595892cd779
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

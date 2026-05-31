@@ -2679,16 +2679,19 @@ MonoBehaviour:
   devices:
   - productKey: AutoHeater
     displayName: Auto Heater
+    productPrice: 300
     activeColor: {r: 0, g: 1, b: 0, a: 0}
     inactiveColor: {r: 1, g: 0, b: 0, a: 0}
     lockedColor: {r: 0.27672952, g: 0.27672952, b: 0.27672952, a: 0}
   - productKey: AutoFeeder
     displayName: Auto Feeder
+    productPrice: 200
     activeColor: {r: 0, g: 1, b: 0, a: 0}
     inactiveColor: {r: 1, g: 0, b: 0, a: 0}
     lockedColor: {r: 0.27672952, g: 0.27672952, b: 0.27672952, a: 0}
   - productKey: AutoFan
     displayName: Auto Fan
+    productPrice: 300
     activeColor: {r: 0, g: 1, b: 0, a: 0}
     inactiveColor: {r: 1, g: 0, b: 0, a: 0}
     lockedColor: {r: 0.27672952, g: 0.27672952, b: 0.27672952, a: 0}
@@ -2696,7 +2699,7 @@ MonoBehaviour:
   - productKey: AutoHeater
     toggleButton: {fileID: 872346966}
     statusText: {fileID: 1485451058}
-  - productKey: AutoFeed
+  - productKey: AutoFeeder
     toggleButton: {fileID: 1400175250}
     statusText: {fileID: 838644036}
   - productKey: AutoFan
