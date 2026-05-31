@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "broilerquest_boilerplate.slnx"
+    "dotnet.defaultSolution": "boilerplate-broilerquest.slnx"
 }

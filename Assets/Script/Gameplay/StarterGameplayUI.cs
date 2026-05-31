@@ -58,17 +58,30 @@ public class StarterGameplayUI : MonoBehaviour
     [SerializeField] private Color coinTextColor = new Color(1f, 0.96f, 0.70f, 1f);
 
     [Header("IoT")]
-    [SerializeField] private StarterIoTController iotController;
+    //[SerializeField] private StarterIoTController iotController;
 
     [Header("Startup")]
     [SerializeField] private bool showBuyPanelOnStart = true;
     [SerializeField] private bool resetFeedOnStart = true;
     [SerializeField] private int startingFeedCount = 0;
-
+    
+    [Header("HP Panel Navigation")]
+    [SerializeField] private Button shopButton;        // tombol "Shop" di halaman utama HP
+    [SerializeField] private Button iotButton;         // tombol "IoT" di halaman utama HP
+    [SerializeField] private GameObject shopAPK;       // panel ShopAPK
+    [SerializeField] private GameObject iotAPK;        // panel IoTAPK
+    [SerializeField] private Button exitShopButton;    // tombol ExitBut di ShopAPK
+    
+    [SerializeField] private Button exitIoTButton;     // tombol ExitBut di IoTAPK
+    [Header("HP Panel Animation")]
+    [SerializeField] private RectTransform hpPanelRect;      // Drag BQ_HPPanel ke sini
+    [SerializeField] private float animationDuration = 0.3f; // lama animasi
     private bool listenersRegistered;
     private bool hpVisible;
     private bool iotCreated;
-
+    private Vector2 hiddenPosition;
+    private Vector2 visiblePosition;
+    private Coroutine hpAnimationCoroutine;
     private void OnEnable()
     {
         RegisterButtonListeners();
@@ -83,6 +96,20 @@ public class StarterGameplayUI : MonoBehaviour
 
         if (resetFeedOnStart && FeedManager.Instance != null)
             FeedManager.Instance.SetFeedCount(startingFeedCount);
+
+        if (hpPanelRect != null)
+        {
+            // Simpan posisi target (posisi yang sudah diatur di Unity)
+            visiblePosition = hpPanelRect.anchoredPosition;
+            // Hitung posisi tersembunyi di bawah layar (y = -tinggi panel)
+            hiddenPosition = new Vector2(visiblePosition.x, -hpPanelRect.rect.height);
+            // Set panel ke posisi tersembunyi (tidak terlihat)
+            hpPanelRect.anchoredPosition = hiddenPosition;
+            // Panel tetap aktif agar animasi berjalan
+            hpPanelRect.gameObject.SetActive(true);
+        }
+
+        SetupHPNavigation();
 
         ResumeGame();
         ShowHpPanel(showBuyPanelOnStart);
@@ -134,21 +161,42 @@ public class StarterGameplayUI : MonoBehaviour
         ShowHpPanel(false);
     }
 
+    private System.Collections.IEnumerator AnimateHPPanel(Vector2 target)
+    {
+        Vector2 start = hpPanelRect.anchoredPosition;
+        float elapsed = 0f;
+        while (elapsed < animationDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / animationDuration;
+            hpPanelRect.anchoredPosition = Vector2.Lerp(start, target, t);
+            yield return null;
+        }
+        hpPanelRect.anchoredPosition = target;
+        hpAnimationCoroutine = null;
+    }
+
     public void ShowHpPanel(bool visible)
     {
         hpVisible = visible;
 
-        if (hpPanel != null)
+        if (visible)
         {
-            hpPanel.SetActive(visible);
-            if (visible)
-                EnsureIotController();
+            ShowMainHPPage(); // untuk mereset ke halaman utama saat panel muncul
+        }
+
+        if (hpPanelRect != null)
+        {
+            if (hpAnimationCoroutine != null) StopCoroutine(hpAnimationCoroutine);
+            Vector2 target = visible ? visiblePosition : hiddenPosition;
+            hpAnimationCoroutine = StartCoroutine(AnimateHPPanel(target));
         }
 
         if (chickenShop != null)
             chickenShop.RefreshShopState();
     }
 
+/*
     private void EnsureIotController()
     {
         if (iotCreated)
@@ -194,7 +242,7 @@ public class StarterGameplayUI : MonoBehaviour
 
         iotCreated = true;
     }
-
+*/
     public void ReturnToMainMenu()
     {
         GameStateManager.ApplyState(GameState.Menu);
@@ -211,9 +259,9 @@ public class StarterGameplayUI : MonoBehaviour
         StyleButton(closeHpButton, closeHpButtonStyle.label, closeHpButtonStyle.color, GetSpriteSafe(3));
         EnsureMainMenuButton();
 
-        StylePanel(hpPanel, hpPanelStyle.color);
+        //StylePanel(hpPanel, hpPanelStyle.color);
         StylePanel(pausePanel, pausePanelStyle.color);
-        PositionHpPanel();
+        //PositionHpPanel();
         DisableDecorativeRaycasts();
 
         if (coinText != null)
@@ -355,6 +403,7 @@ public class StarterGameplayUI : MonoBehaviour
         }
     }
 
+    /*
     private void PositionHpPanel()
     {
         if (hpPanel == null)
@@ -369,6 +418,47 @@ public class StarterGameplayUI : MonoBehaviour
         rect.pivot = hpPanelPivot;
         rect.sizeDelta = hpPanelSizeDelta;
         rect.anchoredPosition = hpPanelAnchoredPosition;
+    }
+*/
+    private void SetupHPNavigation()
+    {
+        if (shopButton != null)
+            ButtonHelper.AddListenerOnce(shopButton, ShowShopAPK);
+        if (iotButton != null)
+            ButtonHelper.AddListenerOnce(iotButton, ShowIoTAPK);
+        if (exitShopButton != null)
+            ButtonHelper.AddListenerOnce(exitShopButton, ShowMainHPPage);
+        if (exitIoTButton != null)
+            ButtonHelper.AddListenerOnce(exitIoTButton, ShowMainHPPage);
+    }
+
+    private void ShowMainHPPage()
+    {
+        if (shopAPK != null) shopAPK.SetActive(false);
+        if (iotAPK != null) iotAPK.SetActive(false);
+        // Tampilkan tombol-tombol utama (shopButton & iotButton) – 
+        // mereka biasanya berada langsung di dalam BQ_HPPanel, jadi cukup nonaktifkan panel APK.
+        // Jika tombol utama ikut tersembunyi, pastikan mereka tetap aktif.
+        if (shopButton != null) shopButton.gameObject.SetActive(true);
+        if (iotButton != null) iotButton.gameObject.SetActive(true);
+        // Opsional: sembunyikan juga panel APK yang mungkin masih terlihat
+    }
+
+    private void ShowShopAPK()
+    {
+        if (shopAPK != null) shopAPK.SetActive(true);
+        if (iotAPK != null) iotAPK.SetActive(false);
+        // Sembunyikan tombol utama agar tidak terlihat saat di dalam APK
+        if (shopButton != null) shopButton.gameObject.SetActive(false);
+        if (iotButton != null) iotButton.gameObject.SetActive(false);
+    }
+
+    private void ShowIoTAPK()
+    {
+        if (shopAPK != null) shopAPK.SetActive(false);
+        if (iotAPK != null) iotAPK.SetActive(true);
+        if (shopButton != null) shopButton.gameObject.SetActive(false);
+        if (iotButton != null) iotButton.gameObject.SetActive(false);
     }
 
 }
