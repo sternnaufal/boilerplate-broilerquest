@@ -92,7 +92,7 @@ public class StarterGameplayUI : MonoBehaviour
         PolishStarterUi();
 
         if (CoinManager.Instance != null && coinText != null)
-            CoinManager.Instance.Initialize(coinText);
+            CoinManager.Instance.Initialize();
 
         if (resetFeedOnStart && FeedManager.Instance != null)
             FeedManager.Instance.SetFeedCount(startingFeedCount);

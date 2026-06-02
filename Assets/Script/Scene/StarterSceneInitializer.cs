@@ -4,7 +4,6 @@ using UnityEngine;
 public class StarterSceneInitializer : MonoBehaviour
 {
     [Header("Scene References")]
-    [SerializeField] private TextMeshProUGUI coinText;
     [SerializeField] private StarterChickenShop chickenShop;
     [SerializeField] private StarterKandangSlot[] kandangSlots;
 
@@ -18,7 +17,7 @@ public class StarterSceneInitializer : MonoBehaviour
             GameManager.Instance.InitializeForCurrentScene();
 
         if (initializeCoinManager && CoinManager.Instance != null)
-            CoinManager.Instance.Initialize(coinText);
+            CoinManager.Instance.Initialize();
 
         if (chickenShop != null && kandangSlots != null && kandangSlots.Length > 0)
             chickenShop.SetKandangSlots(kandangSlots);

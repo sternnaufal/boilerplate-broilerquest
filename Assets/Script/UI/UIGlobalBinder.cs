@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIGlobalBinder : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class UIGlobalBinder : MonoBehaviour
     [SerializeField] private TextMeshProUGUI feedText;
 
     private static UIGlobalBinder _instance;
+
     void Awake()
     {
         if (_instance != null && _instance != this)
@@ -38,9 +40,8 @@ public class UIGlobalBinder : MonoBehaviour
 
     private void OnEnable()
     {
-        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
-        
-        // Daftarkan event
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
         if (CoinManager.Instance != null)
             CoinManager.Instance.CoinsChanged += UpdateCoinDisplay;
         if (FeedManager.Instance != null)
@@ -51,16 +52,15 @@ public class UIGlobalBinder : MonoBehaviour
 
     private void OnDisable()
     {
-        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
-        
-        // Lepas event
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
         if (CoinManager.Instance != null)
             CoinManager.Instance.CoinsChanged -= UpdateCoinDisplay;
         if (FeedManager.Instance != null)
             FeedManager.Instance.FeedChanged -= UpdateFeedDisplay;
     }
 
-    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         coinText = null;
         feedText = null;
@@ -70,11 +70,33 @@ public class UIGlobalBinder : MonoBehaviour
     private void FindUIReferences()
     {
         if (coinText == null)
-            coinText = GameObject.Find("CoinText")?.GetComponent<TextMeshProUGUI>();
+        {
+            var allTexts = FindObjectsByType<TextMeshProUGUI>(
+                FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var t in allTexts)
+            {
+                if (t.gameObject.name == "CoinText")
+                {
+                    coinText = t;
+                    break;
+                }
+            }
+        }
+
         if (feedText == null)
-            feedText = GameObject.Find("PakanText")?.GetComponent<TextMeshProUGUI>();
-        
-        // Update tampilan setelah referensi ditemukan
+        {
+            var allTexts = FindObjectsByType<TextMeshProUGUI>(
+                FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var t in allTexts)
+            {
+                if (t.gameObject.name == "PakanText")
+                {
+                    feedText = t;
+                    break;
+                }
+            }
+        }
+
         if (CoinManager.Instance != null)
             UpdateCoinDisplay(CoinManager.Instance.GetTotalCoin());
         if (FeedManager.Instance != null)
