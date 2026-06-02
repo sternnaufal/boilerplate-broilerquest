@@ -6468,7 +6468,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5234076111404007194, guid: 5d315a3d157c1b64c9b25ffec65e8627, type: 3}
       propertyPath: m_Name
-      value: GlobalUIOverlay
+      value: GlobalCoinPakanCounter
       objectReference: {fileID: 0}
     - target: {fileID: 8219227788220448230, guid: 5d315a3d157c1b64c9b25ffec65e8627, type: 3}
       propertyPath: m_fontAsset
