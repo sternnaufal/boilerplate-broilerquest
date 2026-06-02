@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5889017082364410524}
   - component: {fileID: 3670630867299237253}
   - component: {fileID: 2029138867827643509}
-  - component: {fileID: 2275232692710284854}
+  - component: {fileID: 3465946142297093021}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -73,7 +73,7 @@ MonoBehaviour:
   avoidCollision: 1
   collisionMargin: 10
   obstacleTag: KandangSlot
-  animator: {fileID: 0}
+  animator: {fileID: 3465946142297093021}
   walkAnimParam: isWalking
   flipOnDirection: 1
 --- !u!114 &2029138867827643509
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2099384810065395903, guid: b36f0ba5b6baa314c87948c5b29a39a7, type: 3}
+  m_Sprite: {fileID: -3479645283096473487, guid: c94585967e02362489a0403e302b5fe3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!95 &2275232692710284854
+--- !u!95 &3465946142297093021
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
