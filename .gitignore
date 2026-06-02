@@ -9,7 +9,11 @@ Build/
 *.csproj
 *.sln
 UserSettings/
+BroilerQuest_BurstDebugInformation_DoNotShip/
+broilerquest_BackUpThisFolder_ButDontShipItWithYourGame/
+*.apk
 Assets/_Recovery/
 Assets/_Recovery.meta
 Assets/Adaptive Performance/
 Assets/Adaptive Performance.meta
+.utmp/*

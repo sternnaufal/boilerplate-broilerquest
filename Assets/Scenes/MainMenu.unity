@@ -2944,6 +2944,7 @@ MonoBehaviour:
   backToMainButton: {fileID: 2038806545}
   musicVolumeSlider: {fileID: 527589730}
   sfxVolumeSlider: {fileID: 1034620202}
+  navigateSfx: {fileID: 0}
   resumeButton: {fileID: 1995217418}
   pauseOptionsButton: {fileID: 1571255745}
   pauseMainMenuButton: {fileID: 489019688}
@@ -3011,7 +3012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
