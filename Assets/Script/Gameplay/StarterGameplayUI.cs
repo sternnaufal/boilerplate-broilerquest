@@ -95,7 +95,11 @@ public class StarterGameplayUI : MonoBehaviour
             CoinManager.Instance.Initialize();
 
         if (resetFeedOnStart && FeedManager.Instance != null)
-            FeedManager.Instance.SetFeedCount(startingFeedCount);
+        {
+            // Jangan reset progress kalau user sudah pernah main (sudah ada saved feed).
+            if (!PlayerPrefs.HasKey(GameConstants.Persistence.FeedCountKey))
+                FeedManager.Instance.SetFeedCount(startingFeedCount);
+        }
 
         if (hpPanelRect != null)
         {

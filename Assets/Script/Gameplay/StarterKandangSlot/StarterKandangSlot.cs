@@ -199,7 +199,14 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
             if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.CanUseFeed(1)))
             {
-                GameLog.Info($"{name}: Pakan tidak cukup! Beli pakan dulu.");
+                if (UIAlertPanel.Instance != null)
+                {
+                    UIAlertPanel.Instance.Show("Pakan habis, beli di shop terlebih dahulu.");
+                }
+                else
+                {
+                    GameLog.Info($"{name}: Pakan tidak cukup! Beli pakan dulu.");
+                }
                 return;
             }
 
