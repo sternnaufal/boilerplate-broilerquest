@@ -83,6 +83,21 @@ public class StarterIoTController : MonoBehaviour
         }
     }
 
+    // ========== Save/Load active states ==========
+    public Dictionary<string, bool> GetActiveStates()
+    {
+        return new Dictionary<string, bool>(activeStates);
+    }
+
+    public void SetActiveStates(Dictionary<string, bool> states)
+    {
+        foreach (var kvp in states)
+        {
+            if (IsPurchased(kvp.Key))
+                activeStates[kvp.Key] = kvp.Value;
+        }
+    }
+
     // ========== Public API untuk status ==========
     public static bool CheckPurchased(string productKey)
     {
@@ -111,6 +126,7 @@ public class StarterIoTController : MonoBehaviour
         activeStates[productKey] = !current;
         if (SFXManager.Instance != null)
             SFXManager.Instance.PlaySFX(activeStates[productKey] ? toggleOnSfx : toggleOffSfx);
+        SaveManager.SaveIotStates(activeStates);
         RefreshAll();
     }
 

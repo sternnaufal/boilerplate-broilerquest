@@ -63,6 +63,7 @@ public class GameManager : Singleton<GameManager>
     private void OnTimerUp()
     {
         if (!isGameActive) return;
+        SaveManager.SaveAll();
         isGameActive = false;
         if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(timeUpSfx);
         isPopupShowing = true;

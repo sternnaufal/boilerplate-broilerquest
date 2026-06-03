@@ -62,7 +62,7 @@ public class StarterGameplayUI : MonoBehaviour
 
     [Header("Startup")]
     [SerializeField] private bool showBuyPanelOnStart = true;
-    [SerializeField] private bool resetFeedOnStart = true;
+    [SerializeField] private bool resetFeedOnStart = false;
     [SerializeField] private int startingFeedCount = 0;
     
     [Header("HP Panel Navigation")]
@@ -245,6 +245,7 @@ public class StarterGameplayUI : MonoBehaviour
 */
     public void ReturnToMainMenu()
     {
+        SaveManager.SaveAll();
         GameStateManager.ApplyState(GameState.Menu);
 
         if (GameManager.Instance != null)
