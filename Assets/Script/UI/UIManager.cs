@@ -10,6 +10,11 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject hudPanel;
 
+    [Header("Exit Confirmation (manual UI)")]
+    [SerializeField] private GameObject exitConfirmPanel;
+    [SerializeField] private Button exitYesButton;
+    [SerializeField] private Button exitNoButton;
+
     [Header("Main Menu Buttons")]
     [SerializeField] private Button startButton;
     [SerializeField] private Button optionsButton;
@@ -59,7 +64,7 @@ public class UIManager : Singleton<UIManager>
 
         ButtonHelper.AddListenerOnce(startButton, () => { PlayNavSfx(); StartGame(); });
         ButtonHelper.AddListenerOnce(optionsButton, () => { PlayNavSfx(); ShowOptionsFromMain(); });
-        ButtonHelper.AddListenerOnce(exitButton, () => { PlayNavSfx(); ExitGame(); });
+        ButtonHelper.AddListenerOnce(exitButton, () => { PlayNavSfx(); RequestExit(); });
         ButtonHelper.AddListenerOnce(koleksiIoTButton, () => { PlayNavSfx(); GoToKoleksiIoT(); });
         ButtonHelper.AddListenerOnce(backToMainButton, () => { PlayNavSfx(); BackFromOptions(); });
         ButtonHelper.AddListenerOnce(resumeButton, () => { PlayNavSfx(); ResumeGame(); });
@@ -69,6 +74,9 @@ public class UIManager : Singleton<UIManager>
 
         ButtonHelper.AddListenerOnce(musicVolumeSlider, SetMusicVolume);
         ButtonHelper.AddListenerOnce(sfxVolumeSlider, SetSfxVolume);
+
+        ButtonHelper.AddListenerOnce(exitYesButton, () => { PlayNavSfx(); ConfirmExitYes(); });
+        ButtonHelper.AddListenerOnce(exitNoButton, () => { PlayNavSfx(); ConfirmExitNo(); });
 
         buttonsRegistered = true;
     }
@@ -82,6 +90,8 @@ public class UIManager : Singleton<UIManager>
 
         if (mainMenuPanel != null)
             mainMenuPanel.SetActive(true);
+
+        HideExitConfirmPanel();
     }
 
     public void ShowMainScreen()
@@ -197,10 +207,31 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    public void ExitGame()
+    public void RequestExit()
     {
         GameStateManager.ApplyState(GameState.Menu);
 
+        if (exitConfirmPanel == null)
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+            return;
+        }
+
+        exitConfirmPanel.SetActive(true);
+    }
+
+    private void HideExitConfirmPanel()
+    {
+        if (exitConfirmPanel != null)
+            exitConfirmPanel.SetActive(false);
+    }
+
+    private void ConfirmExitYes()
+    {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
@@ -208,10 +239,27 @@ public class UIManager : Singleton<UIManager>
 #endif
     }
 
+    private void ConfirmExitNo()
+    {
+        HideExitConfirmPanel();
+
+        // Requirement: kalau tidak, kembali di main menu lagi.
+        if (SceneController.Instance != null)
+            SceneController.Instance.GoToMainMenu();
+        else
+            ShowMainMenu();
+    }
+
     private void Update()
     {
         if (Keyboard.current == null || !Keyboard.current.escapeKey.wasPressedThisFrame)
             return;
+
+        if (exitConfirmPanel != null && exitConfirmPanel.activeSelf)
+        {
+            ConfirmExitNo();
+            return;
+        }
 
         if (pausePanel != null && pausePanel.activeSelf)
         {

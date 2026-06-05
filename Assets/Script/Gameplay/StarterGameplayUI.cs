@@ -62,7 +62,7 @@ public class StarterGameplayUI : MonoBehaviour
 
     [Header("Startup")]
     [SerializeField] private bool showBuyPanelOnStart = true;
-    [SerializeField] private bool resetFeedOnStart = true;
+    [SerializeField] private bool resetFeedOnStart = false;
     [SerializeField] private int startingFeedCount = 0;
     
     [Header("HP Panel Navigation")]
@@ -92,10 +92,14 @@ public class StarterGameplayUI : MonoBehaviour
         PolishStarterUi();
 
         if (CoinManager.Instance != null && coinText != null)
-            CoinManager.Instance.Initialize(coinText);
+            CoinManager.Instance.Initialize();
 
         if (resetFeedOnStart && FeedManager.Instance != null)
-            FeedManager.Instance.SetFeedCount(startingFeedCount);
+        {
+            // Jangan reset progress kalau user sudah pernah main (sudah ada saved feed).
+            if (!PlayerPrefs.HasKey(GameConstants.Persistence.FeedCountKey))
+                FeedManager.Instance.SetFeedCount(startingFeedCount);
+        }
 
         if (hpPanelRect != null)
         {
@@ -245,6 +249,7 @@ public class StarterGameplayUI : MonoBehaviour
 */
     public void ReturnToMainMenu()
     {
+        SaveManager.SaveAll();
         GameStateManager.ApplyState(GameState.Menu);
 
         if (GameManager.Instance != null)

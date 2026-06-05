@@ -1,14 +1,9 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using TMPro;
 using System;
 
 public class CoinManager : Singleton<CoinManager>
 {
     public event Action<int> CoinsChanged;
-
-    [Header("UI Reference")]
-    public TextMeshProUGUI coinText;
 
     [Header("Settings")]
     [SerializeField] private bool resetCoinOnStart = false;
@@ -16,7 +11,6 @@ public class CoinManager : Singleton<CoinManager>
 
     private int totalCoin = 0;
     private bool hasInitialized;
-    private bool coinTextSearched;
 
     protected override void Awake()
     {
@@ -27,22 +21,11 @@ public class CoinManager : Singleton<CoinManager>
 
     void Start()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        Initialize(coinText);
+        Initialize();
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public void Initialize()
     {
-        coinText = null;
-        coinTextSearched = false;
-        UpdateCoinUI();
-    }
-
-    public void Initialize(TextMeshProUGUI uiText = null)
-    {
-        if (uiText != null)
-            coinText = uiText;
-
         if (!hasInitialized)
         {
             if (usePlayerPrefs && !resetCoinOnStart)
@@ -56,8 +39,7 @@ public class CoinManager : Singleton<CoinManager>
             SaveCoin();
         }
 
-        if (coinText == null) TryFindCoinText();
-        UpdateCoinUI();
+        CoinsChanged?.Invoke(totalCoin);
     }
 
     public void AddCoin(int amount)
@@ -66,7 +48,7 @@ public class CoinManager : Singleton<CoinManager>
 
         long nextTotal = (long)totalCoin + amount;
         totalCoin = nextTotal > int.MaxValue ? int.MaxValue : (int)nextTotal;
-        UpdateCoinUI();
+        CoinsChanged?.Invoke(totalCoin);
         SaveCoin();
         GameLog.Info($"Coin +{amount}, total: {totalCoin}");
     }
@@ -80,7 +62,7 @@ public class CoinManager : Singleton<CoinManager>
     {
         if (amount < 0 || !CanAfford(amount)) return false;
         totalCoin -= amount;
-        UpdateCoinUI();
+        CoinsChanged?.Invoke(totalCoin);
         SaveCoin();
         GameLog.Info($"Coin -{amount}, total: {totalCoin}");
         return true;
@@ -89,44 +71,11 @@ public class CoinManager : Singleton<CoinManager>
     public void SetTotalCoin(int amount)
     {
         totalCoin = Mathf.Max(0, amount);
-        UpdateCoinUI();
+        CoinsChanged?.Invoke(totalCoin);
         SaveCoin();
     }
 
     public int GetTotalCoin() => totalCoin;
-
-    // Method yang dipanggil oleh StarterGameplayUI
-    public void BindCoinText(TextMeshProUGUI text)
-    {
-        coinText = text;
-        UpdateCoinUI();
-    }
-
-    private void UpdateCoinUI()
-    {
-        if (coinText == null && !coinTextSearched) TryFindCoinText();
-        if (coinText != null)
-            coinText.text = totalCoin.ToString();
-
-        CoinsChanged?.Invoke(totalCoin);
-    }
-
-    private void TryFindCoinText()
-    {
-        coinTextSearched = true;
-        TextMeshProUGUI[] allTexts = FindObjectsByType<TextMeshProUGUI>(
-            FindObjectsInactive.Exclude,
-            FindObjectsSortMode.None);
-
-        foreach (var txt in allTexts)
-        {
-            if (txt.gameObject.name == "CoinText")
-            {
-                coinText = txt;
-                break;
-            }
-        }
-    }
 
     private void SaveCoin()
     {
@@ -148,9 +97,4 @@ public class CoinManager : Singleton<CoinManager>
         return GameConstants.Economy.StartingCoin;
     }
 
-    protected override void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-        base.OnDestroy();
-    }
 }

@@ -520,4 +520,15 @@ public class StarterChickenShop : MonoBehaviour
 
         GameLog.Info(message);
     }
+
+    public GameObject GetChickenPrefabByName(string prefabName)
+    {
+        if (options == null || string.IsNullOrEmpty(prefabName)) return null;
+        foreach (StarterChickenOption option in options)
+        {
+            if (option != null && option.chickenPrefab != null && option.chickenPrefab.name == prefabName)
+                return option.chickenPrefab;
+        }
+        return null;
+    }
 }

@@ -85,14 +85,25 @@ public class PlayerMovement : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
         playerHalfSize = rectTransform.rect.size * 0.5f;
+        
         if (animator == null)
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>(); // ← tambah InChildren
+        
+        if (animator == null)
+            animator = GetComponentInParent<Animator>(); // ← fallback ke parent
     }
 
     private void LateUpdate()
     {
-        if (animator != null && !string.IsNullOrEmpty(walkAnimParam))
-            animator.SetBool(walkAnimParam, isMoving);
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>(); // coba re-fetch
+            if (animator == null) return; // masih null, skip
+        }
+        
+        if (animator.runtimeAnimatorController == null) return;
+        
+        animator.SetBool(walkAnimParam, isMoving);
     }
 
     private void Start()
@@ -132,36 +143,39 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!isMoving || rectTransform == null) return;
+        if (rectTransform == null) return;
 
-        switch (mode)
+        // Wander tetap perlu update saat pausing (untuk hitung timer)
+        if (mode == MovementMode.Wander)
         {
-            case MovementMode.Wander:
-                UpdateWander();
-                break;
-            default:
-                UpdateMoveToPoint();
-                break;
+            UpdateWander();
+            return;
         }
+
+        if (!isMoving) return;
+        UpdateMoveToPoint();
     }
 
     private void UpdateWander()
     {
+        Vector2 currentPos = rectTransform.anchoredPosition; // Deklarasi di awal
+
         if (isPausing)
         {
             wanderPauseTimer -= Time.deltaTime;
             if (wanderPauseTimer <= 0f)
             {
                 isPausing = false;
+                isMoving = true;
+                // Gunakan currentPos (bukan startPosition) untuk target baru
                 fixingPoint = new Vector2(
-                    startPosition.x + Random.Range(-wanderRadius.x, wanderRadius.x),
-                    startPosition.y + Random.Range(-wanderRadius.y, wanderRadius.y)
+                    currentPos.x + Random.Range(-wanderRadius.x, wanderRadius.x),
+                    currentPos.y + Random.Range(-wanderRadius.y, wanderRadius.y)
                 );
             }
             return;
         }
 
-        Vector2 currentPos = rectTransform.anchoredPosition;
         float distance = Vector2.Distance(currentPos, fixingPoint);
 
         if (distance <= arrivalThreshold)
@@ -171,6 +185,7 @@ public class PlayerMovement : MonoBehaviour
 
             wanderPauseTimer = Random.Range(wanderPauseMin, wanderPauseMax);
             isPausing = true;
+            isMoving = false;
             return;
         }
 
@@ -182,6 +197,11 @@ public class PlayerMovement : MonoBehaviour
             rectTransform.anchoredPosition = newPos;
             if (flipOnDirection)
                 UpdateFacing(oldPos, newPos);
+        }
+        else
+        {
+            if (animator != null && !string.IsNullOrEmpty(walkAnimParam))
+                animator.SetBool(walkAnimParam, false);
         }
     }
 

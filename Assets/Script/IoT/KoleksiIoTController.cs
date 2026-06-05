@@ -41,13 +41,6 @@ public class KoleksiIoTController : MonoBehaviour
         if (backButton != null)
             ButtonHelper.AddListenerOnce(backButton, GoBack);
 
-        if (CoinManager.Instance != null)
-        {
-            TextMeshProUGUI coinDisplay = GameObject.Find("CoinText")?.GetComponent<TextMeshProUGUI>();
-            if (coinDisplay != null)
-                CoinManager.Instance.BindCoinText(coinDisplay);
-        }
-
         SetupAllCards();
     }
 

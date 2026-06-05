@@ -69,6 +69,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private string coldAnimParam = "isdingin";
 
     private readonly List<GameObject> spawnedChickens = new List<GameObject>();
+    private string placedPrefabName;
     private Coroutine eventCoroutine;
     private bool occupied;
     private bool feedSatisfied;
@@ -162,17 +163,20 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             }
 
             spawnedChickens.AddRange(newVisuals);
+            placedPrefabName = chickenPrefab != null ? chickenPrefab.name : "";
             PositionAllChickenVisuals();
             ResetChickenProgress();
             SetOccupied(true);
             StartNeedTimer();
             UpdateWanderState();
+            SaveManager.SaveAll();
             return true;
         }
         catch
         {
             foreach (GameObject visual in newVisuals)
             {
+                spawnedChickens.Remove(visual);
                 if (visual != null)
                     Destroy(visual);
             }
@@ -180,7 +184,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         }
     }
 
-    public void ClearChicken()
+    public void ClearChicken(bool save = true)
     {
         StopEventTimer();
         StopWander();
@@ -199,6 +203,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         HideBubble();
         ResetChickenProgress();
         SetOccupied(false);
+        if (save) SaveManager.SaveAll();
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -213,7 +218,14 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
             if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.TryConsumeFeed(1)))
             {
-                GameLog.Info($"{name}: Pakan tidak cukup! Beli pakan dulu.");
+                if (UIAlertPanel.Instance != null)
+                {
+                    UIAlertPanel.Instance.Show("Pakan habis, beli di shop terlebih dahulu.");
+                }
+                else
+                {
+                    GameLog.Info($"{name}: Pakan tidak cukup! Beli pakan dulu.");
+                }
                 return;
             }
 
@@ -257,6 +269,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         MarkCurrentNeedFailed();
         completedCareCount++;
         RecalculateSellReward();
+        SaveManager.SaveAll();
 
         if (IsReadyToSell())
         {
@@ -365,6 +378,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
         completedCareCount++;
         RecalculateSellReward();
+        SaveManager.SaveAll();
 
         if (IsReadyToSell())
         {
@@ -487,6 +501,72 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         completedCareCount = 0;
         RecalculateSellReward();
         ResetAnimationToNormal();
+    }
+
+    public SaveManager.SlotSaveData GetSaveData()
+    {
+        return new SaveManager.SlotSaveData
+        {
+            occupied = occupied,
+            prefabName = placedPrefabName,
+            feedSatisfied = feedSatisfied,
+            coolingSatisfied = coolingSatisfied,
+            heatingSatisfied = heatingSatisfied,
+            feedFailed = feedFailed,
+            coolingFailed = coolingFailed,
+            heatingFailed = heatingFailed,
+            completedCareCount = completedCareCount,
+            sellReward = sellReward
+        };
+    }
+
+    public void RestoreFromSave(SaveManager.SlotSaveData data, System.Func<string, GameObject> prefabLookup)
+    {
+        ClearChicken(false);
+        if (!data.occupied) return;
+
+        GameObject prefab = null;
+        if (!string.IsNullOrEmpty(data.prefabName) && prefabLookup != null)
+            prefab = prefabLookup(data.prefabName);
+        if (prefab == null)
+            prefab = chickenVisual;
+
+        if (prefab == null) return;
+
+        int visualCount = Mathf.Max(1, chickensPerPurchase);
+        for (int i = 0; i < visualCount; i++)
+        {
+            GameObject visual = CreateChickenVisual(prefab);
+            if (visual != null)
+                spawnedChickens.Add(visual);
+        }
+
+        placedPrefabName = data.prefabName;
+        occupied = true;
+        feedSatisfied = data.feedSatisfied;
+        coolingSatisfied = data.coolingSatisfied;
+        heatingSatisfied = data.heatingSatisfied;
+        feedFailed = data.feedFailed;
+        coolingFailed = data.coolingFailed;
+        heatingFailed = data.heatingFailed;
+        completedCareCount = data.completedCareCount;
+        sellReward = data.sellReward;
+        currentState = SlotState.WaitingForCareEvent;
+
+        PositionAllChickenVisuals();
+
+        if (IsReadyToSell())
+        {
+            ShowSellBubble();
+        }
+        else
+        {
+            isWanderingPaused = false;
+            StartNeedTimer();
+        }
+
+        UpdateWanderState();
+        NotifyStateChanged();
     }
 
 }

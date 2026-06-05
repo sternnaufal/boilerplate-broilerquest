@@ -1,7 +1,9 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Obsolete("UI dibuat manual via GlobalCoinPakanCounter.prefab. Jangan gunakan script ini.")]
 public class GlobalUIOverlay : MonoBehaviour
 {
     [Header("UI References")]
