@@ -66,15 +66,21 @@ public class StarterChickenShop : MonoBehaviour
 
     private bool listenersRegistered;
     private bool isSubscribedToSlots;
+    private bool kandangSlotsResolved;
 
     private void Awake()
     {
         ResolveKandangSlots();
+        kandangSlotsResolved = true;
     }
 
     private void OnEnable()
     {
-        ResolveKandangSlots();
+        if (!kandangSlotsResolved)
+        {
+            ResolveKandangSlots();
+            kandangSlotsResolved = true;
+        }
         SubscribeToStateChanges();
         RegisterButtonListeners();
         RegisterFeedButton();
@@ -197,7 +203,9 @@ public class StarterChickenShop : MonoBehaviour
 
     public void RefreshShopState()
     {
-        ResolveKandangSlots();
+        if (!kandangSlotsResolved)
+            ResolveKandangSlots();
+
         SubscribeToStateChanges();
 
         if (options == null)
@@ -238,6 +246,7 @@ public class StarterChickenShop : MonoBehaviour
     {
         UnsubscribeFromStateChanges();
         kandangSlots = slots;
+        kandangSlotsResolved = true;
         SubscribeToStateChanges();
         RefreshShopState();
     }
@@ -318,8 +327,6 @@ public class StarterChickenShop : MonoBehaviour
 
     private StarterKandangSlot FindAvailableKandang()
     {
-        ResolveKandangSlots();
-
         if (kandangSlots == null)
             return null;
 
@@ -345,6 +352,7 @@ public class StarterChickenShop : MonoBehaviour
             return;
 
         kandangSlots = discoveredSlots;
+        kandangSlotsResolved = true;
     }
 
     private bool HasCompleteConfiguredSlots(int discoveredSlotCount)

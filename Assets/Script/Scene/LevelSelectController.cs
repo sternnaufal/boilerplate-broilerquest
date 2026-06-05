@@ -97,6 +97,7 @@ public class LevelSelectController : MonoBehaviour
                 SceneController.Instance.GoToLevel(1);
                 return;
             }
+            return;
         }
 
         TryUnlockLevel(GameConstants.LevelUnlock.BeginnerCost, GameConstants.Persistence.LevelUnlockBeginnerKey, "Beginner", () => {
@@ -114,6 +115,7 @@ public class LevelSelectController : MonoBehaviour
                 SceneController.Instance.GoToLevel(2);
                 return;
             }
+            return;
         }
 
         TryUnlockLevel(GameConstants.LevelUnlock.IntermediateCost, GameConstants.Persistence.LevelUnlockIntermediateKey, "Intermediate", () => {

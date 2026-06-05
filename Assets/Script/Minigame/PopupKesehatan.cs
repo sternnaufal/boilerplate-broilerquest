@@ -146,28 +146,47 @@ public class PopupKesehatan : Singleton<PopupKesehatan>
         // Tampilkan popup hasil
         if (popupResultPrefab != null)
         {
-            // Cari canvas utama (bisa dari popupPanel parent canvas)
-            Canvas canvas = popupPanel.GetComponentInParent<Canvas>();
-            if (canvas == null) canvas = FindFirstObjectByType<Canvas>();
+            Canvas canvas = popupPanel != null ? popupPanel.GetComponentInParent<Canvas>() : null;
+            if (canvas == null)
+                canvas = FindFirstObjectByType<Canvas>();
 
-            GameObject resultObj = Instantiate(popupResultPrefab, canvas.transform);
-            var resultScript = resultObj.GetComponent<PopupHasilKesehatan>();
-            if (resultScript != null)
+            if (canvas != null)
             {
-                resultScript.Setup(success, () => {
-                    // Callback setelah tombol "Kembali" ditekan
-                    popupPanel.SetActive(false); // tutup popup minigame
-                    NotifyResult(success);
-                });
+                GameObject resultObj = Instantiate(popupResultPrefab, canvas.transform);
+                var resultScript = resultObj.GetComponent<PopupHasilKesehatan>();
+                if (resultScript != null)
+                {
+                    resultScript.Setup(success, () => {
+                        CompleteWithoutResultPopup(success);
+                    });
+                }
+                else
+                {
+                    Debug.LogError("PopupKesehatan: popupResultPrefab tidak memiliki PopupHasilKesehatan!");
+                    Destroy(resultObj);
+                    CompleteWithoutResultPopup(success);
+                }
+            }
+            else
+            {
+                Debug.LogError("PopupKesehatan: tidak ditemukan Canvas di scene!");
+                CompleteWithoutResultPopup(success);
             }
         }
         else
         {
             // Fallback jika prefab tidak di-assign: langsung callback
             Debug.LogWarning("PopupResultPrefab tidak di-assign, langsung callback.");
-            popupPanel.SetActive(false);
-            NotifyResult(success);
+            CompleteWithoutResultPopup(success);
         }
+    }
+
+    private void CompleteWithoutResultPopup(bool success)
+    {
+        if (popupPanel != null)
+            popupPanel.SetActive(false);
+
+        NotifyResult(success);
     }
 
     private void NotifyResult(bool success)

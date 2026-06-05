@@ -144,26 +144,40 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             return false;
 
         int visualCount = Mathf.Max(1, chickensPerPurchase);
-        int placedCount = 0;
-        for (int i = 0; i < visualCount; i++)
-        {
-            if (CreateChickenVisual(chickenPrefab) != null)
-                placedCount++;
-        }
+        List<GameObject> newVisuals = new List<GameObject>(visualCount);
 
-        if (placedCount == 0)
+        try
         {
-            Debug.LogWarning($"{name}: Tidak ada prefab atau visual ayam untuk ditampilkan.");
+            for (int i = 0; i < visualCount; i++)
+            {
+                GameObject visual = CreateChickenVisual(chickenPrefab);
+                if (visual != null)
+                    newVisuals.Add(visual);
+            }
+
+            if (newVisuals.Count == 0)
+            {
+                Debug.LogWarning($"{name}: Tidak ada prefab atau visual ayam untuk ditampilkan.");
+                return false;
+            }
+
+            spawnedChickens.AddRange(newVisuals);
+            PositionAllChickenVisuals();
+            ResetChickenProgress();
+            SetOccupied(true);
+            StartNeedTimer();
+            UpdateWanderState();
+            return true;
+        }
+        catch
+        {
+            foreach (GameObject visual in newVisuals)
+            {
+                if (visual != null)
+                    Destroy(visual);
+            }
             return false;
         }
-
-        PositionAllChickenVisuals();
-        ResetChickenProgress();
-        SetOccupied(true);
-        StartNeedTimer();
-
-        UpdateWanderState();
-        return true;
     }
 
     public void ClearChicken()
@@ -197,14 +211,12 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             if (TryCompleteCurrentNeedByActiveIoT())
                 return;
 
-            if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.CanUseFeed(1)))
+            if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.TryConsumeFeed(1)))
             {
                 GameLog.Info($"{name}: Pakan tidak cukup! Beli pakan dulu.");
                 return;
             }
 
-            if (currentNeed == ChickenNeed.Feed)
-                FeedManager.Instance.UseFeed(1);
 
             if (TryStartHealthMinigame())
                 return;

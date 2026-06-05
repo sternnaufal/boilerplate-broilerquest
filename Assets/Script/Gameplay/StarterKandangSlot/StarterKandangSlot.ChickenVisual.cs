@@ -15,7 +15,6 @@ public partial class StarterKandangSlot
 
         GameObject visual = Instantiate(prefabToInstantiate, parent);
         visual.SetActive(true);
-        spawnedChickens.Add(visual);
 
         AssignChickenAnimator(visual);
         return visual;

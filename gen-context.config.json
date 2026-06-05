@@ -1,20 +1,30 @@
 {
   "_comment": "SigMap configuration — all keys are optional (defaults shown). Copy to gen-context.config.json.",
 
-  "output": ".github/copilot-instructions.md",
+  "output": ".context/sigmap-context.md",
 
-  "outputs": ["codex"],
+  "outputs": ["copilot"],
 
   "_srcDirs_comment": "Source directories to scan. OMIT this key to use auto-detection (recommended).",
   "_srcDirs_comment2": "Auto-detection reads package.json/go.mod/Cargo.toml and scans top-level dirs automatically.",
   "_srcDirs_comment3": "Only set this explicitly if auto-detection misses part of your project layout.",
   "_srcDirs_example": ["src", "app", "lib", "packages", "services", "api"],
-  "srcDirs": ["Assets/Script"],
+  "srcDirs": [
+    "Assets/Script",
+    "docs",
+    ".agent",
+    "Packages",
+    "ProjectSettings"
+  ],
 
   "exclude": [
     "node_modules", ".git", "dist", "build", "out",
     "__pycache__", ".next", "coverage", "target", "vendor",
-    ".context"
+    ".context",
+    "Library", "Temp", "Obj", "Logs", "Build", "Builds",
+    "**/sigmap-context.md",
+    "Assets/TextMesh Pro", "Assets/Gambar", "Assets/Screenshots",
+    "Assets/Animation", "Assets/Settings", "Assets/Scenes", "Assets/Prefab"
   ],
 
   "maxDepth": 6,

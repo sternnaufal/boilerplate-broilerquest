@@ -3601,6 +3601,7 @@ GameObject:
   - component: {fileID: 1086103076}
   - component: {fileID: 1086103079}
   - component: {fileID: 1086103078}
+  - component: {fileID: 1086103080}
   m_Layer: 0
   m_Name: BQ_StarterCanvas
   m_TagString: Untagged
@@ -3698,6 +3699,65 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1086103080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086103075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f28afca2f6c41439f1cb2a525b18163, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StarterGameplayUI
+  hudPanel: {fileID: 843519373}
+  pausePanel: {fileID: 1800779048}
+  hpPanel: {fileID: 747566857}
+  hpPanelStyle:
+    color: {r: 0.1, g: 0.22, b: 0.14, a: 0.88}
+  pausePanelStyle:
+    color: {r: 0.05, g: 0.11, b: 0.07, a: 0.9}
+  hpPanelAnchorMin: {x: 1, y: 0.5}
+  hpPanelAnchorMax: {x: 1, y: 0.5}
+  hpPanelPivot: {x: 1, y: 0.5}
+  hpPanelSizeDelta: {x: 620, y: 580}
+  hpPanelAnchoredPosition: {x: -42, y: -18}
+  pauseButton: {fileID: 624186258}
+  resumeButton: {fileID: 1289705273}
+  hpToggleButton: {fileID: 72372731}
+  closeHpButton: {fileID: 1031492086}
+  mainMenuButton: {fileID: 0}
+  pauseButtonStyle:
+    label: PAUSE
+    color: {r: 0.95, g: 0.72, b: 0.22, a: 1}
+  resumeButtonStyle:
+    label: RESUME
+    color: {r: 0.95, g: 0.72, b: 0.22, a: 1}
+  hpToggleButtonStyle:
+    label: HP
+    color: {r: 0.95, g: 0.72, b: 0.22, a: 1}
+  closeHpButtonStyle:
+    label: TUTUP
+    color: {r: 0.95, g: 0.72, b: 0.22, a: 1}
+  mainMenuButtonStyle:
+    label: MAIN MENU
+    color: {r: 0.85, g: 0.35, b: 0.35, a: 1}
+  buttonSprites: []
+  coinText: {fileID: 1924059612}
+  chickenShop: {fileID: 747566859}
+  coinTextColor: {r: 1, g: 0.96, b: 0.7, a: 1}
+  showBuyPanelOnStart: 1
+  resetFeedOnStart: 1
+  startingFeedCount: 0
+  shopButton: {fileID: 307113635}
+  iotButton: {fileID: 685522458}
+  shopAPK: {fileID: 1567247294}
+  iotAPK: {fileID: 238515468}
+  exitShopButton: {fileID: 1890239351}
+  exitIoTButton: {fileID: 666381392}
+  hpPanelRect: {fileID: 747566858}
+  animationDuration: 0.3
 --- !u!1 &1098549306
 GameObject:
   m_ObjectHideFlags: 0

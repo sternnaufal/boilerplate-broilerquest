@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using System;
 
@@ -26,7 +27,15 @@ public class CoinManager : Singleton<CoinManager>
 
     void Start()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
         Initialize(coinText);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        coinText = null;
+        coinTextSearched = false;
+        UpdateCoinUI();
     }
 
     public void Initialize(TextMeshProUGUI uiText = null)
@@ -137,5 +146,11 @@ public class CoinManager : Singleton<CoinManager>
             return PlayerPrefs.GetInt(GameConstants.Persistence.LegacyTotalCoinKey, 0);
 
         return GameConstants.Economy.StartingCoin;
+    }
+
+    protected override void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        base.OnDestroy();
     }
 }

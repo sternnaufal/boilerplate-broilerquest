@@ -9,8 +9,7 @@ Date: 22 Mei 2026
   `D:\Pertempuran Surabaya\boilerplate-broilerquest`.
 - Cleaned accidental parent Unity project artifacts from:
   `D:\Pertempuran Surabaya`.
-- Removed the broken local package dependency that pointed to another developer's absolute Windows path:
-  `com.gladekit.mcp-bridge`.
+- Removed a broken local package dependency that pointed to another developer's absolute Windows path.
 - Added Unity MCP package dependency:
   `com.coplaydev.unity-mcp`.
 - Initialized SigMap and Semble project support:

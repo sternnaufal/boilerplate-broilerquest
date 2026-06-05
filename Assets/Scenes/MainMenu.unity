@@ -2944,6 +2944,7 @@ MonoBehaviour:
   backToMainButton: {fileID: 2038806545}
   musicVolumeSlider: {fileID: 527589730}
   sfxVolumeSlider: {fileID: 1034620202}
+  navigateSfx: {fileID: 0}
   resumeButton: {fileID: 1995217418}
   pauseOptionsButton: {fileID: 1571255745}
   pauseMainMenuButton: {fileID: 489019688}

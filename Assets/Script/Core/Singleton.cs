@@ -52,7 +52,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
         else if (_instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 

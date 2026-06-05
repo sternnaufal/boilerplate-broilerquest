@@ -25,16 +25,33 @@ public class GameManager : Singleton<GameManager>
 
     private bool isGameActive = true;
     private bool isPopupShowing = false;
+    private bool isRecoveringFromMissingTimeUpUi = false;
 
     void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
         InitializeForCurrentScene();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         InitializeForCurrentScene();
+    }
+
+    void OnSceneUnloaded(Scene scene)
+    {
+        UnbindTimer();
+        mainCanvas = null;
+    }
+
+    private void UnbindTimer()
+    {
+        if (levelTimer != null)
+        {
+            levelTimer.OnTimeUp -= OnTimerUp;
+            levelTimer = null;
+        }
     }
 
     public void InitializeForCurrentScene()
@@ -45,7 +62,7 @@ public class GameManager : Singleton<GameManager>
         if (levelTimer == null)
             levelTimer = FindFirstObjectByType<LevelTimer>();
 
-        if (levelTimer != null && mainCanvas != null)
+        if (levelTimer != null)
         {
             levelTimer.OnTimeUp -= OnTimerUp;
             levelTimer.OnTimeUp += OnTimerUp;
@@ -58,6 +75,7 @@ public class GameManager : Singleton<GameManager>
 
         isGameActive = true;
         isPopupShowing = false;
+        isRecoveringFromMissingTimeUpUi = false;
     }
 
     private void OnTimerUp()
@@ -81,6 +99,11 @@ public class GameManager : Singleton<GameManager>
         else
         {
             Debug.LogError("Popup prefab atau mainCanvas tidak di-assign di GameManager!");
+            if (!isRecoveringFromMissingTimeUpUi)
+            {
+                isRecoveringFromMissingTimeUpUi = true;
+                ReturnToMainMenu();
+            }
         }
     }
 
@@ -131,9 +154,9 @@ public class GameManager : Singleton<GameManager>
 
     protected override void OnDestroy()
     {
-        if (levelTimer != null)
-            levelTimer.OnTimeUp -= OnTimerUp;
-
+        UnbindTimer();
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+        base.OnDestroy();
     }
 }
