@@ -2403,7 +2403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db44c2d49f9ba6643aef2c9012fa49bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
-  resetCoinOnStart: 1
+  resetCoinOnStart: 0
   usePlayerPrefs: 1
 --- !u!114 &651932099
 MonoBehaviour:

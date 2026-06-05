@@ -4,7 +4,7 @@ using System;
 
 public static class SaveManager
 {
-    private const string SaveKey = "BroilerQuest.GameSave";
+    private const string SaveKey = GameConstants.Persistence.GameSaveKey;
 
     [Serializable]
     public class SlotSaveData

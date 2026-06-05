@@ -96,6 +96,8 @@ public class StarterIoTController : MonoBehaviour
             if (IsPurchased(kvp.Key))
                 activeStates[kvp.Key] = kvp.Value;
         }
+
+        RefreshAll();
     }
 
     // ========== Public API untuk status ==========

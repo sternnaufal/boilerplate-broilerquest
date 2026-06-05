@@ -53,11 +53,7 @@ public class FeedManager : Singleton<FeedManager>
 
     public bool TryConsumeFeed(int amount)
     {
-        if (amount < 0 || feedCount < amount) return false;
-        feedCount -= amount;
-        SaveFeed();
-        FeedChanged?.Invoke(feedCount);
-        return true;
+        return UseFeed(amount);
     }
 
     public void SetFeedCount(int amount)

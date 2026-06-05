@@ -17,3 +17,18 @@ Assets/_Recovery.meta
 Assets/Adaptive Performance/
 Assets/Adaptive Performance.meta
 .utmp/*
+
+# Local AI/tooling state
+.agent/
+.antigravity/
+.commandcode/
+.context/
+
+# Local Unity tooling and generated captures
+Assets/UnityMCP/
+Assets/UnityMCP.meta
+Assets/Screenshots/
+Assets/Screenshots.meta
+Assets/Plugins/
+Assets/Plugins.meta
+ProjectSettings/Packages/com.unity.probuilder/
