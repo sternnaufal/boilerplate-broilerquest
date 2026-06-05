@@ -290,6 +290,224 @@ Masih ada beberapa debt kecil yang bisa dibahas nanti:
 - `UIGlobalBinder` masih mencari `CoinText` dan `PakanText` berdasarkan nama GameObject. Ini fragile, tetapi untuk sementara sudah bekerja.
 - `GlobalUIOverlay` diberi status obsolete, tetapi masih ada code lama yang membuat UI lewat script. Perlu diputuskan apakah akan dihapus total atau dipertahankan sebagai fallback.
 
+## Brainstorming Minigame Berikutnya
+
+Konteks permintaan:
+
+- Target audience: anak SD, SMP, dan SMA.
+- Jangan terlalu sulit sampai membuat player berhenti main.
+- Tetap engaging dan punya potensi dimainkan berulang.
+- Jangan menyulitkan artist game; utamakan ide yang bisa memakai sprite, UI, dan aset ayam/kandang yang sudah ada.
+
+### 1. Sortir Pakan
+
+Player drag pakan bagus ke karung hijau dan pakan jelek ke tong sampah.
+
+- Gameplay: drag and drop cepat.
+- Edukasi: kualitas pakan ayam.
+- Beban art: ringan, cukup 3-5 sprite pakan dan 2 container.
+- Cocok untuk: SD-SMP.
+
+### 2. Isi Takaran Pakan
+
+Player menahan tombol untuk mengisi wadah sampai garis target, jangan kurang atau lebih.
+
+- Gameplay: timing sederhana.
+- Edukasi: pakan harus sesuai takaran.
+- Beban art: ringan, cukup wadah, bar meter, dan visual pakan.
+- Cocok untuk: SD-SMA karena bisa dibuat makin cepat di level tinggi.
+
+### 3. Bersihkan Kandang
+
+Player tap atau swipe noda/kotoran di kandang sebelum waktu habis.
+
+- Gameplay: tap/swipe objek kotor.
+- Edukasi: kebersihan kandang memengaruhi kesehatan ayam.
+- Beban art: ringan, cukup overlay noda dan ikon alat bersih-bersih.
+- Cocok untuk: SD-SMP.
+
+### 4. Atur Suhu Kandang
+
+Player menggeser slider suhu ke zona aman.
+
+- Gameplay: slider dengan zona hijau.
+- Edukasi: ayam butuh suhu stabil.
+- Beban art: ringan, cukup termometer UI dan indikator warna.
+- Cocok untuk: SD-SMA.
+
+### 5. Tangkap Ayam Kabur
+
+Ayam bergerak pelan di area kecil, player tap untuk mengembalikan ayam ke kandang.
+
+- Gameplay: tap target bergerak.
+- Edukasi: kandang perlu dijaga aman.
+- Beban art: rendah, bisa memakai sprite ayam yang sudah ada.
+- Cocok untuk: SD-SMP.
+
+### 6. Pasang IoT Cepat
+
+Player mencocokkan ikon alat IoT ke slot yang benar: feeder, fan, heater.
+
+- Gameplay: matching ikon.
+- Edukasi: fungsi perangkat IoT di kandang.
+- Beban art: ringan, cukup ikon alat dan slot.
+- Cocok untuk: SMP-SMA.
+
+### 7. Cek Kesehatan Cepat
+
+Muncul 3 gejala sederhana, player memilih tindakan yang sesuai: pakan, kipas, heater, atau cek kesehatan.
+
+- Gameplay: pilihan cepat berbasis kondisi.
+- Edukasi: mengenali kebutuhan ayam.
+- Beban art: ringan, cukup ikon gejala dan tombol tindakan.
+- Cocok untuk: SMP-SMA.
+
+### 8. Ritme Pemberian Pakan
+
+Player tap saat indikator masuk area hijau, seperti rhythm minigame tetapi lambat dan ramah anak.
+
+- Gameplay: timing tap.
+- Edukasi: jadwal pakan perlu teratur.
+- Beban art: ringan, cukup bar ritme dan ikon pakan.
+- Cocok untuk: SD-SMA.
+
+### 9. Susun Jalur Air
+
+Puzzle kecil menyambungkan pipa dari tangki ke tempat minum ayam.
+
+- Gameplay: rotate tile sederhana.
+- Edukasi: air minum penting untuk ayam.
+- Beban art: sedang-ringan, cukup 3-4 bentuk tile pipa.
+- Cocok untuk: SMP-SMA.
+
+### 10. Packing Hasil Panen
+
+Player memasukkan hasil panen ke kotak sesuai warna, ukuran, atau label.
+
+- Gameplay: sorting cepat.
+- Edukasi: panen dan distribusi.
+- Beban art: ringan, cukup kotak, produk, dan label.
+- Cocok untuk: SD-SMP.
+
+### Opsi Tambahan dari Command Code
+
+Daftar berikut berasal dari brainstorming Command Code. Beberapa sangat cocok langsung dipakai, beberapa lain perlu adaptasi agar tetap sesuai tema BroilerQuest yang lebih dekat ke ayam broiler, kandang, pakan, suhu, kesehatan, dan IoT.
+
+### 11. Egg Drop Catch
+
+Telur bergulir atau jatuh dari perch/conveyor, player menangkapnya dengan basket sebelum pecah.
+
+- Gameplay: tap/drag menangkap objek jatuh.
+- Edukasi: ketelitian saat panen.
+- Beban art: ringan, cukup telur, basket, dan perch/conveyor.
+- Catatan: lebih cocok untuk ayam petelur; perlu adaptasi jika BroilerQuest tetap fokus broiler.
+
+### 12. Feed Flinger
+
+Player memakai power bar untuk melempar pakan ke trough pada jarak berbeda.
+
+- Gameplay: aiming sederhana dengan power meter.
+- Edukasi: distribusi pakan ke tempat yang tepat.
+- Beban art: ringan-sedang, cukup pellet pakan, trough, dan alat lempar.
+- Catatan: seru, tetapi physics aiming perlu tuning agar tidak menyulitkan anak SD.
+
+### 13. Scratch & Peck
+
+Bug seperti cacing atau serangga muncul dari patch tanah, player tap agar ayam mematuknya.
+
+- Gameplay: whack-a-mole sederhana.
+- Edukasi: bisa diadaptasi menjadi kontrol hama/kebersihan kandang.
+- Beban art: ringan, cukup 3 tipe bug, patch tanah, dan efek kecil.
+- Catatan: kandidat kuat jika narasinya diubah menjadi "bersihkan hama di kandang".
+
+### 14. Egg Sorter
+
+Conveyor membawa telur dengan warna/ukuran berbeda, player drag ke basket yang sesuai.
+
+- Gameplay: sorting cepat.
+- Edukasi: klasifikasi hasil panen.
+- Beban art: ringan, cukup telur varian, basket, dan belt.
+- Catatan: gameplay bagus, tetapi tema telur lebih cocok untuk ayam petelur daripada broiler.
+
+### 15. Chicken Herd
+
+Player menggiring ayam yang tersebar agar kembali ke pintu kandang sebelum malam.
+
+- Gameplay: tap/arah sederhana untuk mengarahkan ayam.
+- Edukasi: menjaga ayam tetap aman di area kandang.
+- Beban art: sedang, karena butuh movement ayam dan beberapa obstacle.
+- Catatan: cocok, tetapi lebih mahal dari minigame berbasis UI/tap statis.
+
+### 16. Nest Memory Match
+
+Card matching dengan pasangan item farm seperti ayam, pakan, biji, dan anak ayam.
+
+- Gameplay: flip card memory.
+- Edukasi: pengenalan item peternakan.
+- Beban art: ringan, cukup card back dan beberapa icon.
+- Catatan: mudah dibuat, tetapi terasa generic dan kurang terhubung langsung ke loop kandang.
+
+### 17. Morning Chores Dash
+
+Player menyelesaikan urutan tugas cepat: isi pakan, refill air, bersihkan kandang, cek suhu, dan cek ayam.
+
+- Gameplay: sequence tap cepat.
+- Edukasi: rutinitas perawatan kandang.
+- Beban art: ringan, cukup 4-5 icon task dan timer.
+- Catatan: salah satu kandidat terbaik; bisa diadaptasi menjadi "Perawatan Kandang Cepat".
+
+### 18. Egg Decorator
+
+Player menghias telur dengan warna, garis, stiker, dan pola tanpa fail state.
+
+- Gameplay: creative activity.
+- Edukasi: lebih ke reward/ekspresi kreatif daripada manajemen kandang.
+- Beban art: ringan-sedang, butuh template telur dan beberapa decal.
+- Catatan: aman untuk anak-anak, tetapi kurang nyambung ke core gameplay broiler.
+
+### 19. Storm Prep
+
+Awan gelap datang, player memindahkan ayam ke shelter dan menutup pakan dengan tarp sebelum hujan.
+
+- Gameplay: timed tap/drag.
+- Edukasi: persiapan kandang saat cuaca buruk.
+- Beban art: sedang-ringan, butuh overlay awan, tarp, shelter, dan efek hujan sederhana.
+- Catatan: kandidat kuat untuk variasi event di level Beginner/Intermediate.
+
+### 20. Chick Chase
+
+Baby chick auto-run, player tap untuk lompat melewati genangan, pagar, dan mengambil biji.
+
+- Gameplay: side-scrolling runner sederhana.
+- Edukasi: lebih ke refleks daripada edukasi peternakan.
+- Beban art: sedang, butuh animasi chick run/jump dan obstacle.
+- Catatan: engaging, tetapi mulai terasa seperti genre terpisah dan lebih mahal dibuat.
+
+### Rekomendasi Prioritas
+
+Prioritas paling aman untuk implementasi pertama:
+
+1. `Bersihkan Kandang`
+2. `Atur Suhu Kandang`
+3. `Isi Takaran Pakan`
+4. `Morning Chores Dash` / `Perawatan Kandang Cepat`
+
+Alasan:
+
+- Paling mudah dipahami oleh anak SD sampai SMA.
+- Tidak butuh asset kompleks.
+- Bisa dibuat dari UI sederhana.
+- Sangat nyambung dengan loop utama BroilerQuest: merawat ayam, menjaga kandang, dan menyeimbangkan kebutuhan ayam.
+
+Ide yang paling cocok untuk variasi berikutnya:
+
+- `Pasang IoT Cepat`, karena sudah terhubung dengan fitur IoT yang ada.
+- `Cek Kesehatan Cepat`, karena bisa memperkaya minigame kesehatan tanpa membuat puzzle terlalu sulit.
+- `Susun Jalur Air`, jika tim ingin minigame yang sedikit lebih puzzle-oriented untuk anak SMP/SMA.
+- `Scratch & Peck`, jika diadaptasi menjadi minigame kontrol hama/kebersihan kandang.
+- `Storm Prep`, jika tim ingin event cuaca yang terasa berbeda dari aktivitas harian.
+- `Chicken Herd`, jika tim siap membuat sedikit behavior gerak ayam.
+
 ## Pesan Untuk PM / Teammate
 
 Versi singkat:
