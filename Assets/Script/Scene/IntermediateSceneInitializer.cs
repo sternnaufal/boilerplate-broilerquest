@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StarterSceneInitializer : MonoBehaviour
+public class IntermediateSceneInitializer : MonoBehaviour
 {
     [Header("Scene References")]
     [SerializeField] private StarterChickenShop chickenShop;

@@ -51,6 +51,13 @@ public static class GameConstants
         public const int IntermediateCost = 2500;
     }
 
+    public static class LevelConfig
+    {
+        public const int StarterSlotCount = 4;
+        public const int BeginnerSlotCount = 6;
+        public const int IntermediateSlotCount = 8;
+    }
+
     public static class IoT
     {
         public const string ProductKeyFeeder = "AutoFeeder";
