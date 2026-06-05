@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class StarterSceneInitializer : MonoBehaviour
@@ -13,14 +14,25 @@ public class StarterSceneInitializer : MonoBehaviour
 
     private void Start()
     {
-        LevelSceneInitializer.Initialize(
-            chickenShop,
-            kandangSlots,
-            GetChickenPrefab,
-            initializeGameManager,
-            initializeCoinManager,
-            loadSavedState
-        );
+        if (initializeGameManager && GameManager.Instance != null)
+            GameManager.Instance.InitializeForCurrentScene();
+
+        if (initializeCoinManager && CoinManager.Instance != null)
+            CoinManager.Instance.Initialize();
+
+        if (chickenShop != null && kandangSlots != null && kandangSlots.Length > 0)
+        {
+            chickenShop.SetKandangSlots(kandangSlots);
+
+            if (loadSavedState)
+            {
+                SaveManager.LoadAndRestoreSlots(kandangSlots, GetChickenPrefab);
+                chickenShop.RefreshShopState();
+            }
+        }
+
+        if (loadSavedState && StarterIoTController.Instance != null)
+            SaveManager.LoadIotStates(StarterIoTController.Instance);
     }
 
     private GameObject GetChickenPrefab(string prefabName)
