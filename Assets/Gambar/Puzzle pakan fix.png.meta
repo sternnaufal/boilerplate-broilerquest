@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f1434960ddd0bcb449d68fb5a5ec9a82
+guid: 743387ece6deffe42b9575e6fb1245e0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6296094486307321537
-    second: panas puzzle_0
+      213: -8628993074127397193
+    second: Puzzle pakan fix_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,44 +100,44 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: panas puzzle_0
+      name: Puzzle pakan fix_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1024
-        height: 1024
+        width: 1080
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1c6b4a0c398306750800000000000000
-      internalID: 6296094486307321537
+      spriteID: 7be94577488af3880800000000000000
+      internalID: -8628993074127397193
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     outline: []
-    customData:
+    customData: 
     physicsShape: []
     bones: []
-    spriteID:
+    spriteID: 
     internalID: 0
     vertices: []
-    indices:
+    indices: 
     edges: []
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      panas puzzle_0: 6296094486307321537
-  mipmapLimitGroupName:
+      Puzzle pakan fix_0: -8628993074127397193
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

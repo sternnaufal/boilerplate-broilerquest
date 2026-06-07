@@ -90,6 +90,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3fc9d9b758f4b1d8f8f66a87ec8d0f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarterKandangSlot
+  enableWander: 1
+  wanderRadius: {x: 50, y: 20}
+  wanderSpeed: 80
+  wanderPauseMin: 1.5
+  wanderPauseMax: 3.5
   chickenVisual: {fileID: 6907016640907362101}
   chickenParent: {fileID: 0}
   startsOccupied: 0
@@ -101,10 +106,10 @@ MonoBehaviour:
   slotLabel: {fileID: 0}
   slotLabelFormat: KANDANG {0}
   autoNumberSlotLabel: 1
-  feedBubbleSprite: {fileID: 5143672823471664202, guid: 2257351556cdd154796e4cad6a84e4ef, type: 3}
-  coolingBubbleSprite: {fileID: -5408195563160022079, guid: 2257351556cdd154796e4cad6a84e4ef, type: 3}
-  heatingBubbleSprite: {fileID: 7172106370599629312, guid: 2257351556cdd154796e4cad6a84e4ef, type: 3}
-  sellBubbleSprite: {fileID: 6164502729838965698, guid: 2257351556cdd154796e4cad6a84e4ef, type: 3}
+  feedBubbleSprite: {fileID: -8073166081666970766, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
+  coolingBubbleSprite: {fileID: 4163005836987294345, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
+  heatingBubbleSprite: {fileID: -1764795191525876715, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
+  sellBubbleSprite: {fileID: 7625246835765581611, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
   bubbleVisual: {fileID: 0}
   bubbleImage: {fileID: 0}
   bubbleLabel: {fileID: 0}
@@ -114,24 +119,22 @@ MonoBehaviour:
   sellBubbleText: JUAL
   bubbleSize: {x: 130, y: 56}
   bubbleOffset: {x: 0, y: 68}
-  needInterval: 5
   notificationDelay: 1
-  baseSellReward: 20
-  careBonus: 10
+  needIntervalMin: 3
+  needIntervalMax: 8
+  careCompleteSfx: {fileID: 0}
+  sellCompleteSfx: {fileID: 0}
+  healthSuccessSfx: {fileID: 0}
+  healthFailSfx: {fileID: 0}
   useHealthMinigame: 1
   clearChickenOnHealthFail: 0
-  jigsawFeedTexture: {fileID: 2800000, guid: bbd815325669c924e8ec066b3c03d886, type: 3}
-  jigsawCoolingTexture: {fileID: 2800000, guid: 17982749c62e46e4e97920e37c7a4ec5, type: 3}
-  jigsawHeatingTexture: {fileID: 2800000, guid: f1434960ddd0bcb449d68fb5a5ec9a82, type: 3}
+  jigsawFeedTexture: {fileID: 2800000, guid: 743387ece6deffe42b9575e6fb1245e0, type: 3}
+  jigsawCoolingTexture: {fileID: 2800000, guid: c23aed4960beff6438826fe42c4871a8, type: 3}
+  jigsawHeatingTexture: {fileID: 2800000, guid: 87b4346945cadec4aaae1e9956ee3618, type: 3}
   chickenAnimator: {fileID: 0}
   idleAnimParam: isIdle
   heatAnimParam: isbakar
   coldAnimParam: isdingin
-  enableWander: 1
-  wanderRadius: {x: 50, y: 20}
-  wanderSpeed: 80
-  wanderPauseMin: 1.5
-  wanderPauseMax: 3.5
 --- !u!1 &6907016640907362101
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,351 @@
+fileFormatVersion: 2
+guid: f8e6dbcd289ad874b910c3d66be0a9fa
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3349563078240049187
+    second: Ayam, bubble speech, koin_0
+  - first:
+      213: 4163005836987294345
+    second: Ayam, bubble speech, koin_1
+  - first:
+      213: -1764795191525876715
+    second: Ayam, bubble speech, koin_2
+  - first:
+      213: -8073166081666970766
+    second: Ayam, bubble speech, koin_3
+  - first:
+      213: 7625246835765581611
+    second: Ayam, bubble speech, koin_4
+  - first:
+      213: -4474668701108825482
+    second: Ayam, bubble speech, koin_5
+  - first:
+      213: -4751865814450198346
+    second: Ayam, bubble speech, koin_6
+  - first:
+      213: 2689395079460145318
+    second: Ayam, bubble speech, koin_7
+  - first:
+      213: 797324938915620661
+    second: Ayam, bubble speech, koin_8
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Ayam, bubble speech, koin_0
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 4083
+        width: 63
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd7ecb88026f381d0800000000000000
+      internalID: -3349563078240049187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ayam, bubble speech, koin_1
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 3228
+        width: 871
+        height: 724
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 982618f80c7f5c930800000000000000
+      internalID: 4163005836987294345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ayam, bubble speech, koin_2
+      rect:
+        serializedVersion: 2
+        x: 1239
+        y: 3228
+        width: 871
+        height: 724
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51c58c3af103287e0800000000000000
+      internalID: -1764795191525876715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ayam, bubble speech, koin_3
+      rect:
+        serializedVersion: 2
+        x: 2302
+        y: 3228
+        width: 871
+        height: 724
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27b0281e83a56ff80800000000000000
+      internalID: -8073166081666970766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ayam, bubble speech, koin_4
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 2245
+        width: 871
+        height: 724
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b279a7ac89152d960800000000000000
+      internalID: 7625246835765581611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ayam, bubble speech, koin_5
+      rect:
+        serializedVersion: 2
+        x: 1243
+        y: 2218
+        width: 871
+        height: 723
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67299de2688c6e1c0800000000000000
+      internalID: -4474668701108825482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ayam, bubble speech, koin_6
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 1226
+        width: 617
+        height: 625
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b8af5dd73bfd0eb0800000000000000
+      internalID: -4751865814450198346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ayam, bubble speech, koin_7
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 1270
+        width: 442
+        height: 532
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a8c7e36396a25520800000000000000
+      internalID: 2689395079460145318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ayam, bubble speech, koin_8
+      rect:
+        serializedVersion: 2
+        x: 1464
+        y: 1256
+        width: 640
+        height: 491
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53720aabecaa01b00800000000000000
+      internalID: 797324938915620661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Ayam, bubble speech, koin_0: -3349563078240049187
+      Ayam, bubble speech, koin_1: 4163005836987294345
+      Ayam, bubble speech, koin_2: -1764795191525876715
+      Ayam, bubble speech, koin_3: -8073166081666970766
+      Ayam, bubble speech, koin_4: 7625246835765581611
+      Ayam, bubble speech, koin_5: -4474668701108825482
+      Ayam, bubble speech, koin_6: -4751865814450198346
+      Ayam, bubble speech, koin_7: 2689395079460145318
+      Ayam, bubble speech, koin_8: 797324938915620661
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

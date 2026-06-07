@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bbd815325669c924e8ec066b3c03d886
+guid: cbcd8564585936249a483c2abc615607
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3456987658848041576
-    second: pakan puzzle_0
+      213: -3712342703961453644
+    second: Screenshot 2026-06-07 182915_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,44 +100,44 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pakan puzzle_0
+      name: Screenshot 2026-06-07 182915_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1024
-        height: 1024
+        width: 2128
+        height: 1201
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 89504794a005600d0800000000000000
-      internalID: -3456987658848041576
+      spriteID: 4bb4dd5cafb1b7cc0800000000000000
+      internalID: -3712342703961453644
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     outline: []
-    customData:
+    customData: 
     physicsShape: []
     bones: []
-    spriteID:
+    spriteID: 
     internalID: 0
     vertices: []
-    indices:
+    indices: 
     edges: []
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      pakan puzzle_0: -3456987658848041576
-  mipmapLimitGroupName:
+      Screenshot 2026-06-07 182915_0: -3712342703961453644
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
