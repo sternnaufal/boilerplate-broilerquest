@@ -113,15 +113,16 @@ MonoBehaviour:
   bubbleVisual: {fileID: 0}
   bubbleImage: {fileID: 0}
   bubbleLabel: {fileID: 0}
-  feedBubbleText: MAKAN
-  coolingBubbleText: KIPAS
-  heatingBubbleText: HEATER
-  sellBubbleText: JUAL
+  feedBubbleText: 
+  coolingBubbleText: 
+  heatingBubbleText: 
+  sellBubbleText: 
   bubbleSize: {x: 130, y: 56}
   bubbleOffset: {x: 0, y: 68}
   notificationDelay: 1
   needIntervalMin: 3
   needIntervalMax: 8
+  bubbleExpiryDuration: 10
   careCompleteSfx: {fileID: 0}
   sellCompleteSfx: {fileID: 0}
   healthSuccessSfx: {fileID: 0}

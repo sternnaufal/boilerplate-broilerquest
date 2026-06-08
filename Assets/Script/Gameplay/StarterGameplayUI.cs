@@ -58,8 +58,6 @@ public class StarterGameplayUI : MonoBehaviour
     [SerializeField] private Color coinTextColor = new Color(1f, 0.96f, 0.70f, 1f);
 
     [Header("IoT")]
-    //[SerializeField] private StarterIoTController iotController;
-
     [Header("Startup")]
     [SerializeField] private bool showBuyPanelOnStart = true;
     [SerializeField] private bool resetFeedOnStart = false;
@@ -200,53 +198,6 @@ public class StarterGameplayUI : MonoBehaviour
             chickenShop.RefreshShopState();
     }
 
-/*
-    private void EnsureIotController()
-    {
-        if (iotCreated)
-            return;
-
-        if (iotController == null)
-            iotController = FindFirstObjectByType<StarterIoTController>();
-
-        if (iotController == null && hpPanel != null)
-        {
-            GameObject iotObj = new GameObject("StarterIoTController", typeof(RectTransform), typeof(StarterIoTController));
-            iotObj.transform.SetParent(hpPanel.transform, false);
-
-            RectTransform rect = iotObj.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(1f, 1f);
-            rect.pivot = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(0f, -360f);
-            rect.sizeDelta = new Vector2(0f, 180f);
-
-            iotController = iotObj.GetComponent<StarterIoTController>();
-
-            StarterIoTController.IoTDeviceDef[] defs = new StarterIoTController.IoTDeviceDef[]
-            {
-                new StarterIoTController.IoTDeviceDef
-                {
-                    productKey = GameConstants.IoT.ProductKeyFeeder,
-                    displayName = GameConstants.IoT.ProductNameFeeder
-                },
-                new StarterIoTController.IoTDeviceDef
-                {
-                    productKey = GameConstants.IoT.ProductKeyFan,
-                    displayName = GameConstants.IoT.ProductNameFan
-                },
-                new StarterIoTController.IoTDeviceDef
-                {
-                    productKey = GameConstants.IoT.ProductKeyHeater,
-                    displayName = GameConstants.IoT.ProductNameHeater
-                }
-            };
-            iotController.devices = defs;
-        }
-
-        iotCreated = true;
-    }
-*/
     public void ReturnToMainMenu()
     {
         SaveManager.SaveAll();
@@ -408,23 +359,6 @@ public class StarterGameplayUI : MonoBehaviour
         }
     }
 
-    /*
-    private void PositionHpPanel()
-    {
-        if (hpPanel == null)
-            return;
-
-        RectTransform rect = hpPanel.GetComponent<RectTransform>();
-        if (rect == null)
-            return;
-
-        rect.anchorMin = hpPanelAnchorMin;
-        rect.anchorMax = hpPanelAnchorMax;
-        rect.pivot = hpPanelPivot;
-        rect.sizeDelta = hpPanelSizeDelta;
-        rect.anchoredPosition = hpPanelAnchoredPosition;
-    }
-*/
     private void SetupHPNavigation()
     {
         if (shopButton != null)
