@@ -46,6 +46,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private float notificationDelay = GameConstants.StarterSlot.NotificationDelay;
     [SerializeField] private float needIntervalMin = GameConstants.StarterSlot.NeedIntervalMin;
     [SerializeField] private float needIntervalMax = GameConstants.StarterSlot.NeedIntervalMax;
+    [SerializeField] private float bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDuration;
 
     [Header("SFX")]
     [SerializeField] private AudioClip careCompleteSfx;
@@ -71,6 +72,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     private readonly List<GameObject> spawnedChickens = new List<GameObject>();
     private string placedPrefabName;
     private Coroutine eventCoroutine;
+    private Coroutine bubbleExpiryCoroutine;
     private bool occupied;
     private bool feedSatisfied;
     private bool coolingSatisfied;
@@ -102,6 +104,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     public bool IsEmpty => currentState == SlotState.Empty;
     public bool CanAcceptChicken => IsEmpty;
     public int CurrentChickenCount => GetActiveChickenVisuals().Count;
+    public string SlotId => gameObject.name;
 
     private void Awake()
     {
@@ -126,6 +129,11 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             StartNeedTimer();
             UpdateWanderState();
         }
+    }
+
+    private void OnDisable()
+    {
+        StopBubbleExpiryTimer();
     }
 
     private void OnTransformParentChanged()
@@ -186,8 +194,10 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
     public void ClearChicken(bool save = true)
     {
+        StopBubbleExpiryTimer();
         StopEventTimer();
         StopWander();
+        RegisterUntrackedChickenVisuals();
 
         foreach (GameObject spawnedChicken in spawnedChickens)
         {
@@ -213,9 +223,6 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
         if (currentState == SlotState.WaitingForCareClick)
         {
-            if (TryCompleteCurrentNeedByActiveIoT())
-                return;
-
             if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.TryConsumeFeed(1)))
             {
                 if (UIAlertPanel.Instance != null)
@@ -229,6 +236,8 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
                 return;
             }
 
+            if (TryCompleteCurrentNeedByActiveIoT())
+                return;
 
             if (TryStartHealthMinigame())
                 return;
@@ -265,6 +274,12 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             return;
 
         if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(healthFailSfx);
+        FailCurrentNeedAndAdvance("puzzle gagal");
+    }
+
+    private void FailCurrentNeedAndAdvance(string reason)
+    {
+        StopBubbleExpiryTimer();
         ResetAnimationToNormal();
         MarkCurrentNeedFailed();
         completedCareCount++;
@@ -280,7 +295,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         HideBubble();
         isWanderingPaused = false;
         StartNeedTimer();
-        GameLog.Info($"{name}: Kebutuhan {GetNeedText(currentNeed)} gagal, lanjut kebutuhan berikutnya.");
+        GameLog.Info($"{name}: Kebutuhan {GetNeedText(currentNeed)} gagal ({reason}), lanjut kebutuhan berikutnya.");
     }
 
     private void SetOccupied(bool value)
@@ -320,7 +335,56 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         currentState = SlotState.WaitingForCareClick;
         NotifyStateChanged();
         UpdateAnimationByNeed(currentNeed);
+        StartBubbleExpiryTimer();
+        SaveManager.SaveAll();
         GameLog.Info($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
+    }
+
+    private void StartBubbleExpiryTimer()
+    {
+        StopBubbleExpiryTimer();
+        CoroutineHelper.StopAndStart(this, ref bubbleExpiryCoroutine, BubbleExpiryRoutine());
+    }
+
+    private void StopBubbleExpiryTimer()
+    {
+        CoroutineHelper.StopSafe(this, ref bubbleExpiryCoroutine);
+    }
+
+    private IEnumerator BubbleExpiryRoutine()
+    {
+        float remaining = bubbleExpiryDuration;
+
+        while (remaining > 0f)
+        {
+            bool shouldTick = currentState == SlotState.WaitingForCareClick
+                && IsGameplayActive()
+                && !IsPuzzleActive();
+
+            if (shouldTick)
+                remaining -= Time.deltaTime;
+
+            yield return null;
+        }
+
+        if (currentState == SlotState.WaitingForCareClick)
+            FailCurrentNeedAndAdvance("bubble expired");
+    }
+
+    private bool IsGameplayActive()
+    {
+        if (GameManager.Instance != null)
+            return GameManager.Instance.IsGameActive();
+
+        if (GameStateManager.Instance != null)
+            return GameStateManager.Instance.CurrentState == GameState.Playing;
+
+        return true;
+    }
+
+    private bool IsPuzzleActive()
+    {
+        return JigsawMinigameController.Instance != null && JigsawMinigameController.Instance.IsPlaying;
     }
 
     private bool TryCompleteCurrentNeedByActiveIoT()
@@ -361,6 +425,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
     private void CompleteCurrentNeed()
     {
+        StopBubbleExpiryTimer();
         ResetAnimationToNormal();
 
         switch (currentNeed)
@@ -505,8 +570,12 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
     public SaveManager.SlotSaveData GetSaveData()
     {
+        bool hasActiveCareBubble = occupied
+            && (currentState == SlotState.WaitingForCareClick || currentState == SlotState.WaitingForHealthMinigame);
+
         return new SaveManager.SlotSaveData
         {
+            slotId = SlotId,
             occupied = occupied,
             prefabName = placedPrefabName,
             feedSatisfied = feedSatisfied,
@@ -516,7 +585,9 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             coolingFailed = coolingFailed,
             heatingFailed = heatingFailed,
             completedCareCount = completedCareCount,
-            sellReward = sellReward
+            sellReward = sellReward,
+            hasActiveBubble = hasActiveCareBubble,
+            activeBubbleNeed = hasActiveCareBubble ? (int)currentNeed : -1
         };
     }
 
@@ -558,6 +629,16 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         if (IsReadyToSell())
         {
             ShowSellBubble();
+        }
+        else if (data.hasActiveBubble && data.activeBubbleNeed >= 0 && data.activeBubbleNeed <= 2)
+        {
+            currentNeed = (ChickenNeed)data.activeBubbleNeed;
+            Sprite needSprite = GetNeedSprite(currentNeed);
+            ShowBubble(needSprite, GetNeedText(currentNeed));
+            currentState = SlotState.WaitingForCareClick;
+            NotifyStateChanged();
+            UpdateAnimationByNeed(currentNeed);
+            StartBubbleExpiryTimer();
         }
         else
         {

@@ -168,6 +168,8 @@ public class UIManager : Singleton<UIManager>
     {
         ShowMainMenu();
 
+        SaveManager.SaveAll();
+
         if (GameManager.Instance != null)
             GameManager.Instance.ReturnToMainMenu();
     }

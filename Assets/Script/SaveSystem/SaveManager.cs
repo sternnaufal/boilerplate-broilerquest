@@ -9,6 +9,7 @@ public static class SaveManager
     [Serializable]
     public class SlotSaveData
     {
+        public string slotId;
         public bool occupied;
         public string prefabName;
         public bool feedSatisfied;
@@ -19,6 +20,8 @@ public static class SaveManager
         public bool heatingFailed;
         public int completedCareCount;
         public int sellReward;
+        public bool hasActiveBubble;
+        public int activeBubbleNeed;
     }
 
     [Serializable]
@@ -96,16 +99,42 @@ public static class SaveManager
 
     public static void SaveAll()
     {
+        GameSaveData data = LoadOrCreateData();
+        bool hasChanges = false;
+
         StarterKandangSlot[] slots = GameObject.FindObjectsByType<StarterKandangSlot>(
-            FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID);
-        if (slots.Length > 0)
-            SaveSlots(slots);
+            FindObjectsInactive.Include, FindObjectsSortMode.InstanceID);
+        if (slots != null && slots.Length > 0)
+        {
+            data.slots = new SlotSaveData[slots.Length];
+            for (int i = 0; i < slots.Length; i++)
+            {
+                data.slots[i] = slots[i] != null ? slots[i].GetSaveData() : null;
+            }
+
+            hasChanges = true;
+        }
 
         if (StarterIoTController.Instance != null)
         {
             var states = StarterIoTController.Instance.GetActiveStates();
             if (states != null)
-                SaveIotStates(states);
+            {
+                var list = new List<IotSaveData>();
+                foreach (var kvp in states)
+                {
+                    list.Add(new IotSaveData { productKey = kvp.Key, active = kvp.Value });
+                }
+
+                data.iotStates = list.ToArray();
+                hasChanges = true;
+            }
+        }
+
+        if (hasChanges)
+        {
+            SaveData(data);
+            GameLog.Info("SaveManager: Full game state saved.");
         }
     }
 
@@ -117,9 +146,55 @@ public static class SaveManager
         GameSaveData data = JsonUtility.FromJson<GameSaveData>(json);
         if (data?.slots == null) return;
 
-        for (int i = 0; i < data.slots.Length && i < slots.Length; i++)
+        var slotsById = new Dictionary<string, StarterKandangSlot>();
+        if (slots != null)
         {
-            slots[i].RestoreFromSave(data.slots[i], prefabLookup);
+            foreach (StarterKandangSlot slot in slots)
+            {
+                if (slot == null)
+                    continue;
+
+                string slotId = slot.SlotId;
+                if (string.IsNullOrEmpty(slotId))
+                {
+                    Debug.LogWarning($"SaveManager: Slot {slot.name} has an empty SlotId.");
+                    continue;
+                }
+
+                if (slotsById.ContainsKey(slotId))
+                {
+                    Debug.LogWarning($"SaveManager: Duplicate SlotId '{slotId}' found. The first slot will be used.");
+                    continue;
+                }
+
+                slotsById.Add(slotId, slot);
+            }
+        }
+
+        for (int i = 0; i < data.slots.Length; i++)
+        {
+            SlotSaveData savedSlot = data.slots[i];
+            if (savedSlot == null)
+                continue;
+
+            if (string.IsNullOrEmpty(savedSlot.slotId))
+            {
+                if (slots != null && i < slots.Length && slots[i] != null)
+                {
+                    slots[i].RestoreFromSave(savedSlot, prefabLookup);
+                    GameLog.Info($"SaveManager: Restored legacy slot data by index {i}. It will be upgraded on the next save.");
+                }
+                continue;
+            }
+
+            if (slotsById.TryGetValue(savedSlot.slotId, out StarterKandangSlot slot))
+            {
+                slot.RestoreFromSave(savedSlot, prefabLookup);
+            }
+            else
+            {
+                Debug.LogWarning($"SaveManager: Saved slotId '{savedSlot.slotId}' was not found in the current scene.");
+            }
         }
 
         GameLog.Info("SaveManager: Slot states restored.");

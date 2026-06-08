@@ -125,24 +125,7 @@ public class StarterChickenShop : MonoBehaviour
         if (feedBuyButton != null)
             return;
 
-        GameObject btnObj = new GameObject("FeedBuyButton", typeof(RectTransform), typeof(Image), typeof(Button));
-        btnObj.transform.SetParent(transform, false);
-        RectTransform btnRect = btnObj.GetComponent<RectTransform>();
-        btnRect.anchorMin = new Vector2(0f, 1f);
-        btnRect.anchorMax = new Vector2(1f, 1f);
-        btnRect.pivot = new Vector2(0.5f, 1f);
-        btnRect.sizeDelta = new Vector2(0f, 50f);
-
-        feedBuyButton = btnObj.GetComponent<Button>();
-
-        GameObject labelObj = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
-        labelObj.transform.SetParent(btnObj.transform, false);
-        RectTransform labelRect = labelObj.GetComponent<RectTransform>();
-        labelRect.anchorMin = Vector2.zero;
-        labelRect.anchorMax = Vector2.one;
-        labelRect.offsetMin = Vector2.zero;
-        labelRect.offsetMax = Vector2.zero;
-        feedBuyLabel = labelObj.GetComponent<TextMeshProUGUI>();
+        Debug.LogWarning($"{name}: Feed buy button is not assigned. Assign ShopAPK/Pakan and ShopAPK/Pakan/Label in the Inspector.");
     }
 
     public void TryBuyFeed()

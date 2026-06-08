@@ -253,7 +253,23 @@ Gameplay/code status:
 - Feed API sudah dirapikan.
 - Coin tidak lagi reset setiap scene start.
 
+Update tambahan 8 Juni 2026:
+
+- `gakusahnama` sudah ditarik ke `dev/Hylmi`; local HEAD berada di `01e2887`.
+- Setelah update, beberapa bugfix gameplay/save/UI lama direstore dan dicatat di `bugfix_refactor_log_2026-06-08.md`.
+- Fitur care bubble expiry untuk `StarterKandangSlot` sudah diimplementasikan:
+  - default expiry 10 detik melalui `GameConstants.StarterSlot.BubbleExpiryDuration`.
+  - timer dimulai saat care bubble terlihat.
+  - pause dan puzzle menghentikan countdown tanpa reset dalam sesi scene yang sama.
+  - keluar lalu masuk lagi ke scene gameplay me-refresh active bubble ke 10 detik baru.
+  - bubble expired digolongkan sebagai gagal dan memengaruhi harga jual lewat flow failure yang sama dengan puzzle failure.
+  - save data menyimpan `hasActiveBubble` dan `activeBubbleNeed` agar active bubble bisa direstore.
+- Detail behavior dan QA checklist fitur ini ada di `bubble_expiry_update_2026-06-08.md`.
+
 Git status:
+
+Catatan: poin di bawah ini adalah status historis dari sesi 5 Juni, bukan status working tree saat ini.
+Untuk status setelah update 8 Juni, lihat `bugfix_refactor_log_2026-06-08.md` dan `bubble_expiry_update_2026-06-08.md`.
 
 - Perubahan intentional sudah staged.
 - Tidak ada unstaged diff setelah cleanup terakhir.

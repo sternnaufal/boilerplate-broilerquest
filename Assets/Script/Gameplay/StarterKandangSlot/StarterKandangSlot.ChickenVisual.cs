@@ -7,7 +7,7 @@ public partial class StarterKandangSlot
 {
     private GameObject CreateChickenVisual(GameObject chickenPrefab)
     {
-        Transform parent = chickenParent != null ? chickenParent : transform;
+        Transform parent = GetChickenVisualParent();
 
         GameObject prefabToInstantiate = chickenPrefab != null ? chickenPrefab : chickenVisual;
         if (prefabToInstantiate == null)
@@ -20,8 +20,46 @@ public partial class StarterKandangSlot
         return visual;
     }
 
+    private Transform GetChickenVisualParent()
+    {
+        return chickenParent != null ? chickenParent : transform;
+    }
+
+    private void RegisterUntrackedChickenVisuals()
+    {
+        Transform parent = GetChickenVisualParent();
+        if (parent == null)
+            return;
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            GameObject child = parent.GetChild(i).gameObject;
+            if (!IsRuntimeChickenVisual(child))
+                continue;
+
+            if (!spawnedChickens.Contains(child))
+                spawnedChickens.Add(child);
+        }
+    }
+
+    private bool IsRuntimeChickenVisual(GameObject candidate)
+    {
+        if (candidate == null || candidate == chickenVisual)
+            return false;
+
+        if (spawnedChickens.Contains(candidate))
+            return true;
+
+        string candidateName = candidate.name;
+        if (!string.IsNullOrEmpty(candidateName) && candidateName.Contains("(Clone)"))
+            return true;
+
+        return false;
+    }
+
     private List<GameObject> GetActiveChickenVisuals()
     {
+        RegisterUntrackedChickenVisuals();
         spawnedChickens.RemoveAll(chicken => chicken == null);
 
         List<GameObject> visuals = new List<GameObject>();

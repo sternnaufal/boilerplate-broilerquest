@@ -154,6 +154,7 @@ public class StarterIoTController : MonoBehaviour
         // Set default active false
         if (!activeStates.ContainsKey(productKey))
             activeStates[productKey] = false;
+        SaveManager.SaveIotStates(activeStates);
         RefreshAll();
         return true;
     }

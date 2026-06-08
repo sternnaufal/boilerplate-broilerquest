@@ -30,6 +30,7 @@ public static class GameConstants
         public const float NotificationDelay = 1f;
         public const float NeedIntervalMin = 3f;
         public const float NeedIntervalMax = 8f;
+        public const float BubbleExpiryDuration = 10f;
     }
 
     public static class Economy
@@ -38,8 +39,8 @@ public static class GameConstants
         public const int ChickenPrice = 40;
         public const int BaseSellPrice = 90;
         public const int FailPenalty = 30;
-        public const int FeedCost = 50;
-        public const int FeedIncrement = 10;
+        public const int FeedCost = 5;
+        public const int FeedIncrement = 1;
         public const int AutoFeederCost = 200;
         public const int AutoFanCost = 300;
         public const int AutoHeaterCost = 300;
