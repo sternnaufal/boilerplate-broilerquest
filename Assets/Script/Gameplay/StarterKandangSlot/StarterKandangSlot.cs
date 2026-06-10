@@ -46,7 +46,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private float notificationDelay = GameConstants.StarterSlot.NotificationDelay;
     [SerializeField] private float needIntervalMin = GameConstants.StarterSlot.NeedIntervalMin;
     [SerializeField] private float needIntervalMax = GameConstants.StarterSlot.NeedIntervalMax;
-    [SerializeField] private float bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDuration;
+    [SerializeField] private float bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDurationStarter;
 
     [Header("SFX")]
     [SerializeField] private AudioClip careCompleteSfx;
@@ -343,6 +343,8 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     private void StartBubbleExpiryTimer()
     {
         StopBubbleExpiryTimer();
+        if (bubbleExpiryDuration <= 0f)
+            return; // no expiry for this level
         CoroutineHelper.StopAndStart(this, ref bubbleExpiryCoroutine, BubbleExpiryRoutine());
     }
 
