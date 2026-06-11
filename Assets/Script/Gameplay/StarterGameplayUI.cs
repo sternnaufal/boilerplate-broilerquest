@@ -76,6 +76,7 @@ public class StarterGameplayUI : MonoBehaviour
     [SerializeField] private float animationDuration = 0.3f; // lama animasi
     private bool listenersRegistered;
     private bool hpVisible;
+    private bool hpVisibleBeforePause;
     private bool iotCreated;
     private Vector2 hiddenPosition;
     private Vector2 visiblePosition;
@@ -140,6 +141,10 @@ public class StarterGameplayUI : MonoBehaviour
 
         if (pausePanel != null)
             pausePanel.SetActive(true);
+
+        hpVisibleBeforePause = hpVisible;
+        if (hpVisible)
+            CloseHpPanel();
     }
 
     public void ResumeGame()
@@ -151,6 +156,9 @@ public class StarterGameplayUI : MonoBehaviour
 
         if (hudPanel != null)
             hudPanel.SetActive(true);
+
+        if (hpVisibleBeforePause)
+            ShowHpPanel(true);
     }
 
     public void ToggleHpPanel()

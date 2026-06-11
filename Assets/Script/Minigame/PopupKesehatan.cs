@@ -19,11 +19,6 @@ public class PopupKesehatan : Singleton<PopupKesehatan>
     public float moveSpeed = 300f;
     public float greenZoneWidth = 100f;
 
-    [Header("SFX")]
-    [SerializeField] private AudioClip toggleOnSfx;
-    [SerializeField] private AudioClip stopSuccessSfx;
-    [SerializeField] private AudioClip stopFailSfx;
-
     [Header("Popup Result Prefab")]
     public GameObject popupResultPrefab;   // Assign prefab PopupHasilKesehatan
 
@@ -82,7 +77,7 @@ public class PopupKesehatan : Singleton<PopupKesehatan>
         if (isOn) return;
         isOn = true;
         buttonText.text = "ON";
-        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(toggleOnSfx);
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayTimingToggleOn();
         timingPanel.SetActive(true);
         stopButton.interactable = true;
         StartMoving();
@@ -196,12 +191,12 @@ public class PopupKesehatan : Singleton<PopupKesehatan>
 
         if (success)
         {
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(stopSuccessSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayTimingSuccess();
             currentListener.OnHealthCheckSuccess();
         }
         else
         {
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(stopFailSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayTimingFail();
             currentListener.OnHealthCheckFailure();
         }
 

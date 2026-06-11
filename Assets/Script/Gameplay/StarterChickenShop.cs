@@ -52,11 +52,6 @@ public class StarterChickenShop : MonoBehaviour
     [SerializeField] private string feedBoughtMessage = "Pakan berhasil dibeli!";
     [SerializeField] private string noCoinFeedMessage = "Duitmu tidak cukup!";
 
-    [Header("SFX")]
-    [SerializeField] private AudioClip buySuccessSfx;
-    [SerializeField] private AudioClip buyFailSfx;
-    [SerializeField] private AudioClip feedBuySfx;
-
     [Header("Feedback")]
     [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private string startupMessage = "Beli ayam. Satu pembelian mengisi satu kandang dengan beberapa ayam.";
@@ -136,14 +131,14 @@ public class StarterChickenShop : MonoBehaviour
         if (CoinManager.Instance == null || !CoinManager.Instance.CanAfford(cost))
         {
             ShowMessage(noCoinFeedMessage);
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buyFailSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             return;
         }
 
         CoinManager.Instance.SpendCoin(cost);
         FeedManager.Instance.AddFeed(increment);
         ShowMessage(feedBoughtMessage);
-        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(feedBuySfx);
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayFeedBuy();
         RefreshShopState();
     }
 
@@ -157,14 +152,14 @@ public class StarterChickenShop : MonoBehaviour
         if (availableSlot == null)
         {
             ShowMessage(noSlotMessage);
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buyFailSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             return false;
         }
 
         if (CoinManager.Instance == null || !CoinManager.Instance.SpendCoin(option.price))
         {
             ShowMessage(noCoinMessage);
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buyFailSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             RefreshShopState();
             return false;
         }
@@ -173,13 +168,13 @@ public class StarterChickenShop : MonoBehaviour
         {
             CoinManager.Instance.AddCoin(option.price);
             ShowMessage(noSlotMessage);
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buyFailSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             RefreshShopState();
             return false;
         }
 
         ShowMessage($"{option.displayName}: {boughtMessage}. Kandang kosong: {GetAvailableKandangCount()}.");
-        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buySuccessSfx);
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayBuySuccess();
         RefreshShopState();
         return true;
     }

@@ -287,7 +287,7 @@ GameObject:
   - component: {fileID: 3457124104039086998}
   - component: {fileID: 1501038919867028726}
   m_Layer: 0
-  m_Name: BQ_HPPanel
+  m_Name: HPPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1475,7 +1475,7 @@ GameObject:
   - component: {fileID: 3881141730353367335}
   - component: {fileID: 3527110128645595744}
   m_Layer: 0
-  m_Name: BQ_PausePanel
+  m_Name: PausePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1671,7 +1671,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8131622060512287391}
   m_Layer: 0
-  m_Name: BQ_HUD
+  m_Name: HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1923,7 +1923,7 @@ GameObject:
   - component: {fileID: 1007574070709093545}
   - component: {fileID: 1747374001949823519}
   m_Layer: 0
-  m_Name: BQ_KandangArea
+  m_Name: KandangArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2123,7 +2123,7 @@ GameObject:
   - component: {fileID: 972934487087008241}
   - component: {fileID: 1913283177537954440}
   m_Layer: 0
-  m_Name: BQ_KandangBackground
+  m_Name: KandangBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2320,7 +2320,7 @@ GameObject:
   - component: {fileID: 3631020489939212501}
   - component: {fileID: 5732023220666920516}
   m_Layer: 0
-  m_Name: BQ_StarterCanvas
+  m_Name: StarterCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

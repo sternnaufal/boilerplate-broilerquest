@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8079685212995240743}
   - component: {fileID: 7396551506617627839}
   m_Layer: 0
-  m_Name: BQ_KandangSlot
+  m_Name: KandangSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

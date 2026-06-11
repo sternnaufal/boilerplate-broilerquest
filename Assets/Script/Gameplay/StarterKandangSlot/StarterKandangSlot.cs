@@ -48,12 +48,6 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private float needIntervalMax = GameConstants.StarterSlot.NeedIntervalMax;
     [SerializeField] private float bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDurationStarter;
 
-    [Header("SFX")]
-    [SerializeField] private AudioClip careCompleteSfx;
-    [SerializeField] private AudioClip sellCompleteSfx;
-    [SerializeField] private AudioClip healthSuccessSfx;
-    [SerializeField] private AudioClip healthFailSfx;
-
     [Header("Optional Health Minigame")]
     [SerializeField] private bool useHealthMinigame;
     [SerializeField] private bool clearChickenOnHealthFail;
@@ -243,7 +237,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
                 return;
 
             CompleteCurrentNeed();
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(careCompleteSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayCareComplete();
             return;
         }
 
@@ -254,7 +248,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
                 CoinManager.Instance.AddCoin(sellReward);
 
             GameLog.Info($"{name}: {CurrentChickenCount} ayam dijual, +{finalReward} coin.");
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(sellCompleteSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlaySellComplete();
             ClearChicken();
         }
     }
@@ -264,7 +258,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         if (currentState != SlotState.WaitingForHealthMinigame)
             return;
 
-        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(healthSuccessSfx);
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayHealthSuccess();
         CompleteCurrentNeed();
     }
 
@@ -273,7 +267,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         if (currentState != SlotState.WaitingForHealthMinigame)
             return;
 
-        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(healthFailSfx);
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayHealthFail();
         FailCurrentNeedAndAdvance("puzzle gagal");
     }
 
@@ -403,7 +397,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             GameLog.Info($"{name}: IoT {iotKey} aktif, kebutuhan {GetNeedText(currentNeed)} selesai dengan tap tanpa minigame.");
             UpdateAnimationByNeed(currentNeed);
             CompleteCurrentNeed();
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(careCompleteSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayCareComplete();
             return true;
         }
 

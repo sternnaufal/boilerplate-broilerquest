@@ -13,11 +13,6 @@ public class LevelSelectController : MonoBehaviour
     [SerializeField] private Button beginnerButton;
     [SerializeField] private Button intermediateButton;
 
-    [Header("SFX")]
-    [SerializeField] private AudioClip buttonClickSfx;
-    [SerializeField] private AudioClip unlockSuccessSfx;
-    [SerializeField] private AudioClip unlockFailSfx;
-
     [Header("Locked Level Feedback")]
     [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private string lockedMessage = "Level ini belum tersedia.";
@@ -137,7 +132,7 @@ public class LevelSelectController : MonoBehaviour
         if (CoinManager.Instance == null)
         {
             ShowLockedMessage(levelName);
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(unlockFailSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayUnlockFail();
             return;
         }
 
@@ -146,7 +141,7 @@ public class LevelSelectController : MonoBehaviour
             PlayerPrefs.SetInt(playerPrefsKey, 1);
             PlayerPrefs.Save();
             GameLog.Info($"{levelName} berhasil dibuka! -{cost} coin.");
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(unlockSuccessSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayUnlockSuccess();
             RefreshButtonStates();
             onSuccess?.Invoke();
         }
@@ -156,7 +151,7 @@ public class LevelSelectController : MonoBehaviour
                 messageText.text = $"{levelName}: {insufficientCoinMessage} ({cost} coin)";
 
             GameLog.Info($"Coin tidak cukup untuk membuka {levelName}.");
-            if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(unlockFailSfx);
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayUnlockFail();
         }
     }
 
@@ -178,6 +173,6 @@ public class LevelSelectController : MonoBehaviour
 
     private void PlayClickSfx()
     {
-        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(buttonClickSfx);
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick();
     }
 }

@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 4357114434625207754}
   - component: {fileID: 3787596482580703932}
   m_Layer: 0
-  m_Name: BQ_CoinIcon
+  m_Name: CoinIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

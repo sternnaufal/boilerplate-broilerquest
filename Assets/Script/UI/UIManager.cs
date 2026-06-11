@@ -26,9 +26,6 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Slider musicVolumeSlider;
     [SerializeField] private Slider sfxVolumeSlider;
 
-    [Header("SFX")]
-    [SerializeField] private AudioClip navigateSfx;
-
     [Header("Pause Menu")]
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button pauseOptionsButton;
@@ -42,7 +39,7 @@ public class UIManager : Singleton<UIManager>
 
     private void PlayNavSfx()
     {
-        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(navigateSfx);
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayNavigate();
     }
 
     protected override bool PersistAcrossScenes => false;
