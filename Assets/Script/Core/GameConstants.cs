@@ -30,7 +30,10 @@ public static class GameConstants
         public const float NotificationDelay = 1f;
         public const float NeedIntervalMin = 3f;
         public const float NeedIntervalMax = 8f;
-        public const float BubbleExpiryDuration = 10f;
+        // 0 or negative = no expiry (starter level: unlimited time)
+        public const float BubbleExpiryDurationStarter    = 0f;   // disabled
+        public const float BubbleExpiryDurationBeginner   = 20f;
+        public const float BubbleExpiryDurationIntermediate = 15f;
     }
 
     public static class Economy
