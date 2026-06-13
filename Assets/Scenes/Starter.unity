@@ -1673,6 +1673,7 @@ MonoBehaviour:
   resumeButton: {fileID: 1289705273}
   hpToggleButton: {fileID: 72372731}
   closeHpButton: {fileID: 1031492086}
+  exitButton: {fileID: 1007367985}
   mainMenuButton: {fileID: 0}
   pauseButtonStyle:
     label: PAUSE
@@ -2761,6 +2762,7 @@ MonoBehaviour:
   resumeButton: {fileID: 1289705273}
   hpToggleButton: {fileID: 72372731}
   closeHpButton: {fileID: 1031492086}
+  exitButton: {fileID: 0}
   mainMenuButton: {fileID: 0}
   pauseButtonStyle:
     label: PAUSE

@@ -38,6 +38,7 @@ public class StarterGameplayUI : MonoBehaviour
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button hpToggleButton;
     [SerializeField] private Button closeHpButton;
+    [SerializeField] private Button exitButton;
     [SerializeField] private Button mainMenuButton;
 
     [Header("Button Styles")]
@@ -127,7 +128,7 @@ public class StarterGameplayUI : MonoBehaviour
         ButtonHelper.AddListenerOnce(resumeButton, ResumeGame);
         ButtonHelper.AddListenerOnce(hpToggleButton, ToggleHpPanel);
         ButtonHelper.AddListenerOnce(closeHpButton, CloseHpPanel);
-        ButtonHelper.AddListenerOnce(mainMenuButton, ReturnToMainMenu);
+        ButtonHelper.AddListenerOnce(exitButton, ReturnToMainMenu);
 
         listenersRegistered = true;
     }
@@ -211,11 +212,11 @@ public class StarterGameplayUI : MonoBehaviour
         UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.MainMenuConfirm, () =>
         {
             SaveManager.SaveAll();
-        GameStateManager.ApplyState(GameState.Menu);
+            GameStateManager.ApplyState(GameState.Menu);
 
-        if (GameManager.Instance != null)
-            GameManager.Instance.ReturnToMainMenu();
-        });   
+            if (GameManager.Instance != null)
+                GameManager.Instance.ReturnToMainMenu();
+        });
     }
 
     private void PolishStarterUi()
@@ -224,7 +225,9 @@ public class StarterGameplayUI : MonoBehaviour
         StyleButton(resumeButton, resumeButtonStyle.label, resumeButtonStyle.color, GetSpriteSafe(1));
         StyleButton(hpToggleButton, hpToggleButtonStyle.label, hpToggleButtonStyle.color, GetSpriteSafe(2));
         StyleButton(closeHpButton, closeHpButtonStyle.label, closeHpButtonStyle.color, GetSpriteSafe(3));
-        EnsureMainMenuButton();
+
+        if (mainMenuButton != null)
+            mainMenuButton.gameObject.SetActive(false);
 
         //StylePanel(hpPanel, hpPanelStyle.color);
         StylePanel(pausePanel, pausePanelStyle.color);
@@ -241,36 +244,6 @@ public class StarterGameplayUI : MonoBehaviour
         }
     }
 
-    private void EnsureMainMenuButton()
-    {
-        if (mainMenuButton != null)
-            return;
-
-        if (pausePanel == null)
-            return;
-
-        GameObject btnObj = new GameObject("MainMenuButton", typeof(RectTransform), typeof(Image), typeof(Button));
-        btnObj.transform.SetParent(pausePanel.transform, false);
-        RectTransform btnRect = btnObj.GetComponent<RectTransform>();
-        btnRect.anchorMin = new Vector2(0.5f, 0f);
-        btnRect.anchorMax = new Vector2(0.5f, 0f);
-        btnRect.pivot = new Vector2(0.5f, 0f);
-        btnRect.anchoredPosition = new Vector2(0f, 80f);
-        btnRect.sizeDelta = new Vector2(220f, 52f);
-
-        mainMenuButton = btnObj.GetComponent<Button>();
-        ButtonHelper.AddListenerOnce(mainMenuButton, ReturnToMainMenu);
-
-        GameObject labelObj = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
-        labelObj.transform.SetParent(btnObj.transform, false);
-        RectTransform labelRect = labelObj.GetComponent<RectTransform>();
-        labelRect.anchorMin = Vector2.zero;
-        labelRect.anchorMax = Vector2.one;
-        labelRect.offsetMin = Vector2.zero;
-        labelRect.offsetMax = Vector2.zero;
-
-        StyleButton(mainMenuButton, mainMenuButtonStyle.label, mainMenuButtonStyle.color, null);
-    }
 
     private Sprite GetSpriteSafe(int index)
     {
