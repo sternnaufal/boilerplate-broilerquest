@@ -10,6 +10,25 @@ public partial class StarterKandangSlot
         if (JigsawMinigameController.Instance != null && JigsawMinigameController.Instance.IsPlaying)
             return true;
 
+        if (currentNeed == ChickenNeed.Cooling)
+        {
+            if (MemoryMatchController.Instance != null && MemoryMatchController.Instance.IsPlaying)
+                return true;
+
+            MemoryMatchController memoryMatch = MemoryMatchController.Instance;
+            if (memoryMatch != null)
+            {
+                currentState = SlotState.WaitingForHealthMinigame;
+                NotifyStateChanged();
+
+                if (memoryMatch.ShowMemoryMatch(this, GetNeedTitle(currentNeed)))
+                    return true;
+
+                currentState = SlotState.WaitingForCareClick;
+                NotifyStateChanged();
+            }
+        }
+
         JigsawMinigameController jigsawController = JigsawMinigameController.Instance;
         if (jigsawController != null)
         {

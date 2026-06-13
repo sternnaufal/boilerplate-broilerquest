@@ -120,7 +120,10 @@ public class GameManager : Singleton<GameManager>
             }
 
             currentLevelIndex = nextLevel;
-            SceneManager.LoadScene(sceneNames[nextLevel]);
+            if (SceneTransition.Instance != null)
+                SceneTransition.Instance.LoadScene(sceneNames[nextLevel]);
+            else
+                SceneManager.LoadScene(sceneNames[nextLevel]);
             return;
         }
 

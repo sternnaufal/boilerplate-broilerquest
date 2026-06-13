@@ -208,6 +208,9 @@ public class KoleksiIoTController : MonoBehaviour
         if (SceneController.Instance != null)
             SceneController.Instance.GoToMainMenu();
         else
-            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+            if (SceneTransition.Instance != null)
+                SceneTransition.Instance.LoadScene("MainMenu");
+            else
+                UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 }

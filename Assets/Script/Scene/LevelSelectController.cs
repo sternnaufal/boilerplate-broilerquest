@@ -80,7 +80,12 @@ public class LevelSelectController : MonoBehaviour
         }
 
         if (!string.IsNullOrWhiteSpace(starterSceneName))
-            SceneManager.LoadScene(starterSceneName);
+        {
+            if (SceneTransition.Instance != null)
+                SceneTransition.Instance.LoadScene(starterSceneName);
+            else
+                SceneManager.LoadScene(starterSceneName);
+        }
     }
 
     public void PlayBeginner()

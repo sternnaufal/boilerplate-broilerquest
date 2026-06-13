@@ -380,7 +380,11 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
     private bool IsPuzzleActive()
     {
-        return JigsawMinigameController.Instance != null && JigsawMinigameController.Instance.IsPlaying;
+        if (JigsawMinigameController.Instance != null && JigsawMinigameController.Instance.IsPlaying)
+            return true;
+        if (MemoryMatchController.Instance != null && MemoryMatchController.Instance.IsPlaying)
+            return true;
+        return false;
     }
 
     private bool TryCompleteCurrentNeedByActiveIoT()

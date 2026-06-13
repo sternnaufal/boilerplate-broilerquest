@@ -11,19 +11,28 @@ public class SceneController : Singleton<SceneController>
     public void GoToMainMenu()
     {
         GameStateManager.ApplyState(GameState.Menu);
-        SceneManager.LoadScene(mainMenuScene);
+        if (SceneTransition.Instance != null)
+            SceneTransition.Instance.LoadScene(mainMenuScene);
+        else
+            SceneManager.LoadScene(mainMenuScene);
     }
 
     public void GoToSelectLevel()
     {
         GameStateManager.ApplyState(GameState.Menu);
-        SceneManager.LoadScene(selectLevelScene);
+        if (SceneTransition.Instance != null)
+            SceneTransition.Instance.LoadScene(selectLevelScene);
+        else
+            SceneManager.LoadScene(selectLevelScene);
     }
 
     public void GoToKoleksiIoT()
     {
         GameStateManager.ApplyState(GameState.Menu);
-        SceneManager.LoadScene(koleksiIoTScene);
+        if (SceneTransition.Instance != null)
+            SceneTransition.Instance.LoadScene(koleksiIoTScene);
+        else
+            SceneManager.LoadScene(koleksiIoTScene);
     }
 
     public void GoToLevel(int levelIndex)
@@ -52,7 +61,10 @@ public class SceneController : Singleton<SceneController>
         }
 
         GameStateManager.ApplyState(GameState.Playing);
-        SceneManager.LoadScene(sceneName);
+        if (SceneTransition.Instance != null)
+            SceneTransition.Instance.LoadScene(sceneName);
+        else
+            SceneManager.LoadScene(sceneName);
     }
 
 }
