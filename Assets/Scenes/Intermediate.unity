@@ -2462,7 +2462,6 @@ MonoBehaviour:
   - 120
   - 180
   levelTimer: {fileID: 0}
-  timeUpSfx: {fileID: 0}
   timeUpPopupPrefab: {fileID: 5686620739718393810, guid: e3f959814f1d81344b175c04511ef24b, type: 3}
   mainCanvas: {fileID: 1086103076}
 --- !u!114 &651932098
@@ -2883,9 +2882,6 @@ MonoBehaviour:
   feedBuyButtonText: Beli Pakan
   feedBoughtMessage: Pakan berhasil dibeli!
   noCoinFeedMessage: Duitmu tidak cukup!
-  buySuccessSfx: {fileID: 0}
-  buyFailSfx: {fileID: 0}
-  feedBuySfx: {fileID: 0}
   messageText: {fileID: 1171002132}
   startupMessage: Beli ayam. Ayam akan masuk ke kandang kosong pertama.
   noCoinMessage: Coin belum cukup.
@@ -2964,7 +2960,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &748294369
 MonoBehaviour:
@@ -3145,8 +3141,6 @@ MonoBehaviour:
   - productKey: AutoFan
     toggleButton: {fileID: 947229081}
     statusText: {fileID: 1697770114}
-  toggleOnSfx: {fileID: 0}
-  toggleOffSfx: {fileID: 0}
   ownedColor: {r: 0.2, g: 0.8, b: 0.3, a: 1}
 --- !u!1 &838644034
 GameObject:
@@ -4270,6 +4264,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 899893808}
+  - {fileID: 84642807}
+  - {fileID: 2111606669}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1086103075

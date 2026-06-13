@@ -221,7 +221,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             {
                 if (UIAlertPanel.Instance != null)
                 {
-                    UIAlertPanel.Instance.Show("Pakan habis, beli di shop terlebih dahulu.");
+                    UIAlertPanel.Instance.Show(UIAlertPanel.NotificationType.FoodOut);
                 }
                 else
                 {

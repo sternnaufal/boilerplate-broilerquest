@@ -310,7 +310,7 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
     {
         if (!isPlaying)
             return;
-
+            
         if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawComplete();
         FinishMinigame(true);
     }
@@ -319,6 +319,8 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
     {
         if (!isPlaying)
             return;
+            
+        UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.TimeOut);
 
         if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawFail();
         FinishMinigame(false);

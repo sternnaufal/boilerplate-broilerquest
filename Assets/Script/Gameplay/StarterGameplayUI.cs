@@ -208,11 +208,14 @@ public class StarterGameplayUI : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        SaveManager.SaveAll();
+        UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.MainMenuConfirm, () =>
+        {
+            SaveManager.SaveAll();
         GameStateManager.ApplyState(GameState.Menu);
 
         if (GameManager.Instance != null)
             GameManager.Instance.ReturnToMainMenu();
+        });   
     }
 
     private void PolishStarterUi()

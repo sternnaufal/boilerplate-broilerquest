@@ -159,6 +159,7 @@ public class StarterChickenShop : MonoBehaviour
         if (CoinManager.Instance == null || !CoinManager.Instance.SpendCoin(option.price))
         {
             ShowMessage(noCoinMessage);
+            UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.CoinOut);
             if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             RefreshShopState();
             return false;

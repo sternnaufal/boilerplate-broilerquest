@@ -1,75 +1,146 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIAlertPanel : MonoBehaviour
 {
-    [Header("UI References (manual drag)")]
-    [SerializeField] private GameObject panelRoot;
-    [SerializeField] private TextMeshProUGUI messageText;
-    [SerializeField] private Button closeButton;
+    public static UIAlertPanel Instance { get; private set; }
 
-    [Header("Behavior")]
-    [SerializeField] private bool dontDestroyOnLoad = true;
-    [SerializeField] private float autoHideSeconds = 0f;
+    [Header("Notification Panels (Drag from Hierarchy)")]
+    [SerializeField] private GameObject foodOutPanel;      // PakanHabis
+    [SerializeField] private GameObject coinOutPanel;      // DuidHabis
+    [SerializeField] private GameObject timeOutPanel;      // WaktuHabis
+    [SerializeField] private GameObject mainMenuConfirmPanel; // MainMenu
 
-    private static UIAlertPanel instance;
-    private float hideAtTime;
+    [Header("Auto-hide Duration")]
+    [SerializeField] private float autoHideDelay = 3f;
 
-    public static UIAlertPanel Instance => instance;
+    private Coroutine autoHideCoroutine;
+
+    public enum NotificationType
+    {
+        FoodOut,
+        CoinOut,
+        TimeOut,
+        MainMenuConfirm
+    }
 
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
 
-        instance = this;
-        if (dontDestroyOnLoad)
-            DontDestroyOnLoad(gameObject);
-
-        if (closeButton != null)
-            closeButton.onClick.AddListener(Hide);
-
-        Hide();
+        // Nonaktifkan semua panel di awal
+        SetAllPanelsActive(false);
     }
 
-    private void Update()
+    private void SetAllPanelsActive(bool active)
     {
-        if (autoHideSeconds <= 0f)
-            return;
+        if (foodOutPanel != null) foodOutPanel.SetActive(active);
+        if (coinOutPanel != null) coinOutPanel.SetActive(active);
+        if (timeOutPanel != null) timeOutPanel.SetActive(active);
+        if (mainMenuConfirmPanel != null) mainMenuConfirmPanel.SetActive(active);
+    }
 
-        if (hideAtTime > 0f && Time.unscaledTime >= hideAtTime)
+    public void Show(NotificationType type, System.Action onConfirm = null)
+    {
+        // Hentikan auto-hide yang sedang berjalan
+        if (autoHideCoroutine != null) StopCoroutine(autoHideCoroutine);
+        SetAllPanelsActive(false);
+
+        switch (type)
         {
-            hideAtTime = 0f;
-            Hide();
+            case NotificationType.FoodOut:
+                if (foodOutPanel != null)
+                {
+                    foodOutPanel.SetActive(true);
+                    autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(foodOutPanel));
+                }
+                break;
+            case NotificationType.CoinOut:
+                if (coinOutPanel != null)
+                {
+                    coinOutPanel.SetActive(true);
+                    autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(coinOutPanel));
+                }
+                break;
+            case NotificationType.TimeOut:
+                if (timeOutPanel != null)
+                {
+                    timeOutPanel.SetActive(true);
+                    autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(timeOutPanel));
+                }
+                break;
+            case NotificationType.MainMenuConfirm:
+                if (mainMenuConfirmPanel != null)
+                {
+                    mainMenuConfirmPanel.SetActive(true);
+                    SetupMainMenuButtons(onConfirm);
+                }
+                break;
         }
     }
 
-    public void Show(string message)
+    private IEnumerator AutoHideAfterDelay(GameObject panel)
     {
-        if (messageText != null)
-            messageText.text = message ?? string.Empty;
-
-        if (panelRoot != null)
-            panelRoot.SetActive(true);
-        else
-            gameObject.SetActive(true);
-
-        if (autoHideSeconds > 0f)
-            hideAtTime = Time.unscaledTime + autoHideSeconds;
+        yield return new WaitForSeconds(autoHideDelay);
+        if (panel != null) panel.SetActive(false);
+        autoHideCoroutine = null;
     }
 
-    public void Hide()
+    private void SetupMainMenuButtons(System.Action onConfirm)
     {
-        hideAtTime = 0f;
+        if (mainMenuConfirmPanel == null) return;
 
-        if (panelRoot != null)
-            panelRoot.SetActive(false);
-        else
-            gameObject.SetActive(false);
+        Button kembali = FindButtonInChildren(mainMenuConfirmPanel.transform, "KembaliBut");
+        Button lanjutkan = FindButtonInChildren(mainMenuConfirmPanel.transform, "LanjutkanBut");
+
+        if (kembali != null)
+        {
+            kembali.onClick.RemoveAllListeners();
+            kembali.onClick.AddListener(() => HideMainMenuConfirm());
+        }
+        if (lanjutkan != null)
+        {
+            lanjutkan.onClick.RemoveAllListeners();
+            lanjutkan.onClick.AddListener(() =>
+            {
+                HideMainMenuConfirm();
+                onConfirm?.Invoke();
+            });
+        }
+    }
+
+    private Button FindButtonInChildren(Transform parent, string buttonName)
+    {
+        foreach (Transform child in parent)
+        {
+            if (child.name == buttonName)
+            {
+                Button btn = child.GetComponent<Button>();
+                if (btn != null) return btn;
+            }
+            Button found = FindButtonInChildren(child, buttonName);
+            if (found != null) return found;
+        }
+        return null;
+    }
+
+    private void HideMainMenuConfirm()
+    {
+        if (mainMenuConfirmPanel != null)
+            mainMenuConfirmPanel.SetActive(false);
+    }
+
+    public void HideAll()
+    {
+        if (autoHideCoroutine != null) StopCoroutine(autoHideCoroutine);
+        SetAllPanelsActive(false);
     }
 }
-
