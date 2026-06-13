@@ -92,17 +92,12 @@ public class LevelSelectController : MonoBehaviour
     {
         if (IsBeginnerUnlocked())
         {
-            if (SceneController.Instance != null)
-            {
-                SceneController.Instance.GoToLevel(1);
-                return;
-            }
+            LoadLevelScene(1);
             return;
         }
 
         TryUnlockLevel(GameConstants.LevelUnlock.BeginnerCost, GameConstants.Persistence.LevelUnlockBeginnerKey, "Beginner", () => {
-            if (SceneController.Instance != null)
-                SceneController.Instance.GoToLevel(1);
+            LoadLevelScene(1);
         });
     }
 
@@ -110,18 +105,31 @@ public class LevelSelectController : MonoBehaviour
     {
         if (IsIntermediateUnlocked())
         {
-            if (SceneController.Instance != null)
-            {
-                SceneController.Instance.GoToLevel(2);
-                return;
-            }
+            LoadLevelScene(2);
             return;
         }
 
         TryUnlockLevel(GameConstants.LevelUnlock.IntermediateCost, GameConstants.Persistence.LevelUnlockIntermediateKey, "Intermediate", () => {
-            if (SceneController.Instance != null)
-                SceneController.Instance.GoToLevel(2);
+            LoadLevelScene(2);
         });
+    }
+
+    private void LoadLevelScene(int levelIndex)
+    {
+        string[] sceneNames = GameManager.Instance != null
+            ? GameManager.Instance.sceneNames
+            : new string[] { "Starter", "Beginner", "Intermediate" };
+
+        if (levelIndex < 0 || levelIndex >= sceneNames.Length)
+            return;
+
+        string sceneName = sceneNames[levelIndex];
+        if (SceneController.Instance != null)
+            SceneController.Instance.GoToLevel(levelIndex);
+        else if (SceneTransition.Instance != null)
+            SceneTransition.Instance.LoadScene(sceneName);
+        else
+            SceneManager.LoadScene(sceneName);
     }
 
     public void ShowLockedMessage(string levelName)

@@ -308,6 +308,12 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         if (popupRoot != null && timerText != null && gridContainer != null)
             return;
 
+        GameObject existingCanvas = GameObject.Find("MemoryMatchCanvas");
+        if (existingCanvas != null)
+        {
+            Destroy(existingCanvas);
+        }
+
         GameObject canvasObject = new GameObject("MemoryMatchCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
         DontDestroyOnLoad(canvasObject);
         popupRoot = canvasObject;

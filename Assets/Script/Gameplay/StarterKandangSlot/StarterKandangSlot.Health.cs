@@ -46,16 +46,7 @@ public partial class StarterKandangSlot
             }
         }
 
-        if (PopupKesehatan.Instance == null)
-        {
-            Debug.LogWarning($"{name}: PopupKesehatan belum tersedia, kebutuhan diselesaikan langsung.");
-            return false;
-        }
-
-        currentState = SlotState.WaitingForHealthMinigame;
-        NotifyStateChanged();
-        PopupKesehatan.Instance.ShowHealthCheck(this);
-        return true;
+        return false;
     }
 
     private Texture GetNeedPuzzleTexture(ChickenNeed need)

@@ -361,6 +361,12 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         if (popupRoot != null && timerText != null && gridContainer != null)
             return;
 
+        GameObject existingCanvas = GameObject.Find("JigsawMinigameCanvas");
+        if (existingCanvas != null)
+        {
+            Destroy(existingCanvas);
+        }
+
         GameObject canvasObject = new GameObject("JigsawMinigameCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
         DontDestroyOnLoad(canvasObject);
         popupRoot = canvasObject;
