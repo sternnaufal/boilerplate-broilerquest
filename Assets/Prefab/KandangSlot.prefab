@@ -128,7 +128,6 @@ MonoBehaviour:
   healthSuccessSfx: {fileID: 0}
   healthFailSfx: {fileID: 0}
   useHealthMinigame: 1
-  clearChickenOnHealthFail: 0
   jigsawFeedTexture: {fileID: 2800000, guid: 743387ece6deffe42b9575e6fb1245e0, type: 3}
   jigsawCoolingTexture: {fileID: 2800000, guid: c23aed4960beff6438826fe42c4871a8, type: 3}
   jigsawHeatingTexture: {fileID: 2800000, guid: 87b4346945cadec4aaae1e9956ee3618, type: 3}

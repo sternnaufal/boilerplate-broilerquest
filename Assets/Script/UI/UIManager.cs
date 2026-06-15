@@ -91,11 +91,6 @@ public class UIManager : Singleton<UIManager>
         HideExitConfirmPanel();
     }
 
-    public void ShowMainScreen()
-    {
-        ShowMainMenu();
-    }
-
     public void StartGame()
     {
         if (SceneController.Instance != null)

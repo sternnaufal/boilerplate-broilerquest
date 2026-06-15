@@ -50,7 +50,6 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
     [Header("Optional Health Minigame")]
     [SerializeField] private bool useHealthMinigame;
-    [SerializeField] private bool clearChickenOnHealthFail;
 
     [Header("Jigsaw Puzzle Textures")]
     [SerializeField] private Texture jigsawFeedTexture;

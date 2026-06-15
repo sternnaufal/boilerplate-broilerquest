@@ -78,7 +78,6 @@ public class StarterGameplayUI : MonoBehaviour
     private bool listenersRegistered;
     private bool hpVisible;
     private bool hpVisibleBeforePause;
-    private bool iotCreated;
     private Vector2 hiddenPosition;
     private Vector2 visiblePosition;
     private Coroutine hpAnimationCoroutine;
@@ -243,9 +242,7 @@ public class StarterGameplayUI : MonoBehaviour
         if (mainMenuButton != null)
             mainMenuButton.gameObject.SetActive(false);
 
-        //StylePanel(hpPanel, hpPanelStyle.color);
         StylePanel(pausePanel, pausePanelStyle.color);
-        //PositionHpPanel();
         DisableDecorativeRaycasts();
 
         if (coinText != null)
