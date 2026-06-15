@@ -82,5 +82,6 @@ public static class GameConstants
         public const int TotalPairs = 6;
         public const float FlipDuration = 0.25f;
         public const float MatchDelay = 0.5f;
+        public const float WarningThreshold = 10f;
     }
 }

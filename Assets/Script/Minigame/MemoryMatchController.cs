@@ -82,10 +82,14 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         currentListener = listener;
         firstSelected = null;
         secondSelected = null;
+        matchedCount = 0;
         isProcessing = false;
 
         if (titleText != null)
             titleText.text = string.IsNullOrWhiteSpace(eventTitle) ? "Memory Match" : eventTitle;
+
+        if (errorText != null)
+            errorText.gameObject.SetActive(false);
 
         BuildGrid();
 
@@ -128,6 +132,8 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
     {
         yield return new WaitForSecondsRealtime(flipMatchDelay);
 
+        if (!isPlaying) yield break;
+
         firstSelected.SetMatched();
         secondSelected.SetMatched();
         matchedCount++;
@@ -145,6 +151,8 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
     private IEnumerator OnMismatchRoutine()
     {
         yield return new WaitForSecondsRealtime(flipMatchDelay);
+
+        if (!isPlaying) yield break;
 
         firstSelected.FlipToBack();
         secondSelected.FlipToBack();
@@ -252,7 +260,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
 
         int seconds = Mathf.Max(0, Mathf.CeilToInt(timeRemaining));
         timerText.text = seconds.ToString();
-        timerText.color = timeRemaining <= 10f ? warningTimerColor : normalTimerColor;
+        timerText.color = timeRemaining <= GameConstants.MemoryMatch.WarningThreshold ? warningTimerColor : normalTimerColor;
     }
 
     private void CompleteWithSuccess()
@@ -261,6 +269,8 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
             return;
 
         if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawComplete();
+        HealthCheckResultOverlay.ShowSuccess();
+        CameraShake.Trigger(0.15f, 0.05f);
         FinishMinigame(true);
     }
 
@@ -269,7 +279,9 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         if (!isPlaying)
             return;
 
+        CameraShake.Trigger();
         if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawFail();
+        HealthCheckResultOverlay.ShowFail();
         FinishMinigame(false);
     }
 
@@ -321,6 +333,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         Canvas canvas = canvasObject.GetComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 500;
+        canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.Normal | AdditionalCanvasShaderChannels.Tangent;
 
         CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
@@ -328,10 +341,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         scaler.matchWidthOrHeight = 0.5f;
 
         RectTransform canvasRect = canvasObject.GetComponent<RectTransform>();
-        canvasRect.anchorMin = Vector2.zero;
-        canvasRect.anchorMax = Vector2.one;
-        canvasRect.offsetMin = Vector2.zero;
-        canvasRect.offsetMax = Vector2.zero;
+        StretchToParent(canvasRect);
 
         CreateBackdrop(canvasObject.transform);
 
@@ -341,16 +351,16 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         panelRect.anchorMin = new Vector2(0.5f, 0.5f);
         panelRect.anchorMax = new Vector2(0.5f, 0.5f);
         panelRect.pivot = new Vector2(0.5f, 0.5f);
-        panelRect.sizeDelta = new Vector2(450f, 550f);
+        panelRect.sizeDelta = new Vector2(500f, 600f);
         panelRect.anchoredPosition = new Vector2(350f, 0f);
 
         Image panelImage = panelObject.GetComponent<Image>();
         panelImage.color = new Color(0.08f, 0.22f, 0.12f, 0.96f);
         panelImage.raycastTarget = true;
 
-        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 240f), new Vector2(400f, 40f), 26f, TextAlignmentOptions.Center);
-        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 195f), new Vector2(120f, 40f), 32f, TextAlignmentOptions.Center);
-        errorText = CreateText(panelObject.transform, "ErrorText", new Vector2(0f, 0f), new Vector2(400f, 60f), 20f, TextAlignmentOptions.Center);
+        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 270f), new Vector2(500f, 50f), 28f, TextAlignmentOptions.Center);
+        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 220f), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
+        errorText = CreateText(panelObject.transform, "ErrorText", new Vector2(0f, 130f), new Vector2(400f, 60f), 20f, TextAlignmentOptions.Center);
         errorText.color = new Color(1f, 0.3f, 0.3f);
         errorText.gameObject.SetActive(false);
 
@@ -360,7 +370,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         gridRect.anchorMin = new Vector2(0.5f, 0.5f);
         gridRect.anchorMax = new Vector2(0.5f, 0.5f);
         gridRect.pivot = new Vector2(0.5f, 0.5f);
-        gridRect.anchoredPosition = new Vector2(0f, -30f);
+        gridRect.anchoredPosition = new Vector2(0f, -35f);
         gridContainer = gridObject.transform;
     }
 
@@ -409,5 +419,13 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
 
         GameObject eventSystemObject = new GameObject("EventSystem", typeof(UnityEngine.EventSystems.EventSystem), typeof(UnityEngine.EventSystems.StandaloneInputModule));
         DontDestroyOnLoad(eventSystemObject);
+    }
+
+    private void StretchToParent(RectTransform rect)
+    {
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
     }
 }

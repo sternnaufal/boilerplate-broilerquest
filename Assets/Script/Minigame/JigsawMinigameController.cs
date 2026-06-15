@@ -310,8 +310,10 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
     {
         if (!isPlaying)
             return;
-            
+
         if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawComplete();
+        HealthCheckResultOverlay.ShowSuccess();
+        CameraShake.Trigger(0.15f, 0.05f);
         FinishMinigame(true);
     }
 
@@ -319,10 +321,12 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
     {
         if (!isPlaying)
             return;
-            
+
+        CameraShake.Trigger();
         UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.TimeOut);
 
         if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawFail();
+        HealthCheckResultOverlay.ShowFail();
         FinishMinigame(false);
     }
 

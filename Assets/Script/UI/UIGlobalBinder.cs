@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,7 +9,14 @@ public class UIGlobalBinder : MonoBehaviour
     [SerializeField] private TextMeshProUGUI coinText;
     [SerializeField] private TextMeshProUGUI feedText;
 
+    [Header("Animated Counter")]
+    [SerializeField] private float counterAnimDuration = 0.3f;
+
     private static UIGlobalBinder _instance;
+    private int lastCoinAmount;
+    private int lastFeedAmount;
+    private bool coinInitialized;
+    private bool feedInitialized;
 
     void Awake()
     {
@@ -28,14 +36,95 @@ public class UIGlobalBinder : MonoBehaviour
 
     private void UpdateCoinDisplay(int totalCoin)
     {
+        int delta = totalCoin - lastCoinAmount;
+        lastCoinAmount = totalCoin;
+
         if (coinText != null)
-            coinText.text = totalCoin.ToString();
+        {
+            StopCoroutine(nameof(AnimateCoinText));
+            StartCoroutine(AnimateCoinText(totalCoin));
+        }
+
+        if (delta != 0 && coinInitialized)
+        {
+            Vector2 pos = GetTextScreenPos(coinText, new Vector2(80f, 0f));
+            FloatingFeedback.ShowCoin(pos, delta);
+        }
+
+        coinInitialized = true;
     }
 
     private void UpdateFeedDisplay(int totalFeed)
     {
+        int delta = totalFeed - lastFeedAmount;
+        lastFeedAmount = totalFeed;
+
         if (feedText != null)
-            feedText.text = totalFeed.ToString();
+        {
+            StopCoroutine(nameof(AnimateFeedText));
+            StartCoroutine(AnimateFeedText(totalFeed));
+        }
+
+        if (delta != 0 && feedInitialized)
+        {
+            Vector2 pos = GetTextScreenPos(feedText, new Vector2(80f, 0f));
+            FloatingFeedback.ShowFeed(pos, delta);
+        }
+
+        feedInitialized = true;
+    }
+
+    private IEnumerator AnimateCoinText(int target)
+    {
+        if (coinText == null) yield break;
+
+        int start = int.TryParse(coinText.text.Replace(",", ""), out int parsed) ? parsed : target;
+        float elapsed = 0f;
+
+        while (elapsed < counterAnimDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / counterAnimDuration);
+            int current = Mathf.RoundToInt(Mathf.Lerp(start, target, t));
+            coinText.text = current.ToString();
+            yield return null;
+        }
+
+        coinText.text = target.ToString();
+    }
+
+    private IEnumerator AnimateFeedText(int target)
+    {
+        if (feedText == null) yield break;
+
+        int start = int.TryParse(feedText.text.Replace(",", ""), out int parsed) ? parsed : target;
+        float elapsed = 0f;
+
+        while (elapsed < counterAnimDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / counterAnimDuration);
+            int current = Mathf.RoundToInt(Mathf.Lerp(start, target, t));
+            feedText.text = current.ToString();
+            yield return null;
+        }
+
+        feedText.text = target.ToString();
+    }
+
+    private static Vector2 GetTextScreenPos(TextMeshProUGUI text, Vector2 offset)
+    {
+        if (text == null) return new Vector2(Screen.width / 2f, Screen.height / 2f);
+
+        RectTransform rt = text.rectTransform;
+        Vector3[] corners = new Vector3[4];
+        rt.GetWorldCorners(corners);
+        Vector3 center = (corners[0] + corners[2]) / 2f;
+
+        if (Camera.main != null && rt.root.GetComponent<Canvas>().renderMode != RenderMode.ScreenSpaceOverlay)
+            center = Camera.main.WorldToScreenPoint(center);
+
+        return new Vector2(center.x, center.y) + offset;
     }
 
     private void OnEnable()
@@ -98,8 +187,14 @@ public class UIGlobalBinder : MonoBehaviour
         }
 
         if (CoinManager.Instance != null)
-            UpdateCoinDisplay(CoinManager.Instance.GetTotalCoin());
+        {
+            lastCoinAmount = CoinManager.Instance.GetTotalCoin();
+            UpdateCoinDisplay(lastCoinAmount);
+        }
         if (FeedManager.Instance != null)
-            UpdateFeedDisplay(FeedManager.Instance.GetFeedCount());
+        {
+            lastFeedAmount = FeedManager.Instance.GetFeedCount();
+            UpdateFeedDisplay(lastFeedAmount);
+        }
     }
 }
