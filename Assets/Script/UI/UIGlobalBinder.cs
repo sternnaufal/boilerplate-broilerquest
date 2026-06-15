@@ -12,11 +12,11 @@ public class UIGlobalBinder : MonoBehaviour
     [Header("Animated Counter")]
     [SerializeField] private float counterAnimDuration = 0.3f;
 
+    private const int UNINITIALIZED = int.MinValue;
+
     private static UIGlobalBinder _instance;
-    private int lastCoinAmount;
-    private int lastFeedAmount;
-    private bool coinInitialized;
-    private bool feedInitialized;
+    private int lastCoinAmount = UNINITIALIZED;
+    private int lastFeedAmount = UNINITIALIZED;
 
     void Awake()
     {
@@ -36,6 +36,17 @@ public class UIGlobalBinder : MonoBehaviour
 
     private void UpdateCoinDisplay(int totalCoin)
     {
+        if (lastCoinAmount == UNINITIALIZED)
+        {
+            lastCoinAmount = totalCoin;
+            if (coinText != null)
+            {
+                StopCoroutine(nameof(AnimateCoinText));
+                StartCoroutine(AnimateCoinText(totalCoin));
+            }
+            return;
+        }
+
         int delta = totalCoin - lastCoinAmount;
         lastCoinAmount = totalCoin;
 
@@ -45,17 +56,26 @@ public class UIGlobalBinder : MonoBehaviour
             StartCoroutine(AnimateCoinText(totalCoin));
         }
 
-        if (delta != 0 && coinInitialized)
+        if (delta != 0)
         {
             Vector2 pos = GetTextScreenPos(coinText, new Vector2(80f, 0f));
             FloatingFeedback.ShowCoin(pos, delta);
         }
-
-        coinInitialized = true;
     }
 
     private void UpdateFeedDisplay(int totalFeed)
     {
+        if (lastFeedAmount == UNINITIALIZED)
+        {
+            lastFeedAmount = totalFeed;
+            if (feedText != null)
+            {
+                StopCoroutine(nameof(AnimateFeedText));
+                StartCoroutine(AnimateFeedText(totalFeed));
+            }
+            return;
+        }
+
         int delta = totalFeed - lastFeedAmount;
         lastFeedAmount = totalFeed;
 
@@ -65,13 +85,11 @@ public class UIGlobalBinder : MonoBehaviour
             StartCoroutine(AnimateFeedText(totalFeed));
         }
 
-        if (delta != 0 && feedInitialized)
+        if (delta != 0)
         {
             Vector2 pos = GetTextScreenPos(feedText, new Vector2(80f, 0f));
             FloatingFeedback.ShowFeed(pos, delta);
         }
-
-        feedInitialized = true;
     }
 
     private IEnumerator AnimateCoinText(int target)
@@ -153,6 +171,8 @@ public class UIGlobalBinder : MonoBehaviour
     {
         coinText = null;
         feedText = null;
+        lastCoinAmount = UNINITIALIZED;
+        lastFeedAmount = UNINITIALIZED;
         FindUIReferences();
     }
 
@@ -186,15 +206,10 @@ public class UIGlobalBinder : MonoBehaviour
             }
         }
 
-        if (CoinManager.Instance != null)
-        {
-            lastCoinAmount = CoinManager.Instance.GetTotalCoin();
-            UpdateCoinDisplay(lastCoinAmount);
-        }
-        if (FeedManager.Instance != null)
-        {
-            lastFeedAmount = FeedManager.Instance.GetFeedCount();
-            UpdateFeedDisplay(lastFeedAmount);
-        }
+        if (coinText != null && CoinManager.Instance != null)
+            coinText.text = CoinManager.Instance.GetTotalCoin().ToString();
+
+        if (feedText != null && FeedManager.Instance != null)
+            feedText.text = FeedManager.Instance.GetFeedCount().ToString();
     }
 }

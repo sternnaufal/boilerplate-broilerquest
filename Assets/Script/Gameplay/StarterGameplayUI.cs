@@ -103,13 +103,10 @@ public class StarterGameplayUI : MonoBehaviour
 
         if (hpPanelRect != null)
         {
-            // Simpan posisi target (posisi yang sudah diatur di Unity)
+            Canvas.ForceUpdateCanvases();
             visiblePosition = hpPanelRect.anchoredPosition;
-            // Hitung posisi tersembunyi di bawah layar (y = -tinggi panel)
-            hiddenPosition = new Vector2(visiblePosition.x, -hpPanelRect.rect.height);
-            // Set panel ke posisi tersembunyi (tidak terlihat)
+            hiddenPosition = new Vector2(visiblePosition.x, visiblePosition.y - 800f);
             hpPanelRect.anchoredPosition = hiddenPosition;
-            // Panel tetap aktif agar animasi berjalan
             hpPanelRect.gameObject.SetActive(true);
         }
 
@@ -178,8 +175,8 @@ public class StarterGameplayUI : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < animationDuration)
         {
-            elapsed += Time.deltaTime;
-            float t = elapsed / animationDuration;
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / animationDuration);
             hpPanelRect.anchoredPosition = Vector2.Lerp(start, target, t);
             yield return null;
         }

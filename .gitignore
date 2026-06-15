@@ -11,6 +11,7 @@ Build/
 UserSettings/
 BroilerQuest_BurstDebugInformation_DoNotShip/
 broilerquest_BackUpThisFolder_ButDontShipItWithYourGame/
+broilerquest1.0_BackUpThisFolder_ButDontShipItWithYourGame/
 *.apk
 Assets/_Recovery/
 Assets/_Recovery.meta
