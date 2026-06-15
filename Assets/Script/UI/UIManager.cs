@@ -1,0 +1,272 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
+public class UIManager : Singleton<UIManager>
+{
+    [Header("UI Panels")]
+    [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private GameObject optionsPanel;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject hudPanel;
+
+    [Header("Exit Confirmation (manual UI)")]
+    [SerializeField] private GameObject exitConfirmPanel;
+    [SerializeField] private Button exitYesButton;
+    [SerializeField] private Button exitNoButton;
+
+    [Header("Main Menu Buttons")]
+    [SerializeField] private Button startButton;
+    [SerializeField] private Button optionsButton;
+    [SerializeField] private Button exitButton;
+    [SerializeField] private Button koleksiIoTButton;
+
+    [Header("Options Menu")]
+    [SerializeField] private Button backToMainButton;
+    [SerializeField] private Slider musicVolumeSlider;
+    [SerializeField] private Slider sfxVolumeSlider;
+
+    [Header("Pause Menu")]
+    [SerializeField] private Button resumeButton;
+    [SerializeField] private Button pauseOptionsButton;
+    [SerializeField] private Button pauseMainMenuButton;
+
+    [Header("HUD")]
+    [SerializeField] private Button pauseButton;
+
+    private bool openedFromPause;
+    private bool buttonsRegistered;
+
+    private void PlayNavSfx()
+    {
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayNavigate();
+    }
+
+    protected override bool PersistAcrossScenes => false;
+
+    private void OnEnable()
+    {
+        RegisterButtonListeners();
+    }
+
+    private void Start()
+    {
+        ShowMainMenu();
+    }
+
+    private void RegisterButtonListeners()
+    {
+        if (buttonsRegistered)
+            return;
+
+        ButtonHelper.AddListenerOnce(startButton, () => { PlayNavSfx(); StartGame(); });
+        ButtonHelper.AddListenerOnce(optionsButton, () => { PlayNavSfx(); ShowOptionsFromMain(); });
+        ButtonHelper.AddListenerOnce(exitButton, () => { PlayNavSfx(); RequestExit(); });
+        ButtonHelper.AddListenerOnce(koleksiIoTButton, () => { PlayNavSfx(); GoToKoleksiIoT(); });
+        ButtonHelper.AddListenerOnce(backToMainButton, () => { PlayNavSfx(); BackFromOptions(); });
+        ButtonHelper.AddListenerOnce(resumeButton, () => { PlayNavSfx(); ResumeGame(); });
+        ButtonHelper.AddListenerOnce(pauseOptionsButton, () => { PlayNavSfx(); ShowOptionsFromPause(); });
+        ButtonHelper.AddListenerOnce(pauseMainMenuButton, () => { PlayNavSfx(); ReturnToMainMenuFromPause(); });
+        ButtonHelper.AddListenerOnce(pauseButton, () => { PlayNavSfx(); PauseGame(); });
+
+        ButtonHelper.AddListenerOnce(musicVolumeSlider, SetMusicVolume);
+        ButtonHelper.AddListenerOnce(sfxVolumeSlider, SetSfxVolume);
+
+        ButtonHelper.AddListenerOnce(exitYesButton, () => { PlayNavSfx(); ConfirmExitYes(); });
+        ButtonHelper.AddListenerOnce(exitNoButton, () => { PlayNavSfx(); ConfirmExitNo(); });
+
+        buttonsRegistered = true;
+    }
+
+    public void ShowMainMenu()
+    {
+        GameStateManager.ApplyState(GameState.Menu);
+        openedFromPause = false;
+
+        HideAllPanels();
+
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(true);
+
+        HideExitConfirmPanel();
+    }
+
+    public void ShowMainScreen()
+    {
+        ShowMainMenu();
+    }
+
+    public void StartGame()
+    {
+        if (SceneController.Instance != null)
+        {
+            SceneController.Instance.GoToSelectLevel();
+        }
+    }
+    
+    public void PauseGame()
+    {
+        GameStateManager.ApplyState(GameState.Paused);
+        openedFromPause = true;
+
+        HideAllPanels();
+
+        if (pausePanel != null)
+            pausePanel.SetActive(true);
+    }
+
+    public void ResumeGame()
+    {
+        GameStateManager.ApplyState(GameState.Playing);
+        openedFromPause = false;
+
+        HideAllPanels();
+
+        if (hudPanel != null)
+            hudPanel.SetActive(true);
+    }
+
+    public void ShowOptionsFromMain()
+    {
+        openedFromPause = false;
+
+        HideAllPanels();
+
+        if (optionsPanel != null)
+            optionsPanel.SetActive(true);
+    }
+
+    public void ShowOptionsFromPause()
+    {
+        openedFromPause = true;
+
+        HideAllPanels();
+
+        if (optionsPanel != null)
+            optionsPanel.SetActive(true);
+    }
+
+    public void BackFromOptions()
+    {
+        HideAllPanels();
+
+        if (openedFromPause)
+        {
+            if (pausePanel != null)
+                pausePanel.SetActive(true);
+        }
+        else if (mainMenuPanel != null)
+        {
+            mainMenuPanel.SetActive(true);
+        }
+    }
+
+    public void ReturnToMainMenuFromPause()
+    {
+        ShowMainMenu();
+
+        SaveManager.SaveAll();
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.ReturnToMainMenu();
+    }
+
+    private void HideAllPanels()
+    {
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(false);
+
+        if (optionsPanel != null)
+            optionsPanel.SetActive(false);
+
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
+
+        if (hudPanel != null)
+            hudPanel.SetActive(false);
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        AudioListener.volume = volume;
+    }
+
+    public void SetSfxVolume(float volume)
+    {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+        GameLog.Info($"SFX volume requested: {volume}. AudioMixer routing is not set up yet.");
+#endif
+    }
+
+    public void GoToKoleksiIoT()
+    {
+        if (SceneController.Instance != null)
+        {
+            SceneController.Instance.GoToKoleksiIoT();
+        }
+    }
+
+    public void RequestExit()
+    {
+        GameStateManager.ApplyState(GameState.Menu);
+
+        if (exitConfirmPanel == null)
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+            return;
+        }
+
+        exitConfirmPanel.SetActive(true);
+    }
+
+    private void HideExitConfirmPanel()
+    {
+        if (exitConfirmPanel != null)
+            exitConfirmPanel.SetActive(false);
+    }
+
+    private void ConfirmExitYes()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    private void ConfirmExitNo()
+    {
+        HideExitConfirmPanel();
+
+        // Requirement: kalau tidak, kembali di main menu lagi.
+        if (SceneController.Instance != null)
+            SceneController.Instance.GoToMainMenu();
+        else
+            ShowMainMenu();
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current == null || !Keyboard.current.escapeKey.wasPressedThisFrame)
+            return;
+
+        if (exitConfirmPanel != null && exitConfirmPanel.activeSelf)
+        {
+            ConfirmExitNo();
+            return;
+        }
+
+        if (pausePanel != null && pausePanel.activeSelf)
+        {
+            ResumeGame();
+        }
+        else if (hudPanel != null && hudPanel.activeSelf)
+        {
+            PauseGame();
+        }
+    }
+}

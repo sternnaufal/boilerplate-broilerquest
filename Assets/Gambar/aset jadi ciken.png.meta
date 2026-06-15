@@ -1,0 +1,741 @@
+fileFormatVersion: 2
+guid: 3f055d5d7fa9dff45afeaad0a6eacbc4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5886811062748117623
+    second: aset jadi ciken_0
+  - first:
+      213: 34566245310779715
+    second: aset jadi ciken_1
+  - first:
+      213: 8609932285258352163
+    second: aset jadi ciken_2
+  - first:
+      213: -4907948125663116879
+    second: aset jadi ciken_3
+  - first:
+      213: -4565851928189343081
+    second: aset jadi ciken_4
+  - first:
+      213: -1290624087449902196
+    second: aset jadi ciken_5
+  - first:
+      213: 5447072978678965681
+    second: aset jadi ciken_6
+  - first:
+      213: 9087354818932945816
+    second: aset jadi ciken_7
+  - first:
+      213: -6450053211930787215
+    second: aset jadi ciken_8
+  - first:
+      213: 1274202540132575137
+    second: aset jadi ciken_9
+  - first:
+      213: 2984734331870742697
+    second: aset jadi ciken_10
+  - first:
+      213: 1271740079673415239
+    second: aset jadi ciken_11
+  - first:
+      213: 2127427820424742772
+    second: aset jadi ciken_12
+  - first:
+      213: -1520540927931277962
+    second: aset jadi ciken_13
+  - first:
+      213: 5716506598807816733
+    second: aset jadi ciken_14
+  - first:
+      213: 365952995478788644
+    second: aset jadi ciken_15
+  - first:
+      213: 3713276703098462284
+    second: aset jadi ciken_16
+  - first:
+      213: -7156138389399601688
+    second: aset jadi ciken_17
+  - first:
+      213: 7635321169701908376
+    second: aset jadi ciken_18
+  - first:
+      213: -7451923633976598380
+    second: aset jadi ciken_19
+  - first:
+      213: 6379052050082883269
+    second: aset jadi ciken_20
+  - first:
+      213: -649435979115837395
+    second: aset jadi ciken_21
+  - first:
+      213: 8228897111790142115
+    second: aset jadi ciken_22
+  - first:
+      213: 6344473093400073269
+    second: aset jadi ciken_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: aset jadi ciken_0
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 2533
+        width: 363
+        height: 363
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9850f013788dd4ea0800000000000000
+      internalID: -5886811062748117623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_1
+      rect:
+        serializedVersion: 2
+        x: 674
+        y: 1989
+        width: 478
+        height: 906
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 341d7f421ddca7000800000000000000
+      internalID: 34566245310779715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_2
+      rect:
+        serializedVersion: 2
+        x: 1311
+        y: 2494
+        width: 334
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 326cdfacbcf9c7770800000000000000
+      internalID: 8609932285258352163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_3
+      rect:
+        serializedVersion: 2
+        x: 1799
+        y: 2200
+        width: 462
+        height: 463
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b14ec1ee2773ebb0800000000000000
+      internalID: -4907948125663116879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_4
+      rect:
+        serializedVersion: 2
+        x: 2509
+        y: 2052
+        width: 666
+        height: 790
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79aed3bbcd5d2a0c0800000000000000
+      internalID: -4565851928189343081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_5
+      rect:
+        serializedVersion: 2
+        x: 3235
+        y: 2031
+        width: 960
+        height: 739
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c836cf00b38c61ee0800000000000000
+      internalID: -1290624087449902196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_6
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 2119
+        width: 363
+        height: 363
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b5e9c7a304e79b40800000000000000
+      internalID: 5447072978678965681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_7
+      rect:
+        serializedVersion: 2
+        x: 1285
+        y: 2104
+        width: 116
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 893be6a9f05cc1e70800000000000000
+      internalID: 9087354818932945816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_8
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 2165
+        width: 118
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1728f7017cecc76a0800000000000000
+      internalID: -6450053211930787215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_9
+      rect:
+        serializedVersion: 2
+        x: 1542
+        y: 2228
+        width: 123
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a7a0809570eea110800000000000000
+      internalID: 1274202540132575137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_10
+      rect:
+        serializedVersion: 2
+        x: 1230
+        y: 1973
+        width: 122
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a88110af08eb6920800000000000000
+      internalID: 2984734331870742697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_11
+      rect:
+        serializedVersion: 2
+        x: 1384
+        y: 2004
+        width: 118
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7469f8f4dd026a110800000000000000
+      internalID: 1271740079673415239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_12
+      rect:
+        serializedVersion: 2
+        x: 1480
+        y: 2085
+        width: 131
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47743b1c454268d10800000000000000
+      internalID: 2127427820424742772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_13
+      rect:
+        serializedVersion: 2
+        x: 1569
+        y: 1955
+        width: 150
+        height: 255
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67d963c0514f5eae0800000000000000
+      internalID: -1520540927931277962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_14
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 1701
+        width: 951
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1acd1ad67c155f40800000000000000
+      internalID: 5716506598807816733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_15
+      rect:
+        serializedVersion: 2
+        x: 1331
+        y: 1891
+        width: 96
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42ad00c7f40241500800000000000000
+      internalID: 365952995478788644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_16
+      rect:
+        serializedVersion: 2
+        x: 1460
+        y: 1853
+        width: 133
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c40eae8dc75388330800000000000000
+      internalID: 3713276703098462284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_17
+      rect:
+        serializedVersion: 2
+        x: 3506
+        y: 1296
+        width: 607
+        height: 607
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8edfc48bc0a40bc90800000000000000
+      internalID: -7156138389399601688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_18
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 1464
+        width: 951
+        height: 219
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89f2a12762c16f960800000000000000
+      internalID: 7635321169701908376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_19
+      rect:
+        serializedVersion: 2
+        x: 1259
+        y: 764
+        width: 1010
+        height: 992
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 490ac77dfe2759890800000000000000
+      internalID: -7451923633976598380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_20
+      rect:
+        serializedVersion: 2
+        x: 2552
+        y: 1526
+        width: 679
+        height: 269
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c6eae8ba02f68850800000000000000
+      internalID: 6379052050082883269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_21
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 1227
+        width: 951
+        height: 219
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d284178fa6dbcf6f0800000000000000
+      internalID: -649435979115837395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_22
+      rect:
+        serializedVersion: 2
+        x: 2936
+        y: 578
+        width: 709
+        height: 772
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a24d79135ae23270800000000000000
+      internalID: 8228897111790142115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aset jadi ciken_23
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 990
+        width: 951
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 534922bf9a81c0850800000000000000
+      internalID: 6344473093400073269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      aset jadi ciken_0: -5886811062748117623
+      aset jadi ciken_1: 34566245310779715
+      aset jadi ciken_10: 2984734331870742697
+      aset jadi ciken_11: 1271740079673415239
+      aset jadi ciken_12: 2127427820424742772
+      aset jadi ciken_13: -1520540927931277962
+      aset jadi ciken_14: 5716506598807816733
+      aset jadi ciken_15: 365952995478788644
+      aset jadi ciken_16: 3713276703098462284
+      aset jadi ciken_17: -7156138389399601688
+      aset jadi ciken_18: 7635321169701908376
+      aset jadi ciken_19: -7451923633976598380
+      aset jadi ciken_2: 8609932285258352163
+      aset jadi ciken_20: 6379052050082883269
+      aset jadi ciken_21: -649435979115837395
+      aset jadi ciken_22: 8228897111790142115
+      aset jadi ciken_23: 6344473093400073269
+      aset jadi ciken_3: -4907948125663116879
+      aset jadi ciken_4: -4565851928189343081
+      aset jadi ciken_5: -1290624087449902196
+      aset jadi ciken_6: 5447072978678965681
+      aset jadi ciken_7: 9087354818932945816
+      aset jadi ciken_8: -6450053211930787215
+      aset jadi ciken_9: 1274202540132575137
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

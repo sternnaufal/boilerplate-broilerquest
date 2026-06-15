@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6384904773509121494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7496414725447378647}
+  - component: {fileID: 1925916746256750119}
+  - component: {fileID: 816194936739529115}
+  - component: {fileID: 2755324548764031290}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7496414725447378647
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384904773509121494}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 139.64651, y: 403.81854, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1925916746256750119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384904773509121494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02fd199150969ea40a0b7307b6f0c15e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGlobalBinder
+  coinText: {fileID: 0}
+  feedText: {fileID: 0}
+--- !u!114 &816194936739529115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384904773509121494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0e9a009a038ac45a3787c29ddef263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FeedManager
+--- !u!114 &2755324548764031290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384904773509121494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5db9f6f2483affb419d11a7f3f1515f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MemoryMatchController
+  timeLimit: 30
+  flipMatchDelay: 0.5
+  cardSize: {x: 100, y: 130}
+  cardSpacing: {x: 12, y: 12}
+  columns: 3
+  cardSprites:
+  - {fileID: 3984413914186058838, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: -1102589601, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: -1407930075, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: -1897525302, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: -1469912830, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: -910871808, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: 657634678, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: -185455336, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: 1410132718, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: -1996719685, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: 1485968436, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: 878023223, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  normalTimerColor: {r: 1, g: 1, b: 1, a: 1}
+  warningTimerColor: {r: 1, g: 0.25, b: 0.15, a: 1}

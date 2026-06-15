@@ -1,0 +1,35 @@
+# Unity generated folders
+Temp/
+Library/
+Logs/
+Obj/
+Build/
+.vs/
+*.user
+*.csproj
+*.sln
+UserSettings/
+BroilerQuest_BurstDebugInformation_DoNotShip/
+broilerquest_BackUpThisFolder_ButDontShipItWithYourGame/
+broilerquest1.0_BackUpThisFolder_ButDontShipItWithYourGame/
+*.apk
+Assets/_Recovery/
+Assets/_Recovery.meta
+Assets/Adaptive Performance/
+Assets/Adaptive Performance.meta
+.utmp/*
+
+# Local AI/tooling state
+.agent/
+.antigravity/
+.commandcode/
+.context/
+
+# Local Unity tooling and generated captures
+Assets/UnityMCP/
+Assets/UnityMCP.meta
+Assets/Screenshots/
+Assets/Screenshots.meta
+Assets/Plugins/
+Assets/Plugins.meta
+ProjectSettings/Packages/com.unity.probuilder/
