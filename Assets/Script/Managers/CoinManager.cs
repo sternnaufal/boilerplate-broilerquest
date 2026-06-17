@@ -17,10 +17,6 @@ public class CoinManager : Singleton<CoinManager>
         base.Awake();
         if (resetCoinOnStart)
             SetTotalCoin(GameConstants.Economy.StartingCoin);
-    }
-
-    void Start()
-    {
         Initialize();
     }
 
@@ -37,13 +33,13 @@ public class CoinManager : Singleton<CoinManager>
 
             hasInitialized = true;
             SaveCoin();
+            CoinsChanged?.Invoke(totalCoin);
         }
-
-        CoinsChanged?.Invoke(totalCoin);
     }
 
     public void AddCoin(int amount)
     {
+        Initialize();
         if (amount < 0) return;
 
         long nextTotal = (long)totalCoin + amount;
@@ -55,11 +51,13 @@ public class CoinManager : Singleton<CoinManager>
 
     public bool CanAfford(int amount)
     {
+        Initialize();
         return amount >= 0 && totalCoin >= amount;
     }
 
     public bool SpendCoin(int amount)
     {
+        Initialize();
         if (amount < 0 || !CanAfford(amount)) return false;
         totalCoin -= amount;
         CoinsChanged?.Invoke(totalCoin);
@@ -70,12 +68,17 @@ public class CoinManager : Singleton<CoinManager>
 
     public void SetTotalCoin(int amount)
     {
+        Initialize();
         totalCoin = Mathf.Max(0, amount);
         CoinsChanged?.Invoke(totalCoin);
         SaveCoin();
     }
 
-    public int GetTotalCoin() => totalCoin;
+    public int GetTotalCoin()
+    {
+        Initialize();
+        return totalCoin;
+    }
 
     private void SaveCoin()
     {
