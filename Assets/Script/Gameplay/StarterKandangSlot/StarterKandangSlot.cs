@@ -57,6 +57,10 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private Texture jigsawCoolingTexture;
     [SerializeField] private Texture jigsawHeatingTexture;
 
+    [Header("Wiring Minigame Config")]
+    [SerializeField] private int wiringPairCount = 4;
+    [SerializeField] private float wiringTimeLimit = 30f;
+
     [Header("Animation")]
     [SerializeField] private Animator chickenAnimator;
     [SerializeField] private string idleAnimParam = "";
@@ -217,7 +221,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
         if (currentState == SlotState.WaitingForCareClick)
         {
-            if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.TryConsumeFeed(1)))
+            if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.UseFeed(1)))
             {
                 if (UIAlertPanel.Instance != null)
                 {

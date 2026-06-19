@@ -29,6 +29,25 @@ public partial class StarterKandangSlot
             }
         }
 
+        if (currentNeed == ChickenNeed.Heating)
+        {
+            if (WiringMinigameController.Instance != null && WiringMinigameController.Instance.IsPlaying)
+                return true;
+
+            WiringMinigameController wiring = WiringMinigameController.Instance;
+            if (wiring != null)
+            {
+                currentState = SlotState.WaitingForHealthMinigame;
+                NotifyStateChanged();
+
+                if (wiring.ShowWiring(this, wiringPairCount, wiringTimeLimit, GetWiringTitle(currentNeed)))
+                    return true;
+
+                currentState = SlotState.WaitingForCareClick;
+                NotifyStateChanged();
+            }
+        }
+
         JigsawMinigameController jigsawController = JigsawMinigameController.Instance;
         if (jigsawController != null)
         {
@@ -88,6 +107,17 @@ public partial class StarterKandangSlot
                 return "Susun Puzzle Panas";
             default:
                 return "Susun Puzzle";
+        }
+    }
+
+    private string GetWiringTitle(ChickenNeed need)
+    {
+        switch (need)
+        {
+            case ChickenNeed.Heating:
+                return "Hubungkan Kabel Heater";
+            default:
+                return "Hubungkan Kabel";
         }
     }
 }

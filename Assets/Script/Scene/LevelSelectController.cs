@@ -19,13 +19,86 @@ public class LevelSelectController : MonoBehaviour
     [SerializeField] private string insufficientCoinMessage = "Coin tidak cukup!";
     [SerializeField] private bool disableLockedButtons = true;
 
+    [Header("Bounce In Animation")]
+    [SerializeField] private RectTransform[] bounceElements;
+    [SerializeField] private float bounceDuration = 0.6f;
+    [SerializeField] private float bounceStagger = 0.12f;
+    [SerializeField] private float bounceOffsetY = 600f;
+
+    [Header("Level Button Labels")]
+    [SerializeField] private string starterLabel = "STARTER";
+    [SerializeField] private string beginnerLabel = "BEGINNER";
+    [SerializeField] private string intermediateLabel = "INTERMEDIATE";
+    [SerializeField] private string lockedLabelFormat = "{0}\n({1} coin)";
+
+    [Header("Level Button Style")]
+    [SerializeField] private Color unlockedColor = new Color(0.95f, 0.72f, 0.22f, 1f);
+    [SerializeField] private Color lockedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
+    [SerializeField] private Color labelUnlockedColor = new Color(0.12f, 0.15f, 0.08f, 1f);
+    [SerializeField] private float labelFontSize = 24f;
+
     private bool listenersRegistered;
+    private bool hasBounced;
+
+    private void Start()
+    {
+        if (!hasBounced && bounceElements != null && bounceElements.Length > 0)
+        {
+            hasBounced = true;
+            StartCoroutine(PlayBounceIn());
+        }
+    }
 
     private void OnEnable()
     {
         RegisterButtonListeners();
         RefreshButtonStates();
         ClearMessage();
+    }
+
+    private static float BounceOut(float t)
+    {
+        if (t < 1f / 2.75f)
+            return 7.5625f * t * t;
+        else if (t < 2f / 2.75f)
+            return 7.5625f * (t -= 1.5f / 2.75f) * t + 0.75f;
+        else if (t < 2.5f / 2.75f)
+            return 7.5625f * (t -= 2.25f / 2.75f) * t + 0.9375f;
+        else
+            return 7.5625f * (t -= 2.625f / 2.75f) * t + 0.984375f;
+    }
+
+    private System.Collections.IEnumerator PlayBounceIn()
+    {
+        Vector2[] targets = new Vector2[bounceElements.Length];
+        for (int i = 0; i < bounceElements.Length; i++)
+        {
+            if (bounceElements[i] == null) continue;
+            targets[i] = bounceElements[i].anchoredPosition;
+            bounceElements[i].anchoredPosition = new Vector2(targets[i].x, targets[i].y + bounceOffsetY);
+        }
+
+        for (int i = 0; i < bounceElements.Length; i++)
+        {
+            if (bounceElements[i] == null) continue;
+            int index = i;
+            StartCoroutine(AnimateSingleBounce(bounceElements[index], targets[index]));
+            yield return new WaitForSeconds(bounceStagger);
+        }
+    }
+
+    private System.Collections.IEnumerator AnimateSingleBounce(RectTransform rt, Vector2 target)
+    {
+        Vector2 start = rt.anchoredPosition;
+        float elapsed = 0f;
+        while (elapsed < bounceDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / bounceDuration);
+            rt.anchoredPosition = Vector2.Lerp(start, target, BounceOut(t));
+            yield return null;
+        }
+        rt.anchoredPosition = target;
     }
 
     private void RegisterButtonListeners()
@@ -46,20 +119,37 @@ public class LevelSelectController : MonoBehaviour
 
         bool beginnerUnlocked = IsBeginnerUnlocked();
         bool intermediateUnlocked = IsIntermediateUnlocked();
-<<<<<<< HEAD
-
-        beginnerButton.interactable = beginnerUnlocked;
-        intermediateButton.interactable = intermediateUnlocked;
-=======
         bool beginnerCanAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(GameConstants.LevelUnlock.BeginnerCost);
         bool intermediateCanAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(GameConstants.LevelUnlock.IntermediateCost);
 
         beginnerButton.interactable = beginnerUnlocked || beginnerCanAfford;
         intermediateButton.interactable = intermediateUnlocked || intermediateCanAfford;
->>>>>>> origin/dev/Hylmi
 
-        UpdateButtonLabel(beginnerButton, beginnerUnlocked, GameConstants.LevelUnlock.BeginnerCost, "Beginner");
-        UpdateButtonLabel(intermediateButton, intermediateUnlocked, GameConstants.LevelUnlock.IntermediateCost, "Intermediate");
+        UpdateButtonLabel(starterButton, true, 0, starterLabel);
+        UpdateButtonLabel(beginnerButton, beginnerUnlocked, GameConstants.LevelUnlock.BeginnerCost, beginnerLabel);
+        UpdateButtonLabel(intermediateButton, intermediateUnlocked, GameConstants.LevelUnlock.IntermediateCost, intermediateLabel);
+
+        StyleLevelButton(starterButton, true);
+        StyleLevelButton(beginnerButton, beginnerUnlocked);
+        StyleLevelButton(intermediateButton, intermediateUnlocked);
+    }
+
+    private void StyleLevelButton(Button button, bool unlocked)
+    {
+        if (button == null) return;
+
+        Image image = button.GetComponent<Image>();
+        if (image != null)
+            image.color = unlocked ? unlockedColor : lockedColor;
+
+        TextMeshProUGUI label = button.GetComponentInChildren<TextMeshProUGUI>(true);
+        if (label != null)
+        {
+            label.color = unlocked ? labelUnlockedColor : Color.gray;
+            label.fontStyle = FontStyles.Bold;
+            if (unlocked)
+                label.fontSize = Mathf.Max(label.fontSize, labelFontSize);
+        }
     }
 
     private void UpdateButtonLabel(Button button, bool unlocked, int cost, string name)
@@ -74,7 +164,7 @@ public class LevelSelectController : MonoBehaviour
         }
         else
         {
-            label.text = $"{name}\n({cost} coin)";
+            label.text = string.Format(lockedLabelFormat, name, cost);
             label.fontSize = Mathf.Max(label.fontSize - 4, 16);
         }
     }

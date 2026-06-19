@@ -26,22 +26,19 @@ public class CoinManager : Singleton<CoinManager>
 
     public void Initialize()
     {
-        if (!hasInitialized)
-        {
-            if (usePlayerPrefs && !resetCoinOnStart)
-                totalCoin = LoadSavedCoin();
-            else if (resetCoinOnStart)
-                totalCoin = Mathf.Max(0, GameConstants.Economy.StartingCoin);
-            else
-                totalCoin = 0;
+        if (hasInitialized)
+            return;
 
-            hasInitialized = true;
-            SaveCoin();
-        }
+        if (usePlayerPrefs && !resetCoinOnStart)
+            totalCoin = LoadSavedCoin();
+        else if (resetCoinOnStart)
+            totalCoin = Mathf.Max(0, GameConstants.Economy.StartingCoin);
+        else
+            totalCoin = 0;
 
+        hasInitialized = true;
+        SaveCoin();
         CoinsChanged?.Invoke(totalCoin);
-            CoinsChanged?.Invoke(totalCoin);
-        }
     }
 
     public void AddCoin(int amount)
@@ -81,7 +78,6 @@ public class CoinManager : Singleton<CoinManager>
         SaveCoin();
     }
 
-    public int GetTotalCoin() => totalCoin;
     public int GetTotalCoin()
     {
         Initialize();

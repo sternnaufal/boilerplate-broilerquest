@@ -96,7 +96,8 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         timeRemaining = timeLimit;
         UpdateTimerUI();
 
-        popupRoot.SetActive(true);
+        foreach (Transform child in popupRoot.transform)
+            child.gameObject.SetActive(true);
         isPlaying = true;
         CoroutineHelper.StopAndStart(this, ref timerCoroutine, TimerRoutine());
         return true;
@@ -311,8 +312,11 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
 
     private void HidePopup()
     {
-        if (popupRoot != null)
-            popupRoot.SetActive(false);
+        if (popupRoot == null)
+            return;
+
+        foreach (Transform child in popupRoot.transform)
+            child.gameObject.SetActive(false);
     }
 
     private void EnsureRuntimeUi()

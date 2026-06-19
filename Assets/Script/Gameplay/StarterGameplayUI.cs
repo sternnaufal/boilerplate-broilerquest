@@ -27,11 +27,11 @@ public class StarterGameplayUI : MonoBehaviour
     [SerializeField] private PanelStyleConfig pausePanelStyle = new PanelStyleConfig { color = new Color(0.05f, 0.11f, 0.07f, 0.90f) };
 
     [Header("HP Panel Position")]
-    [SerializeField] private Vector2 hpPanelAnchorMin = new Vector2(1f, 0.5f);
-    [SerializeField] private Vector2 hpPanelAnchorMax = new Vector2(1f, 0.5f);
-    [SerializeField] private Vector2 hpPanelPivot = new Vector2(1f, 0.5f);
-    [SerializeField] private Vector2 hpPanelSizeDelta = new Vector2(620f, 580f);
-    [SerializeField] private Vector2 hpPanelAnchoredPosition = new Vector2(-42f, -18f);
+    [SerializeField] private Vector2 hpPanelAnchorMin = new Vector2(0.5f, 0.5f);
+    [SerializeField] private Vector2 hpPanelAnchorMax = new Vector2(0.5f, 0.5f);
+    [SerializeField] private Vector2 hpPanelPivot = new Vector2(0.5f, 0.5f);
+    [SerializeField] private Vector2 hpPanelSizeDelta = new Vector2(556f, 960f);
+    [SerializeField] private Vector2 hpPanelAnchoredPosition = new Vector2(513f, -86.884f);
 
     [Header("Buttons")]
     [SerializeField] private Button pauseButton;
@@ -73,18 +73,60 @@ public class StarterGameplayUI : MonoBehaviour
     
     [SerializeField] private Button exitIoTButton;     // tombol ExitBut di IoTAPK
     [Header("HP Panel Animation")]
-    [SerializeField] private RectTransform hpPanelRect;      // Drag BQ_HPPanel ke sini
+    private RectTransform hpPanelRect;
     [SerializeField] private float animationDuration = 0.3f; // lama animasi
     private bool listenersRegistered;
     private bool hpVisible;
     private bool hpVisibleBeforePause;
-<<<<<<< HEAD
-    private bool iotCreated;
-=======
->>>>>>> origin/dev/Hylmi
     private Vector2 hiddenPosition;
     private Vector2 visiblePosition;
     private Coroutine hpAnimationCoroutine;
+
+    private void SetupReferences()
+    {
+        if (hpPanel != null && hpPanelRect == null)
+            hpPanelRect = hpPanel.GetComponent<RectTransform>();
+    }
+
+    private void SetupHpPanelPosition()
+    {
+        SetupReferences();
+        if (hpPanelRect == null) return;
+
+        hpPanelRect.anchorMin = new Vector2(0.5f, 0.5f);
+        hpPanelRect.anchorMax = new Vector2(0.5f, 0.5f);
+        hpPanelRect.pivot = new Vector2(0.5f, 0.5f);
+        hpPanelRect.sizeDelta = new Vector2(556f, 960f);
+        hpPanelRect.anchoredPosition = new Vector2(513f, -86.884f);
+
+        Canvas.ForceUpdateCanvases();
+
+        visiblePosition = new Vector2(513f, -86.884f);
+
+        Transform parent = hpPanelRect.parent;
+        float parentHeight = Screen.height;
+        if (parent is RectTransform parentRt && parentRt.rect.height > 0f)
+            parentHeight = parentRt.rect.height;
+
+        float panelHeight = hpPanelRect.sizeDelta.y > 0f
+            ? hpPanelRect.sizeDelta.y
+            : hpPanelRect.rect.height;
+
+        hiddenPosition = new Vector2(
+            visiblePosition.x,
+            -parentHeight * hpPanelAnchorMin.y
+            - panelHeight * (1f - hpPanelPivot.y)
+            - GameConstants.UI.HPPanelSafetyMargin
+        );
+
+        hpPanelRect.anchoredPosition = hiddenPosition;
+    }
+
+    private void Awake()
+    {
+        SetupReferences();
+    }
+
     private void OnEnable()
     {
         RegisterButtonListeners();
@@ -104,32 +146,7 @@ public class StarterGameplayUI : MonoBehaviour
                 FeedManager.Instance.SetFeedCount(startingFeedCount);
         }
 
-        if (hpPanelRect != null)
-        {
-            Canvas.ForceUpdateCanvases();
-            visiblePosition = hpPanelRect.anchoredPosition;
-            hiddenPosition = new Vector2(visiblePosition.x, visiblePosition.y - 800f);
-
-            RectTransform parentRect = hpPanelRect.parent as RectTransform;
-            float parentHeight = parentRect != null && parentRect.rect.height > 0f
-                ? parentRect.rect.height
-                : Screen.height;
-            float panelHeight = hpPanelRect.sizeDelta.y > 0f
-                ? hpPanelRect.sizeDelta.y
-                : hpPanelRect.rect.height;
-            Vector2 anchor = hpPanelRect.anchorMin;
-            Vector2 pivot = hpPanelRect.pivot;
-
-            hiddenPosition = new Vector2(
-                visiblePosition.x,
-                -parentHeight * anchor.y
-                - panelHeight * (1f - pivot.y)
-                - GameConstants.UI.HPPanelSafetyMargin
-            );
-
-            hpPanelRect.anchoredPosition = hiddenPosition;
-            hpPanelRect.gameObject.SetActive(true);
-        }
+        SetupHpPanelPosition();
 
         SetupHPNavigation();
 
@@ -210,16 +227,13 @@ public class StarterGameplayUI : MonoBehaviour
         hpVisible = visible;
 
         if (visible)
-        {
-            ShowMainHPPage(); // untuk mereset ke halaman utama saat panel muncul
-        }
+            ShowMainHPPage();
 
-        if (hpPanelRect != null)
-        {
-            if (hpAnimationCoroutine != null) StopCoroutine(hpAnimationCoroutine);
-            Vector2 target = visible ? visiblePosition : hiddenPosition;
-            hpAnimationCoroutine = StartCoroutine(AnimateHPPanel(target));
-        }
+        if (hpAnimationCoroutine != null)
+            StopCoroutine(hpAnimationCoroutine);
+
+        Vector2 target = visible ? visiblePosition : hiddenPosition;
+        hpAnimationCoroutine = StartCoroutine(AnimateHPPanel(target));
 
         if (chickenShop != null)
             chickenShop.RefreshShopState();
@@ -378,7 +392,7 @@ public class StarterGameplayUI : MonoBehaviour
         if (shopAPK != null) shopAPK.SetActive(false);
         if (iotAPK != null) iotAPK.SetActive(false);
         // Tampilkan tombol-tombol utama (shopButton & iotButton) – 
-        // mereka biasanya berada langsung di dalam BQ_HPPanel, jadi cukup nonaktifkan panel APK.
+        // mereka biasanya berada langsung di dalam HPPanel, jadi cukup nonaktifkan panel APK.
         // Jika tombol utama ikut tersembunyi, pastikan mereka tetap aktif.
         if (shopButton != null) shopButton.gameObject.SetActive(true);
         if (iotButton != null) iotButton.gameObject.SetActive(true);

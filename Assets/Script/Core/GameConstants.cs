@@ -85,4 +85,11 @@ public static class GameConstants
         public const float MatchDelay = 0.5f;
         public const float WarningThreshold = 10f;
     }
+
+    public static class WiringMinigame
+    {
+        public const float TimeLimit = 30f;
+        public const int PairCount = 4;
+        public const float WarningThreshold = 10f;
+    }
 }

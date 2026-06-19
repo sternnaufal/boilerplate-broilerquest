@@ -51,11 +51,6 @@ public class FeedManager : Singleton<FeedManager>
         return amount >= 0 && feedCount >= amount;
     }
 
-    public bool TryConsumeFeed(int amount)
-    {
-        return UseFeed(amount);
-    }
-
     public void SetFeedCount(int amount)
     {
         feedCount = Mathf.Max(0, amount);
