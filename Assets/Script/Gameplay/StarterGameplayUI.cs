@@ -78,7 +78,10 @@ public class StarterGameplayUI : MonoBehaviour
     private bool listenersRegistered;
     private bool hpVisible;
     private bool hpVisibleBeforePause;
+<<<<<<< HEAD
     private bool iotCreated;
+=======
+>>>>>>> origin/dev/Hylmi
     private Vector2 hiddenPosition;
     private Vector2 visiblePosition;
     private Coroutine hpAnimationCoroutine;
@@ -106,6 +109,24 @@ public class StarterGameplayUI : MonoBehaviour
             Canvas.ForceUpdateCanvases();
             visiblePosition = hpPanelRect.anchoredPosition;
             hiddenPosition = new Vector2(visiblePosition.x, visiblePosition.y - 800f);
+
+            RectTransform parentRect = hpPanelRect.parent as RectTransform;
+            float parentHeight = parentRect != null && parentRect.rect.height > 0f
+                ? parentRect.rect.height
+                : Screen.height;
+            float panelHeight = hpPanelRect.sizeDelta.y > 0f
+                ? hpPanelRect.sizeDelta.y
+                : hpPanelRect.rect.height;
+            Vector2 anchor = hpPanelRect.anchorMin;
+            Vector2 pivot = hpPanelRect.pivot;
+
+            hiddenPosition = new Vector2(
+                visiblePosition.x,
+                -parentHeight * anchor.y
+                - panelHeight * (1f - pivot.y)
+                - GameConstants.UI.HPPanelSafetyMargin
+            );
+
             hpPanelRect.anchoredPosition = hiddenPosition;
             hpPanelRect.gameObject.SetActive(true);
         }

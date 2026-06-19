@@ -46,9 +46,17 @@ public class LevelSelectController : MonoBehaviour
 
         bool beginnerUnlocked = IsBeginnerUnlocked();
         bool intermediateUnlocked = IsIntermediateUnlocked();
+<<<<<<< HEAD
 
         beginnerButton.interactable = beginnerUnlocked;
         intermediateButton.interactable = intermediateUnlocked;
+=======
+        bool beginnerCanAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(GameConstants.LevelUnlock.BeginnerCost);
+        bool intermediateCanAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(GameConstants.LevelUnlock.IntermediateCost);
+
+        beginnerButton.interactable = beginnerUnlocked || beginnerCanAfford;
+        intermediateButton.interactable = intermediateUnlocked || intermediateCanAfford;
+>>>>>>> origin/dev/Hylmi
 
         UpdateButtonLabel(beginnerButton, beginnerUnlocked, GameConstants.LevelUnlock.BeginnerCost, "Beginner");
         UpdateButtonLabel(intermediateButton, intermediateUnlocked, GameConstants.LevelUnlock.IntermediateCost, "Intermediate");

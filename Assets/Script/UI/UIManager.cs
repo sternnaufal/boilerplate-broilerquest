@@ -91,11 +91,14 @@ public class UIManager : Singleton<UIManager>
         HideExitConfirmPanel();
     }
 
+<<<<<<< HEAD
     public void ShowMainScreen()
     {
         ShowMainMenu();
     }
 
+=======
+>>>>>>> origin/dev/Hylmi
     public void StartGame()
     {
         if (SceneController.Instance != null)

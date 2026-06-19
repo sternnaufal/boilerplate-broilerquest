@@ -36,6 +36,7 @@ public class GameStateManager : Singleton<GameStateManager>
         StateChanged?.Invoke(newState);
     }
 
+<<<<<<< HEAD
     public void SetMenu()
     {
         SetGameState(GameState.Menu);
@@ -56,6 +57,8 @@ public class GameStateManager : Singleton<GameStateManager>
         SetGameState(GameState.GameOver);
     }
 
+=======
+>>>>>>> origin/dev/Hylmi
     public static bool TrySetGameState(GameState newState)
     {
         var instance = EnsureInstance();

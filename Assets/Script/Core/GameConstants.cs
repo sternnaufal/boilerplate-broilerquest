@@ -23,6 +23,7 @@ public static class GameConstants
         public const float CoinTextFontSize = 34f;
         public const float ButtonLabelFontSize = 24f;
         public const float BubbleLabelFontSize = 22f;
+        public const float HPPanelSafetyMargin = 50f;
     }
 
     public static class StarterSlot

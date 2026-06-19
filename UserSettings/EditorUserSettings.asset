@@ -27,6 +27,7 @@ EditorUserSettings:
       value: 0506505f0150580e595e552144265e4415154f7b787a7f35297f1830bae46439
       flags: 0
     RecentlyUsedSceneGuid-5:
+<<<<<<< HEAD
       value: 0207500751500b5d0e0c092415220d4444154a7b2d7a7634757d4b32b3b06639
       flags: 0
     RecentlyUsedSceneGuid-6:
@@ -35,6 +36,16 @@ EditorUserSettings:
     RecentlyUsedSceneGuid-7:
       value: 5752050351065e085a575d2142250b444e4e1972742c75657f7d4467b4b7636e
       flags: 0
+=======
+      value: 56500402540359590b5c0a274620094415151c79782b74327c781f35e1e33739
+      flags: 0
+    RecentlyUsedSceneGuid-6:
+      value: 5752050351065e085a575d2142250b444e4e1972742c75657f7d4467b4b7636e
+      flags: 0
+    RecentlyUsedSceneGuid-7:
+      value: 0207500751500b5d0e0c092415220d4444154a7b2d7a7634757d4b32b3b06639
+      flags: 0
+>>>>>>> origin/dev/Hylmi
     RecentlyUsedSceneGuid-8:
       value: 5b520d0503545b0d0c0c0a2715770748154f4d2c7d7d7e627a7d4a35b4e1646a
       flags: 0
