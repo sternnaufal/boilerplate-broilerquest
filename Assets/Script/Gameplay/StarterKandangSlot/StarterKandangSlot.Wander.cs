@@ -84,7 +84,7 @@ public partial class StarterKandangSlot
 
             if (currentState == SlotState.WaitingForCareClick)
             {
-                if (currentNeed == ChickenNeed.Feed)
+                if (CurrentNeed == ChickenNeed.Feed || CurrentNeed == ChickenNeed.ReduceFeed)
                     canMove = false;
                 else
                 {

@@ -69,7 +69,9 @@ public partial class StarterKandangSlot
 
         if (bubbleLabel != null)
         {
-            if (label == feedBubbleText || label == coolingBubbleText || label == heatingBubbleText)
+            if (label == feedBubbleText || label == coolingBubbleText || label == heatingBubbleText
+                || label == humidityUpBubbleText || label == humidityDownBubbleText
+                || label == addDryHuskBubbleText || label == reduceFeedBubbleText)
             {
                 bubbleLabel.text = "";
                 bubbleLabel.enabled = false;

@@ -29,6 +29,10 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private Sprite feedBubbleSprite;
     [SerializeField] private Sprite coolingBubbleSprite;
     [SerializeField] private Sprite heatingBubbleSprite;
+    [SerializeField] private Sprite humidityUpBubbleSprite;
+    [SerializeField] private Sprite humidityDownBubbleSprite;
+    [SerializeField] private Sprite addDryHuskBubbleSprite;
+    [SerializeField] private Sprite reduceFeedBubbleSprite;
     [SerializeField] private Sprite sellBubbleSprite;
 
     [Header("Bubble Visual")]
@@ -38,6 +42,10 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private string feedBubbleText = "MAKAN";
     [SerializeField] private string coolingBubbleText = "KIPAS";
     [SerializeField] private string heatingBubbleText = "HEATER";
+    [SerializeField] private string humidityUpBubbleText = "LEMBAB";
+    [SerializeField] private string humidityDownBubbleText = "KERING";
+    [SerializeField] private string addDryHuskBubbleText = "SEKAM";
+    [SerializeField] private string reduceFeedBubbleText = "KURANGI";
     [SerializeField] private string sellBubbleText = "JUAL";
     [SerializeField] private Vector2 bubbleSize = new Vector2(130f, 56f);
     [SerializeField] private Vector2 bubbleOffset = new Vector2(0f, 68f);
@@ -72,22 +80,29 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     private Coroutine eventCoroutine;
     private Coroutine bubbleExpiryCoroutine;
     private bool occupied;
-    private bool feedSatisfied;
-    private bool coolingSatisfied;
-    private bool heatingSatisfied;
-    private bool feedFailed;
-    private bool coolingFailed;
-    private bool heatingFailed;
-    private int completedCareCount;
+
+    private List<ChickenNeed> needsQueue;
+    private bool[] needSatisfied;
+    private bool[] needFailed;
+    private int currentNeedIndex;
     private int sellReward;
-    private ChickenNeed currentNeed;
     private SlotState currentState;
 
-    private enum ChickenNeed
+    public ChickenNeed CurrentNeed => currentNeedIndex >= 0 && currentNeedIndex < needsQueue?.Count
+        ? needsQueue[currentNeedIndex] : ChickenNeed.Feed;
+    public int TotalNeedCount => needsQueue?.Count ?? 0;
+    public int CompletedCareCount => completedCareCount;
+
+    private int completedCareCount
     {
-        Feed,
-        Cooling,
-        Heating
+        get
+        {
+            if (needSatisfied == null) return 0;
+            int count = 0;
+            for (int i = 0; i < needSatisfied.Length; i++)
+                if (needSatisfied[i] || needFailed[i]) count++;
+            return count;
+        }
     }
 
     private enum SlotState
@@ -106,6 +121,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
     private void Awake()
     {
+        SetBubbleExpiryByLevel();
         RefreshSlotLabel();
         PrepareSlotHitbox();
         EnsureBubbleVisual();
@@ -126,6 +142,23 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         {
             StartNeedTimer();
             UpdateWanderState();
+        }
+    }
+
+    private void SetBubbleExpiryByLevel()
+    {
+        int level = GameManager.Instance != null ? GameManager.Instance.currentLevelIndex : 0;
+        switch (level)
+        {
+            case 0:
+                bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDurationStarter;
+                break;
+            case 1:
+                bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDurationBeginner;
+                break;
+            case 2:
+                bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDurationIntermediate;
+                break;
         }
     }
 
@@ -221,7 +254,9 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
         if (currentState == SlotState.WaitingForCareClick)
         {
-            if (currentNeed == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.UseFeed(1)))
+            ChickenNeed need = CurrentNeed;
+
+            if (need == ChickenNeed.Feed && (FeedManager.Instance == null || !FeedManager.Instance.UseFeed(1)))
             {
                 if (UIAlertPanel.Instance != null)
                 {
@@ -275,12 +310,31 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         FailCurrentNeedAndAdvance("puzzle gagal");
     }
 
+    private int GetCurrentNeedIndex()
+    {
+        if (needsQueue == null) return -1;
+        for (int i = 0; i < needsQueue.Count; i++)
+            if (!needSatisfied[i] && !needFailed[i])
+                return i;
+        return -1;
+    }
+
+    private ChickenNeed GetNeedAt(int index)
+    {
+        if (needsQueue == null || index < 0 || index >= needsQueue.Count)
+            return ChickenNeed.Feed;
+        return needsQueue[index];
+    }
+
     private void FailCurrentNeedAndAdvance(string reason)
     {
         StopBubbleExpiryTimer();
         ResetAnimationToNormal();
-        MarkCurrentNeedFailed();
-        completedCareCount++;
+
+        int idx = currentNeedIndex;
+        if (idx >= 0 && idx < needFailed.Length)
+            needFailed[idx] = true;
+
         RecalculateSellReward();
         SaveManager.SaveAll();
 
@@ -293,7 +347,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         HideBubble();
         isWanderingPaused = false;
         StartNeedTimer();
-        GameLog.Info($"{name}: Kebutuhan {GetNeedText(currentNeed)} gagal ({reason}), lanjut kebutuhan berikutnya.");
+        GameLog.Info($"{name}: Kebutuhan {GetNeedText(GetNeedAt(idx))} gagal ({reason}), lanjut kebutuhan berikutnya.");
     }
 
     private void SetOccupied(bool value)
@@ -326,23 +380,29 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
     private void ShowNextNeedBubble()
     {
-        currentNeed = GetNextNeed();
+        currentNeedIndex = GetCurrentNeedIndex();
+        if (currentNeedIndex < 0)
+        {
+            ShowSellBubble();
+            return;
+        }
 
-        Sprite needSprite = GetNeedSprite(currentNeed);
-        ShowBubble(needSprite, GetNeedText(currentNeed));
+        ChickenNeed need = needsQueue[currentNeedIndex];
+        Sprite needSprite = GetNeedSprite(need);
+        ShowBubble(needSprite, GetNeedText(need));
         currentState = SlotState.WaitingForCareClick;
         NotifyStateChanged();
-        UpdateAnimationByNeed(currentNeed);
+        UpdateAnimationByNeed(need);
         StartBubbleExpiryTimer();
         SaveManager.SaveAll();
-        GameLog.Info($"{name}: Notifikasi {GetNeedText(currentNeed)} muncul.");
+        GameLog.Info($"{name}: Notifikasi {GetNeedText(need)} muncul.");
     }
 
     private void StartBubbleExpiryTimer()
     {
         StopBubbleExpiryTimer();
         if (bubbleExpiryDuration <= 0f)
-            return; // no expiry for this level
+            return;
         CoroutineHelper.StopAndStart(this, ref bubbleExpiryCoroutine, BubbleExpiryRoutine());
     }
 
@@ -388,6 +448,16 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             return true;
         if (MemoryMatchController.Instance != null && MemoryMatchController.Instance.IsPlaying)
             return true;
+        if (WiringMinigameController.Instance != null && WiringMinigameController.Instance.IsPlaying)
+            return true;
+        if (HumidityToggleController.Instance != null && HumidityToggleController.Instance.IsPlaying)
+            return true;
+        if (PipelinePuzzleController.Instance != null && PipelinePuzzleController.Instance.IsPlaying)
+            return true;
+        if (DragDropSackController.Instance != null && DragDropSackController.Instance.IsPlaying)
+            return true;
+        if (HoldSwipeController.Instance != null && HoldSwipeController.Instance.IsPlaying)
+            return true;
         return false;
     }
 
@@ -396,14 +466,14 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         if (StarterIoTController.Instance == null)
             return false;
 
-        string iotKey = GetIoTKeyForNeed(currentNeed);
+        string iotKey = GetIoTKeyForNeed(CurrentNeed);
         if (string.IsNullOrEmpty(iotKey))
             return false;
 
         if (StarterIoTController.Instance.IsActiveForNeed(iotKey))
         {
-            GameLog.Info($"{name}: IoT {iotKey} aktif, kebutuhan {GetNeedText(currentNeed)} selesai dengan tap tanpa minigame.");
-            UpdateAnimationByNeed(currentNeed);
+            GameLog.Info($"{name}: IoT {iotKey} aktif, kebutuhan {GetNeedText(CurrentNeed)} selesai dengan tap tanpa minigame.");
+            UpdateAnimationByNeed(CurrentNeed);
             CompleteCurrentNeed();
             if (SFXManager.Instance != null) SFXManager.Instance.PlayCareComplete();
             return true;
@@ -432,20 +502,10 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         StopBubbleExpiryTimer();
         ResetAnimationToNormal();
 
-        switch (currentNeed)
-        {
-            case ChickenNeed.Feed:
-                feedSatisfied = true;
-                break;
-            case ChickenNeed.Cooling:
-                coolingSatisfied = true;
-                break;
-            case ChickenNeed.Heating:
-                heatingSatisfied = true;
-                break;
-        }
+        int idx = currentNeedIndex;
+        if (idx >= 0 && idx < needSatisfied.Length)
+            needSatisfied[idx] = true;
 
-        completedCareCount++;
         RecalculateSellReward();
         SaveManager.SaveAll();
 
@@ -457,7 +517,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
         HideBubble();
         StartNeedTimer();
-        GameLog.Info($"{name}: Kebutuhan {GetNeedText(currentNeed)} terpenuhi.");
+        GameLog.Info($"{name}: Kebutuhan {GetNeedText(GetNeedAt(idx))} terpenuhi.");
     }
 
     private void ShowSellBubble()
@@ -475,48 +535,27 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
     private void RecalculateSellReward()
     {
-        int failCount = (feedFailed ? 1 : 0) + (coolingFailed ? 1 : 0) + (heatingFailed ? 1 : 0);
-        sellReward = Mathf.Max(0, GameConstants.Economy.BaseSellPrice - failCount * GameConstants.Economy.FailPenalty);
-    }
-
-    private ChickenNeed GetNextNeed()
-    {
-        bool feedDone = feedSatisfied || feedFailed;
-        bool coolingDone = coolingSatisfied || coolingFailed;
-        bool heatingDone = heatingSatisfied || heatingFailed;
-
-        // Feed always first
-        if (!feedDone)
-            return ChickenNeed.Feed;
-
-        // If both cooling and heating are still not done, pick randomly
-        if (!coolingDone && !heatingDone)
+        int failCount = 0;
+        if (needFailed != null)
         {
-            return Random.Range(0, 2) == 0 ? ChickenNeed.Cooling : ChickenNeed.Heating;
+            for (int i = 0; i < needFailed.Length; i++)
+                if (needFailed[i]) failCount++;
         }
-
-        // Otherwise return the only not-done need
-        if (!coolingDone)
-            return ChickenNeed.Cooling;
-        if (!heatingDone)
-            return ChickenNeed.Heating;
-
-        // Should never reach here (sell bubble will be shown instead)
-        return ChickenNeed.Feed;
+        sellReward = Mathf.Max(0, GameConstants.Economy.BaseSellPrice - failCount * GameConstants.Economy.FailPenalty);
     }
 
     private Sprite GetNeedSprite(ChickenNeed need)
     {
         switch (need)
         {
-            case ChickenNeed.Feed:
-                return feedBubbleSprite;
-            case ChickenNeed.Cooling:
-                return coolingBubbleSprite;
-            case ChickenNeed.Heating:
-                return heatingBubbleSprite;
-            default:
-                return feedBubbleSprite;
+            case ChickenNeed.Feed: return feedBubbleSprite;
+            case ChickenNeed.Cooling: return coolingBubbleSprite;
+            case ChickenNeed.Heating: return heatingBubbleSprite;
+            case ChickenNeed.HumidityUp: return humidityUpBubbleSprite;
+            case ChickenNeed.HumidityDown: return humidityDownBubbleSprite;
+            case ChickenNeed.AddDryHusk: return addDryHuskBubbleSprite;
+            case ChickenNeed.ReduceFeed: return reduceFeedBubbleSprite;
+            default: return feedBubbleSprite;
         }
     }
 
@@ -524,52 +563,97 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     {
         switch (need)
         {
-            case ChickenNeed.Feed:
-                return feedBubbleText;
-            case ChickenNeed.Cooling:
-                return coolingBubbleText;
-            case ChickenNeed.Heating:
-                return heatingBubbleText;
-            default:
-                return feedBubbleText;
+            case ChickenNeed.Feed: return feedBubbleText;
+            case ChickenNeed.Cooling: return coolingBubbleText;
+            case ChickenNeed.Heating: return heatingBubbleText;
+            case ChickenNeed.HumidityUp: return humidityUpBubbleText;
+            case ChickenNeed.HumidityDown: return humidityDownBubbleText;
+            case ChickenNeed.AddDryHusk: return addDryHuskBubbleText;
+            case ChickenNeed.ReduceFeed: return reduceFeedBubbleText;
+            default: return feedBubbleText;
         }
     }
 
     private bool IsReadyToSell()
     {
-        bool feedDone = feedSatisfied || feedFailed;
-        bool coolingDone = coolingSatisfied || coolingFailed;
-        bool heatingDone = heatingSatisfied || heatingFailed;
-        return feedDone && coolingDone && heatingDone;
-    }
-
-    private void MarkCurrentNeedFailed()
-    {
-        switch (currentNeed)
-        {
-            case ChickenNeed.Feed:
-                feedFailed = true;
-                break;
-            case ChickenNeed.Cooling:
-                coolingFailed = true;
-                break;
-            case ChickenNeed.Heating:
-                heatingFailed = true;
-                break;
-        }
+        return completedCareCount >= (needsQueue?.Count ?? 0);
     }
 
     private void ResetChickenProgress()
     {
-        feedSatisfied = false;
-        coolingSatisfied = false;
-        heatingSatisfied = false;
-        feedFailed = false;
-        coolingFailed = false;
-        heatingFailed = false;
-        completedCareCount = 0;
+        needsQueue = GenerateNeedsQueue();
+        int count = needsQueue.Count;
+        needSatisfied = new bool[count];
+        needFailed = new bool[count];
+        currentNeedIndex = 0;
         RecalculateSellReward();
         ResetAnimationToNormal();
+    }
+
+    private List<ChickenNeed> GenerateNeedsQueue()
+    {
+        int level = GameManager.Instance != null ? GameManager.Instance.currentLevelIndex : 0;
+
+        // Starter: fixed order [Feed, Cooling, Heating]
+        if (level == 0)
+        {
+            return new List<ChickenNeed> { ChickenNeed.Feed, ChickenNeed.Cooling, ChickenNeed.Heating };
+        }
+
+        // Beginner/Intermediate: Feed (wajib) + random subset from pool
+        var queue = new List<ChickenNeed>();
+        queue.Add(ChickenNeed.Feed);
+
+        var pool = GetNeedPool();
+        pool.Remove(ChickenNeed.Feed);
+
+        int totalNeeds = GetTotalNeedsCount();
+        int remaining = totalNeeds - 1;
+
+        for (int i = 0; i < remaining && pool.Count > 0; i++)
+        {
+            int randomIndex = Random.Range(0, pool.Count);
+            queue.Add(pool[randomIndex]);
+            pool.RemoveAt(randomIndex);
+        }
+
+        return queue;
+    }
+
+    private List<ChickenNeed> GetNeedPool()
+    {
+        var pool = new List<ChickenNeed>();
+        int level = GameManager.Instance != null ? GameManager.Instance.currentLevelIndex : 0;
+
+        switch (level)
+        {
+            case 0:
+                pool.AddRange(new[] { ChickenNeed.Feed, ChickenNeed.Cooling, ChickenNeed.Heating });
+                break;
+            case 1:
+                pool.AddRange(new[] { ChickenNeed.Feed, ChickenNeed.Cooling, ChickenNeed.Heating,
+                                      ChickenNeed.HumidityUp, ChickenNeed.HumidityDown });
+                break;
+            case 2:
+                pool.AddRange(new[] { ChickenNeed.Feed, ChickenNeed.Cooling, ChickenNeed.Heating,
+                                      ChickenNeed.HumidityUp, ChickenNeed.HumidityDown,
+                                      ChickenNeed.AddDryHusk, ChickenNeed.ReduceFeed });
+                break;
+        }
+
+        return pool;
+    }
+
+    private int GetTotalNeedsCount()
+    {
+        int level = GameManager.Instance != null ? GameManager.Instance.currentLevelIndex : 0;
+        switch (level)
+        {
+            case 0: return GameConstants.Difficulty.StarterSteps;
+            case 1: return GameConstants.Difficulty.BeginnerSteps;
+            case 2: return GameConstants.Difficulty.IntermediateSteps;
+            default: return GameConstants.Difficulty.StarterSteps;
+        }
     }
 
     public SaveManager.SlotSaveData GetSaveData()
@@ -577,21 +661,22 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         bool hasActiveCareBubble = occupied
             && (currentState == SlotState.WaitingForCareClick || currentState == SlotState.WaitingForHealthMinigame);
 
+        int[] needQueueArr = needsQueue?.ConvertAll(n => (int)n).ToArray();
+        int activeNeed = hasActiveCareBubble && currentNeedIndex >= 0 ? (int)needsQueue[currentNeedIndex] : -1;
+
         return new SaveManager.SlotSaveData
         {
             slotId = SlotId,
             occupied = occupied,
             prefabName = placedPrefabName,
-            feedSatisfied = feedSatisfied,
-            coolingSatisfied = coolingSatisfied,
-            heatingSatisfied = heatingSatisfied,
-            feedFailed = feedFailed,
-            coolingFailed = coolingFailed,
-            heatingFailed = heatingFailed,
+            needQueue = needQueueArr,
+            needSatisfied = needSatisfied,
+            needFailed = needFailed,
+            currentNeedIndex = currentNeedIndex,
             completedCareCount = completedCareCount,
             sellReward = sellReward,
             hasActiveBubble = hasActiveCareBubble,
-            activeBubbleNeed = hasActiveCareBubble ? (int)currentNeed : -1
+            activeBubbleNeed = activeNeed
         };
     }
 
@@ -618,13 +703,19 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
         placedPrefabName = data.prefabName;
         occupied = true;
-        feedSatisfied = data.feedSatisfied;
-        coolingSatisfied = data.coolingSatisfied;
-        heatingSatisfied = data.heatingSatisfied;
-        feedFailed = data.feedFailed;
-        coolingFailed = data.coolingFailed;
-        heatingFailed = data.heatingFailed;
-        completedCareCount = data.completedCareCount;
+
+        if (data.needQueue != null && data.needQueue.Length > 0)
+        {
+            needsQueue = new List<ChickenNeed>(System.Array.ConvertAll(data.needQueue, n => (ChickenNeed)n));
+            needSatisfied = data.needSatisfied ?? new bool[needsQueue.Count];
+            needFailed = data.needFailed ?? new bool[needsQueue.Count];
+            currentNeedIndex = data.currentNeedIndex;
+        }
+        else
+        {
+            ResetChickenProgress();
+        }
+
         sellReward = data.sellReward;
         currentState = SlotState.WaitingForCareEvent;
 
@@ -634,15 +725,28 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         {
             ShowSellBubble();
         }
-        else if (data.hasActiveBubble && data.activeBubbleNeed >= 0 && data.activeBubbleNeed <= 2)
+        else if (data.hasActiveBubble)
         {
-            currentNeed = (ChickenNeed)data.activeBubbleNeed;
-            Sprite needSprite = GetNeedSprite(currentNeed);
-            ShowBubble(needSprite, GetNeedText(currentNeed));
-            currentState = SlotState.WaitingForCareClick;
-            NotifyStateChanged();
-            UpdateAnimationByNeed(currentNeed);
-            StartBubbleExpiryTimer();
+            int idx = -1;
+            for (int i = 0; i < needsQueue.Count; i++)
+                if (!needSatisfied[i] && !needFailed[i]) { idx = i; break; }
+
+            if (idx >= 0)
+            {
+                currentNeedIndex = idx;
+                ChickenNeed need = needsQueue[idx];
+                Sprite needSprite = GetNeedSprite(need);
+                ShowBubble(needSprite, GetNeedText(need));
+                currentState = SlotState.WaitingForCareClick;
+                NotifyStateChanged();
+                UpdateAnimationByNeed(need);
+                StartBubbleExpiryTimer();
+            }
+            else
+            {
+                isWanderingPaused = false;
+                StartNeedTimer();
+            }
         }
         else
         {

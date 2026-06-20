@@ -81,7 +81,7 @@ public class StarterChickenShop : MonoBehaviour
         RegisterFeedButton();
         OverridePrices();
         UpdateOptionLabels();
-        PolishShopButtons();
+        EnsureIconsExistOnly();
         RefreshShopState();
 
         if (messageText != null && string.IsNullOrWhiteSpace(messageText.text))
@@ -201,17 +201,13 @@ public class StarterChickenShop : MonoBehaviour
             bool canAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(option.price);
 
             if (option.buyButton != null)
-            {
                 option.buyButton.interactable = hasAvailableSlot && canAfford;
-                StyleButtonState(option.buyButton, hasAvailableSlot && canAfford);
-            }
         }
 
         if (feedBuyButton != null)
         {
             bool canAffordFeed = CoinManager.Instance != null && CoinManager.Instance.CanAfford(GameConstants.Economy.FeedCost);
             feedBuyButton.interactable = canAffordFeed;
-            StyleButtonState(feedBuyButton, canAffordFeed);
         }
 
         if (feedBuyLabel != null)
@@ -239,11 +235,11 @@ public class StarterChickenShop : MonoBehaviour
         {
             StarterChickenOption option = options[i];
             if (option != null && option.labelText != null)
-                option.labelText.text = $"{option.displayName} - {option.price}";
+                option.labelText.text = $"{option.price}";
         }
     }
 
-    private void PolishShopButtons()
+    private void EnsureIconsExistOnly()
     {
         if (options == null)
             return;
@@ -255,30 +251,7 @@ public class StarterChickenShop : MonoBehaviour
                 continue;
 
             if (option.buyButton != null)
-            {
-                StyleButtonState(option.buyButton, true);
                 EnsureOptionIcon(option);
-            }
-
-            if (option.labelText != null)
-            {
-                option.labelText.color = buttonStyle.labelColor;
-                option.labelText.fontSize = Mathf.Max(option.labelText.fontSize, buttonStyle.labelFontSize);
-                option.labelText.fontStyle = FontStyles.Bold;
-                option.labelText.alignment = TextAlignmentOptions.MidlineLeft;
-                RectTransform labelRect = option.labelText.rectTransform;
-                labelRect.anchorMin = Vector2.zero;
-                labelRect.anchorMax = Vector2.one;
-                labelRect.offsetMin = new Vector2(86f, 8f);
-                labelRect.offsetMax = new Vector2(-12f, -8f);
-            }
-        }
-
-        if (messageText != null)
-        {
-            messageText.color = buttonStyle.messageColor;
-            messageText.fontSize = Mathf.Max(messageText.fontSize, buttonStyle.labelFontSize);
-            messageText.alignment = TextAlignmentOptions.Center;
         }
     }
 

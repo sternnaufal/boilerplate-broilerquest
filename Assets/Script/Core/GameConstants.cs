@@ -1,3 +1,14 @@
+public enum ChickenNeed
+{
+    Feed,
+    Cooling,
+    Heating,
+    HumidityUp,
+    HumidityDown,
+    AddDryHusk,
+    ReduceFeed
+}
+
 public static class GameConstants
 {
     public static class Persistence
@@ -24,6 +35,13 @@ public static class GameConstants
         public const float ButtonLabelFontSize = 24f;
         public const float BubbleLabelFontSize = 22f;
         public const float HPPanelSafetyMargin = 50f;
+    }
+
+    public static class Difficulty
+    {
+        public const int StarterSteps = 3;
+        public const int BeginnerSteps = 4;
+        public const int IntermediateSteps = 5;
     }
 
     public static class StarterSlot
@@ -91,5 +109,33 @@ public static class GameConstants
         public const float TimeLimit = 30f;
         public const int PairCount = 4;
         public const float WarningThreshold = 10f;
+    }
+
+    public static class HumidityToggle
+    {
+        public const float TimeLimit = 15f;
+        public const int ToggleCount = 8;
+        public const float WarningThreshold = 5f;
+    }
+
+    public static class PipelinePuzzle
+    {
+        public const int GridSize = 3;
+        public const float TimeLimit = 30f;
+        public const float WarningThreshold = 10f;
+    }
+
+    public static class DragDropSack
+    {
+        public const int SackCount = 3;
+        public const float TimeLimit = 20f;
+        public const float WarningThreshold = 7f;
+    }
+
+    public static class HoldSwipe
+    {
+        public const float TimeLimit = 15f;
+        public const int SwipeCount = 5;
+        public const float WarningThreshold = 5f;
     }
 }

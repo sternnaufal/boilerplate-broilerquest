@@ -24,7 +24,7 @@ public partial class StarterKandangSlot
             case ChickenNeed.Cooling:
                 TrySetAnimationBool(coldAnimParam, true);
                 break;
-            case ChickenNeed.Feed:
+            default:
                 ResetAnimationToNormal();
                 break;
         }

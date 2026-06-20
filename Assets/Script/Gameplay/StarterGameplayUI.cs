@@ -259,7 +259,7 @@ public class StarterGameplayUI : MonoBehaviour
         StyleButton(closeHpButton, closeHpButtonStyle.label, closeHpButtonStyle.color, GetSpriteSafe(3));
 
         if (mainMenuButton != null)
-            mainMenuButton.gameObject.SetActive(false);
+            ButtonHelper.AddListenerOnce(mainMenuButton, ReturnToMainMenu);
 
         //StylePanel(hpPanel, hpPanelStyle.color);
         StylePanel(pausePanel, pausePanelStyle.color);

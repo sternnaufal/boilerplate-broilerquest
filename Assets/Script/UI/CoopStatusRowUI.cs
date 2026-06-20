@@ -1,13 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class CoopStatusRowUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI kandangLabel;
-    [SerializeField] private Image pakanIcon;
-    [SerializeField] private Image panasIcon;
-    [SerializeField] private Image dinginIcon;
+    [SerializeField] private List<Image> needIcons;
 
     public void SetKandangLabel(string text)
     {
@@ -15,19 +14,23 @@ public class CoopStatusRowUI : MonoBehaviour
             kandangLabel.text = text;
     }
 
-    public void SetPakanIcon(Sprite sprite)
+    public void SetNeedIcons(List<Sprite> icons, List<bool> failedStates)
     {
-        SetIcon(pakanIcon, sprite);
-    }
+        if (needIcons == null) return;
 
-    public void SetPanasIcon(Sprite sprite)
-    {
-        SetIcon(panasIcon, sprite);
-    }
-
-    public void SetDinginIcon(Sprite sprite)
-    {
-        SetIcon(dinginIcon, sprite);
+        for (int i = 0; i < needIcons.Count; i++)
+        {
+            if (i < icons.Count && icons[i] != null)
+            {
+                SetIcon(needIcons[i], icons[i]);
+                needIcons[i].color = (failedStates != null && i < failedStates.Count && failedStates[i]) ? Color.gray : Color.white;
+                needIcons[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                needIcons[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     public void SetActive(bool active)

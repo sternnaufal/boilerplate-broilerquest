@@ -617,6 +617,12 @@ MonoBehaviour:
   bounceDuration: 0.9
   bounceStagger: 0.12
   bounceOffsetY: 600
+  starterLabel: STARTER
+  beginnerLabel: BEGINNER
+  intermediateLabel: INTERMEDIATE
+  lockedLabelFormat: '{0}
+
+    ({1} coin)'
   unlockedColor: {r: 0.95, g: 0.72, b: 0.22, a: 1}
   lockedColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
   labelUnlockedColor: {r: 0.12, g: 0.15, b: 0.08, a: 1}

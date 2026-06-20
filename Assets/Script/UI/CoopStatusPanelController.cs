@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class CoopStatusPanelController : MonoBehaviour
 {
@@ -9,17 +10,21 @@ public class CoopStatusPanelController : MonoBehaviour
     [SerializeField] private CoopStatusRowUI rowPrefab;
     [SerializeField] private RectTransform rowContainer;
 
-    [Header("Ikon Pakan")]
-    [SerializeField] private Sprite iconPakanSukses;
-    [SerializeField] private Sprite iconPakanGagal;
-
-    [Header("Ikon Suhu Dingin")]
-    [SerializeField] private Sprite iconDinginSukses;
-    [SerializeField] private Sprite iconDinginGagal;
-
-    [Header("Ikon Suhu Panas")]
-    [SerializeField] private Sprite iconPanasSukses;
-    [SerializeField] private Sprite iconPanasGagal;
+    [Header("Need Icons")]
+    [SerializeField] private Sprite iconFeedSukses;
+    [SerializeField] private Sprite iconFeedGagal;
+    [SerializeField] private Sprite iconCoolingSukses;
+    [SerializeField] private Sprite iconCoolingGagal;
+    [SerializeField] private Sprite iconHeatingSukses;
+    [SerializeField] private Sprite iconHeatingGagal;
+    [SerializeField] private Sprite iconHumidityUpSukses;
+    [SerializeField] private Sprite iconHumidityUpGagal;
+    [SerializeField] private Sprite iconHumidityDownSukses;
+    [SerializeField] private Sprite iconHumidityDownGagal;
+    [SerializeField] private Sprite iconAddDryHuskSukses;
+    [SerializeField] private Sprite iconAddDryHuskGagal;
+    [SerializeField] private Sprite iconReduceFeedSukses;
+    [SerializeField] private Sprite iconReduceFeedGagal;
 
     private StarterKandangSlot[] kandangSlots;
     private CoopStatusRowUI[] rows;
@@ -87,14 +92,49 @@ public class CoopStatusPanelController : MonoBehaviour
         }
 
         row.SetActive(true);
-        row.SetPakanIcon(PickIcon(slot.GetFeedStatus(), iconPakanSukses, iconPakanGagal));
-        row.SetPanasIcon(PickIcon(slot.GetHeatingStatus(), iconPanasSukses, iconPanasGagal));
-        row.SetDinginIcon(PickIcon(slot.GetCoolingStatus(), iconDinginSukses, iconDinginGagal));
+
+        var icons = new List<Sprite>();
+        var failedStates = new List<bool>();
+        for (int i = 0; i < slot.NeedsQueue.Count; i++)
+        {
+            ChickenNeed need = slot.NeedsQueue[i];
+            bool isFailed = slot.NeedFailed[i];
+            icons.Add(GetNeedIcon(need, isFailed));
+            failedStates.Add(isFailed);
+        }
+
+        row.SetNeedIcons(icons, failedStates);
     }
 
-    private static Sprite PickIcon(int status, Sprite sukses, Sprite gagal)
+    private Sprite GetNeedIcon(ChickenNeed need, bool isFailed)
     {
-        if (status == 1) return sukses;
-        return gagal;
+        if (isFailed)
+        {
+            switch (need)
+            {
+                case ChickenNeed.Feed: return iconFeedGagal;
+                case ChickenNeed.Cooling: return iconCoolingGagal;
+                case ChickenNeed.Heating: return iconHeatingGagal;
+                case ChickenNeed.HumidityUp: return iconHumidityUpGagal;
+                case ChickenNeed.HumidityDown: return iconHumidityDownGagal;
+                case ChickenNeed.AddDryHusk: return iconAddDryHuskGagal;
+                case ChickenNeed.ReduceFeed: return iconReduceFeedGagal;
+            }
+        }
+        else
+        {
+            switch (need)
+            {
+                case ChickenNeed.Feed: return iconFeedSukses;
+                case ChickenNeed.Cooling: return iconCoolingSukses;
+                case ChickenNeed.Heating: return iconHeatingSukses;
+                case ChickenNeed.HumidityUp: return iconHumidityUpSukses;
+                case ChickenNeed.HumidityDown: return iconHumidityDownSukses;
+                case ChickenNeed.AddDryHusk: return iconAddDryHuskSukses;
+                case ChickenNeed.ReduceFeed: return iconReduceFeedSukses;
+            }
+        }
+
+        return null;
     }
 }

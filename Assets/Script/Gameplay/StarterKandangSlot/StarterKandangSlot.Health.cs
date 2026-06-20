@@ -7,10 +7,12 @@ public partial class StarterKandangSlot
         if (!useHealthMinigame)
             return false;
 
+        ChickenNeed need = CurrentNeed;
+
         if (JigsawMinigameController.Instance != null && JigsawMinigameController.Instance.IsPlaying)
             return true;
 
-        if (currentNeed == ChickenNeed.Cooling)
+        if (need == ChickenNeed.Cooling)
         {
             if (MemoryMatchController.Instance != null && MemoryMatchController.Instance.IsPlaying)
                 return true;
@@ -21,7 +23,7 @@ public partial class StarterKandangSlot
                 currentState = SlotState.WaitingForHealthMinigame;
                 NotifyStateChanged();
 
-                if (memoryMatch.ShowMemoryMatch(this, GetNeedTitle(currentNeed)))
+                if (memoryMatch.ShowMemoryMatch(this, GetNeedTitle(need)))
                     return true;
 
                 currentState = SlotState.WaitingForCareClick;
@@ -29,7 +31,7 @@ public partial class StarterKandangSlot
             }
         }
 
-        if (currentNeed == ChickenNeed.Heating)
+        if (need == ChickenNeed.Heating)
         {
             if (WiringMinigameController.Instance != null && WiringMinigameController.Instance.IsPlaying)
                 return true;
@@ -40,7 +42,71 @@ public partial class StarterKandangSlot
                 currentState = SlotState.WaitingForHealthMinigame;
                 NotifyStateChanged();
 
-                if (wiring.ShowWiring(this, wiringPairCount, wiringTimeLimit, GetWiringTitle(currentNeed)))
+                if (wiring.ShowWiring(this, wiringPairCount, wiringTimeLimit, GetWiringTitle(need)))
+                    return true;
+
+                currentState = SlotState.WaitingForCareClick;
+                NotifyStateChanged();
+            }
+        }
+
+        if (need == ChickenNeed.HumidityUp)
+        {
+            HumidityToggleController toggle = HumidityToggleController.Instance;
+            if (toggle != null)
+            {
+                currentState = SlotState.WaitingForHealthMinigame;
+                NotifyStateChanged();
+
+                if (toggle.ShowToggle(this))
+                    return true;
+
+                currentState = SlotState.WaitingForCareClick;
+                NotifyStateChanged();
+            }
+        }
+
+        if (need == ChickenNeed.HumidityDown)
+        {
+            PipelinePuzzleController pipeline = PipelinePuzzleController.Instance;
+            if (pipeline != null)
+            {
+                currentState = SlotState.WaitingForHealthMinigame;
+                NotifyStateChanged();
+
+                if (pipeline.ShowPuzzle(this))
+                    return true;
+
+                currentState = SlotState.WaitingForCareClick;
+                NotifyStateChanged();
+            }
+        }
+
+        if (need == ChickenNeed.AddDryHusk)
+        {
+            DragDropSackController sack = DragDropSackController.Instance;
+            if (sack != null)
+            {
+                currentState = SlotState.WaitingForHealthMinigame;
+                NotifyStateChanged();
+
+                if (sack.ShowDragDrop(this))
+                    return true;
+
+                currentState = SlotState.WaitingForCareClick;
+                NotifyStateChanged();
+            }
+        }
+
+        if (need == ChickenNeed.ReduceFeed)
+        {
+            HoldSwipeController swipe = HoldSwipeController.Instance;
+            if (swipe != null)
+            {
+                currentState = SlotState.WaitingForHealthMinigame;
+                NotifyStateChanged();
+
+                if (swipe.ShowHoldSwipe(this))
                     return true;
 
                 currentState = SlotState.WaitingForCareClick;
@@ -51,13 +117,13 @@ public partial class StarterKandangSlot
         JigsawMinigameController jigsawController = JigsawMinigameController.Instance;
         if (jigsawController != null)
         {
-            Texture puzzleTexture = GetNeedPuzzleTexture(currentNeed);
+            Texture puzzleTexture = GetNeedPuzzleTexture(need);
             if (puzzleTexture != null)
             {
                 currentState = SlotState.WaitingForHealthMinigame;
                 NotifyStateChanged();
 
-                if (jigsawController.ShowJigsaw(this, puzzleTexture, GetNeedTitle(currentNeed)))
+                if (jigsawController.ShowJigsaw(this, puzzleTexture, GetNeedTitle(need)))
                     return true;
 
                 currentState = SlotState.WaitingForCareClick;
@@ -105,6 +171,14 @@ public partial class StarterKandangSlot
                 return "Susun Puzzle Dingin";
             case ChickenNeed.Heating:
                 return "Susun Puzzle Panas";
+            case ChickenNeed.HumidityUp:
+                return "Atur Kelembaban";
+            case ChickenNeed.HumidityDown:
+                return "Pipeline Pipa";
+            case ChickenNeed.AddDryHusk:
+                return "Tambah Sekam";
+            case ChickenNeed.ReduceFeed:
+                return "Kurangi Pakan";
             default:
                 return "Susun Puzzle";
         }

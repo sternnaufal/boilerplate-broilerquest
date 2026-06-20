@@ -12,12 +12,10 @@ public static class SaveManager
         public string slotId;
         public bool occupied;
         public string prefabName;
-        public bool feedSatisfied;
-        public bool coolingSatisfied;
-        public bool heatingSatisfied;
-        public bool feedFailed;
-        public bool coolingFailed;
-        public bool heatingFailed;
+        public int[] needQueue;
+        public bool[] needSatisfied;
+        public bool[] needFailed;
+        public int currentNeedIndex;
         public int completedCareCount;
         public int sellReward;
         public bool hasActiveBubble;
