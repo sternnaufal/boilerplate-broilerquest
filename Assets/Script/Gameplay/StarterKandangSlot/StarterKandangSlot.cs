@@ -60,6 +60,10 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private bool useHealthMinigame;
     [SerializeField] private bool clearChickenOnHealthFail;
 
+    [Header("Minigame Toggles")]
+    [SerializeField] private bool enableAdvancedMinigames = false;
+    [Tooltip("When false: only Feed, Cooling, Heating, HumidityUp are available. Set true for other devs to enable PipelinePuzzle, DragDropSack, HoldSwipe.")]
+
     [Header("Jigsaw Puzzle Textures")]
     [SerializeField] private Texture jigsawFeedTexture;
     [SerializeField] private Texture jigsawCoolingTexture;
@@ -97,9 +101,10 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     {
         get
         {
-            if (needSatisfied == null) return 0;
+            if (needSatisfied == null || needFailed == null) return 0;
+            int len = Mathf.Min(needSatisfied.Length, needFailed.Length);
             int count = 0;
-            for (int i = 0; i < needSatisfied.Length; i++)
+            for (int i = 0; i < len; i++)
                 if (needSatisfied[i] || needFailed[i]) count++;
             return count;
         }
@@ -147,8 +152,14 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
     private void SetBubbleExpiryByLevel()
     {
-        int level = GameManager.Instance != null ? GameManager.Instance.currentLevelIndex : 0;
-        switch (level)
+        if (GameManager.Instance == null)
+        {
+            Debug.LogWarning($"{name}: GameManager.Instance is null in SetBubbleExpiryByLevel, defaulting to Starter (no expiry).");
+            bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDurationStarter;
+            return;
+        }
+
+        switch (GameManager.Instance.currentLevelIndex)
         {
             case 0:
                 bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDurationStarter;
@@ -211,8 +222,9 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             SaveManager.SaveAll();
             return true;
         }
-        catch
+        catch (System.Exception e)
         {
+            Debug.LogError($"{name}: Exception in TryPlaceChicken: {e.Message}\n{e.StackTrace}");
             foreach (GameObject visual in newVisuals)
             {
                 spawnedChickens.Remove(visual);
@@ -632,12 +644,19 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
                 break;
             case 1:
                 pool.AddRange(new[] { ChickenNeed.Feed, ChickenNeed.Cooling, ChickenNeed.Heating,
-                                      ChickenNeed.HumidityUp, ChickenNeed.HumidityDown });
+                                      ChickenNeed.HumidityUp });
+                if (enableAdvancedMinigames)
+                    pool.Add(ChickenNeed.HumidityDown);
                 break;
             case 2:
                 pool.AddRange(new[] { ChickenNeed.Feed, ChickenNeed.Cooling, ChickenNeed.Heating,
-                                      ChickenNeed.HumidityUp, ChickenNeed.HumidityDown,
-                                      ChickenNeed.AddDryHusk, ChickenNeed.ReduceFeed });
+                                      ChickenNeed.HumidityUp });
+                if (enableAdvancedMinigames)
+                {
+                    pool.Add(ChickenNeed.HumidityDown);
+                    pool.Add(ChickenNeed.AddDryHusk);
+                    pool.Add(ChickenNeed.ReduceFeed);
+                }
                 break;
         }
 
@@ -647,11 +666,17 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     private int GetTotalNeedsCount()
     {
         int level = GameManager.Instance != null ? GameManager.Instance.currentLevelIndex : 0;
+        int maxFromPool;
+
         switch (level)
         {
             case 0: return GameConstants.Difficulty.StarterSteps;
-            case 1: return GameConstants.Difficulty.BeginnerSteps;
-            case 2: return GameConstants.Difficulty.IntermediateSteps;
+            case 1:
+                maxFromPool = enableAdvancedMinigames ? 4 : 3;
+                return 1 + Mathf.Min(GameConstants.Difficulty.BeginnerSteps - 1, maxFromPool);
+            case 2:
+                maxFromPool = enableAdvancedMinigames ? 6 : 3;
+                return 1 + Mathf.Min(GameConstants.Difficulty.IntermediateSteps - 1, maxFromPool);
             default: return GameConstants.Difficulty.StarterSteps;
         }
     }

@@ -15,7 +15,7 @@ public class CoinManager : Singleton<CoinManager>
     protected override void Awake()
     {
         base.Awake();
-        if (resetCoinOnStart)
+        if (resetCoinOnStart && !HasSavedCoin())
             SetTotalCoin(GameConstants.Economy.StartingCoin);
     }
 
@@ -29,16 +29,28 @@ public class CoinManager : Singleton<CoinManager>
         if (hasInitialized)
             return;
 
-        if (usePlayerPrefs && !resetCoinOnStart)
+        if (usePlayerPrefs)
+        {
             totalCoin = LoadSavedCoin();
+        }
         else if (resetCoinOnStart)
+        {
             totalCoin = Mathf.Max(0, GameConstants.Economy.StartingCoin);
+        }
         else
+        {
             totalCoin = 0;
+        }
 
         hasInitialized = true;
         SaveCoin();
         CoinsChanged?.Invoke(totalCoin);
+    }
+
+    private static bool HasSavedCoin()
+    {
+        return PlayerPrefs.HasKey(GameConstants.Persistence.TotalCoinKey)
+            || PlayerPrefs.HasKey(GameConstants.Persistence.LegacyTotalCoinKey);
     }
 
     public void AddCoin(int amount)

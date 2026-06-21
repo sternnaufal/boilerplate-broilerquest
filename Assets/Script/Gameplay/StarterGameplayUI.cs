@@ -73,7 +73,7 @@ public class StarterGameplayUI : MonoBehaviour
     
     [SerializeField] private Button exitIoTButton;     // tombol ExitBut di IoTAPK
     [Header("HP Panel Animation")]
-    private RectTransform hpPanelRect;
+    [SerializeField] private RectTransform hpPanelRect;
     [SerializeField] private float animationDuration = 0.3f; // lama animasi
     private bool listenersRegistered;
     private bool hpVisible;

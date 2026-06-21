@@ -20,8 +20,21 @@ public class LevelTimer : MonoBehaviour
         StopTimer();
         timeRemaining = Mathf.Max(0, duration);
         isRunning = true;
+        EnsureTimerText();
         UpdateDisplay();
         timerCoroutine = StartCoroutine(TimerRoutine());
+    }
+
+    private void EnsureTimerText()
+    {
+        if (timerText != null) return;
+
+        GameObject found = GameObject.Find("TimerText");
+        if (found != null)
+            timerText = found.GetComponent<TextMeshProUGUI>();
+
+        if (timerText == null)
+            GameLog.Warn("LevelTimer: timerText not assigned and 'TimerText' GameObject not found in scene. Timer won't display.");
     }
 
     public void StopTimer()

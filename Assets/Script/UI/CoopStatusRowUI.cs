@@ -22,13 +22,19 @@ public class CoopStatusRowUI : MonoBehaviour
         {
             if (i < icons.Count && icons[i] != null)
             {
-                SetIcon(needIcons[i], icons[i]);
-                needIcons[i].color = (failedStates != null && i < failedStates.Count && failedStates[i]) ? Color.gray : Color.white;
-                needIcons[i].gameObject.SetActive(true);
+                if (needIcons[i] != null)
+                {
+                    SetIcon(needIcons[i], icons[i]);
+                    needIcons[i].color = (failedStates != null && i < failedStates.Count && failedStates[i]) ? Color.gray : Color.white;
+                    needIcons[i].gameObject.SetActive(true);
+                }
             }
             else
             {
-                needIcons[i].gameObject.SetActive(false);
+                if (needIcons[i] != null)
+                {
+                    needIcons[i].gameObject.SetActive(false);
+                }
             }
         }
     }

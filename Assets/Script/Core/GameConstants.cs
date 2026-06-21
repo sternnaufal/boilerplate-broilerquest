@@ -113,9 +113,12 @@ public static class GameConstants
 
     public static class HumidityToggle
     {
-        public const float TimeLimit = 15f;
-        public const int ToggleCount = 8;
+        public const float TimeLimit = 20f;
+        public const int TargetSuccess = 3;
+        public const int MaxFails = 1;
         public const float WarningThreshold = 5f;
+        public const float IndicatorSpeed = 1.2f;
+        public const float TargetZoneWidth = 0.3f;
     }
 
     public static class PipelinePuzzle
