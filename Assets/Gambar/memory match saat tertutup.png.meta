@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6cb0e96408d5adb4f86061d42eb2dd60
+guid: 8e2c6403712c2cd48a817950ac108e61
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3984413914186058838
-    second: memorigame_0
+      213: 2772318725309764230
+    second: memory match saat tertutup_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: memorigame_0
+      name: memory match saat tertutup_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,14 +128,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 65c0f29385b7b4730800000000000000
-      internalID: 3984413914186058838
+      spriteID: 682904a3131497620800000000000000
+      internalID: 2772318725309764230
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_1
+      name: memory match saat tertutup_1
       rect:
         serializedVersion: 2
         x: 300
@@ -150,14 +150,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 513ca29723cb9db48a2c4838c7047b54
-      internalID: -1102589601
+      spriteID: c726c2433fd1a5a4784d0fa9a533bf62
+      internalID: -986115714
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_2
+      name: memory match saat tertutup_2
       rect:
         serializedVersion: 2
         x: 600
@@ -172,14 +172,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7d8a34343f059094aa8f3aa2fce6bec4
-      internalID: -1407930075
+      spriteID: 9f50dcc4b233f2549b48584cc52ee24f
+      internalID: 256181791
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_3
+      name: memory match saat tertutup_3
       rect:
         serializedVersion: 2
         x: 0
@@ -194,14 +194,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7e23789ecb494c4a87dc5f0a16678f0
-      internalID: -1897525302
+      spriteID: 13c65bea2a42905468784fe3a8ec6d74
+      internalID: -738882085
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_4
+      name: memory match saat tertutup_4
       rect:
         serializedVersion: 2
         x: 300
@@ -216,14 +216,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 74aae198b2e85ae41886bd92fb4a929c
-      internalID: -1469912830
+      spriteID: 6bb084dafba3c374a89e07112cd58511
+      internalID: -1151274343
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_5
+      name: memory match saat tertutup_5
       rect:
         serializedVersion: 2
         x: 600
@@ -238,14 +238,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 31683880758d7bd4691d070cebbacde7
-      internalID: -910871808
+      spriteID: 54c10bb4d157aed4bb79c5e2b6ef55e4
+      internalID: -1906743040
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_6
+      name: memory match saat tertutup_6
       rect:
         serializedVersion: 2
         x: 0
@@ -260,14 +260,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5b830eaf93e7dca42893ec0b4141ba72
-      internalID: 657634678
+      spriteID: 8ee9789e7572f5043acc5f0d15348239
+      internalID: 1908960545
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_7
+      name: memory match saat tertutup_7
       rect:
         serializedVersion: 2
         x: 300
@@ -282,14 +282,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b886347b842e6294ebd7ae9f974403df
-      internalID: -185455336
+      spriteID: 2d58dd2a545b4044f9a4b96adaae95a3
+      internalID: -1503646047
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_8
+      name: memory match saat tertutup_8
       rect:
         serializedVersion: 2
         x: 600
@@ -304,14 +304,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9956c5b50d3541049827efa165f70d09
-      internalID: 1410132718
+      spriteID: f95c41ea5cf87e14799485067be16dd0
+      internalID: -297310974
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_9
+      name: memory match saat tertutup_9
       rect:
         serializedVersion: 2
         x: 0
@@ -326,14 +326,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 51068a138b75ef64eafdd0014c53f584
-      internalID: -1996719685
+      spriteID: 9277d12b517b38642b0d79e84bcdcf8f
+      internalID: -303756226
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_10
+      name: memory match saat tertutup_10
       rect:
         serializedVersion: 2
         x: 300
@@ -348,14 +348,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 411a6f5df81fed642a25e717dfbe429c
-      internalID: 1485968436
+      spriteID: 9d6194d12415e6d40a6688d42ca964c3
+      internalID: -1558777155
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: memorigame_11
+      name: memory match saat tertutup_11
       rect:
         serializedVersion: 2
         x: 600
@@ -370,8 +370,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1b32945a8dfb9c2459b8fae43d335c8c
-      internalID: 878023223
+      spriteID: 147223b051752d94fa00b5c8fa838def
+      internalID: 698580036
       vertices: []
       indices: 
       edges: []
@@ -380,7 +380,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: c86066d8b01461d4386c491e3fc92002
+    spriteID: a093c1486c638494595d2dc5e9472a73
     internalID: 0
     vertices: []
     indices: 
@@ -389,21 +389,23 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries:
+      - key: SpriteEditor.SliceOnImport
+        value: True
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":3.0,"y":4.0},"gridSpriteSize":{"x":300.0,"y":300.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":true,"gridCellCount":{"x":3.0,"y":4.0},"gridSpriteSize":{"x":300.0,"y":300.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      memorigame_0: 3984413914186058838
-      memorigame_1: -1102589601
-      memorigame_10: 1485968436
-      memorigame_11: 878023223
-      memorigame_2: -1407930075
-      memorigame_3: -1897525302
-      memorigame_4: -1469912830
-      memorigame_5: -910871808
-      memorigame_6: 657634678
-      memorigame_7: -185455336
-      memorigame_8: 1410132718
-      memorigame_9: -1996719685
+      memory match saat tertutup_0: 2772318725309764230
+      memory match saat tertutup_1: -986115714
+      memory match saat tertutup_10: -1558777155
+      memory match saat tertutup_11: 698580036
+      memory match saat tertutup_2: 256181791
+      memory match saat tertutup_3: -738882085
+      memory match saat tertutup_4: -1151274343
+      memory match saat tertutup_5: -1906743040
+      memory match saat tertutup_6: 1908960545
+      memory match saat tertutup_7: -1503646047
+      memory match saat tertutup_8: -297310974
+      memory match saat tertutup_9: -303756226
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

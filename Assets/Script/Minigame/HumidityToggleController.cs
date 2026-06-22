@@ -10,21 +10,35 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI remainingLabel;
-    [SerializeField] private Button toggleButton;
+    [SerializeField] private Button machineToggleButton; // ON/OFF button (above timing bar)
+    [SerializeField] private Button tekanButton; // Tekan button (below timing bar)
+    [SerializeField] private RectTransform timingBarBg;
+    [SerializeField] private RectTransform targetZone;
+    [SerializeField] private RectTransform indicator;
 
     [Header("Settings")]
     [SerializeField] private float timeLimit = GameConstants.HumidityToggle.TimeLimit;
-    [SerializeField] private int toggleCount = GameConstants.HumidityToggle.ToggleCount;
+    [SerializeField] private int totalAttempts = 3;
+    [SerializeField] private int maxFails = 1;
+    [SerializeField] private float indicatorSpeed = GameConstants.HumidityToggle.IndicatorSpeed;
+    [SerializeField] private float targetZoneWidthPct = GameConstants.HumidityToggle.TargetZoneWidth;
 
     [Header("Timer Colors")]
     [SerializeField] private Color normalTimerColor = Color.white;
     [SerializeField] private Color warningTimerColor = new Color(1f, 0.25f, 0.15f);
 
     private IHealthCheckListener currentListener;
-    private int remainingToggles;
+    private int successCount;
+    private int failCount;
+    private int clickCount;
     private float timeRemaining;
     private bool isPlaying;
+    private bool machineOn;
     private Coroutine timerCoroutine;
+    private float indicatorProgress;
+    private int pingPongDirection = 1;
+    private Sprite onSprite;
+    private Sprite offSprite;
 
     public bool IsPlaying => isPlaying;
 
@@ -40,10 +54,16 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
         if (IsPlaying) return false;
 
         currentListener = caller;
-        remainingToggles = toggleCount;
+        successCount = 0;
+        failCount = 0;
+        clickCount = 0;
         timeRemaining = timeLimit;
         isPlaying = true;
+        machineOn = false;
+        indicatorProgress = 0f;
+        pingPongDirection = 1;
 
+        LoadSprites();
         ShowPopup();
         UpdateRemainingUI();
         UpdateTimerUI();
@@ -51,33 +71,124 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
         if (titleText != null)
             titleText.text = "Atur Kelembaban";
 
-        if (toggleButton != null)
+        // Initial state: machine OFF, Tekan disabled
+        SetMachineVisual(false);
+        SetTekanButtonInteractable(false);
+
+        if (machineToggleButton != null)
         {
-            toggleButton.onClick.RemoveAllListeners();
-            toggleButton.onClick.AddListener(OnToggleClicked);
+            machineToggleButton.onClick.RemoveAllListeners();
+            machineToggleButton.onClick.AddListener(OnMachineToggleClicked);
         }
 
+        if (tekanButton != null)
+        {
+            tekanButton.onClick.RemoveAllListeners();
+            tekanButton.onClick.AddListener(OnTekanClicked);
+        }
+
+        // Start overall timer coroutine
         CoroutineHelper.StopSafe(this, ref timerCoroutine);
         timerCoroutine = StartCoroutine(TimerRoutine());
 
         return true;
     }
 
-    private void OnToggleClicked()
+    private void LoadSprites()
+    {
+        if (onSprite != null && offSprite != null) return;
+
+#if UNITY_EDITOR
+        if (onSprite == null)
+            onSprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Gambar/ON button.png");
+        if (offSprite == null)
+            offSprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Gambar/OFF button.png");
+#else
+        // Fallback untuk build: coba Resources (kalo masih ada)
+        if (onSprite == null)
+            onSprite = Resources.Load<Sprite>("ON button");
+        if (offSprite == null)
+            offSprite = Resources.Load<Sprite>("OFF button");
+#endif
+        if (onSprite == null) Debug.LogWarning("HumidityToggle: 'ON button' sprite not found in Assets/Gambar/.");
+        if (offSprite == null) Debug.LogWarning("HumidityToggle: 'OFF button' sprite not found in Assets/Gambar/.");
+    }
+
+    private void SetMachineVisual(bool on)
+    {
+        if (machineToggleButton == null) return;
+        Image btnImage = machineToggleButton.GetComponent<Image>();
+        if (btnImage != null)
+        {
+            if (on && onSprite != null)
+                btnImage.sprite = onSprite;
+            else if (!on && offSprite != null)
+                btnImage.sprite = offSprite;
+        }
+    }
+
+    private void SetTekanButtonInteractable(bool interactable)
+    {
+        if (tekanButton != null)
+            tekanButton.interactable = interactable;
+    }
+
+    private void OnMachineToggleClicked()
     {
         if (!isPlaying) return;
 
-        remainingToggles--;
+        machineOn = !machineOn;
+        SetMachineVisual(machineOn);
+        SetTekanButtonInteractable(machineOn);
+    }
+
+    private void OnTekanClicked()
+    {
+        if (!isPlaying || !machineOn) return;
+
+        clickCount++;
+
+        bool hit = false;
+        if (indicator != null && targetZone != null && timingBarBg != null)
+        {
+            float targetMin = 0.5f - (targetZoneWidthPct / 2f);
+            float targetMax = 0.5f + (targetZoneWidthPct / 2f);
+
+            if (indicatorProgress >= targetMin && indicatorProgress <= targetMax)
+            {
+                hit = true;
+                successCount++;
+            }
+            else
+            {
+                failCount++;
+            }
+        }
+
+        if (hit)
+        {
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayTimingSuccess();
+        }
+        else
+        {
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayTimingFail();
+        }
+
         UpdateRemainingUI();
 
-        if (remainingToggles <= 0)
-            CompleteWithSuccess();
+        if (clickCount >= totalAttempts)
+        {
+            if (failCount > maxFails)
+                CompleteWithFailure();
+            else
+                CompleteWithSuccess();
+        }
     }
 
     private void UpdateRemainingUI()
     {
         if (remainingLabel != null)
-            remainingLabel.text = $"Sisa: {remainingToggles}";
+            remainingLabel.text = $"Percobaan: {clickCount}/{totalAttempts}";
     }
 
     private IEnumerator TimerRoutine()
@@ -86,6 +197,26 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
         {
             timeRemaining -= Time.unscaledDeltaTime;
             UpdateTimerUI();
+
+            if (machineOn && indicator != null && timingBarBg != null)
+            {
+                indicatorProgress += pingPongDirection * indicatorSpeed * Time.unscaledDeltaTime;
+                if (indicatorProgress >= 1f)
+                {
+                    indicatorProgress = 1f;
+                    pingPongDirection = -1;
+                }
+                else if (indicatorProgress <= 0f)
+                {
+                    indicatorProgress = 0f;
+                    pingPongDirection = 1;
+                }
+
+                float barWidth = timingBarBg.rect.width;
+                float xPos = Mathf.Lerp(-barWidth / 2f, barWidth / 2f, indicatorProgress);
+                indicator.anchoredPosition = new Vector2(xPos, 0f);
+            }
+
             yield return null;
         }
 
@@ -103,12 +234,18 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
     private void CompleteWithSuccess()
     {
         if (!isPlaying) return;
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawComplete();
+        HealthCheckResultOverlay.ShowSuccess();
         FinishMinigame(true);
     }
 
     private void CompleteWithFailure()
     {
         if (!isPlaying) return;
+        CameraShake.Trigger();
+        UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.TimeOut);
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawFail();
+        HealthCheckResultOverlay.ShowFail();
         FinishMinigame(false);
     }
 
@@ -149,7 +286,7 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
 
     private void EnsureRuntimeUi()
     {
-        if (popupRoot != null && timerText != null)
+        if (popupRoot != null && timerText != null && indicator != null)
             return;
 
         GameObject existingCanvas = GameObject.Find("HumidityToggleCanvas");
@@ -191,36 +328,81 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
         titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 270f), new Vector2(500f, 50f), 28f, TextAlignmentOptions.Center);
         timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 220f), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
 
-        GameObject buttonObject = new GameObject("ToggleButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-        buttonObject.transform.SetParent(panelObject.transform, false);
-        RectTransform buttonRect = buttonObject.GetComponent<RectTransform>();
-        buttonRect.anchorMin = new Vector2(0.5f, 0.5f);
-        buttonRect.anchorMax = new Vector2(0.5f, 0.5f);
-        buttonRect.pivot = new Vector2(0.5f, 0.5f);
-        buttonRect.sizeDelta = new Vector2(200f, 120f);
-        buttonRect.anchoredPosition = new Vector2(0f, 30f);
+        GameObject timingBgObj = new GameObject("TimingBarBg", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        timingBgObj.transform.SetParent(panelObject.transform, false);
+        timingBarBg = timingBgObj.GetComponent<RectTransform>();
+        timingBarBg.anchorMin = new Vector2(0.5f, 0.5f);
+        timingBarBg.anchorMax = new Vector2(0.5f, 0.5f);
+        timingBarBg.pivot = new Vector2(0.5f, 0.5f);
+        timingBarBg.sizeDelta = new Vector2(400f, 40f);
+        timingBarBg.anchoredPosition = new Vector2(0f, 80f);
+        Image bgImg = timingBgObj.GetComponent<Image>();
+        bgImg.color = new Color(0.2f, 0.2f, 0.2f, 1f);
 
-        Image buttonImage = buttonObject.GetComponent<Image>();
-        buttonImage.color = new Color(0.2f, 0.6f, 1f, 1f);
-        buttonImage.raycastTarget = true;
-        toggleButton = buttonObject.GetComponent<Button>();
+        GameObject targetObj = new GameObject("TargetZone", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        targetObj.transform.SetParent(timingBgObj.transform, false);
+        targetZone = targetObj.GetComponent<RectTransform>();
+        targetZone.anchorMin = new Vector2(0.5f, 0.5f);
+        targetZone.anchorMax = new Vector2(0.5f, 0.5f);
+        targetZone.pivot = new Vector2(0.5f, 0.5f);
+        targetZone.sizeDelta = new Vector2(400f * targetZoneWidthPct, 40f);
+        targetZone.anchoredPosition = Vector2.zero;
+        Image targetImg = targetObj.GetComponent<Image>();
+        targetImg.color = new Color(0.2f, 0.8f, 0.2f, 0.5f);
 
-        GameObject labelObject = new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
-        labelObject.transform.SetParent(buttonObject.transform, false);
-        RectTransform labelRect = labelObject.GetComponent<RectTransform>();
-        labelRect.anchorMin = Vector2.zero;
-        labelRect.anchorMax = Vector2.one;
-        labelRect.offsetMin = Vector2.zero;
-        labelRect.offsetMax = Vector2.zero;
-        TextMeshProUGUI btnLabel = labelObject.GetComponent<TextMeshProUGUI>();
-        btnLabel.alignment = TextAlignmentOptions.Center;
-        btnLabel.fontSize = 30f;
-        btnLabel.fontStyle = FontStyles.Bold;
-        btnLabel.color = Color.white;
-        btnLabel.raycastTarget = false;
-        btnLabel.text = "ON / OFF";
+        GameObject indObj = new GameObject("Indicator", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        indObj.transform.SetParent(timingBgObj.transform, false);
+        indicator = indObj.GetComponent<RectTransform>();
+        indicator.anchorMin = new Vector2(0.5f, 0.5f);
+        indicator.anchorMax = new Vector2(0.5f, 0.5f);
+        indicator.pivot = new Vector2(0.5f, 0.5f);
+        indicator.sizeDelta = new Vector2(10f, 60f);
+        indicator.anchoredPosition = new Vector2(-200f, 0f);
+        Image indImg = indObj.GetComponent<Image>();
+        indImg.color = new Color(1f, 1f, 0.2f, 1f);
 
-        remainingLabel = CreateText(panelObject.transform, "RemainingText", new Vector2(0f, -120f), new Vector2(500f, 40f), 24f, TextAlignmentOptions.Center);
+        // Machine Toggle Button (ON/OFF) — above timing bar, uses sprites
+        GameObject machineBtnObj = new GameObject("MachineToggleButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        machineBtnObj.transform.SetParent(panelObject.transform, false);
+        RectTransform machineBtnRect = machineBtnObj.GetComponent<RectTransform>();
+        machineBtnRect.anchorMin = new Vector2(0.5f, 0.5f);
+        machineBtnRect.anchorMax = new Vector2(0.5f, 0.5f);
+        machineBtnRect.pivot = new Vector2(0.5f, 0.5f);
+        machineBtnRect.sizeDelta = new Vector2(120f, 60f);
+        machineBtnRect.anchoredPosition = new Vector2(0f, 150f);
+        Image machineBtnImage = machineBtnObj.GetComponent<Image>();
+        machineBtnImage.color = Color.white;
+        machineBtnImage.raycastTarget = true;
+        machineToggleButton = machineBtnObj.GetComponent<Button>();
+
+        // Tekan Button — below timing bar, disabled until machine ON
+        GameObject tekanBtnObj = new GameObject("TekanButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        tekanBtnObj.transform.SetParent(panelObject.transform, false);
+        RectTransform tekanBtnRect = tekanBtnObj.GetComponent<RectTransform>();
+        tekanBtnRect.anchorMin = new Vector2(0.5f, 0.5f);
+        tekanBtnRect.anchorMax = new Vector2(0.5f, 0.5f);
+        tekanBtnRect.pivot = new Vector2(0.5f, 0.5f);
+        tekanBtnRect.sizeDelta = new Vector2(200f, 100f);
+        tekanBtnRect.anchoredPosition = new Vector2(0f, -40f);
+        Image tekanBtnImage = tekanBtnObj.GetComponent<Image>();
+        tekanBtnImage.color = new Color(0.2f, 0.6f, 1f, 1f);
+        tekanBtnImage.raycastTarget = true;
+        tekanButton = tekanBtnObj.GetComponent<Button>();
+
+        // Label for Tekan button
+        GameObject tekanLabelObj = new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        tekanLabelObj.transform.SetParent(tekanBtnObj.transform, false);
+        RectTransform tekanLabelRect = tekanLabelObj.GetComponent<RectTransform>();
+        StretchToParent(tekanLabelRect);
+        TextMeshProUGUI tekanLabel = tekanLabelObj.GetComponent<TextMeshProUGUI>();
+        tekanLabel.alignment = TextAlignmentOptions.Center;
+        tekanLabel.fontSize = 30f;
+        tekanLabel.fontStyle = FontStyles.Bold;
+        tekanLabel.color = Color.white;
+        tekanLabel.raycastTarget = false;
+        tekanLabel.text = "Tekan";
+
+        remainingLabel = CreateText(panelObject.transform, "RemainingText", new Vector2(0f, -140f), new Vector2(500f, 40f), 24f, TextAlignmentOptions.Center);
     }
 
     private void CreateBackdrop(Transform parent)

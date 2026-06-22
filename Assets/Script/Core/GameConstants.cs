@@ -1,3 +1,14 @@
+public enum MinigameType
+{
+    Jigsaw,
+    MemoryMatch,
+    Wiring,
+    HumidityToggle,
+    PipelinePuzzle,
+    DragDropSack,
+    HoldSwipe
+}
+
 public enum ChickenNeed
 {
     Feed,
@@ -24,9 +35,9 @@ public static class GameConstants
 
     public static class LevelDuration
     {
-        public const float Starter = 300f;
-        public const float Beginner = 120f;
-        public const float Intermediate = 180f;
+        public const float Starter = 600f;
+        public const float Beginner = 600f;
+        public const float Intermediate = 600f;
     }
 
     public static class UI
@@ -113,9 +124,12 @@ public static class GameConstants
 
     public static class HumidityToggle
     {
-        public const float TimeLimit = 15f;
-        public const int ToggleCount = 8;
+        public const float TimeLimit = 20f;
+        public const int TargetSuccess = 3;
+        public const int MaxFails = 1;
         public const float WarningThreshold = 5f;
+        public const float IndicatorSpeed = 1.2f;
+        public const float TargetZoneWidth = 0.3f;
     }
 
     public static class PipelinePuzzle

@@ -40,6 +40,13 @@ public class SFXManager : Singleton<SFXManager>
     [SerializeField] private AudioClip jigsawCompleteSfx;
     [SerializeField] private AudioClip jigsawFailSfx;
 
+    [Header("Need Bubble")]
+    [SerializeField] private AudioClip bubbleNeedSfx;
+
+    [Header("Minigame Result")]
+    [SerializeField] private AudioClip minigameSuccessSfx;
+    [SerializeField] private AudioClip minigameFailSfx;
+
     [Header("Level")]
     [SerializeField] private AudioClip timeUpSfx;
     [SerializeField] private AudioClip unlockSuccessSfx;
@@ -103,6 +110,11 @@ public class SFXManager : Singleton<SFXManager>
     public void PlayJigsawPieceSwap() { PlaySFX(jigsawPieceSwapSfx); }
     public void PlayJigsawComplete() { PlaySFX(jigsawCompleteSfx); }
     public void PlayJigsawFail() { PlaySFX(jigsawFailSfx); }
+
+    public void PlayBubbleNeed() { PlaySFX(bubbleNeedSfx); }
+
+    public void PlayMinigameSuccess() { PlaySFX(minigameSuccessSfx); }
+    public void PlayMinigameFail() { PlaySFX(minigameFailSfx); }
 
     public void PlayTimeUp() { PlaySFX(timeUpSfx); }
     public void PlayUnlockSuccess() { PlaySFX(unlockSuccessSfx); }

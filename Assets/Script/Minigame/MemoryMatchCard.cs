@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class MemoryMatchCard : MonoBehaviour, IPointerClickHandler
 {
     [Header("Colors")]
-    [SerializeField] private Color backColor = new Color(0.15f, 0.35f, 0.7f);
+    [SerializeField] private Color backColor = Color.white;
     [SerializeField] private Color frontColor = Color.white;
     [SerializeField] private Color matchedColor = new Color(0.3f, 0.85f, 0.4f);
 
@@ -15,21 +15,23 @@ public class MemoryMatchCard : MonoBehaviour, IPointerClickHandler
 
     private Image cardImage;
     private Sprite faceSprite;
+    private Sprite cardBackSprite;
     private System.Action<MemoryMatchCard> onClickCallback;
     private bool isAnimating;
     private Coroutine flipRoutine;
 
-    public void Setup(int pairId, Sprite faceSprite, System.Action<MemoryMatchCard> onClickCallback)
+    public void Setup(int pairId, Sprite faceSprite, Sprite cardBackSprite, System.Action<MemoryMatchCard> onClickCallback)
     {
         if (cardImage == null)
             cardImage = GetComponent<Image>();
 
         PairId = pairId;
         this.faceSprite = faceSprite;
+        this.cardBackSprite = cardBackSprite;
         this.onClickCallback = onClickCallback;
         IsMatched = false;
         IsFlipped = false;
-        cardImage.sprite = null;
+        cardImage.sprite = cardBackSprite;
         cardImage.color = backColor;
     }
 
@@ -93,7 +95,7 @@ public class MemoryMatchCard : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            cardImage.sprite = null;
+            cardImage.sprite = cardBackSprite;
             cardImage.color = backColor;
         }
 

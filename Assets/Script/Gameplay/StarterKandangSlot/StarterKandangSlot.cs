@@ -97,9 +97,10 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     {
         get
         {
-            if (needSatisfied == null) return 0;
+            if (needSatisfied == null || needFailed == null) return 0;
+            int len = Mathf.Min(needSatisfied.Length, needFailed.Length);
             int count = 0;
-            for (int i = 0; i < needSatisfied.Length; i++)
+            for (int i = 0; i < len; i++)
                 if (needSatisfied[i] || needFailed[i]) count++;
             return count;
         }
@@ -147,8 +148,14 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
     private void SetBubbleExpiryByLevel()
     {
-        int level = GameManager.Instance != null ? GameManager.Instance.currentLevelIndex : 0;
-        switch (level)
+        if (GameManager.Instance == null)
+        {
+            GameLog.Warn($"{name}: GameManager.Instance is null in SetBubbleExpiryByLevel, defaulting to Starter (no expiry).");
+            bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDurationStarter;
+            return;
+        }
+
+        switch (GameManager.Instance.currentLevelIndex)
         {
             case 0:
                 bubbleExpiryDuration = GameConstants.StarterSlot.BubbleExpiryDurationStarter;
@@ -211,8 +218,9 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             SaveManager.SaveAll();
             return true;
         }
-        catch
+        catch (System.Exception e)
         {
+            GameLog.Error($"{name}: Exception in TryPlaceChicken: {e.Message}\n{e.StackTrace}");
             foreach (GameObject visual in newVisuals)
             {
                 spawnedChickens.Remove(visual);

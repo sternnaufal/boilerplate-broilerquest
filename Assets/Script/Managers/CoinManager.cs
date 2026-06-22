@@ -6,7 +6,7 @@ public class CoinManager : Singleton<CoinManager>
     public event Action<int> CoinsChanged;
 
     [Header("Settings")]
-    [SerializeField] private bool resetCoinOnStart = true;
+    [SerializeField] private bool resetCoinOnStart = false;
     [SerializeField] private bool usePlayerPrefs = true;
 
     private int totalCoin = 0;
@@ -15,7 +15,8 @@ public class CoinManager : Singleton<CoinManager>
     protected override void Awake()
     {
         base.Awake();
-        if (resetCoinOnStart)
+        if (Instance != this) return;
+        if (resetCoinOnStart && !HasSavedCoin())
             SetTotalCoin(GameConstants.Economy.StartingCoin);
     }
 
@@ -29,16 +30,28 @@ public class CoinManager : Singleton<CoinManager>
         if (hasInitialized)
             return;
 
-        if (usePlayerPrefs && !resetCoinOnStart)
+        if (usePlayerPrefs)
+        {
             totalCoin = LoadSavedCoin();
+        }
         else if (resetCoinOnStart)
+        {
             totalCoin = Mathf.Max(0, GameConstants.Economy.StartingCoin);
+        }
         else
+        {
             totalCoin = 0;
+        }
 
         hasInitialized = true;
         SaveCoin();
         CoinsChanged?.Invoke(totalCoin);
+    }
+
+    private static bool HasSavedCoin()
+    {
+        return PlayerPrefs.HasKey(GameConstants.Persistence.TotalCoinKey)
+            || PlayerPrefs.HasKey(GameConstants.Persistence.LegacyTotalCoinKey);
     }
 
     public void AddCoin(int amount)

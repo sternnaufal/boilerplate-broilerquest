@@ -6,6 +6,15 @@ public static class SaveManager
 {
     private const string SaveKey = GameConstants.Persistence.GameSaveKey;
 
+    private static string LevelSaveKey
+    {
+        get
+        {
+            int level = GameManager.Instance != null ? GameManager.Instance.currentLevelIndex : -1;
+            return level >= 0 ? $"{SaveKey}_L{level}" : SaveKey;
+        }
+    }
+
     [Serializable]
     public class SlotSaveData
     {
@@ -32,24 +41,53 @@ public static class SaveManager
     [Serializable]
     public class GameSaveData
     {
+        public int version = 2;
         public SlotSaveData[] slots;
+        public IotSaveData[] iotStates; // kept for legacy save migration
+    }
+
+    [Serializable]
+    public class IotSaveContainer
+    {
         public IotSaveData[] iotStates;
     }
 
-    private static GameSaveData LoadOrCreateData()
+    private static GameSaveData LoadLevelData()
     {
-        string json = PlayerPrefs.GetString(SaveKey, "");
+        string json = PlayerPrefs.GetString(LevelSaveKey, "");
         if (!string.IsNullOrEmpty(json))
         {
             var data = JsonUtility.FromJson<GameSaveData>(json);
-            if (data != null) return data;
+            if (data != null)
+            {
+                if (data.version < 2)
+                    Debug.LogWarning($"SaveManager: Loaded legacy save format (v{data.version}). Needs array-style need data will use fallback regeneration.");
+                return data;
+            }
         }
         return new GameSaveData();
     }
 
-    private static void SaveData(GameSaveData data)
+    private static void SaveLevelData(GameSaveData data)
     {
-        PlayerPrefs.SetString(SaveKey, JsonUtility.ToJson(data));
+        PlayerPrefs.SetString(LevelSaveKey, JsonUtility.ToJson(data));
+        PlayerPrefs.Save();
+    }
+
+    private static IotSaveContainer LoadIotContainer()
+    {
+        string json = PlayerPrefs.GetString(SaveKey + "_IoT", "");
+        if (!string.IsNullOrEmpty(json))
+        {
+            var data = JsonUtility.FromJson<IotSaveContainer>(json);
+            if (data != null) return data;
+        }
+        return new IotSaveContainer();
+    }
+
+    private static void SaveIotContainer(IotSaveContainer data)
+    {
+        PlayerPrefs.SetString(SaveKey + "_IoT", JsonUtility.ToJson(data));
         PlayerPrefs.Save();
     }
 
@@ -57,92 +95,118 @@ public static class SaveManager
     {
         if (slots == null || slots.Length == 0) return;
 
-        GameSaveData data = LoadOrCreateData();
-        data.slots = new SlotSaveData[slots.Length];
-        for (int i = 0; i < slots.Length; i++)
+        var sortedSlots = new StarterKandangSlot[slots.Length];
+        System.Array.Copy(slots, sortedSlots, slots.Length);
+        System.Array.Sort(sortedSlots, (a, b) => string.Compare(a?.name, b?.name, System.StringComparison.Ordinal));
+
+        GameSaveData data = LoadLevelData();
+        data.slots = new SlotSaveData[sortedSlots.Length];
+        for (int i = 0; i < sortedSlots.Length; i++)
         {
-            data.slots[i] = slots[i].GetSaveData();
+            data.slots[i] = sortedSlots[i].GetSaveData();
         }
-        SaveData(data);
-        GameLog.Info("SaveManager: Slot states saved.");
+        SaveLevelData(data);
+        GameLog.Info($"SaveManager: Slot states saved for {LevelSaveKey}.");
     }
 
     public static void SaveSlot(StarterKandangSlot slot, int slotIndex)
     {
         if (slot == null || slotIndex < 0) return;
 
-        GameSaveData data = LoadOrCreateData();
+        GameSaveData data = LoadLevelData();
         if (data.slots == null || slotIndex >= data.slots.Length)
         {
             Array.Resize(ref data.slots, slotIndex + 1);
         }
         data.slots[slotIndex] = slot.GetSaveData();
-        SaveData(data);
+        SaveLevelData(data);
     }
 
     public static void SaveIotStates(Dictionary<string, bool> activeStates)
     {
         if (activeStates == null) return;
 
-        GameSaveData data = LoadOrCreateData();
+        var container = LoadIotContainer();
         var list = new List<IotSaveData>();
         foreach (var kvp in activeStates)
         {
             list.Add(new IotSaveData { productKey = kvp.Key, active = kvp.Value });
         }
-        data.iotStates = list.ToArray();
-        SaveData(data);
+        container.iotStates = list.ToArray();
+        SaveIotContainer(container);
         GameLog.Info("SaveManager: IoT states saved.");
     }
 
     public static void SaveAll()
     {
-        GameSaveData data = LoadOrCreateData();
-        bool hasChanges = false;
-
         StarterKandangSlot[] slots = GameObject.FindObjectsByType<StarterKandangSlot>(
-            FindObjectsInactive.Include, FindObjectsSortMode.InstanceID);
+            FindObjectsInactive.Include, FindObjectsSortMode.None);
         if (slots != null && slots.Length > 0)
         {
-            data.slots = new SlotSaveData[slots.Length];
-            for (int i = 0; i < slots.Length; i++)
+            bool allEmpty = true;
+            foreach (var slot in slots)
             {
-                data.slots[i] = slots[i] != null ? slots[i].GetSaveData() : null;
+                if (slot != null && !slot.IsEmpty)
+                {
+                    allEmpty = false;
+                    break;
+                }
             }
+            if (allEmpty)
+            {
+                GameLog.Info("SaveManager: All slots are empty, skipping slot save to prevent overwrite.");
+            }
+            else
+            {
+                var sortedSlots = new StarterKandangSlot[slots.Length];
+                System.Array.Copy(slots, sortedSlots, slots.Length);
+                System.Array.Sort(sortedSlots, (a, b) => string.Compare(a?.name, b?.name, System.StringComparison.Ordinal));
 
-            hasChanges = true;
+                GameSaveData levelData = LoadLevelData();
+                levelData.slots = new SlotSaveData[sortedSlots.Length];
+                for (int i = 0; i < sortedSlots.Length; i++)
+                {
+                    levelData.slots[i] = sortedSlots[i] != null ? sortedSlots[i].GetSaveData() : null;
+                }
+                SaveLevelData(levelData);
+            }
         }
 
+        // Save global IoT data
         if (StarterIoTController.Instance != null)
         {
             var states = StarterIoTController.Instance.GetActiveStates();
             if (states != null)
             {
-                var list = new List<IotSaveData>();
-                foreach (var kvp in states)
-                {
-                    list.Add(new IotSaveData { productKey = kvp.Key, active = kvp.Value });
-                }
-
-                data.iotStates = list.ToArray();
-                hasChanges = true;
+                SaveIotStates(states);
             }
         }
 
-        if (hasChanges)
-        {
-            SaveData(data);
-            GameLog.Info("SaveManager: Full game state saved.");
-        }
+        GameLog.Info("SaveManager: Full game state saved.");
     }
 
     public static void LoadAndRestoreSlots(StarterKandangSlot[] slots, Func<string, GameObject> prefabLookup)
     {
-        string json = PlayerPrefs.GetString(SaveKey, "");
+        string json = PlayerPrefs.GetString(LevelSaveKey, "");
+        
+        // Fallback: try legacy single-key format if level key is empty
+        if (string.IsNullOrEmpty(json))
+        {
+            string legacyJson = PlayerPrefs.GetString(SaveKey, "");
+            if (!string.IsNullOrEmpty(legacyJson))
+            {
+                json = legacyJson;
+                GameLog.Info($"SaveManager: Migrating legacy save from {SaveKey} to {LevelSaveKey}.");
+            }
+        }
+
         if (string.IsNullOrEmpty(json)) return;
 
         GameSaveData data = JsonUtility.FromJson<GameSaveData>(json);
         if (data?.slots == null) return;
+
+        if (slots != null)
+            System.Array.Sort(slots, (a, b) => string.Compare(a?.name, b?.name, System.StringComparison.Ordinal));
 
         var slotsById = new Dictionary<string, StarterKandangSlot>();
         if (slots != null)
@@ -195,19 +259,34 @@ public static class SaveManager
             }
         }
 
-        GameLog.Info("SaveManager: Slot states restored.");
+        GameLog.Info($"SaveManager: Slot states restored from {LevelSaveKey}.");
     }
 
     public static void LoadIotStates(StarterIoTController controller)
     {
-        string json = PlayerPrefs.GetString(SaveKey, "");
-        if (string.IsNullOrEmpty(json)) return;
+        var container = LoadIotContainer();
+        
+        // Fallback: try legacy single-key GameSaveData for IoT states
+        if (container?.iotStates == null || container.iotStates.Length == 0)
+        {
+            string legacyJson = PlayerPrefs.GetString(SaveKey, "");
+            if (!string.IsNullOrEmpty(legacyJson))
+            {
+                var legacyData = JsonUtility.FromJson<GameSaveData>(legacyJson);
+                if (legacyData?.iotStates != null && legacyData.iotStates.Length > 0)
+                {
+                    // Migrate IoT states from legacy format
+                    container = new IotSaveContainer { iotStates = legacyData.iotStates };
+                    SaveIotContainer(container);
+                    GameLog.Info("SaveManager: Migrated IoT states from legacy save.");
+                }
+            }
+        }
 
-        GameSaveData data = JsonUtility.FromJson<GameSaveData>(json);
-        if (data?.iotStates == null) return;
+        if (container?.iotStates == null) return;
 
         var states = new Dictionary<string, bool>();
-        foreach (var iot in data.iotStates)
+        foreach (var iot in container.iotStates)
         {
             states[iot.productKey] = iot.active;
         }
@@ -217,6 +296,10 @@ public static class SaveManager
 
     public static void ClearSave()
     {
+        // Clear all level saves + IoT save + legacy save
+        for (int i = 0; i < 3; i++)
+            PlayerPrefs.DeleteKey($"{SaveKey}_L{i}");
+        PlayerPrefs.DeleteKey(SaveKey + "_IoT");
         PlayerPrefs.DeleteKey(SaveKey);
         PlayerPrefs.Save();
     }

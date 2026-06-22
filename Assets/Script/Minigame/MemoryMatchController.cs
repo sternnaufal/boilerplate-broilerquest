@@ -13,10 +13,13 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
     [SerializeField] private Vector2 cardSpacing = new Vector2(12f, 12f);
     [SerializeField] private int columns = GameConstants.MemoryMatch.Columns;
 
-    [Header("Card Sprites (12 slices dari memorigame.png)")]
+    [Header("Card Sprites (min 6 — indexed by pairId)")]
     [SerializeField] private Sprite[] cardSprites;
 
-    private static readonly int[] PairMap = { 0, 1, 0, 1, 2, 3, 3, 4, 2, 4, 5, 5 };
+    [Header("Card Back")]
+    [SerializeField] private Sprite cardBackSprite;
+
+    private static readonly int[] PairMap = { 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5 };
 
     [Header("Timer Colors")]
     [SerializeField] private Color normalTimerColor = Color.white;
@@ -68,9 +71,9 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
             return false;
         }
 
-        if (cardSprites == null || cardSprites.Length < 12)
+        if (cardSprites == null || cardSprites.Length < 6)
         {
-            Debug.LogWarning("MemoryMatchController: cardSprites (12) belum di-assign di Inspector Managers.prefab.");
+            Debug.LogWarning("MemoryMatchController: cardSprites (6) belum di-assign di Inspector Managers.prefab.");
             if (errorText != null)
             {
                 errorText.text = "Memory Match: sprite belum di-assign!";
@@ -189,7 +192,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         {
             int idx = indices[i];
             int pairId = PairMap[idx];
-            Sprite sprite = (cardSprites != null && idx < cardSprites.Length) ? cardSprites[idx] : null;
+            Sprite sprite = (cardSprites != null && pairId < cardSprites.Length) ? cardSprites[pairId] : null;
 
             GameObject cardObject = CreateCardObject();
             cardObject.transform.SetParent(gridContainer, false);
@@ -198,7 +201,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
             if (card == null)
                 card = cardObject.AddComponent<MemoryMatchCard>();
 
-            card.Setup(pairId, sprite, OnCardClicked);
+            card.Setup(pairId, sprite, cardBackSprite, OnCardClicked);
             cards.Add(card);
         }
     }
