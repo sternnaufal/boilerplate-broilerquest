@@ -1,3 +1,14 @@
+public enum MinigameType
+{
+    Jigsaw,
+    MemoryMatch,
+    Wiring,
+    HumidityToggle,
+    PipelinePuzzle,
+    DragDropSack,
+    HoldSwipe
+}
+
 public enum ChickenNeed
 {
     Feed,

@@ -2,6 +2,12 @@ using UnityEngine;
 
 public partial class StarterKandangSlot
 {
+    private static bool IsMinigameEnabled(MinigameType type)
+    {
+        var config = SceneMinigameConfig.Instance;
+        return config == null || config.IsEnabled(type);
+    }
+
     private bool TryStartHealthMinigame()
     {
         if (!useHealthMinigame)
@@ -9,128 +15,139 @@ public partial class StarterKandangSlot
 
         ChickenNeed need = CurrentNeed;
 
-        if (JigsawMinigameController.Instance != null && JigsawMinigameController.Instance.IsPlaying)
+        if (IsPuzzleActive())
             return true;
 
-        if (need == ChickenNeed.Cooling)
+        if (need == ChickenNeed.Cooling && IsMinigameEnabled(MinigameType.MemoryMatch))
         {
-            if (MemoryMatchController.Instance != null && MemoryMatchController.Instance.IsPlaying)
-                return true;
-
-            MemoryMatchController memoryMatch = MemoryMatchController.Instance;
-            if (memoryMatch != null)
-            {
-                currentState = SlotState.WaitingForHealthMinigame;
-                NotifyStateChanged();
-
-                if (memoryMatch.ShowMemoryMatch(this, GetNeedTitle(need)))
-                    return true;
-
-                currentState = SlotState.WaitingForCareClick;
-                NotifyStateChanged();
-            }
+            if (TryMemoryMatch(need)) return true;
         }
 
-        if (need == ChickenNeed.Heating)
+        if (need == ChickenNeed.Heating && IsMinigameEnabled(MinigameType.Wiring))
         {
-            if (WiringMinigameController.Instance != null && WiringMinigameController.Instance.IsPlaying)
-                return true;
-
-            WiringMinigameController wiring = WiringMinigameController.Instance;
-            if (wiring != null)
-            {
-                currentState = SlotState.WaitingForHealthMinigame;
-                NotifyStateChanged();
-
-                if (wiring.ShowWiring(this, wiringPairCount, wiringTimeLimit, GetWiringTitle(need)))
-                    return true;
-
-                currentState = SlotState.WaitingForCareClick;
-                NotifyStateChanged();
-            }
+            if (TryWiring(need)) return true;
         }
 
-        if (need == ChickenNeed.HumidityUp)
+        if (need == ChickenNeed.HumidityUp && IsMinigameEnabled(MinigameType.HumidityToggle))
         {
-            HumidityToggleController toggle = HumidityToggleController.Instance;
-            if (toggle != null)
-            {
-                currentState = SlotState.WaitingForHealthMinigame;
-                NotifyStateChanged();
-
-                if (toggle.ShowToggle(this))
-                    return true;
-
-                currentState = SlotState.WaitingForCareClick;
-                NotifyStateChanged();
-            }
+            if (TryHumidityToggle()) return true;
         }
 
-        if (need == ChickenNeed.HumidityDown)
+        if (need == ChickenNeed.HumidityDown && IsMinigameEnabled(MinigameType.PipelinePuzzle))
         {
-            PipelinePuzzleController pipeline = PipelinePuzzleController.Instance;
-            if (pipeline != null)
-            {
-                currentState = SlotState.WaitingForHealthMinigame;
-                NotifyStateChanged();
-
-                if (pipeline.ShowPuzzle(this))
-                    return true;
-
-                currentState = SlotState.WaitingForCareClick;
-                NotifyStateChanged();
-            }
+            if (TryPipelinePuzzle()) return true;
         }
 
-        if (need == ChickenNeed.AddDryHusk)
+        if (need == ChickenNeed.AddDryHusk && IsMinigameEnabled(MinigameType.DragDropSack))
         {
-            DragDropSackController sack = DragDropSackController.Instance;
-            if (sack != null)
-            {
-                currentState = SlotState.WaitingForHealthMinigame;
-                NotifyStateChanged();
-
-                if (sack.ShowDragDrop(this))
-                    return true;
-
-                currentState = SlotState.WaitingForCareClick;
-                NotifyStateChanged();
-            }
+            if (TryDragDropSack()) return true;
         }
 
-        if (need == ChickenNeed.ReduceFeed)
+        if (need == ChickenNeed.ReduceFeed && IsMinigameEnabled(MinigameType.HoldSwipe))
         {
-            HoldSwipeController swipe = HoldSwipeController.Instance;
-            if (swipe != null)
-            {
-                currentState = SlotState.WaitingForHealthMinigame;
-                NotifyStateChanged();
-
-                if (swipe.ShowHoldSwipe(this))
-                    return true;
-
-                currentState = SlotState.WaitingForCareClick;
-                NotifyStateChanged();
-            }
+            if (TryHoldSwipe()) return true;
         }
 
-        JigsawMinigameController jigsawController = JigsawMinigameController.Instance;
-        if (jigsawController != null)
-        {
-            Texture puzzleTexture = GetNeedPuzzleTexture(need);
-            if (puzzleTexture != null)
-            {
-                currentState = SlotState.WaitingForHealthMinigame;
-                NotifyStateChanged();
+        return TryJigsawFallback(need);
+    }
 
-                if (jigsawController.ShowJigsaw(this, puzzleTexture, GetNeedTitle(need)))
-                    return true;
+    private bool TryMemoryMatch(ChickenNeed need)
+    {
+        if (MemoryMatchController.Instance != null && MemoryMatchController.Instance.IsPlaying)
+            return true;
 
-                currentState = SlotState.WaitingForCareClick;
-                NotifyStateChanged();
-            }
-        }
+        MemoryMatchController mm = MemoryMatchController.Instance;
+        if (mm == null) return false;
 
+        currentState = SlotState.WaitingForHealthMinigame;
+        NotifyStateChanged();
+        if (mm.ShowMemoryMatch(this, GetNeedTitle(need))) return true;
+        currentState = SlotState.WaitingForCareClick;
+        NotifyStateChanged();
+        return false;
+    }
+
+    private bool TryWiring(ChickenNeed need)
+    {
+        if (WiringMinigameController.Instance != null && WiringMinigameController.Instance.IsPlaying)
+            return true;
+
+        WiringMinigameController wiring = WiringMinigameController.Instance;
+        if (wiring == null) return false;
+
+        currentState = SlotState.WaitingForHealthMinigame;
+        NotifyStateChanged();
+        if (wiring.ShowWiring(this, wiringPairCount, wiringTimeLimit, GetWiringTitle(need))) return true;
+        currentState = SlotState.WaitingForCareClick;
+        NotifyStateChanged();
+        return false;
+    }
+
+    private bool TryHumidityToggle()
+    {
+        HumidityToggleController toggle = HumidityToggleController.Instance;
+        if (toggle == null) return false;
+
+        currentState = SlotState.WaitingForHealthMinigame;
+        NotifyStateChanged();
+        if (toggle.ShowToggle(this)) return true;
+        currentState = SlotState.WaitingForCareClick;
+        NotifyStateChanged();
+        return false;
+    }
+
+    private bool TryPipelinePuzzle()
+    {
+        PipelinePuzzleController pipeline = PipelinePuzzleController.Instance;
+        if (pipeline == null) return false;
+
+        currentState = SlotState.WaitingForHealthMinigame;
+        NotifyStateChanged();
+        if (pipeline.ShowPuzzle(this)) return true;
+        currentState = SlotState.WaitingForCareClick;
+        NotifyStateChanged();
+        return false;
+    }
+
+    private bool TryDragDropSack()
+    {
+        DragDropSackController sack = DragDropSackController.Instance;
+        if (sack == null) return false;
+
+        currentState = SlotState.WaitingForHealthMinigame;
+        NotifyStateChanged();
+        if (sack.ShowDragDrop(this)) return true;
+        currentState = SlotState.WaitingForCareClick;
+        NotifyStateChanged();
+        return false;
+    }
+
+    private bool TryHoldSwipe()
+    {
+        HoldSwipeController swipe = HoldSwipeController.Instance;
+        if (swipe == null) return false;
+
+        currentState = SlotState.WaitingForHealthMinigame;
+        NotifyStateChanged();
+        if (swipe.ShowHoldSwipe(this)) return true;
+        currentState = SlotState.WaitingForCareClick;
+        NotifyStateChanged();
+        return false;
+    }
+
+    private bool TryJigsawFallback(ChickenNeed need)
+    {
+        JigsawMinigameController jigsaw = JigsawMinigameController.Instance;
+        if (jigsaw == null) return false;
+
+        Texture puzzleTexture = GetNeedPuzzleTexture(need);
+        if (puzzleTexture == null) return false;
+
+        currentState = SlotState.WaitingForHealthMinigame;
+        NotifyStateChanged();
+        if (jigsaw.ShowJigsaw(this, puzzleTexture, GetNeedTitle(need))) return true;
+        currentState = SlotState.WaitingForCareClick;
+        NotifyStateChanged();
         return false;
     }
 

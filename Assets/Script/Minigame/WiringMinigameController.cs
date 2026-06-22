@@ -43,10 +43,11 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
     private float timeRemaining;
     private Coroutine timerCoroutine;
 
-    private GameObject popupRoot;
-    private Transform wireContainer;
-    private TextMeshProUGUI timerText;
-    private TextMeshProUGUI titleText;
+    [Header("UI References")]
+    [SerializeField] private GameObject popupRoot;
+    [SerializeField] private Transform wireContainer;
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI titleText;
 
     public bool IsPlaying => isPlaying;
 
@@ -182,7 +183,6 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
 
     private IEnumerator OnMatchRoutine(WireNode left, WireNode right)
     {
-        isPlaying = false;
         isProcessing = true;
 
         left.SetConnected();

@@ -6,7 +6,7 @@ public class CoinManager : Singleton<CoinManager>
     public event Action<int> CoinsChanged;
 
     [Header("Settings")]
-    [SerializeField] private bool resetCoinOnStart = true;
+    [SerializeField] private bool resetCoinOnStart = false;
     [SerializeField] private bool usePlayerPrefs = true;
 
     private int totalCoin = 0;
