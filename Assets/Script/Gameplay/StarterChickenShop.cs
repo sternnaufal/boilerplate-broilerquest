@@ -131,6 +131,7 @@ public class StarterChickenShop : MonoBehaviour
         if (CoinManager.Instance == null || !CoinManager.Instance.CanAfford(cost))
         {
             ShowMessage(noCoinFeedMessage);
+            UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.CoinOut);
             if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             return;
         }
@@ -168,7 +169,7 @@ public class StarterChickenShop : MonoBehaviour
         if (!availableSlot.TryPlaceChicken(option.chickenPrefab))
         {
             CoinManager.Instance.AddCoin(option.price);
-            ShowMessage(noSlotMessage);
+            ShowMessage("Gagal menaruh ayam: Prefab/Visual ayam tidak di-assign di Inspector.");
             if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             RefreshShopState();
             return false;

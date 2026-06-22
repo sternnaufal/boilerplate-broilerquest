@@ -56,6 +56,13 @@ public class GameManager : Singleton<GameManager>
         if (mainCanvas == null)
             mainCanvas = FindFirstObjectByType<Canvas>();
 
+        if (timeUpPopupPrefab == null)
+        {
+            GameObject found = GameObject.Find("TimeUpPopup");
+            if (found != null)
+                timeUpPopupPrefab = found;
+        }
+
         if (levelTimer == null)
             levelTimer = FindFirstObjectByType<LevelTimer>();
 
