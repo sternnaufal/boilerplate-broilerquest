@@ -16,6 +16,9 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
     [Header("Card Sprites (12 slices dari memorigame.png)")]
     [SerializeField] private Sprite[] cardSprites;
 
+    [Header("Card Back")]
+    [SerializeField] private Sprite cardBackSprite;
+
     private static readonly int[] PairMap = { 0, 1, 0, 1, 2, 3, 3, 4, 2, 4, 5, 5 };
 
     [Header("Timer Colors")]
@@ -198,7 +201,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
             if (card == null)
                 card = cardObject.AddComponent<MemoryMatchCard>();
 
-            card.Setup(pairId, sprite, OnCardClicked);
+            card.Setup(pairId, sprite, cardBackSprite, OnCardClicked);
             cards.Add(card);
         }
     }

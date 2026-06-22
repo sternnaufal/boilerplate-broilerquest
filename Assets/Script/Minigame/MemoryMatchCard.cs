@@ -15,21 +15,23 @@ public class MemoryMatchCard : MonoBehaviour, IPointerClickHandler
 
     private Image cardImage;
     private Sprite faceSprite;
+    private Sprite cardBackSprite;
     private System.Action<MemoryMatchCard> onClickCallback;
     private bool isAnimating;
     private Coroutine flipRoutine;
 
-    public void Setup(int pairId, Sprite faceSprite, System.Action<MemoryMatchCard> onClickCallback)
+    public void Setup(int pairId, Sprite faceSprite, Sprite cardBackSprite, System.Action<MemoryMatchCard> onClickCallback)
     {
         if (cardImage == null)
             cardImage = GetComponent<Image>();
 
         PairId = pairId;
         this.faceSprite = faceSprite;
+        this.cardBackSprite = cardBackSprite;
         this.onClickCallback = onClickCallback;
         IsMatched = false;
         IsFlipped = false;
-        cardImage.sprite = null;
+        cardImage.sprite = cardBackSprite;
         cardImage.color = backColor;
     }
 
@@ -93,7 +95,7 @@ public class MemoryMatchCard : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            cardImage.sprite = null;
+            cardImage.sprite = cardBackSprite;
             cardImage.color = backColor;
         }
 
