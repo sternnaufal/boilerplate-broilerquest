@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1925916746256750119}
   - component: {fileID: 816194936739529115}
   - component: {fileID: 2755324548764031290}
+  - component: {fileID: 7000000000000000002}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -78,17 +79,56 @@ MonoBehaviour:
   cardSpacing: {x: 12, y: 12}
   columns: 3
   cardSprites:
-  - {fileID: 3984413914186058838, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: -1102589601, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: -1407930075, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: -1897525302, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: -1469912830, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: -910871808, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: 657634678, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: -185455336, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: 1410132718, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: -1996719685, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: 1485968436, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
-  - {fileID: 878023223, guid: 6cb0e96408d5adb4f86061d42eb2dd60, type: 3}
+  - {fileID: 96697816473634632, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: 572393097, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: -289241244, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: 1643734681, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: -1430939624, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: 331287801, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: -281031179, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: -1508248940, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: 57537288, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: 437387695, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: -926190524, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  - {fileID: -2093541243, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
   normalTimerColor: {r: 1, g: 1, b: 1, a: 1}
   warningTimerColor: {r: 1, g: 0.25, b: 0.15, a: 1}
+  cardBackSprite: {fileID: 2772318725309764230, guid: 8e2c6403712c2cd48a817950ac108e61, type: 3}
+--- !u!114 &7000000000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384904773509121494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c98e4b58dfc42f42b283526ba9fc204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SFXManager
+  sfxSource: {fileID: 0}
+  volume: 1
+  navigateSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
+  buttonClickSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+  buySuccessSfx: {fileID: 0}
+  buyFailSfx: {fileID: 0}
+  feedBuySfx: {fileID: 0}
+  iotToggleOnSfx: {fileID: 0}
+  iotToggleOffSfx: {fileID: 0}
+  careCompleteSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
+  sellCompleteSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+  timingToggleOnSfx: {fileID: 0}
+  timingSuccessSfx: {fileID: 0}
+  timingFailSfx: {fileID: 0}
+  healthSuccessSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
+  healthFailSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+  jigsawPieceClickSfx: {fileID: 0, guid: 30a993e22fb89524087fb2ecc824eb8e, type: 3}
+  jigsawPieceSwapSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
+  jigsawCompleteSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
+  jigsawFailSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+  timeUpSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+  unlockSuccessSfx: {fileID: 0}
+  unlockFailSfx: {fileID: 0}
+  bubbleNeedSfx: {fileID: 0, guid: 30a993e22fb89524087fb2ecc824eb8e, type: 3}
+  minigameSuccessSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
+  minigameFailSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}

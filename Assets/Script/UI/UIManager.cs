@@ -51,6 +51,8 @@ public class UIManager : Singleton<UIManager>
 
     private void Start()
     {
+        if (BGMManager.Instance != null)
+            BGMManager.Instance.PlayMainMenuBGM();
         ShowMainMenu();
     }
 
@@ -188,14 +190,14 @@ public class UIManager : Singleton<UIManager>
 
     public void SetMusicVolume(float volume)
     {
-        AudioListener.volume = volume;
+        if (BGMManager.Instance != null)
+            BGMManager.Instance.SetVolume(volume);
     }
 
     public void SetSfxVolume(float volume)
     {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-        GameLog.Info($"SFX volume requested: {volume}. AudioMixer routing is not set up yet.");
-#endif
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.SetVolume(volume);
     }
 
     public void GoToKoleksiIoT()

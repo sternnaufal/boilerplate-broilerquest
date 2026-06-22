@@ -33,6 +33,17 @@ public class StarterSceneInitializer : MonoBehaviour
 
         if (loadSavedState && StarterIoTController.Instance != null)
             SaveManager.LoadIotStates(StarterIoTController.Instance);
+
+        if (BGMManager.Instance != null)
+        {
+            int level = GameManager.Instance != null ? GameManager.Instance.currentLevelIndex : 0;
+            switch (level)
+            {
+                case 0: BGMManager.Instance.PlayStarterBGM(); break;
+                case 1: BGMManager.Instance.PlayBeginnerBGM(); break;
+                case 2: BGMManager.Instance.PlayIntermediateBGM(); break;
+            }
+        }
     }
 
     private GameObject GetChickenPrefab(string prefabName)

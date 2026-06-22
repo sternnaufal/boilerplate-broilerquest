@@ -19,12 +19,14 @@ public class HealthCheckResultOverlay : MonoBehaviour
     public static void ShowSuccess()
     {
         EnsureInstance();
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayMinigameSuccess();
         instance.Show(instance.successText, instance.successColor);
     }
 
     public static void ShowFail()
     {
         EnsureInstance();
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayMinigameFail();
         instance.Show(instance.failText, instance.failColor);
     }
 

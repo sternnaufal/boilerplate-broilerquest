@@ -82,6 +82,9 @@ public partial class StarterKandangSlot
                 bubbleLabel.enabled = !string.IsNullOrEmpty(label);
             }
         }
+
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlayBubbleNeed();
     }
 
     private void HideBubble()
