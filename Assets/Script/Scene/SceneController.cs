@@ -11,7 +11,7 @@ public class SceneController : Singleton<SceneController>
     public void GoToMainMenu()
     {
         GameStateManager.ApplyState(GameState.Menu);
-        if (BGMManager.Instance != null) BGMManager.Instance.PlayMainMenuBGM();
+        if (BGMManager.Instance != null) BGMManager.Instance.PlayMenuBGM();
         if (SceneTransition.Instance != null)
             SceneTransition.Instance.LoadScene(mainMenuScene);
         else
@@ -21,7 +21,7 @@ public class SceneController : Singleton<SceneController>
     public void GoToSelectLevel()
     {
         GameStateManager.ApplyState(GameState.Menu);
-        if (BGMManager.Instance != null) BGMManager.Instance.PlayLevelSelectBGM();
+        if (BGMManager.Instance != null) BGMManager.Instance.PlayMenuBGM();
         if (SceneTransition.Instance != null)
             SceneTransition.Instance.LoadScene(selectLevelScene);
         else
@@ -31,7 +31,7 @@ public class SceneController : Singleton<SceneController>
     public void GoToKoleksiIoT()
     {
         GameStateManager.ApplyState(GameState.Menu);
-        if (BGMManager.Instance != null) BGMManager.Instance.PlayKoleksiIoTBGM();
+        if (BGMManager.Instance != null) BGMManager.Instance.PlayMenuBGM();
         if (SceneTransition.Instance != null)
             SceneTransition.Instance.LoadScene(koleksiIoTScene);
         else

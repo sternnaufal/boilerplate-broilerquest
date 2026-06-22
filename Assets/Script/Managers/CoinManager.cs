@@ -15,6 +15,7 @@ public class CoinManager : Singleton<CoinManager>
     protected override void Awake()
     {
         base.Awake();
+        if (Instance != this) return;
         if (resetCoinOnStart && !HasSavedCoin())
             SetTotalCoin(GameConstants.Economy.StartingCoin);
     }

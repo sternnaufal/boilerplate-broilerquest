@@ -3368,9 +3368,21 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: bubbleNeedSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 30a993e22fb89524087fb2ecc824eb8e, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: jigsawFailSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: minigameFailSfx
       value: 
       objectReference: {fileID: 8300000, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: jigsawCompleteSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
     - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: minigameSuccessSfx
       value: 

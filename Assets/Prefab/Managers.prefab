@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 816194936739529115}
   - component: {fileID: 2755324548764031290}
   - component: {fileID: 7000000000000000002}
+  - component: {fileID: 8008893428682441373}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -49,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIGlobalBinder
   coinText: {fileID: 0}
   feedText: {fileID: 0}
+  counterAnimDuration: 0.3
 --- !u!114 &816194936739529115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,9 +93,9 @@ MonoBehaviour:
   - {fileID: 437387695, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
   - {fileID: -926190524, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
   - {fileID: -2093541243, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+  cardBackSprite: {fileID: 2772318725309764230, guid: 8e2c6403712c2cd48a817950ac108e61, type: 3}
   normalTimerColor: {r: 1, g: 1, b: 1, a: 1}
   warningTimerColor: {r: 1, g: 0.25, b: 0.15, a: 1}
-  cardBackSprite: {fileID: 2772318725309764230, guid: 8e2c6403712c2cd48a817950ac108e61, type: 3}
 --- !u!114 &7000000000000000002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,27 +110,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SFXManager
   sfxSource: {fileID: 0}
   volume: 1
-  navigateSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
-  buttonClickSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+  navigateSfx: {fileID: 0}
+  buttonClickSfx: {fileID: 0}
   buySuccessSfx: {fileID: 0}
   buyFailSfx: {fileID: 0}
   feedBuySfx: {fileID: 0}
   iotToggleOnSfx: {fileID: 0}
   iotToggleOffSfx: {fileID: 0}
-  careCompleteSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
-  sellCompleteSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+  careCompleteSfx: {fileID: 0}
+  sellCompleteSfx: {fileID: 0}
   timingToggleOnSfx: {fileID: 0}
   timingSuccessSfx: {fileID: 0}
   timingFailSfx: {fileID: 0}
-  healthSuccessSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
-  healthFailSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
-  jigsawPieceClickSfx: {fileID: 0, guid: 30a993e22fb89524087fb2ecc824eb8e, type: 3}
-  jigsawPieceSwapSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
-  jigsawCompleteSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
-  jigsawFailSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
-  timeUpSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+  healthSuccessSfx: {fileID: 0}
+  healthFailSfx: {fileID: 0}
+  jigsawPieceClickSfx: {fileID: 0}
+  jigsawPieceSwapSfx: {fileID: 0}
+  jigsawCompleteSfx: {fileID: 0}
+  jigsawFailSfx: {fileID: 0}
+  bubbleNeedSfx: {fileID: 0}
+  minigameSuccessSfx: {fileID: 0}
+  minigameFailSfx: {fileID: 0}
+  timeUpSfx: {fileID: 0}
   unlockSuccessSfx: {fileID: 0}
   unlockFailSfx: {fileID: 0}
-  bubbleNeedSfx: {fileID: 0, guid: 30a993e22fb89524087fb2ecc824eb8e, type: 3}
-  minigameSuccessSfx: {fileID: 0, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
-  minigameFailSfx: {fileID: 0, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+--- !u!114 &8008893428682441373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384904773509121494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4ade5fe44f31e14e8349d9632884110, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BGMManager
+  bgmSource: {fileID: 0}
+  volume: 1
+  defaultFadeDuration: 1
+  mainMenuBGM: {fileID: 0}
+  levelSelectBGM: {fileID: 0}
+  starterBGM: {fileID: 0}
+  beginnerBGM: {fileID: 0}
+  intermediateBGM: {fileID: 0}
+  koleksiIoTBGM: {fileID: 0}

@@ -95,11 +95,15 @@ public static class SaveManager
     {
         if (slots == null || slots.Length == 0) return;
 
+        var sortedSlots = new StarterKandangSlot[slots.Length];
+        System.Array.Copy(slots, sortedSlots, slots.Length);
+        System.Array.Sort(sortedSlots, (a, b) => string.Compare(a?.name, b?.name, System.StringComparison.Ordinal));
+
         GameSaveData data = LoadLevelData();
-        data.slots = new SlotSaveData[slots.Length];
-        for (int i = 0; i < slots.Length; i++)
+        data.slots = new SlotSaveData[sortedSlots.Length];
+        for (int i = 0; i < sortedSlots.Length; i++)
         {
-            data.slots[i] = slots[i].GetSaveData();
+            data.slots[i] = sortedSlots[i].GetSaveData();
         }
         SaveLevelData(data);
         GameLog.Info($"SaveManager: Slot states saved for {LevelSaveKey}.");
@@ -135,18 +139,37 @@ public static class SaveManager
 
     public static void SaveAll()
     {
-        // Save per-level slot data
         StarterKandangSlot[] slots = GameObject.FindObjectsByType<StarterKandangSlot>(
-            FindObjectsInactive.Include, FindObjectsSortMode.InstanceID);
+            FindObjectsInactive.Include, FindObjectsSortMode.None);
         if (slots != null && slots.Length > 0)
         {
-            GameSaveData levelData = LoadLevelData();
-            levelData.slots = new SlotSaveData[slots.Length];
-            for (int i = 0; i < slots.Length; i++)
+            bool allEmpty = true;
+            foreach (var slot in slots)
             {
-                levelData.slots[i] = slots[i] != null ? slots[i].GetSaveData() : null;
+                if (slot != null && !slot.IsEmpty)
+                {
+                    allEmpty = false;
+                    break;
+                }
             }
-            SaveLevelData(levelData);
+            if (allEmpty)
+            {
+                GameLog.Info("SaveManager: All slots are empty, skipping slot save to prevent overwrite.");
+            }
+            else
+            {
+                var sortedSlots = new StarterKandangSlot[slots.Length];
+                System.Array.Copy(slots, sortedSlots, slots.Length);
+                System.Array.Sort(sortedSlots, (a, b) => string.Compare(a?.name, b?.name, System.StringComparison.Ordinal));
+
+                GameSaveData levelData = LoadLevelData();
+                levelData.slots = new SlotSaveData[sortedSlots.Length];
+                for (int i = 0; i < sortedSlots.Length; i++)
+                {
+                    levelData.slots[i] = sortedSlots[i] != null ? sortedSlots[i].GetSaveData() : null;
+                }
+                SaveLevelData(levelData);
+            }
         }
 
         // Save global IoT data
@@ -181,6 +204,9 @@ public static class SaveManager
 
         GameSaveData data = JsonUtility.FromJson<GameSaveData>(json);
         if (data?.slots == null) return;
+
+        if (slots != null)
+            System.Array.Sort(slots, (a, b) => string.Compare(a?.name, b?.name, System.StringComparison.Ordinal));
 
         var slotsById = new Dictionary<string, StarterKandangSlot>();
         if (slots != null)
