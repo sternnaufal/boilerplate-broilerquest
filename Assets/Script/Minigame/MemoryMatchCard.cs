@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class MemoryMatchCard : MonoBehaviour, IPointerClickHandler
 {
     [Header("Colors")]
-    [SerializeField] private Color backColor = new Color(0.15f, 0.35f, 0.7f);
+    [SerializeField] private Color backColor = Color.white;
     [SerializeField] private Color frontColor = Color.white;
     [SerializeField] private Color matchedColor = new Color(0.3f, 0.85f, 0.4f);
 
