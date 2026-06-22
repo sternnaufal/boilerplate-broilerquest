@@ -26,3 +26,8 @@
 {"ts":"2026-06-02T00:09:49.629Z","version":"6.10.0","fileCount":37,"droppedCount":0,"rawTokens":49137,"finalTokens":2335,"reductionPct":95.2,"overBudget":false,"budgetLimit":4000}
 {"ts":"2026-06-02T00:13:14.459Z","version":"6.10.0","fileCount":37,"droppedCount":0,"rawTokens":49137,"finalTokens":2335,"reductionPct":95.2,"overBudget":false,"budgetLimit":4000}
 {"ts":"2026-06-05T02:23:13.692Z","version":"6.10.0","fileCount":38,"droppedCount":0,"rawTokens":49681,"finalTokens":2418,"reductionPct":95.1,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-06-22T00:10:05.799Z","version":"7.25.0","fileCount":63,"droppedCount":16,"rawTokens":101994,"finalTokens":3592,"reductionPct":96.5,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-06-22T00:13:11.077Z","version":"7.25.0","fileCount":63,"droppedCount":16,"rawTokens":101962,"finalTokens":3592,"reductionPct":96.5,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-06-22T00:27:21.077Z","version":"7.25.0","fileCount":63,"droppedCount":16,"rawTokens":101962,"finalTokens":3592,"reductionPct":96.5,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-06-22T01:35:26.209Z","version":"7.25.0","fileCount":64,"droppedCount":18,"rawTokens":103982,"finalTokens":3591,"reductionPct":96.5,"overBudget":false,"budgetLimit":4000}
+{"ts":"2026-06-22T01:39:13.928Z","version":"7.25.0","fileCount":64,"droppedCount":19,"rawTokens":105316,"finalTokens":3603,"reductionPct":96.6,"overBudget":false,"budgetLimit":4000}

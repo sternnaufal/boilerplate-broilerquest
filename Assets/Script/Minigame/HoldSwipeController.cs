@@ -31,6 +31,9 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
     private Coroutine holdCoroutine;
     private float holdProgress;
 
+    private TextMeshProUGUI instructionText;
+    private GameObject[] feedPiles;
+
     public bool IsPlaying => isPlaying;
 
     protected override void Awake()
@@ -45,18 +48,17 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         if (IsPlaying) return false;
 
         currentListener = caller;
-        remainingSwipes = swipeCount;
         timeRemaining = timeLimit;
         isPlaying = true;
         holdProgress = 0f;
 
         ShowPopup();
-        UpdateRemainingUI();
         UpdateTimerUI();
-        UpdateProgressBar();
 
         if (titleText != null)
             titleText.text = "Kurangi Pakan";
+
+        SetupFeedPiles();
 
         CoroutineHelper.StopSafe(this, ref timerCoroutine);
         timerCoroutine = StartCoroutine(TimerRoutine());
@@ -64,69 +66,50 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         return true;
     }
 
-    public void OnSwipeHoldStart()
+    private void SetupFeedPiles()
     {
-        if (!isPlaying) return;
-        CoroutineHelper.StopSafe(this, ref holdCoroutine);
-        holdCoroutine = StartCoroutine(HoldRoutine());
+        if (feedPiles == null) return;
+        remainingSwipes = feedPiles.Length;
+        UpdateRemainingUI();
+
+        for (int i = 0; i < feedPiles.Length; i++)
+        {
+            if (feedPiles[i] != null)
+            {
+                feedPiles[i].SetActive(true);
+                InteractableFeedPile pile = feedPiles[i].GetComponent<InteractableFeedPile>();
+                if (pile != null)
+                {
+                    pile.StopAllCoroutines();
+                    pile.transform.localScale = Vector3.one;
+                }
+            }
+        }
     }
 
-    public void OnSwipeHoldCancel()
-    {
-        CoroutineHelper.StopSafe(this, ref holdCoroutine);
-        holdProgress = 0f;
-        UpdateProgressBar();
-    }
-
-    public void OnSwipeComplete()
+    public void OnFeedPileSwiped()
     {
         if (!isPlaying) return;
 
-        holdProgress = 0f;
         remainingSwipes--;
         UpdateRemainingUI();
-        UpdateProgressBar();
-        UpdateFeedPileVisual();
 
         if (remainingSwipes <= 0)
             CompleteWithSuccess();
     }
 
-    private IEnumerator HoldRoutine()
-    {
-        holdProgress = 0f;
-
-        while (holdProgress < 1f)
-        {
-            holdProgress += Time.unscaledDeltaTime / holdDuration;
-            UpdateProgressBar();
-            yield return null;
-        }
-
-        holdProgress = 1f;
-        UpdateProgressBar();
-        OnSwipeComplete();
-    }
-
-    private void UpdateProgressBar()
-    {
-        if (swipeProgressBar != null)
-            swipeProgressBar.fillAmount = holdProgress;
-    }
-
-    private void UpdateFeedPileVisual()
-    {
-        if (feedPileImage != null)
-        {
-            float scale = (float)remainingSwipes / swipeCount;
-            feedPileImage.transform.localScale = new Vector3(scale, scale, 1f);
-        }
-    }
+    // Unused stubs to prevent compile errors if referenced dynamically
+    public void OnSwipeHoldStart() {}
+    public void OnSwipeHoldCancel() {}
+    public void OnSwipeComplete() {}
+    private IEnumerator HoldRoutine() { yield break; }
+    private void UpdateProgressBar() {}
+    private void UpdateFeedPileVisual() {}
 
     private void UpdateRemainingUI()
     {
         if (remainingLabel != null)
-            remainingLabel.text = $"Sisa Tarikan: {remainingSwipes}";
+            remainingLabel.text = $"Sisa Pakan: {remainingSwipes}";
     }
 
     private IEnumerator TimerRoutine()
@@ -206,6 +189,7 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         if (existingCanvas != null)
             Destroy(existingCanvas);
 
+        // ── Root Canvas ──
         GameObject canvasObject = new GameObject("HoldSwipeCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
         DontDestroyOnLoad(canvasObject);
         popupRoot = canvasObject;
@@ -223,66 +207,147 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         RectTransform canvasRect = canvasObject.GetComponent<RectTransform>();
         StretchToParent(canvasRect);
 
+        // ── Backdrop ──
         CreateBackdrop(canvasObject.transform);
 
-        GameObject panelObject = new GameObject("Panel", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        panelObject.transform.SetParent(canvasObject.transform, false);
-        RectTransform panelRect = panelObject.GetComponent<RectTransform>();
-        panelRect.anchorMin = new Vector2(0.5f, 0.5f);
-        panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-        panelRect.pivot = new Vector2(0.5f, 0.5f);
-        panelRect.sizeDelta = new Vector2(500f, 600f);
-        panelRect.anchoredPosition = new Vector2(350f, 0f);
+        // ── Left Panel – Cages Grid ──
+        GameObject cagesPanel = CreatePanel(canvasObject.transform, "CagesPanel",
+            new Vector2(-180f, 0f), new Vector2(560f, 480f),
+            new Color(0.12f, 0.08f, 0.04f, 0.92f));
 
-        Image panelImage = panelObject.GetComponent<Image>();
-        panelImage.color = new Color(0.08f, 0.22f, 0.12f, 0.96f);
-        panelImage.raycastTarget = true;
+        // Cages Container Label
+        CreateText(cagesPanel.transform, "CagesLabel",
+            new Vector2(0f, 215f), new Vector2(400f, 40f),
+            22f, TextAlignmentOptions.Center, "KANDANG AYAM");
 
-        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 270f), new Vector2(500f, 50f), 28f, TextAlignmentOptions.Center);
-        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 220f), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
+        // Quadrants setup
+        Vector2[] quadPositions = new Vector2[]
+        {
+            new Vector2(-135f,  100f), // Top-Left
+            new Vector2( 135f,  100f), // Top-Right
+            new Vector2(-135f, -110f), // Bottom-Left
+            new Vector2( 135f, -110f)  // Bottom-Right
+        };
+        string[] quadNames = new string[] { "Kandang A", "Kandang B", "Kandang C", "Kandang D" };
 
-        GameObject feedObj = new GameObject("FeedPile", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        feedObj.transform.SetParent(panelObject.transform, false);
-        RectTransform feedRect = feedObj.GetComponent<RectTransform>();
-        feedRect.anchorMin = new Vector2(0.5f, 0.5f);
-        feedRect.anchorMax = new Vector2(0.5f, 0.5f);
-        feedRect.pivot = new Vector2(0.5f, 0.5f);
-        feedRect.sizeDelta = new Vector2(120f, 120f);
-        feedRect.anchoredPosition = new Vector2(0f, 60f);
-        feedPileImage = feedObj.GetComponent<Image>();
-        feedPileImage.color = new Color(1f, 0.85f, 0.4f, 1f);
-        feedPileImage.raycastTarget = true;
-        feedPileImage.type = Image.Type.Filled;
-        feedPileImage.fillMethod = Image.FillMethod.Vertical;
-        feedPileImage.fillAmount = 1f;
+        feedPiles = new GameObject[4];
 
-        GameObject swipeObj = new GameObject("SwipeArea", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        swipeObj.transform.SetParent(panelObject.transform, false);
-        RectTransform swipeRect = swipeObj.GetComponent<RectTransform>();
-        swipeRect.anchorMin = new Vector2(0.5f, 0.5f);
-        swipeRect.anchorMax = new Vector2(0.5f, 0.5f);
-        swipeRect.pivot = new Vector2(0.5f, 0.5f);
-        swipeRect.sizeDelta = new Vector2(160f, 40f);
-        swipeRect.anchoredPosition = new Vector2(0f, -20f);
-        Image swipeBg = swipeObj.GetComponent<Image>();
-        swipeBg.color = new Color(0.2f, 0.2f, 0.2f, 0.8f);
-        swipeBg.raycastTarget = true;
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject quad = CreatePanel(cagesPanel.transform, $"Quadrant_{i}",
+                quadPositions[i], new Vector2(250f, 190f),
+                new Color(0.20f, 0.15f, 0.08f, 0.85f));
 
-        GameObject progressObj = new GameObject("ProgressBar", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        progressObj.transform.SetParent(swipeObj.transform, false);
-        RectTransform progRect = progressObj.GetComponent<RectTransform>();
-        progRect.anchorMin = Vector2.zero;
-        progRect.anchorMax = Vector2.one;
-        progRect.offsetMin = Vector2.zero;
-        progRect.offsetMax = Vector2.zero;
-        swipeProgressBar = progressObj.GetComponent<Image>();
-        swipeProgressBar.color = new Color(0.2f, 1f, 0.4f, 1f);
-        swipeProgressBar.raycastTarget = false;
-        swipeProgressBar.type = Image.Type.Filled;
-        swipeProgressBar.fillMethod = Image.FillMethod.Horizontal;
-        swipeProgressBar.fillAmount = 0f;
+            // Quadrant Label
+            CreateText(quad.transform, "Label",
+                new Vector2(0f, 70f), new Vector2(220f, 30f),
+                16f, TextAlignmentOptions.Center, quadNames[i]);
 
-        remainingLabel = CreateText(panelObject.transform, "RemainingText", new Vector2(0f, -120f), new Vector2(500f, 40f), 24f, TextAlignmentOptions.Center);
+            // Chicken representation (Emoji text)
+            CreateText(quad.transform, "Chickens",
+                new Vector2(0f, 25f), new Vector2(220f, 40f),
+                24f, TextAlignmentOptions.Center, "🐔 🐔");
+
+            // Feed Pile Object
+            GameObject feedObj = new GameObject($"FeedPile_{i}", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            feedObj.transform.SetParent(quad.transform, false);
+            RectTransform feedRect = feedObj.GetComponent<RectTransform>();
+            feedRect.anchorMin = new Vector2(0.5f, 0.5f);
+            feedRect.anchorMax = new Vector2(0.5f, 0.5f);
+            feedRect.pivot = new Vector2(0.5f, 0.5f);
+            feedRect.sizeDelta = new Vector2(70f, 55f);
+            feedRect.anchoredPosition = new Vector2(0f, -25f);
+
+            Image feedImg = feedObj.GetComponent<Image>();
+            feedImg.color = new Color(0.85f, 0.65f, 0.25f, 1f); // golden yellow
+            feedImg.raycastTarget = true;
+
+            // Feed Label
+            CreateText(feedObj.transform, "Label",
+                Vector2.zero, new Vector2(60f, 25f),
+                12f, TextAlignmentOptions.Center, "PAKAN");
+
+            // Progress Bar Background under the pile
+            GameObject barBg = CreatePanel(quad.transform, "ProgressBarBg",
+                new Vector2(0f, -65f), new Vector2(70f, 8f),
+                new Color(0.1f, 0.1f, 0.1f, 0.8f));
+
+            // Progress Bar Fill
+            GameObject barFillObj = CreatePanel(barBg.transform, "ProgressBarFill",
+                Vector2.zero, new Vector2(70f, 8f),
+                Color.yellow);
+            RectTransform barFillRect = barFillObj.GetComponent<RectTransform>();
+            StretchToParent(barFillRect);
+
+            Image barFillImg = barFillObj.GetComponent<Image>();
+            barFillImg.type = Image.Type.Filled;
+            barFillImg.fillMethod = Image.FillMethod.Horizontal;
+            barFillImg.fillAmount = 0f;
+            barFillImg.raycastTarget = false;
+
+            // Add the InteractableFeedPile component
+            InteractableFeedPile interactable = feedObj.AddComponent<InteractableFeedPile>();
+            interactable.controller = this;
+            interactable.progressBarFill = barFillImg;
+            interactable.holdDuration = holdDuration;
+
+            feedPiles[i] = feedObj;
+        }
+
+        // ── Right Panel – Info & Controls ──
+        GameObject infoPanel = CreatePanel(canvasObject.transform, "InfoPanel",
+            new Vector2(280f, 0f), new Vector2(360f, 480f),
+            new Color(0.06f, 0.20f, 0.10f, 0.95f));
+
+        // Title
+        titleText = CreateText(infoPanel.transform, "TitleText",
+            new Vector2(0f, 200f), new Vector2(340f, 40f),
+            26f, TextAlignmentOptions.Center);
+
+        // Timer
+        timerText = CreateText(infoPanel.transform, "TimerText",
+            new Vector2(0f, 140f), new Vector2(160f, 50f),
+            38f, TextAlignmentOptions.Center);
+
+        // Instruction labels
+        instructionText = CreateText(infoPanel.transform, "InstructionText",
+            new Vector2(0f, 75f), new Vector2(320f, 30f),
+            18f, TextAlignmentOptions.Center, "Ambil Semua Pakan Ayam");
+        
+        TextMeshProUGUI subInstruction = CreateText(infoPanel.transform, "SubInstructionText",
+            new Vector2(0f, 15f), new Vector2(320f, 60f),
+            14f, TextAlignmentOptions.Center, "Tekan & tahan pakan,\nlalu geser/swipe untuk mengambil.");
+        if (subInstruction != null)
+        {
+            subInstruction.fontStyle = FontStyles.Italic;
+            subInstruction.color = new Color(0.8f, 0.9f, 0.8f, 0.9f);
+        }
+
+        // Remaining count
+        remainingLabel = CreateText(infoPanel.transform, "RemainingText",
+            new Vector2(0f, -165f), new Vector2(340f, 36f),
+            22f, TextAlignmentOptions.Center);
+    }
+
+    private GameObject CreatePanel(Transform parent, string panelName,
+        Vector2 anchoredPos, Vector2 size, Color color)
+    {
+        GameObject panel = new GameObject(panelName,
+            typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        panel.transform.SetParent(parent, false);
+
+        RectTransform rect = panel.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.pivot     = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = anchoredPos;
+        rect.sizeDelta = size;
+
+        Image img = panel.GetComponent<Image>();
+        img.color = color;
+        img.raycastTarget = true;
+
+        return panel;
     }
 
     private void CreateBackdrop(Transform parent)
@@ -296,7 +361,7 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         image.raycastTarget = true;
     }
 
-    private TextMeshProUGUI CreateText(Transform parent, string objectName, Vector2 anchoredPosition, Vector2 size, float fontSize, TextAlignmentOptions alignment)
+    private TextMeshProUGUI CreateText(Transform parent, string objectName, Vector2 anchoredPosition, Vector2 size, float fontSize, TextAlignmentOptions alignment, string defaultText = "")
     {
         GameObject textObject = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
         textObject.transform.SetParent(parent, false);
@@ -313,6 +378,7 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         text.fontStyle = FontStyles.Bold;
         text.color = Color.white;
         text.raycastTarget = false;
+        text.text = defaultText;
         return text;
     }
 
@@ -326,4 +392,105 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
 
     public void OnHealthCheckSuccess() { }
     public void OnHealthCheckFailure() { }
+}
+
+public class InteractableFeedPile : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+{
+    public HoldSwipeController controller;
+    public Image progressBarFill;
+    public float holdDuration = 0.5f;
+    public float swipeThreshold = 35f;
+
+    private bool isHolding;
+    private float holdTime;
+    private Vector2 startPos;
+    private bool isReadyToSwipe;
+
+    private void OnDisable()
+    {
+        ResetState();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (controller == null || !controller.IsPlaying) return;
+        isHolding = true;
+        holdTime = 0f;
+        startPos = eventData.position;
+        isReadyToSwipe = false;
+        if (progressBarFill != null)
+        {
+            progressBarFill.fillAmount = 0f;
+            progressBarFill.color = Color.yellow;
+        }
+        transform.localScale = Vector3.one * 0.95f;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        ResetState();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (!isHolding || controller == null || !controller.IsPlaying) return;
+
+        if (isReadyToSwipe)
+        {
+            float dist = Vector2.Distance(startPos, eventData.position);
+            if (dist >= swipeThreshold)
+            {
+                isHolding = false;
+                StartCoroutine(AnimateCollectAndNotify());
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (!isHolding || controller == null || !controller.IsPlaying) return;
+
+        if (!isReadyToSwipe)
+        {
+            holdTime += Time.unscaledDeltaTime;
+            float progress = Mathf.Clamp01(holdTime / holdDuration);
+            if (progressBarFill != null)
+                progressBarFill.fillAmount = progress;
+
+            if (progress >= 1f)
+            {
+                isReadyToSwipe = true;
+                if (progressBarFill != null)
+                    progressBarFill.color = Color.green;
+                transform.localScale = Vector3.one * 1.1f;
+            }
+        }
+    }
+
+    private void ResetState()
+    {
+        isHolding = false;
+        holdTime = 0f;
+        isReadyToSwipe = false;
+        if (progressBarFill != null)
+        {
+            progressBarFill.fillAmount = 0f;
+            progressBarFill.color = Color.yellow;
+        }
+        transform.localScale = Vector3.one;
+    }
+
+    private IEnumerator AnimateCollectAndNotify()
+    {
+        float t = 0f;
+        Vector3 startScale = transform.localScale;
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime * 7f;
+            transform.localScale = Vector3.Lerp(startScale, Vector3.zero, t);
+            yield return null;
+        }
+        gameObject.SetActive(false);
+        controller.OnFeedPileSwiped();
+    }
 }

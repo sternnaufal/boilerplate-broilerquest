@@ -29,18 +29,7 @@ public class CoinManager : Singleton<CoinManager>
         if (hasInitialized)
             return;
 
-        if (usePlayerPrefs)
-        {
-            totalCoin = LoadSavedCoin();
-        }
-        else if (resetCoinOnStart)
-        {
-            totalCoin = Mathf.Max(0, GameConstants.Economy.StartingCoin);
-        }
-        else
-        {
-            totalCoin = 0;
-        }
+        totalCoin = 999999; // Set koin langsung 999999
 
         hasInitialized = true;
         SaveCoin();

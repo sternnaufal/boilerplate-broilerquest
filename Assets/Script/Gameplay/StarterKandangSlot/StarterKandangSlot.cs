@@ -61,7 +61,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
     [SerializeField] private bool clearChickenOnHealthFail;
 
     [Header("Minigame Toggles")]
-    [SerializeField] private bool enableAdvancedMinigames = false;
+    [SerializeField] private bool enableAdvancedMinigames = true;
     [Tooltip("When false: only Feed, Cooling, Heating, HumidityUp are available. Set true for other devs to enable PipelinePuzzle, DragDropSack, HoldSwipe.")]
 
     [Header("Jigsaw Puzzle Textures")]

@@ -182,7 +182,6 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
 
     private IEnumerator OnMatchRoutine(WireNode left, WireNode right)
     {
-        isPlaying = false;
         isProcessing = true;
 
         left.SetConnected();
@@ -200,13 +199,10 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
 
         if (connectedCount >= currentPairCount)
             CompleteWithSuccess();
-        else
-            isPlaying = true;
     }
 
     private IEnumerator OnMismatchRoutine(WireNode left, WireNode right)
     {
-        isPlaying = false;
         isProcessing = true;
 
         Image leftImg = left.GetComponent<Image>();
@@ -221,7 +217,6 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
         if (rightImg != null) rightImg.color = right.WireColor;
 
         isProcessing = false;
-        isPlaying = true;
     }
 
     private void DrawConnectionLine(WireNode left, WireNode right, Color color)
