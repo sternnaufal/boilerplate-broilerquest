@@ -35,9 +35,9 @@ public static class GameConstants
 
     public static class LevelDuration
     {
-        public const float Starter = 300f;
-        public const float Beginner = 120f;
-        public const float Intermediate = 180f;
+        public const float Starter = 600f;
+        public const float Beginner = 600f;
+        public const float Intermediate = 600f;
     }
 
     public static class UI
