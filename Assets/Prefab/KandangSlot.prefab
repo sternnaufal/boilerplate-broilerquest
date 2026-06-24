@@ -106,14 +106,14 @@ MonoBehaviour:
   slotLabel: {fileID: 0}
   slotLabelFormat: KANDANG {0}
   autoNumberSlotLabel: 1
-  feedBubbleSprite: {fileID: -8073166081666970766, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
-  coolingBubbleSprite: {fileID: 4163005836987294345, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
-  heatingBubbleSprite: {fileID: -1764795191525876715, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
+  feedBubbleSprite: {fileID: -2843893495403024386, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  coolingBubbleSprite: {fileID: 5671498951499757729, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  heatingBubbleSprite: {fileID: 9111825458085843759, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   humidityUpBubbleSprite: {fileID: 5185448939473618498, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   humidityDownBubbleSprite: {fileID: -4857264338737576232, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   addDryHuskBubbleSprite: {fileID: 6576909685032483182, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   reduceFeedBubbleSprite: {fileID: 351520864713326834, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  sellBubbleSprite: {fileID: 7625246835765581611, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
+  sellBubbleSprite: {fileID: -7574120519656753061, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   bubbleVisual: {fileID: 0}
   bubbleImage: {fileID: 0}
   bubbleLabel: {fileID: 0}
