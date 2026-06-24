@@ -35,7 +35,7 @@ public partial class StarterKandangSlot
 
         if (need == ChickenNeed.HumidityDown && IsMinigameEnabled(MinigameType.PipelinePuzzle))
         {
-            if (TryPipelinePuzzle()) return true;
+            if (TryPipePrefabPuzzle()) return true;
         }
 
         if (need == ChickenNeed.AddDryHusk && IsMinigameEnabled(MinigameType.DragDropSack))
@@ -96,14 +96,18 @@ public partial class StarterKandangSlot
         return false;
     }
 
-    private bool TryPipelinePuzzle()
+    private bool TryPipePrefabPuzzle()
     {
-        PipelinePuzzleController pipeline = PipelinePuzzleController.Instance;
-        if (pipeline == null) return false;
+        if (PipePrefabMinigameController.Instance == null)
+            return false;
 
         currentState = SlotState.WaitingForHealthMinigame;
         NotifyStateChanged();
-        if (pipeline.ShowPuzzle(this)) return true;
+
+        if (PipePrefabMinigameController.Instance.ShowRandomPipePuzzle(this))
+            return true;
+
+        // Jika gagal, kembali ke state sebelumnya
         currentState = SlotState.WaitingForCareClick;
         NotifyStateChanged();
         return false;
@@ -191,7 +195,7 @@ public partial class StarterKandangSlot
             case ChickenNeed.HumidityUp:
                 return "Atur Kelembaban";
             case ChickenNeed.HumidityDown:
-                return "Pipeline Pipa";
+                return "Susun Puzzle Pipa";
             case ChickenNeed.AddDryHusk:
                 return "Tambah Sekam";
             case ChickenNeed.ReduceFeed:

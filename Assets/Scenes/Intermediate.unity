@@ -563,19 +563,19 @@ PrefabInstance:
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: addDryHuskBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: e4d60b17927362846b41e867db7449c9, type: 3}
+      objectReference: {fileID: 6576909685032483182, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: humidityUpBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: accdb8282d495774a99d736659be83c2, type: 3}
+      objectReference: {fileID: 5185448939473618498, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: reduceFeedBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2d4e51e070dfc6e42a7c4d0c4caa852e, type: 3}
+      objectReference: {fileID: 351520864713326834, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: humidityDownBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 59640ae540e78c6458dc42391ad29efe, type: 3}
+      objectReference: {fileID: -4857264338737576232, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1459,19 +1459,19 @@ PrefabInstance:
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: addDryHuskBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: e4d60b17927362846b41e867db7449c9, type: 3}
+      objectReference: {fileID: 6576909685032483182, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: humidityUpBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: accdb8282d495774a99d736659be83c2, type: 3}
+      objectReference: {fileID: 5185448939473618498, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: reduceFeedBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2d4e51e070dfc6e42a7c4d0c4caa852e, type: 3}
+      objectReference: {fileID: 351520864713326834, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: humidityDownBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 59640ae540e78c6458dc42391ad29efe, type: 3}
+      objectReference: {fileID: -4857264338737576232, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2387,19 +2387,19 @@ PrefabInstance:
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: addDryHuskBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: e4d60b17927362846b41e867db7449c9, type: 3}
+      objectReference: {fileID: 6576909685032483182, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: humidityUpBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: accdb8282d495774a99d736659be83c2, type: 3}
+      objectReference: {fileID: 5185448939473618498, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: reduceFeedBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2d4e51e070dfc6e42a7c4d0c4caa852e, type: 3}
+      objectReference: {fileID: 351520864713326834, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: humidityDownBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 59640ae540e78c6458dc42391ad29efe, type: 3}
+      objectReference: {fileID: -4857264338737576232, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7592,19 +7592,19 @@ PrefabInstance:
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: addDryHuskBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: e4d60b17927362846b41e867db7449c9, type: 3}
+      objectReference: {fileID: 6576909685032483182, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: humidityUpBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: accdb8282d495774a99d736659be83c2, type: 3}
+      objectReference: {fileID: 5185448939473618498, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: reduceFeedBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2d4e51e070dfc6e42a7c4d0c4caa852e, type: 3}
+      objectReference: {fileID: 351520864713326834, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: humidityDownBubbleSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 59640ae540e78c6458dc42391ad29efe, type: 3}
+      objectReference: {fileID: -4857264338737576232, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
     - target: {fileID: 8079685212995240743, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_Color.a
       value: 1

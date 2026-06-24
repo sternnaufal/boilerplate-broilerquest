@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems; 
 
 public class DragDropSackController : Singleton<DragDropSackController>, IHealthCheckListener
 {
@@ -20,6 +21,9 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
     [Header("Timer Colors")]
     [SerializeField] private Color normalTimerColor = Color.white;
     [SerializeField] private Color warningTimerColor = new Color(1f, 0.25f, 0.15f);
+
+    [Header("Sack Asset")]
+    [SerializeField] private Sprite sackSprite;
 
     private RectTransform dropZoneRect;
     private TextMeshProUGUI instructionText;
@@ -322,8 +326,15 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
                 srt.anchoredPosition = sackPositions[i];
 
             Image sackImg = sackObj.GetComponent<Image>();
-            sackImg.color = new Color(0.82f, 0.62f, 0.22f, 1f);
-            sackImg.raycastTarget = true;
+            if (sackSprite != null)
+            {
+                sackImg.sprite = sackSprite;
+                sackImg.color = Color.white;   // biarkan sprite original
+            }
+            else
+            {
+                sackImg.color = new Color(0.82f, 0.62f, 0.22f, 1f); // fallback
+            }
 
             // Inner label so sack is visually distinguishable
             TextMeshProUGUI sackLabel = CreateText(sackObj.transform, "Label",
@@ -340,6 +351,19 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
         remainingLabel = CreateText(infoPanel.transform, "RemainingText",
             new Vector2(0f, -165f), new Vector2(340f, 36f),
             22f, TextAlignmentOptions.Center);
+
+        EnsureEventSystem();
+    }
+
+    private void EnsureEventSystem()
+    {
+        if (FindFirstObjectByType<EventSystem>() != null)
+            return;
+
+        GameObject eventSystemObj = new GameObject("EventSystem",
+            typeof(EventSystem),
+            typeof(StandaloneInputModule));
+        DontDestroyOnLoad(eventSystemObj);
     }
 
     // ── Helper Methods ──────────────────────────────────────────

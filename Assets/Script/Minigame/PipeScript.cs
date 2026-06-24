@@ -28,17 +28,13 @@ public class PipeScript : MonoBehaviour, IPointerClickHandler
 
         PossibleRots = correctRotation.Length;
 
-        // Pastikan rotasi awal TIDAK pernah benar secara kebetulan
-        int randomIndex;
-        float startAngle;
+        int attempts = 0;
         do
         {
-            randomIndex = Random.Range(0, rotations.Length);
-            startAngle = rotations[randomIndex];
-        } while (IsCorrectRotation(startAngle));
-
-        transform.eulerAngles = new Vector3(0, 0, startAngle);
-        // Tidak perlu CheckAndUpdatePlacement() di sini, isPlaced sudah false by default
+            int randomIndex = Random.Range(0, rotations.Length);
+            transform.eulerAngles = new Vector3(0, 0, rotations[randomIndex]);
+            attempts++;
+        } while (IsCorrectRotation(transform.eulerAngles.z) && attempts < 10);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -50,15 +46,16 @@ public class PipeScript : MonoBehaviour, IPointerClickHandler
     }
     private bool IsCorrectRotation(float angle)
     {
+        float rounded = Mathf.Round(angle / 90f) * 90f;
         foreach (float target in correctRotation)
-            if (Mathf.Approximately(angle, target)) return true;
+            if (Mathf.Approximately(rounded, target)) return true;
         return false;
     }
 
     private void CheckAndUpdatePlacement()
     {
         float currentAngle = Mathf.Round(transform.eulerAngles.z / 90f) * 90f;
-        bool isCorrect = IsCorrectRotation(currentAngle); // gunakan method yang sama
+        bool isCorrect = IsCorrectRotation(currentAngle);
 
         if (isCorrect && !isPlaced)
         {

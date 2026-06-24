@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2755324548764031290}
   - component: {fileID: 7000000000000000002}
   - component: {fileID: 8008893428682441373}
+  - component: {fileID: 7156035242539575423}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -155,3 +156,19 @@ MonoBehaviour:
   beginnerBGM: {fileID: 0}
   intermediateBGM: {fileID: 0}
   koleksiIoTBGM: {fileID: 0}
+--- !u!114 &7156035242539575423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384904773509121494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7712cb664d2503748bcc18aca520594d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PipePrefabMinigameController
+  pipePrefabs:
+  - {fileID: 5253222666426079920, guid: 833c5867334d21e42abdd0a12ff45c7e, type: 3}
+  - {fileID: 8905798695123697654, guid: e33e06f92ef0b684eaa16d7d2683efac, type: 3}
+  - {fileID: 8415943800638977734, guid: 39a5a56894bb424489a3b224a19fa8b8, type: 3}

@@ -109,6 +109,10 @@ MonoBehaviour:
   feedBubbleSprite: {fileID: -8073166081666970766, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
   coolingBubbleSprite: {fileID: 4163005836987294345, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
   heatingBubbleSprite: {fileID: -1764795191525876715, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
+  humidityUpBubbleSprite: {fileID: 5185448939473618498, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  humidityDownBubbleSprite: {fileID: -4857264338737576232, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  addDryHuskBubbleSprite: {fileID: 6576909685032483182, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  reduceFeedBubbleSprite: {fileID: 351520864713326834, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   sellBubbleSprite: {fileID: 7625246835765581611, guid: f8e6dbcd289ad874b910c3d66be0a9fa, type: 3}
   bubbleVisual: {fileID: 0}
   bubbleImage: {fileID: 0}
@@ -116,6 +120,10 @@ MonoBehaviour:
   feedBubbleText: 
   coolingBubbleText: 
   heatingBubbleText: 
+  humidityUpBubbleText: LEMBAB
+  humidityDownBubbleText: KERING
+  addDryHuskBubbleText: SEKAM
+  reduceFeedBubbleText: KURANGI
   sellBubbleText: 
   bubbleSize: {x: 130, y: 56}
   bubbleOffset: {x: 0, y: 68}
@@ -123,15 +131,13 @@ MonoBehaviour:
   needIntervalMin: 3
   needIntervalMax: 8
   bubbleExpiryDuration: 10
-  careCompleteSfx: {fileID: 0}
-  sellCompleteSfx: {fileID: 0}
-  healthSuccessSfx: {fileID: 0}
-  healthFailSfx: {fileID: 0}
   useHealthMinigame: 1
   clearChickenOnHealthFail: 0
   jigsawFeedTexture: {fileID: 2800000, guid: 743387ece6deffe42b9575e6fb1245e0, type: 3}
   jigsawCoolingTexture: {fileID: 2800000, guid: c23aed4960beff6438826fe42c4871a8, type: 3}
   jigsawHeatingTexture: {fileID: 2800000, guid: 87b4346945cadec4aaae1e9956ee3618, type: 3}
+  wiringPairCount: 4
+  wiringTimeLimit: 30
   chickenAnimator: {fileID: 0}
   idleAnimParam: isIdle
   heatAnimParam: isbakar
