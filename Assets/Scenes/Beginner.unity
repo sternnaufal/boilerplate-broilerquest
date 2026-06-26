@@ -2541,15 +2541,15 @@ RectTransform:
   m_Children:
   - {fileID: 1443508862}
   - {fileID: 9754905}
-  - {fileID: 843519374}
   - {fileID: 918832665}
-  - {fileID: 1800779049}
   - {fileID: 399924762}
   - {fileID: 1137564394}
-  - {fileID: 1780214341595014003}
   - {fileID: 2138907471}
   - {fileID: 141246327}
   - {fileID: 591519752}
+  - {fileID: 843519374}
+  - {fileID: 1780214341595014003}
+  - {fileID: 1800779049}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4000,13 +4000,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1086103077}
     m_Modifications:
+    - target: {fileID: 540814098580114299, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1086401313588588843, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
       propertyPath: 'kandangSlots.Array.data[0]'
       value: 
       objectReference: {fileID: 1368360115}
+    - target: {fileID: 1616618741491475020, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2664834263776875765, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.000045776367
+      objectReference: {fileID: 0}
     - target: {fileID: 3779256765945436642, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
       propertyPath: m_Name
       value: HPPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3846281678640681770, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6257267607791381558, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
       propertyPath: m_AnchoredPosition.x
