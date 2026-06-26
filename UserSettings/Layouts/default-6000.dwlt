@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1706.6667
     height: 869.3334
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Project
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 112}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 42
+  controlID: 45
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 112}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 43
+  controlID: 46
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 56}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 44
+  controlID: 47
   draggingID: 0
 --- !u!114 &8
 MonoBehaviour:
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ConsoleWindow
+  m_Name: ProjectBrowser
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -245,16 +245,16 @@ MonoBehaviour:
     y: 562.6667
     width: 1276
     height: 250.66663
-  m_MinSize: {x: 101, y: 126}
-  m_MaxSize: {x: 4001, y: 4026}
-  m_ActualView: {fileID: 17}
+  m_MinSize: {x: 231, y: 276}
+  m_MaxSize: {x: 10001, y: 10026}
+  m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
   - {fileID: 17}
   - {fileID: 18}
   - {fileID: 19}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -891,9 +891,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 1024.5084, y: 6.621937, z: 7.4641275}
+    m_Target: {x: 1000.7532, y: -2.91572, z: 7.917313}
     speed: 2
-    m_Value: {x: 1024.5084, y: 6.621937, z: 7.4641275}
+    m_Value: {x: 1000.7532, y: -2.91572, z: 7.917313}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 2
@@ -943,9 +943,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 1007.08124
+    m_Target: 961.7626
     speed: 2
-    m_Value: 1007.08124
+    m_Value: 961.7626
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1395,55 +1395,8 @@ MonoBehaviour:
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
-      - m_Data: -110248
-      - m_Data: -76100
-      - m_Data: -76048
-      - m_Data: -70686
-      - m_Data: -66224
-      - m_Data: -65508
-      - m_Data: -65090
-      - m_Data: -61352
-      - m_Data: -59734
-      - m_Data: -58998
-      - m_Data: -56888
-      - m_Data: -53840
-      - m_Data: -53660
-      - m_Data: -53234
-      - m_Data: -52456
-      - m_Data: -44472
-      - m_Data: -37650
-      - m_Data: -37568
-      - m_Data: -33330
-      - m_Data: -33244
-      - m_Data: -32612
-      - m_Data: -32042
-      - m_Data: -26446
-      - m_Data: -26052
-      - m_Data: -25576
-      - m_Data: -25136
-      - m_Data: -24568
-      - m_Data: -24532
-      - m_Data: -9820
-      - m_Data: -2104
+      - m_Data: -21758
       - m_Data: -1360
-      - m_Data: -12
-      - m_Data: 67260
-      - m_Data: 67268
-      - m_Data: 67288
-      - m_Data: 67352
-      - m_Data: 67826
-      - m_Data: 67834
-      - m_Data: 73726
-      - m_Data: 73752
-      - m_Data: 74026
-      - m_Data: 74034
-      - m_Data: 74054
-      - m_Data: 75540
-      - m_Data: 75566
-      - m_Data: 81704
-      - m_Data: 81712
-      - m_Data: 89336
-      - m_Data: 89362
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1491,9 +1444,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 622
-    width: 1147
-    height: 189.33331
+    y: 586.6667
+    width: 1275
+    height: 224.66663
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1518,7 +1471,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Gambar
+    - Assets/Script/IoT
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1528,22 +1481,22 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 71
   m_LastFolders:
-  - Assets/Gambar
+  - Assets/Script/IoT
   m_LastFoldersGridSize: 71
   m_LastProjectPath: D:\Project game\Ayam\boilerplate-broilerquest
   m_LockTracker:
     m_IsLocked: 0
   m_LastLocalAssetsSearchArea: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 88.66669}
+    scrollPos: {x: 0, y: 259.33337}
     m_SelectedIDs:
-    - m_Data: 54006
+    - m_Data: 66330
     m_LastClickedID:
-      m_Data: 54006
+      m_Data: 66330
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 55558
-    - m_Data: 55560
+    - m_Data: 54878
+    - m_Data: 54880
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1576,8 +1529,8 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 55558
-    - m_Data: 55560
+    - m_Data: 54878
+    - m_Data: 54880
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1605,9 +1558,9 @@ MonoBehaviour:
       m_ResourceFile: 
   m_ListAreaState:
     m_SelectedInstanceIDs:
-    - m_Data: -110384
-    m_LastClickedInstanceID: -110384
-    m_HadKeyboardFocusLastEvent: 1
+    - m_Data: -21760
+    m_LastClickedInstanceID: -21760
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs:
     - m_Data: 124164
     - m_Data: 124020
@@ -1653,7 +1606,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 84.66669}
+    m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 71
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 228.33333
@@ -1679,7 +1632,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 586.6667
+    y: 641.3334
     width: 1275
     height: 224.66663
   m_SerializedDataModeController:
