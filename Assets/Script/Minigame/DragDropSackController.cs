@@ -417,7 +417,7 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
 
         TextMeshProUGUI text = textObj.GetComponent<TextMeshProUGUI>();
         text.font = Resources.Load<TMP_FontAsset>(
-            "Fonts & Materials/LiberationSans SDF - Fallback");
+            "Fonts & Materials/LilitaOne-Regular SDF");
         text.alignment = alignment;
         text.fontSize  = fontSize;
         text.fontStyle = FontStyles.Bold;

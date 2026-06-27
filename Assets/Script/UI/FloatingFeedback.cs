@@ -82,7 +82,7 @@ public class FloatingFeedback : MonoBehaviour
         tmp.alignment = TextAlignmentOptions.Center;
         tmp.color = color;
         tmp.raycastTarget = false;
-        tmp.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF - Fallback");
+        tmp.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LilitaOne-Regular SDF");
 
         StartCoroutine(AnimateRoutine(textObject, tmp));
     }

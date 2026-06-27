@@ -401,6 +401,7 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
         tekanLabel.color = Color.white;
         tekanLabel.raycastTarget = false;
         tekanLabel.text = "Tekan";
+        tekanLabel.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LilitaOne-Regular SDF");
 
         remainingLabel = CreateText(panelObject.transform, "RemainingText", new Vector2(0f, -140f), new Vector2(500f, 40f), 24f, TextAlignmentOptions.Center);
     }
@@ -427,7 +428,7 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
         rect.anchoredPosition = anchoredPosition;
         rect.sizeDelta = size;
         TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
-        text.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF - Fallback");
+        text.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LilitaOne-Regular SDF");
         text.alignment = alignment;
         text.fontSize = fontSize;
         text.fontStyle = FontStyles.Bold;
