@@ -89,7 +89,7 @@ public class HealthCheckResultOverlay : MonoBehaviour
         resultText.fontStyle = FontStyles.Bold;
         resultText.alignment = TextAlignmentOptions.Center;
         resultText.raycastTarget = false;
-        resultText.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF - Fallback");
+        resultText.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LilitaOne-Regular SDF");
 
         rootCanvas = canvasObject;
         rootCanvas.SetActive(false);
