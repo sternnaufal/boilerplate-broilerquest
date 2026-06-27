@@ -427,7 +427,7 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
         rect.anchoredPosition = anchoredPosition;
         rect.sizeDelta = size;
         TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
-        text.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF - Fallback");
+        text.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LilitaOne-Regular SDF");
         text.alignment = alignment;
         text.fontSize = fontSize;
         text.fontStyle = FontStyles.Bold;

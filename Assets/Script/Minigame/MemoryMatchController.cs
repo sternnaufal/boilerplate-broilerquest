@@ -415,7 +415,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         text.fontStyle = FontStyles.Bold;
         text.color = Color.white;
         text.raycastTarget = false;
-        text.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF - Fallback");
+        text.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LilitaOne-Regular SDF");
         return text;
     }
 
