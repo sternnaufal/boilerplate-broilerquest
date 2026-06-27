@@ -370,7 +370,7 @@ MonoBehaviour:
   options:
   - displayName: Ayam
     chickenPrefab: {fileID: 0}
-    icon: {fileID: 887113903218096245, guid: 2257351556cdd154796e4cad6a84e4ef, type: 3}
+    icon: {fileID: 9087354818932945816, guid: 3f055d5d7fa9dff45afeaad0a6eacbc4, type: 3}
     buyButton: {fileID: 8069192727683911724}
     labelText: {fileID: 2970727634886816109}
   kandangSlots:

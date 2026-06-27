@@ -409,6 +409,12 @@ public class StarterChickenShop : MonoBehaviour
         if (sprite == null)
             return;
 
+        Image btnImg = option.buyButton.GetComponent<Image>();
+        if (btnImg != null)
+        {
+            btnImg.sprite = null;
+        }
+
         Transform buttonTransform = option.buyButton.transform;
         Transform existing = buttonTransform.Find("ItemIcon");
         Image iconImage;
