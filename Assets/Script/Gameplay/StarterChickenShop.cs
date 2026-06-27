@@ -24,13 +24,6 @@ public class ShopButtonStyleConfig
     public Color messageColor = new Color(1f, 0.96f, 0.78f, 1f);
 }
 
-[System.Serializable]
-public class OptionIconConfig
-{
-    public Vector2 iconAnchoredPosition = new Vector2(44f, 0f);
-    public Vector2 iconSize = new Vector2(62f, 62f);
-}
-
 public class StarterChickenShop : MonoBehaviour
 {
     [Header("Shop Options")]
@@ -41,9 +34,6 @@ public class StarterChickenShop : MonoBehaviour
 
     [Header("Button Styles")]
     [SerializeField] private ShopButtonStyleConfig buttonStyle = new ShopButtonStyleConfig();
-
-    [Header("Option Icon")]
-    [SerializeField] private OptionIconConfig iconStyle = new OptionIconConfig();
 
     [Header("Feed Purchase")]
     [SerializeField] private Button feedBuyButton;
@@ -81,7 +71,6 @@ public class StarterChickenShop : MonoBehaviour
         RegisterFeedButton();
         OverridePrices();
         UpdateOptionLabels();
-        EnsureIconsExistOnly();
         RefreshShopState();
 
         if (messageText != null && string.IsNullOrWhiteSpace(messageText.text))
@@ -240,22 +229,6 @@ public class StarterChickenShop : MonoBehaviour
         }
     }
 
-    private void EnsureIconsExistOnly()
-    {
-        if (options == null)
-            return;
-
-        for (int i = 0; i < options.Length; i++)
-        {
-            StarterChickenOption option = options[i];
-            if (option == null)
-                continue;
-
-            if (option.buyButton != null)
-                EnsureOptionIcon(option);
-        }
-    }
-
     private void StyleButtonState(Button button, bool interactable)
     {
         Image image = button.GetComponent<Image>();
@@ -398,78 +371,6 @@ public class StarterChickenShop : MonoBehaviour
         }
 
         return availableCount;
-    }
-
-    private void EnsureOptionIcon(StarterChickenOption option)
-    {
-        if (option == null || option.buyButton == null)
-            return;
-
-        Sprite sprite = option.icon != null ? option.icon : FindFallbackIcon(option);
-        if (sprite == null)
-            return;
-
-        Image btnImg = option.buyButton.GetComponent<Image>();
-        if (btnImg != null)
-        {
-            btnImg.sprite = null;
-        }
-
-        Transform buttonTransform = option.buyButton.transform;
-        Transform existing = buttonTransform.Find("ItemIcon");
-        Image iconImage;
-
-        if (existing != null)
-        {
-            iconImage = existing.GetComponent<Image>();
-        }
-        else
-        {
-            GameObject iconObject = new GameObject("ItemIcon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            iconObject.transform.SetParent(buttonTransform, false);
-            iconObject.transform.SetAsFirstSibling();
-            iconImage = iconObject.GetComponent<Image>();
-        }
-
-        RectTransform rect = iconImage.rectTransform;
-        rect.anchorMin = new Vector2(0f, 0.5f);
-        rect.anchorMax = new Vector2(0f, 0.5f);
-        rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = iconStyle.iconAnchoredPosition;
-        rect.sizeDelta = iconStyle.iconSize;
-
-        iconImage.sprite = sprite;
-        iconImage.preserveAspect = true;
-        iconImage.color = Color.white;
-        iconImage.raycastTarget = false;
-    }
-
-    private Sprite FindFallbackIcon(StarterChickenOption option)
-    {
-        if (option != null && option.chickenPrefab != null)
-        {
-            Image prefabImage = option.chickenPrefab.GetComponentInChildren<Image>(true);
-            if (prefabImage != null && prefabImage.sprite != null)
-                return prefabImage.sprite;
-        }
-
-        if (kandangSlots == null)
-            return null;
-
-        foreach (StarterKandangSlot slot in kandangSlots)
-        {
-            if (slot == null)
-                continue;
-
-            Image[] slotImages = slot.GetComponentsInChildren<Image>(true);
-            foreach (Image slotImage in slotImages)
-            {
-                if (slotImage != null && slotImage.sprite != null)
-                    return slotImage.sprite;
-            }
-        }
-
-        return null;
     }
 
     private void ShowMessage(string message)
