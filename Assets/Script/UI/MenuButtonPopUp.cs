@@ -12,6 +12,9 @@ public class MenuButtonPopUp : MonoBehaviour
     [SerializeField] private float targetScale = 1f;
     [SerializeField] private float staggerDelay = 0.08f;
 
+    [Header("Target Mode")]
+    [SerializeField] private bool animateAllChildren = false;
+
     private List<RectTransform> buttons;
 
     private void Awake()
@@ -27,8 +30,19 @@ public class MenuButtonPopUp : MonoBehaviour
     private void CacheButtons()
     {
         buttons = new List<RectTransform>();
-        foreach (Button btn in GetComponentsInChildren<Button>(true))
-            buttons.Add(btn.GetComponent<RectTransform>());
+        if (animateAllChildren)
+        {
+            foreach (RectTransform rt in GetComponentsInChildren<RectTransform>(true))
+            {
+                if (rt.parent == this.transform)
+                    buttons.Add(rt);
+            }
+        }
+        else
+        {
+            foreach (Button btn in GetComponentsInChildren<Button>(true))
+                buttons.Add(btn.GetComponent<RectTransform>());
+        }
     }
 
     public void Play()

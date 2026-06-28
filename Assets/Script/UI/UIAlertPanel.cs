@@ -48,7 +48,7 @@ public class UIAlertPanel : MonoBehaviour
         if (mainMenuConfirmPanel != null) mainMenuConfirmPanel.SetActive(active);
     }
 
-    public void Show(NotificationType type, System.Action onConfirm = null)
+    public void Show(NotificationType type, System.Action onConfirm = null, System.Action onBack = null)
     {
         // Hentikan auto-hide yang sedang berjalan
         if (autoHideCoroutine != null) StopCoroutine(autoHideCoroutine);
@@ -81,7 +81,7 @@ public class UIAlertPanel : MonoBehaviour
                 if (mainMenuConfirmPanel != null)
                 {
                     mainMenuConfirmPanel.SetActive(true);
-                    SetupMainMenuButtons(onConfirm);
+                    SetupMainMenuButtons(onConfirm, onBack);
                 }
                 break;
         }
@@ -94,7 +94,7 @@ public class UIAlertPanel : MonoBehaviour
         autoHideCoroutine = null;
     }
 
-    private void SetupMainMenuButtons(System.Action onConfirm)
+    private void SetupMainMenuButtons(System.Action onConfirm, System.Action onBack = null)
     {
         if (mainMenuConfirmPanel == null) return;
 
@@ -104,7 +104,11 @@ public class UIAlertPanel : MonoBehaviour
         if (kembali != null)
         {
             kembali.onClick.RemoveAllListeners();
-            kembali.onClick.AddListener(() => HideMainMenuConfirm());
+            kembali.onClick.AddListener(() =>
+            {
+                HideMainMenuConfirm();
+                onBack?.Invoke();
+            });
         }
         if (lanjutkan != null)
         {
