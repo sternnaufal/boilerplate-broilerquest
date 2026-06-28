@@ -23,6 +23,13 @@ public class StarterIoTController : MonoBehaviour
         public Button toggleButton;                   // tombol untuk toggle ON/OFF
         public TextMeshProUGUI statusText;            // teks status (BELI/ON/OFF)
         //public Image backgroundImage;                 // background untuk warna status
+        public GameObject onObject;
+        public GameObject offObject;
+        public GameObject buyObject;
+        public Animator deviceAnimator; 
+        public Animator[] deviceAnimators; 
+        public string animatorParam = "isOn";
+        public GameObject deviceVisual;
     }
 
     [Header("Device Definitions")]
@@ -190,31 +197,60 @@ public class StarterIoTController : MonoBehaviour
             bool active = IsActive(ui.productKey);
             IoTDeviceDef def = GetDeviceDef(ui.productKey);
 
+            // Update tombol
             if (ui.toggleButton != null)
             {
                 ui.toggleButton.interactable = true;
-
                 Image buttonImage = ui.toggleButton.GetComponent<Image>();
                 if (buttonImage != null)
                 {
-                    Color targetColor;
-                    if (!purchased)
-                        targetColor = def?.lockedColor ?? Color.gray;
-                    else if (active)
-                        targetColor = def?.activeColor ?? ownedColor;
-                    else
-                        targetColor = def?.inactiveColor ?? Color.gray;
-
-                    targetColor.a = 1f;  // paksa alpha penuh
+                    Color targetColor = purchased
+                        ? (active ? (def?.activeColor ?? ownedColor) : (def?.inactiveColor ?? Color.gray))
+                        : (def?.lockedColor ?? Color.gray);
                     buttonImage.color = targetColor;
                 }
             }
 
-            if (ui.statusText != null)
+            // Matikan semua panel status terlebih dahulu
+            if (ui.onObject != null) ui.onObject.SetActive(false);
+            if (ui.offObject != null) ui.offObject.SetActive(false);
+            if (ui.buyObject != null) ui.buyObject.SetActive(false);
+
+            // Tampilkan panel yang sesuai
+            if (!purchased)
             {
-                if (!purchased) ui.statusText.text = GetDevicePrice(ui.productKey) + " Koin";
-                else if (active) ui.statusText.text = "ON";
-                else ui.statusText.text = "OFF";
+                if (ui.buyObject != null) ui.buyObject.SetActive(true);
+                if (ui.statusText != null)
+                    ui.statusText.text = GetDevicePrice(ui.productKey) + " Koin";
+            }
+            else
+            {
+                if (active)
+                {
+                    if (ui.onObject != null) ui.onObject.SetActive(true);
+                    if (ui.statusText != null) ui.statusText.text = "";
+                }
+                else
+                {
+                    if (ui.offObject != null) ui.offObject.SetActive(true);
+                    if (ui.statusText != null) ui.statusText.text = "";
+                }
+            }
+
+            // ⭐ Update animators (baru)
+            if (ui.deviceAnimators != null)
+            {
+                bool isActive = purchased && active;
+                foreach (Animator anim in ui.deviceAnimators)
+                {
+                    if (anim != null)
+                        anim.SetBool(ui.animatorParam, isActive);
+                }
+            }
+
+            if (ui.deviceVisual != null)
+            {
+                ui.deviceVisual.SetActive(purchased);
             }
         }
     }
