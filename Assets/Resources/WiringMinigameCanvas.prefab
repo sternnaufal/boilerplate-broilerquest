@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1001000002}
   - component: {fileID: 1001000003}
   - component: {fileID: 1001000004}
+  - component: {fileID: 1001000005}
   m_Layer: 5
   m_Name: WiringMinigameCanvas
   m_TagString: Untagged
