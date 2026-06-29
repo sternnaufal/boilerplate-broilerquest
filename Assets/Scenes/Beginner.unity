@@ -502,9 +502,9 @@ RectTransform:
   - {fileID: 271589730}
   m_Father: {fileID: 843519374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 539, y: -398}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -421, y: 142}
   m_SizeDelta: {x: 160, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &72372731
@@ -1915,9 +1915,9 @@ RectTransform:
   - {fileID: 573178995}
   m_Father: {fileID: 843519374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 820.55426, y: 447.63214}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -139.4458, y: -92.36786}
   m_SizeDelta: {x: 138.8915, y: 114.7356}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &624186258
@@ -2541,7 +2541,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
   marginPercent: 0.03
+<<<<<<< HEAD
   fixCanvasScalerMatchWidth: 1
+=======
+  fixCanvasScalerMatchWidth: 0
+  canvasMatchValue: 1
+>>>>>>> origin/dev/hylmi
 --- !u!1 &880363457
 GameObject:
   m_ObjectHideFlags: 0
@@ -5886,7 +5891,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7727246971606466976, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7727246971606466976, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5894,7 +5899,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7727246971606466976, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7727246971606466976, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
       propertyPath: m_AnchorMin.y
@@ -5938,7 +5943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7727246971606466976, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 513
+      value: -447
       objectReference: {fileID: 0}
     - target: {fileID: 7727246971606466976, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
       propertyPath: m_AnchoredPosition.y

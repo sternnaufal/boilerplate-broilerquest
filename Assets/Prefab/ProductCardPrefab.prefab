@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Auto Heater
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0ee58fc02332afd4cbbd4abbc4df2a9d, type: 2}
+  m_sharedMaterial: {fileID: 2714000110278428673, guid: 0ee58fc02332afd4cbbd4abbc4df2a9d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -204,8 +204,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Harga: 100 Koin'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0ee58fc02332afd4cbbd4abbc4df2a9d, type: 2}
+  m_sharedMaterial: {fileID: 2714000110278428673, guid: 0ee58fc02332afd4cbbd4abbc4df2a9d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -413,8 +413,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Sudah Dibeli
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0ee58fc02332afd4cbbd4abbc4df2a9d, type: 2}
+  m_sharedMaterial: {fileID: 2714000110278428673, guid: 0ee58fc02332afd4cbbd4abbc4df2a9d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -550,8 +550,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Beli
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0ee58fc02332afd4cbbd4abbc4df2a9d, type: 2}
+  m_sharedMaterial: {fileID: 2714000110278428673, guid: 0ee58fc02332afd4cbbd4abbc4df2a9d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
