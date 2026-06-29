@@ -81,6 +81,21 @@ public class UIResponsiveFixer : EditorWindow
         {
             var bg = GameObject.Find("Background");
             if (bg != null) changed |= FixStretch(bg);
+
+            // Add SafeAreaAdjuster to MainMenu panels (finding them via UICanvas to include inactive panels)
+            var canvasObj = GameObject.Find("UICanvas");
+            if (canvasObj != null)
+            {
+                var mainPanel = canvasObj.transform.Find("MainScreenPanel")?.gameObject;
+                var optionPanel = canvasObj.transform.Find("OptionScreenPanel")?.gameObject;
+                var hudPanel = canvasObj.transform.Find("HUDPanel")?.gameObject;
+                var pausePanel = canvasObj.transform.Find("PauseScreenPanel")?.gameObject;
+
+                if (mainPanel != null) changed |= EnsureSafeAreaAdjuster(mainPanel, true);
+                if (optionPanel != null) changed |= EnsureSafeAreaAdjuster(optionPanel, true);
+                if (hudPanel != null) changed |= EnsureSafeAreaAdjuster(hudPanel, true);
+                if (pausePanel != null) changed |= EnsureSafeAreaAdjuster(pausePanel, true);
+            }
         }
         else if (sceneName == "SelectLevel")
         {
@@ -94,6 +109,10 @@ public class UIResponsiveFixer : EditorWindow
             if (starter != null) changed |= FixLevelPanel(starter, -600f);
             if (beginner != null) changed |= FixLevelPanel(beginner, 0f);
             if (intermediate != null) changed |= FixLevelPanel(intermediate, 600f);
+
+            // Add SafeAreaAdjuster to SelectLevelCanvas to handle adaptive matching only (adjustSafeArea = false)
+            var canvasObj = GameObject.Find("SelectLevelCanvas");
+            if (canvasObj != null) changed |= EnsureSafeAreaAdjuster(canvasObj, false);
         }
         else if (sceneName == "KoleksiIoT")
         {
@@ -114,6 +133,10 @@ public class UIResponsiveFixer : EditorWindow
                     changed = true;
                 }
             }
+
+            // Add SafeAreaAdjuster to BQ_KoleksiIoTCanvas to handle adaptive matching only (adjustSafeArea = false)
+            var canvasObj = GameObject.Find("BQ_KoleksiIoTCanvas");
+            if (canvasObj != null) changed |= EnsureSafeAreaAdjuster(canvasObj, false);
         }
         else if (sceneName == "Starter" || sceneName == "Beginner" || sceneName == "Intermediate")
         {
@@ -136,18 +159,33 @@ public class UIResponsiveFixer : EditorWindow
             if (hpPanel != null) changed |= FixAnchor(hpPanel, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f));
 
             var hud = GameObject.Find("HUD");
-            if (hud != null)
-            {
-                var adjuster = hud.GetComponent<SafeAreaAdjuster>();
-                if (adjuster == null)
-                {
-                    hud.AddComponent<SafeAreaAdjuster>();
-                    changed = true;
-                    Debug.Log($"[UIResponsiveFixer] Added SafeAreaAdjuster to HUD in {sceneName}");
-                }
-            }
+            if (hud != null) changed |= EnsureSafeAreaAdjuster(hud, true);
         }
 
+        return changed;
+    }
+
+    private static bool EnsureSafeAreaAdjuster(GameObject go, bool adjustSafeArea)
+    {
+        if (go == null) return false;
+        var adjuster = go.GetComponent<SafeAreaAdjuster>();
+        bool changed = false;
+        if (adjuster == null)
+        {
+            adjuster = go.AddComponent<SafeAreaAdjuster>();
+            changed = true;
+            Debug.Log($"[UIResponsiveFixer] Added SafeAreaAdjuster to {go.name}");
+        }
+
+        var so = new SerializedObject(adjuster);
+        var prop = so.FindProperty("adjustSafeArea");
+        if (prop != null && prop.boolValue != adjustSafeArea)
+        {
+            prop.boolValue = adjustSafeArea;
+            so.ApplyModifiedProperties();
+            changed = true;
+            Debug.Log($"[UIResponsiveFixer] Updated adjustSafeArea to {adjustSafeArea} on {go.name}");
+        }
         return changed;
     }
 

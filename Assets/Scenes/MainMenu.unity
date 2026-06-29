@@ -398,6 +398,7 @@ GameObject:
   - component: {fileID: 163259462}
   - component: {fileID: 163259464}
   - component: {fileID: 163259463}
+  - component: {fileID: 163259465}
   m_Layer: 0
   m_Name: HUDPanel
   m_TagString: Untagged
@@ -464,6 +465,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163259461}
   m_CullTransparentMesh: 1
+--- !u!114 &163259465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163259461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c000c41f7c939f46ae0f26515527a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
+  marginPercent: 0.03
+  fixCanvasScalerMatchWidth: 0
+  canvasMatchValue: 1
+  autoAdjustMatchMode: 1
+  referenceWidth: 1920
+  referenceHeight: 1080
+  adjustSafeArea: 1
 --- !u!1 &255722677
 GameObject:
   m_ObjectHideFlags: 0
@@ -2605,6 +2625,7 @@ GameObject:
   - component: {fileID: 1272441713}
   - component: {fileID: 1272441712}
   - component: {fileID: 1272441714}
+  - component: {fileID: 1272441715}
   m_Layer: 0
   m_Name: OptionScreenPanel
   m_TagString: Untagged
@@ -2721,6 +2742,25 @@ MonoBehaviour:
   targetScale: 1
   staggerDelay: 0.1
   animateAllChildren: 1
+--- !u!114 &1272441715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272441710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c000c41f7c939f46ae0f26515527a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
+  marginPercent: 0.03
+  fixCanvasScalerMatchWidth: 0
+  canvasMatchValue: 1
+  autoAdjustMatchMode: 1
+  referenceWidth: 1920
+  referenceHeight: 1080
+  adjustSafeArea: 1
 --- !u!1 &1281473811
 GameObject:
   m_ObjectHideFlags: 0
@@ -3833,6 +3873,7 @@ GameObject:
   - component: {fileID: 1716740505}
   - component: {fileID: 1716740507}
   - component: {fileID: 1716740506}
+  - component: {fileID: 1716740508}
   m_Layer: 0
   m_Name: PauseScreenPanel
   m_TagString: Untagged
@@ -3901,6 +3942,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1716740504}
   m_CullTransparentMesh: 1
+--- !u!114 &1716740508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716740504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c000c41f7c939f46ae0f26515527a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
+  marginPercent: 0.03
+  fixCanvasScalerMatchWidth: 0
+  canvasMatchValue: 1
+  autoAdjustMatchMode: 1
+  referenceWidth: 1920
+  referenceHeight: 1080
+  adjustSafeArea: 1
 --- !u!21 &1723954251
 Material:
   serializedVersion: 8
@@ -4817,6 +4877,7 @@ GameObject:
   - component: {fileID: 2030105414}
   - component: {fileID: 2030105413}
   - component: {fileID: 2030105415}
+  - component: {fileID: 2030105416}
   m_Layer: 0
   m_Name: MainScreenPanel
   m_TagString: Untagged
@@ -4936,6 +4997,25 @@ MonoBehaviour:
   targetScale: 1
   staggerDelay: 0.2
   animateAllChildren: 1
+--- !u!114 &2030105416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030105411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c000c41f7c939f46ae0f26515527a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
+  marginPercent: 0.03
+  fixCanvasScalerMatchWidth: 0
+  canvasMatchValue: 1
+  autoAdjustMatchMode: 1
+  referenceWidth: 1920
+  referenceHeight: 1080
+  adjustSafeArea: 1
 --- !u!1 &2038806541
 GameObject:
   m_ObjectHideFlags: 0

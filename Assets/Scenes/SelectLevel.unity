@@ -987,6 +987,7 @@ GameObject:
   - component: {fileID: 1031492088}
   - component: {fileID: 1031492087}
   - component: {fileID: 1031492086}
+  - component: {fileID: 1031492089}
   m_Layer: 0
   m_Name: SelectLevelCanvas
   m_TagString: Untagged
@@ -1081,6 +1082,25 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1031492089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1031492084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c000c41f7c939f46ae0f26515527a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
+  marginPercent: 0.03
+  fixCanvasScalerMatchWidth: 0
+  canvasMatchValue: 1
+  autoAdjustMatchMode: 1
+  referenceWidth: 1920
+  referenceHeight: 1080
+  adjustSafeArea: 0
 --- !u!1 &1055883159
 GameObject:
   m_ObjectHideFlags: 0
