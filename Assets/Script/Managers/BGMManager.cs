@@ -175,7 +175,7 @@ public class BGMManager : Singleton<BGMManager>
             float elapsed = 0f;
             while (elapsed < duration)
             {
-                elapsed += Time.deltaTime;
+                elapsed += Time.unscaledDeltaTime;
                 bgmSource.volume = Mathf.Lerp(startVol, 0f, elapsed / duration);
                 yield return null;
             }
@@ -189,7 +189,7 @@ public class BGMManager : Singleton<BGMManager>
         float elapsed2 = 0f;
         while (elapsed2 < duration)
         {
-            elapsed2 += Time.deltaTime;
+            elapsed2 += Time.unscaledDeltaTime;
             bgmSource.volume = Mathf.Lerp(0f, volume, elapsed2 / duration);
             yield return null;
         }
@@ -205,7 +205,7 @@ public class BGMManager : Singleton<BGMManager>
 
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             bgmSource.volume = Mathf.Lerp(startVol, 0f, elapsed / duration);
             yield return null;
         }

@@ -358,16 +358,18 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         panelRect.anchorMin = new Vector2(0.5f, 0.5f);
         panelRect.anchorMax = new Vector2(0.5f, 0.5f);
         panelRect.pivot = new Vector2(0.5f, 0.5f);
-        panelRect.sizeDelta = new Vector2(500f, 600f);
+        panelRect.sizeDelta = new Vector2(500f, 700f);
         panelRect.anchoredPosition = new Vector2(350f, 0f);
 
         Image panelImage = panelObject.GetComponent<Image>();
         panelImage.color = new Color(0.08f, 0.22f, 0.12f, 0.96f);
         panelImage.raycastTarget = true;
 
-        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 270f), new Vector2(500f, 50f), 28f, TextAlignmentOptions.Center);
-        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 220f), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
-        errorText = CreateText(panelObject.transform, "ErrorText", new Vector2(0f, 130f), new Vector2(400f, 60f), 20f, TextAlignmentOptions.Center);
+        // Layout dari atas: title (top) → timer (di bawah title) → grid → padding bawah
+        // Panel half-height = 350. Title top flush dengan panel top.
+        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 325f), new Vector2(460f, 50f), 28f, TextAlignmentOptions.Center);
+        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 265f), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
+        errorText = CreateText(panelObject.transform, "ErrorText", new Vector2(0f, 140f), new Vector2(400f, 60f), 20f, TextAlignmentOptions.Center);
         errorText.color = new Color(1f, 0.3f, 0.3f);
         errorText.gameObject.SetActive(false);
 
@@ -377,7 +379,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         gridRect.anchorMin = new Vector2(0.5f, 0.5f);
         gridRect.anchorMax = new Vector2(0.5f, 0.5f);
         gridRect.pivot = new Vector2(0.5f, 0.5f);
-        gridRect.anchoredPosition = new Vector2(0f, -35f);
+        gridRect.anchoredPosition = new Vector2(0f, -55f);
         gridContainer = gridObject.transform;
     }
 

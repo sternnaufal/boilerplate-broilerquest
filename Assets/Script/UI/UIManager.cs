@@ -163,7 +163,7 @@ public class UIManager : Singleton<UIManager>
 
     public void ReturnToMainMenuFromPause()
     {
-        pausePanel.SetActive(false);
+        if (pausePanel != null) pausePanel.SetActive(false);
 
         UIAlertPanel.Instance.Show(UIAlertPanel.NotificationType.MainMenuConfirm,
             onConfirm: () =>
@@ -174,7 +174,7 @@ public class UIManager : Singleton<UIManager>
             },
             onBack: () =>
             {
-                pausePanel.SetActive(true);
+                if (pausePanel != null) pausePanel.SetActive(true);
             });
     }
 

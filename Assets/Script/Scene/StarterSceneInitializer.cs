@@ -8,15 +8,11 @@ public class StarterSceneInitializer : MonoBehaviour
     [SerializeField] private StarterKandangSlot[] kandangSlots;
 
     [Header("Initialization")]
-    [SerializeField] private bool initializeGameManager = true;
     [SerializeField] private bool initializeCoinManager = true;
     [SerializeField] private bool loadSavedState = true;
 
     private void Start()
     {
-        if (initializeGameManager && GameManager.Instance != null)
-            GameManager.Instance.InitializeForCurrentScene();
-
         if (initializeCoinManager && CoinManager.Instance != null)
             CoinManager.Instance.Initialize();
 

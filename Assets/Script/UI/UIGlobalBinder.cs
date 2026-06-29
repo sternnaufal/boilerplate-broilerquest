@@ -151,7 +151,8 @@ public class UIGlobalBinder : MonoBehaviour
         rt.GetWorldCorners(corners);
         Vector3 center = (corners[0] + corners[2]) / 2f;
 
-        if (Camera.main != null && rt.root.GetComponent<Canvas>().renderMode != RenderMode.ScreenSpaceOverlay)
+        var rootCanvas = rt.root.GetComponent<Canvas>();
+        if (Camera.main != null && rootCanvas != null && rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
             center = Camera.main.WorldToScreenPoint(center);
 
         return new Vector2(center.x, center.y) + offset;

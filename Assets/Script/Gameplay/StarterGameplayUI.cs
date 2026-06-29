@@ -210,6 +210,7 @@ public class StarterGameplayUI : MonoBehaviour
 
     private IEnumerator AnimateHPPanel(Vector2 target)
     {
+        if (hpPanelRect == null) yield break;
         Vector2 start = hpPanelRect.anchoredPosition;
         float elapsed = 0f;
 
@@ -272,6 +273,7 @@ public class StarterGameplayUI : MonoBehaviour
 
     private IEnumerator StaggerChildren()
     {
+        if (hpPanel == null) yield break;
         int count = hpPanel.transform.childCount;
         for (int i = 0; i < count; i++)
         {

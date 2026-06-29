@@ -32,7 +32,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                     {
                         GameObject go = new GameObject(typeof(T).Name);
                         _instance = go.AddComponent<T>();
-                        DontDestroyOnLoad(go);
+                        // Awake() handles DontDestroyOnLoad based on PersistAcrossScenes
                     }
                 }
                 return _instance;
