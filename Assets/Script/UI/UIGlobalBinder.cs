@@ -139,7 +139,7 @@ public class UIGlobalBinder : MonoBehaviour
         if (text == null) return;
         RectTransform rt = text.rectTransform;
         Vector2 pos = rt.anchoredPosition;
-        rt.anchoredPosition = new Vector2(value >= 100 ? 100.71f : 120.71f, pos.y);
+        rt.anchoredPosition = new Vector2(value >= 100 ? 50.71f : 70.71f, pos.y);
     }
 
     private static Vector2 GetTextScreenPos(TextMeshProUGUI text, Vector2 offset)

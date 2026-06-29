@@ -12,6 +12,9 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
     [SerializeField] private float nodeSpacing = 72f;
     [SerializeField] private float lineThickness = 5f;
 
+    [Header("Node Layout")]
+    [SerializeField] private float cascadeOffset = 2f;
+
     [Header("Wire Colors")]
     [SerializeField] private Color[] wireColors = new Color[]
     {
@@ -63,10 +66,16 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
         if (!isDragging || dragSource == null)
             return;
 
-        Vector2 mousePos = Mouse.current.position.ReadValue();
-        UpdateTempLine(mousePos);
+        Vector2 pointerPos = Pointer.current != null ? Pointer.current.position.ReadValue() : Vector2.zero;
+        UpdateTempLine(pointerPos);
 
-        if (Mouse.current.leftButton.wasReleasedThisFrame)
+        bool shouldEndDrag = false;
+        if (Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame)
+            shouldEndDrag = true;
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasReleasedThisFrame)
+            shouldEndDrag = true;
+
+        if (shouldEndDrag)
             OnDragEnd();
     }
 
@@ -306,6 +315,7 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
         for (int i = 0; i < currentPairCount; i++)
         {
             float y = startY - i * nodeSpacing;
+            if (i > 0) y -= cascadeOffset;
 
             GameObject leftObj = CreateNodeObject("LeftNode_" + i, new Vector2(leftX, y));
             WireNode leftNode = leftObj.AddComponent<WireNode>();
@@ -433,88 +443,25 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
         if (existingCanvas != null)
             Destroy(existingCanvas);
 
-        GameObject canvasObject = new GameObject("WiringMinigameCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-        DontDestroyOnLoad(canvasObject);
-        popupRoot = canvasObject;
+        GameObject prefab = Resources.Load<GameObject>("WiringMinigameCanvas");
+        if (prefab == null)
+        {
+            Debug.LogError("WiringMinigameController: WiringMinigameCanvas.prefab tidak ditemukan di Resources!");
+            return;
+        }
 
-        Canvas canvas = canvasObject.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 500;
-        canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.Normal | AdditionalCanvasShaderChannels.Tangent;
+        GameObject canvasObj = Instantiate(prefab);
+        canvasObj.name = "WiringMinigameCanvas";
+        DontDestroyOnLoad(canvasObj);
+        popupRoot = canvasObj;
 
-        CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1280f, 720f);
-        scaler.matchWidthOrHeight = 0.5f;
-
-        RectTransform canvasRect = canvasObject.GetComponent<RectTransform>();
-        StretchToParent(canvasRect);
-
-        CreateBackdrop(canvasObject.transform);
-
-        GameObject panelObject = new GameObject("Panel", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        panelObject.transform.SetParent(canvasObject.transform, false);
-        RectTransform panelRect = panelObject.GetComponent<RectTransform>();
-        panelRect.anchorMin = new Vector2(0.5f, 0.5f);
-        panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-        panelRect.pivot = new Vector2(0.5f, 0.5f);
-        panelRect.sizeDelta = new Vector2(500f, 600f);
-        panelRect.anchoredPosition = new Vector2(350f, 0f);
-
-        Image panelImage = panelObject.GetComponent<Image>();
-        panelImage.color = new Color(0.08f, 0.22f, 0.12f, 0.96f);
-        panelImage.raycastTarget = true;
-
-        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 270f), new Vector2(500f, 50f), 28f, TextAlignmentOptions.Center);
-        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 220f), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
-
-        GameObject wireObj = new GameObject("WireContainer", typeof(RectTransform));
-        wireObj.transform.SetParent(panelObject.transform, false);
-        RectTransform wireRect = wireObj.GetComponent<RectTransform>();
-        wireRect.anchorMin = new Vector2(0.5f, 0.5f);
-        wireRect.anchorMax = new Vector2(0.5f, 0.5f);
-        wireRect.pivot = new Vector2(0.5f, 0.5f);
-        wireRect.anchoredPosition = new Vector2(0f, -35f);
-        wireRect.sizeDelta = new Vector2(500f, 420f);
-        wireContainer = wireObj.transform;
-    }
-
-    private void CreateBackdrop(Transform parent)
-    {
-        GameObject backdrop = new GameObject("Backdrop", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        backdrop.transform.SetParent(parent, false);
-
-        RectTransform rect = backdrop.GetComponent<RectTransform>();
-        rect.anchorMin = Vector2.zero;
-        rect.anchorMax = Vector2.one;
-        rect.offsetMin = Vector2.zero;
-        rect.offsetMax = Vector2.zero;
-
-        Image image = backdrop.GetComponent<Image>();
-        image.color = new Color(0f, 0f, 0f, 0.55f);
-        image.raycastTarget = true;
-    }
-
-    private TextMeshProUGUI CreateText(Transform parent, string objectName, Vector2 anchoredPosition, Vector2 size, float fontSize, TextAlignmentOptions alignment)
-    {
-        GameObject textObject = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
-        textObject.transform.SetParent(parent, false);
-
-        RectTransform rect = textObject.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0.5f, 0.5f);
-        rect.anchorMax = new Vector2(0.5f, 0.5f);
-        rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = anchoredPosition;
-        rect.sizeDelta = size;
-
-        TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
-        text.alignment = alignment;
-        text.fontSize = fontSize;
-        text.fontStyle = FontStyles.Bold;
-        text.color = Color.white;
-        text.raycastTarget = false;
-        text.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LilitaOne-Regular SDF");
-        return text;
+        Transform panelTransform = canvasObj.transform.Find("Panel");
+        if (panelTransform != null)
+        {
+            titleText = panelTransform.Find("TitleText")?.GetComponent<TextMeshProUGUI>();
+            timerText = panelTransform.Find("TimerText")?.GetComponent<TextMeshProUGUI>();
+            wireContainer = panelTransform.Find("WireContainer");
+        }
     }
 
     private void EnsureEventSystem()
@@ -524,13 +471,5 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
 
         GameObject eventSystemObject = new GameObject("EventSystem", typeof(UnityEngine.EventSystems.EventSystem), typeof(UnityEngine.EventSystems.StandaloneInputModule));
         DontDestroyOnLoad(eventSystemObject);
-    }
-
-    private void StretchToParent(RectTransform rect)
-    {
-        rect.anchorMin = Vector2.zero;
-        rect.anchorMax = Vector2.one;
-        rect.offsetMin = Vector2.zero;
-        rect.offsetMax = Vector2.zero;
     }
 }

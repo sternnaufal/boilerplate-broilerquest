@@ -211,30 +211,32 @@ public class StarterIoTController : MonoBehaviour
                 }
             }
 
-            // Matikan semua panel status terlebih dahulu
             if (ui.onObject != null) ui.onObject.SetActive(false);
             if (ui.offObject != null) ui.offObject.SetActive(false);
             if (ui.buyObject != null) ui.buyObject.SetActive(false);
 
-            // Tampilkan panel yang sesuai
+            GameObject target = null;
+            if (!purchased)
+                target = ui.buyObject;
+            else if (active)
+                target = ui.onObject;
+            else
+                target = ui.offObject;
+
+            if (target != null)
+            {
+                target.SetActive(true);
+                StartCoroutine(AnimateIconIn(target.transform));
+            }
+
             if (!purchased)
             {
-                if (ui.buyObject != null) ui.buyObject.SetActive(true);
                 if (ui.statusText != null)
                     ui.statusText.text = GetDevicePrice(ui.productKey) + " Koin";
             }
             else
             {
-                if (active)
-                {
-                    if (ui.onObject != null) ui.onObject.SetActive(true);
-                    if (ui.statusText != null) ui.statusText.text = "";
-                }
-                else
-                {
-                    if (ui.offObject != null) ui.offObject.SetActive(true);
-                    if (ui.statusText != null) ui.statusText.text = "";
-                }
+                if (ui.statusText != null) ui.statusText.text = "";
             }
 
             // ⭐ Update animators (baru)
@@ -294,5 +296,28 @@ public class StarterIoTController : MonoBehaviour
             default:
                 return 0;
         }
+    }
+
+    private System.Collections.IEnumerator AnimateIconIn(Transform target)
+    {
+        target.localScale = Vector3.zero;
+        float half = 0.1f;
+        float elapsed = 0f;
+        while (elapsed < half)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / half);
+            target.localScale = Vector3.Lerp(Vector3.zero, Vector3.one * 1.12f, t * t * (3f - 2f * t));
+            yield return null;
+        }
+        elapsed = 0f;
+        while (elapsed < half)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / half);
+            target.localScale = Vector3.Lerp(Vector3.one * 1.12f, Vector3.one, t * t * (3f - 2f * t));
+            yield return null;
+        }
+        target.localScale = Vector3.one;
     }
 }

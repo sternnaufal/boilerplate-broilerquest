@@ -437,6 +437,7 @@ GameObject:
   - component: {fileID: 3476809485413919898}
   - component: {fileID: 603239470816059940}
   - component: {fileID: 8381936742672947170}
+  - component: {fileID: 5622963272142307721}
   m_Layer: 0
   m_Name: GlobalCoinPakanCounter
   m_TagString: Untagged
@@ -504,6 +505,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5622963272142307721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5234076111404007194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1aa9bbb26e438049b5e5d735b6a2ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlideInFromTop
+  curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  duration: 0.5
+  extraOffset: 20
 --- !u!1 &8136109730008303307
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,7 +559,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 31.9895, y: 0.000022888}
+  m_AnchoredPosition: {x: -18.0105, y: 0.000022888}
   m_SizeDelta: {x: 108.0815, y: 39.279}
   m_Pivot: {x: 0.5000002, y: 0.5}
 --- !u!222 &6263740214805994049
