@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -207,19 +208,112 @@ public class StarterGameplayUI : MonoBehaviour
         ShowHpPanel(false);
     }
 
-    private System.Collections.IEnumerator AnimateHPPanel(Vector2 target)
+    private IEnumerator AnimateHPPanel(Vector2 target)
     {
         Vector2 start = hpPanelRect.anchoredPosition;
         float elapsed = 0f;
+
+        bool isShowing = target == visiblePosition;
+        Vector3 originalScale = hpPanelRect.localScale;
+
+        if (isShowing)
+            hpPanelRect.localScale = originalScale * 0.85f;
+
         while (elapsed < animationDuration)
         {
             elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / animationDuration);
-            hpPanelRect.anchoredPosition = Vector2.Lerp(start, target, t);
+
+            float eased = EaseOutBack(t);
+            hpPanelRect.anchoredPosition = Vector2.LerpUnclamped(start, target, eased);
+
+            if (isShowing)
+            {
+                float scaleT = Mathf.Clamp01(elapsed / (animationDuration * 0.6f));
+                hpPanelRect.localScale = Vector3.Lerp(originalScale * 0.85f, originalScale * 1.04f, scaleT);
+            }
+
             yield return null;
         }
+
         hpPanelRect.anchoredPosition = target;
+        if (isShowing)
+        {
+            hpPanelRect.localScale = originalScale;
+            StartCoroutine(PunchScale(hpPanelRect, 1.04f, 0.15f));
+            StartCoroutine(StaggerChildren());
+        }
+
         hpAnimationCoroutine = null;
+    }
+
+    private IEnumerator PunchScale(RectTransform target, float punch, float duration)
+    {
+        Vector3 baseScale = target.localScale;
+        float half = duration * 0.5f;
+        float elapsed = 0f;
+        while (elapsed < half)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / half);
+            target.localScale = Vector3.Lerp(baseScale, baseScale * punch, t);
+            yield return null;
+        }
+        elapsed = 0f;
+        while (elapsed < half)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / half);
+            target.localScale = Vector3.Lerp(baseScale * punch, baseScale, t);
+            yield return null;
+        }
+        target.localScale = baseScale;
+    }
+
+    private IEnumerator StaggerChildren()
+    {
+        int count = hpPanel.transform.childCount;
+        for (int i = 0; i < count; i++)
+        {
+            Transform child = hpPanel.transform.GetChild(i);
+            StartCoroutine(ScaleBounceChild(child, 0.25f));
+            yield return new WaitForSecondsRealtime(0.04f);
+        }
+    }
+
+    private IEnumerator ScaleBounceChild(Transform target, float totalDuration)
+    {
+        Vector3 original = target.localScale;
+        target.localScale = Vector3.zero;
+
+        float half = totalDuration * 0.5f;
+        float elapsed = 0f;
+
+        while (elapsed < half)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / half);
+            target.localScale = Vector3.Lerp(Vector3.zero, original * 1.08f, t * t * (3f - 2f * t));
+            yield return null;
+        }
+
+        elapsed = 0f;
+        while (elapsed < half)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / half);
+            target.localScale = Vector3.Lerp(original * 1.08f, original, t * t * (3f - 2f * t));
+            yield return null;
+        }
+
+        target.localScale = original;
+    }
+
+    private static float EaseOutBack(float t)
+    {
+        float c1 = 1.70158f;
+        float c3 = c1 + 1f;
+        return 1f + c3 * Mathf.Pow(t - 1f, 3f) + c1 * Mathf.Pow(t - 1f, 2f);
     }
 
     public void ShowHpPanel(bool visible)
@@ -241,21 +335,40 @@ public class StarterGameplayUI : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.MainMenuConfirm, () =>
-        {
-            SaveManager.SaveAll();
-            GameStateManager.ApplyState(GameState.Menu);
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
 
-            if (GameManager.Instance != null)
-                GameManager.Instance.ReturnToMainMenu();
-        });
+        var alert = UIAlertPanel.Instance;
+        if (alert == null)
+            alert = FindFirstObjectByType<UIAlertPanel>();
+
+        if (alert == null)
+        {
+            Debug.LogWarning("UIAlertPanel not found in scene! Can't show MainMenu confirmation.");
+            return;
+        }
+
+        alert.Show(UIAlertPanel.NotificationType.MainMenuConfirm,
+            onConfirm: () =>
+            {
+                SaveManager.SaveAll();
+                GameStateManager.ApplyState(GameState.Menu);
+
+                if (GameManager.Instance != null)
+                    GameManager.Instance.ReturnToMainMenu();
+            },
+            onBack: () =>
+            {
+                if (pausePanel != null)
+                    pausePanel.SetActive(true);
+            });
     }
 
     private void PolishStarterUi()
     {
         StyleButton(pauseButton, pauseButtonStyle.label, pauseButtonStyle.color, GetSpriteSafe(0));
         StyleButton(resumeButton, resumeButtonStyle.label, resumeButtonStyle.color, GetSpriteSafe(1));
-        StyleButton(hpToggleButton, hpToggleButtonStyle.label, hpToggleButtonStyle.color, GetSpriteSafe(2));
+        //StyleButton(hpToggleButton, hpToggleButtonStyle.label, hpToggleButtonStyle.color, GetSpriteSafe(2));
         StyleButton(closeHpButton, closeHpButtonStyle.label, closeHpButtonStyle.color, GetSpriteSafe(3));
 
         if (mainMenuButton != null)
@@ -385,35 +498,87 @@ public class StarterGameplayUI : MonoBehaviour
             ButtonHelper.AddListenerOnce(exitShopButton, ShowMainHPPage);
         if (exitIoTButton != null)
             ButtonHelper.AddListenerOnce(exitIoTButton, ShowMainHPPage);
+
+        ConfigureButtonHover(shopButton);
+        ConfigureButtonHover(iotButton);
+    }
+
+    private void ConfigureButtonHover(Button button)
+    {
+        if (button == null) return;
+        ColorBlock cb = button.colors;
+        cb.highlightedColor = new Color(1f, 0.85f, 0.4f);
+        cb.pressedColor = new Color(0.8f, 0.65f, 0.2f);
+        button.colors = cb;
     }
 
     private void ShowMainHPPage()
     {
-        if (shopAPK != null) shopAPK.SetActive(false);
-        if (iotAPK != null) iotAPK.SetActive(false);
-        // Tampilkan tombol-tombol utama (shopButton & iotButton) – 
-        // mereka biasanya berada langsung di dalam HPPanel, jadi cukup nonaktifkan panel APK.
-        // Jika tombol utama ikut tersembunyi, pastikan mereka tetap aktif.
+        StartCoroutine(AnimateSubPageOut(shopAPK));
+        StartCoroutine(AnimateSubPageOut(iotAPK));
         if (shopButton != null) shopButton.gameObject.SetActive(true);
         if (iotButton != null) iotButton.gameObject.SetActive(true);
-        // Opsional: sembunyikan juga panel APK yang mungkin masih terlihat
     }
 
     private void ShowShopAPK()
     {
-        if (shopAPK != null) shopAPK.SetActive(true);
-        if (iotAPK != null) iotAPK.SetActive(false);
-        // Sembunyikan tombol utama agar tidak terlihat saat di dalam APK
+        if (iotAPK != null && iotAPK.activeSelf)
+            StartCoroutine(AnimateSubPageOut(iotAPK));
         if (shopButton != null) shopButton.gameObject.SetActive(false);
         if (iotButton != null) iotButton.gameObject.SetActive(false);
+        StartCoroutine(AnimateSubPageIn(shopAPK));
     }
 
     private void ShowIoTAPK()
     {
-        if (shopAPK != null) shopAPK.SetActive(false);
-        if (iotAPK != null) iotAPK.SetActive(true);
+        if (shopAPK != null && shopAPK.activeSelf)
+            StartCoroutine(AnimateSubPageOut(shopAPK));
         if (shopButton != null) shopButton.gameObject.SetActive(false);
         if (iotButton != null) iotButton.gameObject.SetActive(false);
+        StartCoroutine(AnimateSubPageIn(iotAPK));
+    }
+
+    private IEnumerator AnimateSubPageIn(GameObject page)
+    {
+        if (page == null) yield break;
+        page.SetActive(true);
+        RectTransform rt = page.GetComponent<RectTransform>();
+        if (rt == null) yield break;
+
+        rt.localScale = Vector3.zero;
+        float elapsed = 0f;
+        float duration = 0.2f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            rt.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t * t * (3f - 2f * t));
+            yield return null;
+        }
+        rt.localScale = Vector3.one;
+    }
+
+    private IEnumerator AnimateSubPageOut(GameObject page)
+    {
+        if (page == null || !page.activeSelf) yield break;
+        RectTransform rt = page.GetComponent<RectTransform>();
+        if (rt == null)
+        {
+            page.SetActive(false);
+            yield break;
+        }
+
+        float elapsed = 0f;
+        float duration = 0.12f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            rt.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, t * t);
+            yield return null;
+        }
+        rt.localScale = Vector3.zero;
+        page.SetActive(false);
     }
 
 }

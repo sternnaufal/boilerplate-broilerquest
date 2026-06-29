@@ -132,8 +132,6 @@ public class UIManager : Singleton<UIManager>
     {
         openedFromPause = false;
 
-        HideAllPanels();
-
         if (optionsPanel != null)
             optionsPanel.SetActive(true);
     }
@@ -165,12 +163,19 @@ public class UIManager : Singleton<UIManager>
 
     public void ReturnToMainMenuFromPause()
     {
-        ShowMainMenu();
+        pausePanel.SetActive(false);
 
-        SaveManager.SaveAll();
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.ReturnToMainMenu();
+        UIAlertPanel.Instance.Show(UIAlertPanel.NotificationType.MainMenuConfirm,
+            onConfirm: () =>
+            {
+                SaveManager.SaveAll();
+                if (GameManager.Instance != null)
+                    GameManager.Instance.ReturnToMainMenu();
+            },
+            onBack: () =>
+            {
+                pausePanel.SetActive(true);
+            });
     }
 
     private void HideAllPanels()

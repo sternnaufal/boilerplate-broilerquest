@@ -105,10 +105,12 @@ public class UIGlobalBinder : MonoBehaviour
             float t = Mathf.Clamp01(elapsed / counterAnimDuration);
             int current = Mathf.RoundToInt(Mathf.Lerp(start, target, t));
             coinText.text = current.ToString();
+            AdjustTextPosition(coinText, current);
             yield return null;
         }
 
         coinText.text = target.ToString();
+        AdjustTextPosition(coinText, target);
     }
 
     private IEnumerator AnimateFeedText(int target)
@@ -124,10 +126,20 @@ public class UIGlobalBinder : MonoBehaviour
             float t = Mathf.Clamp01(elapsed / counterAnimDuration);
             int current = Mathf.RoundToInt(Mathf.Lerp(start, target, t));
             feedText.text = current.ToString();
+            AdjustTextPosition(feedText, current);
             yield return null;
         }
 
         feedText.text = target.ToString();
+        AdjustTextPosition(feedText, target);
+    }
+
+    private static void AdjustTextPosition(TextMeshProUGUI text, int value)
+    {
+        if (text == null) return;
+        RectTransform rt = text.rectTransform;
+        Vector2 pos = rt.anchoredPosition;
+        rt.anchoredPosition = new Vector2(value >= 100 ? 50.71f : 70.71f, pos.y);
     }
 
     private static Vector2 GetTextScreenPos(TextMeshProUGUI text, Vector2 offset)
@@ -207,9 +219,17 @@ public class UIGlobalBinder : MonoBehaviour
         }
 
         if (coinText != null && CoinManager.Instance != null)
-            coinText.text = CoinManager.Instance.GetTotalCoin().ToString();
+        {
+            int coin = CoinManager.Instance.GetTotalCoin();
+            coinText.text = coin.ToString();
+            AdjustTextPosition(coinText, coin);
+        }
 
         if (feedText != null && FeedManager.Instance != null)
-            feedText.text = FeedManager.Instance.GetFeedCount().ToString();
+        {
+            int feed = FeedManager.Instance.GetFeedCount();
+            feedText.text = feed.ToString();
+            AdjustTextPosition(feedText, feed);
+        }
     }
 }

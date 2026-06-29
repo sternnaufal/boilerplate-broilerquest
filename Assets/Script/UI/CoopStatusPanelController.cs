@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class CoopStatusPanelController : MonoBehaviour
 {
@@ -31,15 +32,38 @@ public class CoopStatusPanelController : MonoBehaviour
 
     private void Start()
     {
+        EnsureLayout();
         FindKandangSlots();
         CreateRows();
         SubscribeToEvents();
         RefreshAll();
     }
 
+    private void EnsureLayout()
+    {
+        if (rowContainer == null) return;
+        if (rowContainer.GetComponent<VerticalLayoutGroup>() != null) return;
+        var vlg = rowContainer.gameObject.AddComponent<VerticalLayoutGroup>();
+        vlg.childAlignment = TextAnchor.UpperLeft;
+        vlg.childForceExpandWidth = false;
+        vlg.childForceExpandHeight = false;
+        vlg.childControlWidth = true;
+        vlg.childControlHeight = true;
+        vlg.spacing = 4;
+        vlg.padding = new RectOffset(0, 0, 0, 0);
+
+        var csf = rowContainer.GetComponent<ContentSizeFitter>();
+        if (csf == null)
+            csf = rowContainer.gameObject.AddComponent<ContentSizeFitter>();
+        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+    }
+
     private void FindKandangSlots()
     {
-        kandangSlots = FindObjectsByType<StarterKandangSlot>(FindObjectsSortMode.None);
+        var allSlots = FindObjectsByType<StarterKandangSlot>(FindObjectsSortMode.None);
+        System.Array.Sort(allSlots, (a, b) =>
+            a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
+        kandangSlots = allSlots;
     }
 
     private void CreateRows()
@@ -53,6 +77,11 @@ public class CoopStatusPanelController : MonoBehaviour
         {
             CoopStatusRowUI row = Instantiate(rowPrefab, rowContainer);
             row.SetKandangLabel(kandangSlots[i].SlotLabel);
+            RectTransform rt = row.GetComponent<RectTransform>();
+            rt.pivot = new Vector2(0.5f, 1f);
+            rt.anchorMin = new Vector2(0, 1);
+            rt.anchorMax = new Vector2(1, 1);
+            rt.anchoredPosition = Vector2.zero;
             rows[i] = row;
         }
     }
@@ -98,7 +127,7 @@ public class CoopStatusPanelController : MonoBehaviour
         for (int i = 0; i < slot.NeedsQueue.Count; i++)
         {
             ChickenNeed need = slot.NeedsQueue[i];
-            bool isFailed = slot.NeedFailed[i];
+            bool isFailed = !slot.NeedSatisfied[i];
             icons.Add(GetNeedIcon(need, isFailed));
             failedStates.Add(isFailed);
         }

@@ -48,9 +48,22 @@ public class UIAlertPanel : MonoBehaviour
         if (mainMenuConfirmPanel != null) mainMenuConfirmPanel.SetActive(active);
     }
 
-    public void Show(NotificationType type, System.Action onConfirm = null)
+    private void EnsureParentActive(GameObject panel)
     {
-        // Hentikan auto-hide yang sedang berjalan
+        if (panel == null) return;
+        if (panel.activeInHierarchy) return;
+
+        Transform p = panel.transform.parent;
+        while (p != null)
+        {
+            if (!p.gameObject.activeSelf)
+                p.gameObject.SetActive(true);
+            p = p.parent;
+        }
+    }
+
+    public void Show(NotificationType type, System.Action onConfirm = null, System.Action onBack = null)
+    {
         if (autoHideCoroutine != null) StopCoroutine(autoHideCoroutine);
         SetAllPanelsActive(false);
 
@@ -59,6 +72,7 @@ public class UIAlertPanel : MonoBehaviour
             case NotificationType.FoodOut:
                 if (foodOutPanel != null)
                 {
+                    EnsureParentActive(foodOutPanel);
                     foodOutPanel.SetActive(true);
                     autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(foodOutPanel));
                 }
@@ -66,6 +80,7 @@ public class UIAlertPanel : MonoBehaviour
             case NotificationType.CoinOut:
                 if (coinOutPanel != null)
                 {
+                    EnsureParentActive(coinOutPanel);
                     coinOutPanel.SetActive(true);
                     autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(coinOutPanel));
                 }
@@ -73,6 +88,7 @@ public class UIAlertPanel : MonoBehaviour
             case NotificationType.TimeOut:
                 if (timeOutPanel != null)
                 {
+                    EnsureParentActive(timeOutPanel);
                     timeOutPanel.SetActive(true);
                     autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(timeOutPanel));
                 }
@@ -80,8 +96,9 @@ public class UIAlertPanel : MonoBehaviour
             case NotificationType.MainMenuConfirm:
                 if (mainMenuConfirmPanel != null)
                 {
+                    EnsureParentActive(mainMenuConfirmPanel);
                     mainMenuConfirmPanel.SetActive(true);
-                    SetupMainMenuButtons(onConfirm);
+                    SetupMainMenuButtons(onConfirm, onBack);
                 }
                 break;
         }
@@ -94,7 +111,7 @@ public class UIAlertPanel : MonoBehaviour
         autoHideCoroutine = null;
     }
 
-    private void SetupMainMenuButtons(System.Action onConfirm)
+    private void SetupMainMenuButtons(System.Action onConfirm, System.Action onBack = null)
     {
         if (mainMenuConfirmPanel == null) return;
 
@@ -104,7 +121,11 @@ public class UIAlertPanel : MonoBehaviour
         if (kembali != null)
         {
             kembali.onClick.RemoveAllListeners();
-            kembali.onClick.AddListener(() => HideMainMenuConfirm());
+            kembali.onClick.AddListener(() =>
+            {
+                HideMainMenuConfirm();
+                onBack?.Invoke();
+            });
         }
         if (lanjutkan != null)
         {
