@@ -59,7 +59,14 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     protected virtual void OnDestroy()
     {
         if (_instance == this as T)
+        {
             _instance = null;
+            // Persistent singletons are only destroyed on app quit, so block re-creation.
+            // Scene-specific singletons (PersistAcrossScenes=false) are destroyed on scene
+            // transitions — don't block other singletons from working in the new scene.
+            if (PersistAcrossScenes)
+                SingletonQuittingDetector.IsQuitting = true;
+        }
     }
 
     protected virtual void OnApplicationQuit()

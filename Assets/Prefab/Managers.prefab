@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7000000000000000002}
   - component: {fileID: 8008893428682441373}
   - component: {fileID: 7156035242539575423}
+  - component: {fileID: 2515327718166374347}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -172,3 +173,18 @@ MonoBehaviour:
   - {fileID: 5253222666426079920, guid: 833c5867334d21e42abdd0a12ff45c7e, type: 3}
   - {fileID: 8905798695123697654, guid: e33e06f92ef0b684eaa16d7d2683efac, type: 3}
   - {fileID: 8415943800638977734, guid: 39a5a56894bb424489a3b224a19fa8b8, type: 3}
+--- !u!114 &2515327718166374347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384904773509121494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b96894aaab98ed549a84d9a05db92b67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthCheckResultOverlay
+  displayDuration: 1.5
+  successSprite: {fileID: 4036518849894964974, guid: 9125e2279d8555e4eba762b3294dfc89, type: 3}
+  failSprite: {fileID: -418081060531236423, guid: bc73c7785d18d11419c72537635ce3d3, type: 3}

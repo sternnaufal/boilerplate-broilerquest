@@ -386,9 +386,6 @@ MonoBehaviour:
     labelColor: {r: 0.12, g: 0.15, b: 0.08, a: 1}
     labelFontSize: 24
     messageColor: {r: 1, g: 0.96, b: 0.78, a: 1}
-  iconStyle:
-    iconAnchoredPosition: {x: 44, y: 0}
-    iconSize: {x: 62, y: 62}
   feedBuyButton: {fileID: 8416635480134392069}
   feedBuyLabel: {fileID: 663527708524355788}
   feedBuyButtonText: Beli Pakan
@@ -2407,7 +2404,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96

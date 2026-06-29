@@ -8,6 +8,15 @@ public class CoopStatusRowUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI kandangLabel;
     [SerializeField] private List<Image> needIcons;
 
+    private void Awake()
+    {
+        if (kandangLabel != null)
+        {
+            var rt = kandangLabel.GetComponent<RectTransform>();
+            rt.anchoredPosition += new Vector2(10f, 0f);
+        }
+    }
+
     public void SetKandangLabel(string text)
     {
         if (kandangLabel != null)

@@ -474,16 +474,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 163259461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c000c41f7c939f46ae0f26515527a8f, type: 3}
+  m_Script: {fileID: 11500000, guid: fa34b5ebd381f7e4cbd9e1c3b1ac9925, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
-  marginPercent: 0.03
-  fixCanvasScalerMatchWidth: 0
-  canvasMatchValue: 1
-  autoAdjustMatchMode: 1
-  referenceWidth: 1920
-  referenceHeight: 1080
-  adjustSafeArea: 1
+  m_EditorClassIdentifier: Assembly-CSharp::ContentSafeZone
 --- !u!1 &255722677
 GameObject:
   m_ObjectHideFlags: 0
@@ -2751,16 +2744,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1272441710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c000c41f7c939f46ae0f26515527a8f, type: 3}
+  m_Script: {fileID: 11500000, guid: fa34b5ebd381f7e4cbd9e1c3b1ac9925, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
-  marginPercent: 0.03
-  fixCanvasScalerMatchWidth: 0
-  canvasMatchValue: 1
-  autoAdjustMatchMode: 1
-  referenceWidth: 1920
-  referenceHeight: 1080
-  adjustSafeArea: 1
+  m_EditorClassIdentifier: Assembly-CSharp::ContentSafeZone
 --- !u!1 &1281473811
 GameObject:
   m_ObjectHideFlags: 0
@@ -3034,7 +3020,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -3373,6 +3359,14 @@ PrefabInstance:
       propertyPath: feedText
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2515327718166374347, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: failSprite
+      value: 
+      objectReference: {fileID: -418081060531236423, guid: bc73c7785d18d11419c72537635ce3d3, type: 3}
+    - target: {fileID: 2515327718166374347, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: successSprite
+      value: 
+      objectReference: {fileID: 4036518849894964974, guid: 9125e2279d8555e4eba762b3294dfc89, type: 3}
     - target: {fileID: 6384904773509121494, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: m_Name
       value: Managers
@@ -3951,16 +3945,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1716740504}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c000c41f7c939f46ae0f26515527a8f, type: 3}
+  m_Script: {fileID: 11500000, guid: fa34b5ebd381f7e4cbd9e1c3b1ac9925, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
-  marginPercent: 0.03
-  fixCanvasScalerMatchWidth: 0
-  canvasMatchValue: 1
-  autoAdjustMatchMode: 1
-  referenceWidth: 1920
-  referenceHeight: 1080
-  adjustSafeArea: 1
+  m_EditorClassIdentifier: Assembly-CSharp::ContentSafeZone
 --- !u!21 &1723954251
 Material:
   serializedVersion: 8
@@ -5006,16 +4993,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2030105411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c000c41f7c939f46ae0f26515527a8f, type: 3}
+  m_Script: {fileID: 11500000, guid: fa34b5ebd381f7e4cbd9e1c3b1ac9925, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
-  marginPercent: 0.03
-  fixCanvasScalerMatchWidth: 0
-  canvasMatchValue: 1
-  autoAdjustMatchMode: 1
-  referenceWidth: 1920
-  referenceHeight: 1080
-  adjustSafeArea: 1
+  m_EditorClassIdentifier: Assembly-CSharp::ContentSafeZone
 --- !u!1 &2038806541
 GameObject:
   m_ObjectHideFlags: 0

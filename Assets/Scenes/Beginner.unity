@@ -2537,16 +2537,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 843519373}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c000c41f7c939f46ae0f26515527a8f, type: 3}
+  m_Script: {fileID: 11500000, guid: fa34b5ebd381f7e4cbd9e1c3b1ac9925, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SafeAreaAdjuster
-  marginPercent: 0.03
-<<<<<<< HEAD
-  fixCanvasScalerMatchWidth: 1
-=======
-  fixCanvasScalerMatchWidth: 0
-  canvasMatchValue: 1
->>>>>>> origin/dev/hylmi
+  m_EditorClassIdentifier: Assembly-CSharp::ContentSafeZone
 --- !u!1 &880363457
 GameObject:
   m_ObjectHideFlags: 0
@@ -3476,7 +3469,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -5559,6 +5552,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3587567231438316225, guid: b34a899420ef47240a5812d5816f453b, type: 3}
+      propertyPath: m_Name
+      value: CoopStatusPanel
+      objectReference: {fileID: 0}
     - target: {fileID: 4324643177012264851, guid: b34a899420ef47240a5812d5816f453b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5718,10 +5715,6 @@ PrefabInstance:
     - target: {fileID: 7286854107701562644, guid: b34a899420ef47240a5812d5816f453b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3587567231438316225, guid: b34a899420ef47240a5812d5816f453b, type: 3}
-      propertyPath: m_Name
-      value: CoopStatusPanel
       objectReference: {fileID: 0}
     - target: {fileID: 8351018372074285979, guid: b34a899420ef47240a5812d5816f453b, type: 3}
       propertyPath: m_AnchorMax.y
