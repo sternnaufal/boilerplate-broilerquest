@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4244190281135968462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4764832120464287464}
+  - component: {fileID: 823596719423811929}
+  m_Layer: 0
+  m_Name: CoopStatusManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4764832120464287464
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4244190281135968462}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &823596719423811929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4244190281135968462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ac73159a2dc1d04cac07e2ba1c01a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CoopStatusPanelController
+  panelRoot: {fileID: 0}
+  rowPrefab: {fileID: 7773894681349173429, guid: df936ed31de78ea4c8a6cc3c3b9fbcb0, type: 3}
+  rowContainer: {fileID: 0}
+  iconFeedSukses: {fileID: -2843893495403024386, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  iconFeedGagal: {fileID: 21300000, guid: 5c8a74b3accb9fb42be899b2a0fd5835, type: 3}
+  iconCoolingSukses: {fileID: 5671498951499757729, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  iconCoolingGagal: {fileID: 21300000, guid: dc18e88f0b968d849bd129353e7e61f0, type: 3}
+  iconHeatingSukses: {fileID: 9111825458085843759, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  iconHeatingGagal: {fileID: 21300000, guid: bb4eda213892e654cad93fe639d1a383, type: 3}
+  iconHumidityUpSukses: {fileID: 5185448939473618498, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  iconHumidityUpGagal: {fileID: 21300000, guid: 3ad108604512d4540ad3251eca99b0ca, type: 3}
+  iconHumidityDownSukses: {fileID: -4857264338737576232, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  iconHumidityDownGagal: {fileID: 21300000, guid: 296684d2c793bed4883ac379427b6da0, type: 3}
+  iconAddDryHuskSukses: {fileID: 6576909685032483182, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  iconAddDryHuskGagal: {fileID: 21300000, guid: 5be34f574b2546f43b17696d0ce123a1, type: 3}
+  iconReduceFeedSukses: {fileID: 351520864713326834, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  iconReduceFeedGagal: {fileID: 21300000, guid: c9aec516ad0e7b1419a2e236f274dc6d, type: 3}
