@@ -125,6 +125,14 @@ public class StarterChickenShop : MonoBehaviour
             return;
         }
 
+        if (HasNoChickens() && CoinManager.Instance.GetTotalCoin() - cost < GameConstants.Economy.ChickenPrice)
+        {
+            ShowMessage("Beli ayam dulu sebelum beli pakan!");
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
+            RefreshShopState();
+            return;
+        }
+
         CoinManager.Instance.SpendCoin(cost);
         FeedManager.Instance.AddFeed(increment);
         ShowMessage(feedBoughtMessage);
@@ -182,6 +190,19 @@ public class StarterChickenShop : MonoBehaviour
 
         bool hasAvailableSlot = FindAvailableKandang() != null;
 
+        bool hasNoChickens = true;
+        if (kandangSlots != null)
+        {
+            foreach (var slot in kandangSlots)
+            {
+                if (slot != null && !slot.IsEmpty)
+                {
+                    hasNoChickens = false;
+                    break;
+                }
+            }
+        }
+
         for (int i = 0; i < options.Length; i++)
         {
             StarterChickenOption option = options[i];
@@ -197,6 +218,8 @@ public class StarterChickenShop : MonoBehaviour
         if (feedBuyButton != null)
         {
             bool canAffordFeed = CoinManager.Instance != null && CoinManager.Instance.CanAfford(GameConstants.Economy.FeedCost);
+            if (canAffordFeed && hasNoChickens && CoinManager.Instance != null)
+                canAffordFeed = CoinManager.Instance.GetTotalCoin() - GameConstants.Economy.FeedCost >= GameConstants.Economy.ChickenPrice;
             feedBuyButton.interactable = canAffordFeed;
         }
 
@@ -356,6 +379,18 @@ public class StarterChickenShop : MonoBehaviour
             if (option != null)
                 option.price = GameConstants.Economy.ChickenPrice;
         }
+    }
+
+    private bool HasNoChickens()
+    {
+        if (kandangSlots == null)
+            return true;
+        foreach (var slot in kandangSlots)
+        {
+            if (slot != null && !slot.IsEmpty)
+                return false;
+        }
+        return true;
     }
 
     private int GetAvailableKandangCount()

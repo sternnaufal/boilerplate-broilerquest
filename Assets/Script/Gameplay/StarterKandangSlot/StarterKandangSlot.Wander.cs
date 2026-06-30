@@ -143,10 +143,28 @@ public partial class StarterKandangSlot
 
     private Vector2 GetRandomWanderTarget(Vector2 startPos, float radiusMult)
     {
-        return new Vector2(
-            startPos.x + Random.Range(-wanderRadius.x * radiusMult, wanderRadius.x * radiusMult),
-            startPos.y + Random.Range(-wanderRadius.y * radiusMult, wanderRadius.y * radiusMult)
-        );
+        float targetX = startPos.x + Random.Range(-wanderRadius.x * radiusMult, wanderRadius.x * radiusMult);
+        float targetY = startPos.y + Random.Range(-wanderRadius.y * radiusMult, wanderRadius.y * radiusMult);
+
+        Rect? bounds = GetWanderBounds();
+        if (bounds.HasValue)
+        {
+            Rect b = bounds.Value;
+            targetX = Mathf.Clamp(targetX, b.xMin, b.xMax);
+            targetY = Mathf.Clamp(targetY, b.yMin, b.yMax);
+        }
+
+        return new Vector2(targetX, targetY);
+    }
+
+    private Rect? GetWanderBounds()
+    {
+        Transform parent = chickenParent != null ? chickenParent : transform;
+        RectTransform parentRect = parent as RectTransform;
+        if (parentRect == null)
+            return null;
+
+        return parentRect.rect;
     }
 
     private void UpdateChickenFacing(RectTransform visualRect, Vector2 from, Vector2 to)
