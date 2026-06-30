@@ -170,6 +170,7 @@ public class BGMManager : Singleton<BGMManager>
     public void PlayBGM(AudioClip clip)
     {
         if (clip == null) return;
+        if (bgmSource == null) return;
         if (bgmSource.clip == clip && bgmSource.isPlaying) return;
 
         if (fadeRoutine != null) StopCoroutine(fadeRoutine);
@@ -182,6 +183,7 @@ public class BGMManager : Singleton<BGMManager>
         if (fadeRoutine != null) StopCoroutine(fadeRoutine);
         bgmSource.clip = clip;
         bgmSource.volume = volume;
+        if (!bgmSource.enabled) bgmSource.enabled = true;
         bgmSource.Play();
     }
 
@@ -202,7 +204,10 @@ public class BGMManager : Singleton<BGMManager>
     public void ResumeBGM()
     {
         if (!bgmSource.isPlaying)
+        {
+            if (!bgmSource.enabled) bgmSource.enabled = true;
             bgmSource.Play();
+        }
     }
 
     public void FadeTo(AudioClip clip, float duration)
@@ -230,6 +235,7 @@ public class BGMManager : Singleton<BGMManager>
 
         bgmSource.clip = newClip;
         bgmSource.volume = 0f;
+        if (!bgmSource.enabled) bgmSource.enabled = true;
         bgmSource.Play();
 
         float elapsed2 = 0f;

@@ -52,7 +52,22 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
         else if (_instance != this)
         {
-            Destroy(this);
+            if (PersistAcrossScenes)
+            {
+                // Persistent: original is authoritative, destroy this duplicate component only
+                Destroy(this);
+            }
+            else
+            {
+                // Scene-local: new scene instance takes over from any stale ghost.
+                // Destroy(this) would kill the component buttons reference → Missing target.
+                // Destroy only the COMPONENT (not the whole GO) to avoid collateral damage
+                // if the stale instance shares a GO with other persistent singletons.
+                Debug.LogWarning($"[Singleton] {typeof(T).Name}: stale instance replaced (was in scene '{_instance.gameObject.scene.name}', GO='{_instance.gameObject.name}').", gameObject);
+                var stale = _instance;
+                _instance = this as T;
+                Destroy(stale);
+            }
         }
     }
 

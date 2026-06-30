@@ -34,7 +34,6 @@ public class UIAlertPanel : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         SetAllPanelsActive(false);
     }

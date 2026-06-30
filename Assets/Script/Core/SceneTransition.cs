@@ -75,13 +75,20 @@ public class SceneTransition : Singleton<SceneTransition>
     {
         if (!isTransitioning) { transitionElapsed = 0f; return; }
         transitionElapsed += Time.unscaledDeltaTime;
-        if (transitionElapsed > 8f)
+        if (transitionElapsed > 5f)
+            ForceComplete();
+    }
+
+    public void ForceComplete()
+    {
+        StopAllCoroutines();
+        if (overlay != null)
         {
             overlay.alpha = 0f;
             overlay.blocksRaycasts = false;
-            isTransitioning = false;
-            transitionElapsed = 0f;
         }
+        isTransitioning = false;
+        transitionElapsed = 0f;
     }
 
     public void LoadScene(string sceneName, Action onComplete = null)

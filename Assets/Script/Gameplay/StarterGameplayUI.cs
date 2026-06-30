@@ -344,21 +344,24 @@ public class StarterGameplayUI : MonoBehaviour
         if (alert == null)
             alert = FindFirstObjectByType<UIAlertPanel>();
 
+        System.Action doReturn = () =>
+        {
+            SaveManager.SaveAll();
+            GameStateManager.ApplyState(GameState.Menu);
+            if (GameManager.Instance != null)
+                GameManager.Instance.ReturnToMainMenu();
+            else
+                SceneController.Instance?.GoToMainMenu();
+        };
+
         if (alert == null)
         {
-            Debug.LogWarning("UIAlertPanel not found in scene! Can't show MainMenu confirmation.");
+            doReturn();
             return;
         }
 
         alert.Show(UIAlertPanel.NotificationType.MainMenuConfirm,
-            onConfirm: () =>
-            {
-                SaveManager.SaveAll();
-                GameStateManager.ApplyState(GameState.Menu);
-
-                if (GameManager.Instance != null)
-                    GameManager.Instance.ReturnToMainMenu();
-            },
+            onConfirm: doReturn,
             onBack: () =>
             {
                 if (pausePanel != null)

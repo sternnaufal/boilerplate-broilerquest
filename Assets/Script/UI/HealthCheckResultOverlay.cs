@@ -76,7 +76,9 @@ public class HealthCheckResultOverlay : MonoBehaviour
         var backdrop = new GameObject("Backdrop", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
         backdrop.transform.SetParent(canvasGO.transform, false);
         StretchToParent(backdrop.GetComponent<RectTransform>());
-        backdrop.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.5f);
+        var backdropImg = backdrop.GetComponent<Image>();
+        backdropImg.color = new Color(0f, 0f, 0f, 0.5f);
+        backdropImg.raycastTarget = false;
 
         var imageGO = new GameObject("ResultImage", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
         imageGO.transform.SetParent(canvasGO.transform, false);
