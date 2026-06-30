@@ -317,16 +317,28 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
             float y = startY - i * nodeSpacing;
             if (i > 0) y -= cascadeOffset;
 
-            GameObject leftObj = CreateNodeObject("LeftNode_" + i, new Vector2(leftX, y));
-            WireNode leftNode = leftObj.AddComponent<WireNode>();
+            GameObject leftObj = GetOrCreateNodeObject("LeftNode_" + i, new Vector2(leftX, y));
+            WireNode leftNode = leftObj.GetComponent<WireNode>() ?? leftObj.AddComponent<WireNode>();
             leftNode.Setup(leftOrder[i], true, wireColors[leftOrder[i]]);
             leftNodes.Add(leftNode);
 
-            GameObject rightObj = CreateNodeObject("RightNode_" + i, new Vector2(rightX, y));
-            WireNode rightNode = rightObj.AddComponent<WireNode>();
+            GameObject rightObj = GetOrCreateNodeObject("RightNode_" + i, new Vector2(rightX, y));
+            WireNode rightNode = rightObj.GetComponent<WireNode>() ?? rightObj.AddComponent<WireNode>();
             rightNode.Setup(rightOrder[i], false, wireColors[rightOrder[i]]);
             rightNodes.Add(rightNode);
         }
+    }
+
+    private GameObject GetOrCreateNodeObject(string name, Vector2 anchoredPos)
+    {
+        Transform existing = wireContainer.Find(name);
+        if (existing != null)
+        {
+            RectTransform rt = existing.GetComponent<RectTransform>();
+            if (rt != null) rt.anchoredPosition = anchoredPos;
+            return existing.gameObject;
+        }
+        return CreateNodeObject(name, anchoredPos);
     }
 
     private GameObject CreateNodeObject(string name, Vector2 anchoredPos)
@@ -344,9 +356,16 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
 
     private void ClearWires()
     {
+        // Only destroy wire line objects — preserve prefab node objects (LeftNode_*, RightNode_*, Background)
         if (wireContainer != null)
+        {
             for (int i = wireContainer.childCount - 1; i >= 0; i--)
-                Destroy(wireContainer.GetChild(i).gameObject);
+            {
+                Transform child = wireContainer.GetChild(i);
+                if (child.name.StartsWith("WireLine") || child.name == "TempLine")
+                    Destroy(child.gameObject);
+            }
+        }
 
         leftNodes.Clear();
         rightNodes.Clear();

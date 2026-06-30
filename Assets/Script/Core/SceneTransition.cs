@@ -103,7 +103,7 @@ public class SceneTransition : Singleton<SceneTransition>
 
         while (elapsed < fadeDuration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / fadeDuration);
             overlay.alpha = Mathf.Lerp(startAlpha, targetAlpha, fadeCurve.Evaluate(t));
             yield return null;
