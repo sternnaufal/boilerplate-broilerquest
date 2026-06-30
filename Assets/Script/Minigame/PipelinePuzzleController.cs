@@ -150,6 +150,7 @@ public class PipelinePuzzleController : Singleton<PipelinePuzzleController>, IHe
     public void OnCellClicked(int index)
     {
         if (!isPlaying || hasWon) return;
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayPipeRotate();
 
         int row = index / gridSize;
         int col = index % gridSize;
@@ -329,12 +330,14 @@ public class PipelinePuzzleController : Singleton<PipelinePuzzleController>, IHe
     private void CompleteWithSuccess()
     {
         if (!isPlaying) return;
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayMinigameSuccess();
         FinishMinigame(true);
     }
 
     private void CompleteWithFailure()
     {
         if (!isPlaying) return;
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayMinigameFail();
         FinishMinigame(false);
     }
 

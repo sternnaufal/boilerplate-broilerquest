@@ -123,6 +123,7 @@ public class UIAlertPanel : MonoBehaviour
             kembali.onClick.RemoveAllListeners();
             kembali.onClick.AddListener(() =>
             {
+                if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick();
                 HideMainMenuConfirm();
                 onBack?.Invoke();
             });
@@ -132,6 +133,7 @@ public class UIAlertPanel : MonoBehaviour
             lanjutkan.onClick.RemoveAllListeners();
             lanjutkan.onClick.AddListener(() =>
             {
+                if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick();
                 HideMainMenuConfirm();
                 onConfirm?.Invoke();
             });

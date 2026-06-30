@@ -61,14 +61,10 @@ public class BGMManager : Singleton<BGMManager>
         if (starterBGM != null) return;
         if (isLoadingGame) return;
 
-        // Cari bgm_game.wav dulu, fallback ke bgm.wav jika tidak ada
         string gamePath = Path.Combine(Application.streamingAssetsPath, "BGM", "bgm_game.wav");
-        string menuPath = Path.Combine(Application.streamingAssetsPath, "BGM", "bgm.wav");
+        if (!File.Exists(gamePath)) return;
 
-        string path = File.Exists(gamePath) ? gamePath : (File.Exists(menuPath) ? menuPath : null);
-        if (path == null) return;
-
-        loadGameRoutine = StartCoroutine(LoadGameRoutine(path));
+        loadGameRoutine = StartCoroutine(LoadGameRoutine(gamePath));
     }
 
     private IEnumerator LoadMenuRoutine(string path)
@@ -146,22 +142,15 @@ public class BGMManager : Singleton<BGMManager>
         if (isLoadingMenu) playMenuOnLoad = true;
     }
 
-    public void PlayStarterBGM()
-    {
-        if (starterBGM != null) { PlayBGM(starterBGM); return; }
-        if (isLoadingGame) playGameOnLoad = true;
-    }
+    public void PlayStarterBGM() => PlayInGameBGM(starterBGM);
+    public void PlayBeginnerBGM() => PlayInGameBGM(beginnerBGM);
+    public void PlayIntermediateBGM() => PlayInGameBGM(intermediateBGM);
 
-    public void PlayBeginnerBGM()
+    private void PlayInGameBGM(AudioClip clip)
     {
-        if (beginnerBGM != null) { PlayBGM(beginnerBGM); return; }
-        if (isLoadingGame) playGameOnLoad = true;
-    }
-
-    public void PlayIntermediateBGM()
-    {
-        if (intermediateBGM != null) { PlayBGM(intermediateBGM); return; }
-        if (isLoadingGame) playGameOnLoad = true;
+        if (clip != null) { PlayBGM(clip); return; }
+        if (isLoadingGame) { playGameOnLoad = true; return; }
+        StopBGM();
     }
 
     public void PlayMenuBGM()
