@@ -497,9 +497,9 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             case ChickenNeed.Feed:
                 return GameConstants.IoT.ProductKeyFeeder;
             case ChickenNeed.Cooling:
-                return GameConstants.IoT.ProductKeyFan;
-            case ChickenNeed.Heating:
                 return GameConstants.IoT.ProductKeyHeater;
+            case ChickenNeed.Heating:
+                return GameConstants.IoT.ProductKeyFan;
             default:
                 return null;
         }
