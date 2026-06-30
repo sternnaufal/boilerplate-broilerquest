@@ -27,7 +27,9 @@ public class WireNode : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler
         if (nodeImage == null)
             nodeImage = gameObject.AddComponent<Image>();
 
-        nodeImage.color = color;
+        nodeImage.sprite = GetCircleSprite();
+        nodeImage.type = Image.Type.Simple;
+        nodeImage.color = new Color(color.r, color.g, color.b, 0.8f);
         nodeImage.raycastTarget = true;
 
         rectTransform = GetComponent<RectTransform>();
@@ -72,11 +74,31 @@ public class WireNode : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler
             controller.OnRightNodePointerExit(this);
     }
 
+    private static Sprite _circleSprite;
+    private static Sprite GetCircleSprite()
+    {
+        if (_circleSprite != null) return _circleSprite;
+        const int size = 64;
+        Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+        float center = size / 2f;
+        float radius = center - 1f;
+        for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                float dx = x - center + 0.5f;
+                float dy = y - center + 0.5f;
+                tex.SetPixel(x, y, (dx * dx + dy * dy) <= radius * radius ? Color.white : Color.clear);
+            }
+        tex.Apply();
+        _circleSprite = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f));
+        return _circleSprite;
+    }
+
     public void ResetNode()
     {
         IsConnected = false;
         originalColor = WireColor;
         if (nodeImage != null)
-            nodeImage.color = WireColor;
+            nodeImage.color = new Color(WireColor.r, WireColor.g, WireColor.b, 0.8f);
     }
 }

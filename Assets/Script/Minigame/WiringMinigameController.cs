@@ -333,11 +333,7 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
     {
         Transform existing = wireContainer.Find(name);
         if (existing != null)
-        {
-            RectTransform rt = existing.GetComponent<RectTransform>();
-            if (rt != null) rt.anchoredPosition = anchoredPos;
             return existing.gameObject;
-        }
         return CreateNodeObject(name, anchoredPos);
     }
 

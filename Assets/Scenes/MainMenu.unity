@@ -3396,6 +3396,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: a807adbc56e9976489a547eac97276aa, type: 3}
     - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: pipeRotateSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 17333e0d8fbcdc64e927ba192875b2bc, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: buttonClickSfx
       value: 
       objectReference: {fileID: 8300000, guid: 3e920735ec4d4a44ea4decfa8f5f5e33, type: 3}
