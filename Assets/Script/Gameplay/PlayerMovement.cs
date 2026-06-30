@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Vector2 fixingPoint;
     [SerializeField] private Vector2[] setAllPointstoFix;
     [SerializeField] private bool snapOnArrival = true;
-    [SerializeField] private float arrivalThreshold = 5f;
+    [SerializeField] private float arrivalThreshold = 10f;
     [SerializeField] private bool autoStart = true;
 
     [Header("Patrol")]
@@ -47,6 +47,13 @@ public class PlayerMovement : MonoBehaviour
     private int direction = 1;
     private float wanderPauseTimer;
     private bool isPausing;
+
+    private float patrolPauseTimer;
+    private bool isPatrolPausing;
+
+    private float previousY;
+    private string upAnimParam = "isGoingUp";
+    private string downAnimParam = "isGoingDown";
 
     public Vector2 FixingPoint
     {
@@ -103,12 +110,14 @@ public class PlayerMovement : MonoBehaviour
         
         if (animator.runtimeAnimatorController == null) return;
         
+        if (!isPatrolPausing)
         animator.SetBool(walkAnimParam, isMoving);
     }
 
     private void Start()
     {
         startPosition = rectTransform.anchoredPosition;
+        previousY = startPosition.y;
 
         if (avoidCollision)
         {
@@ -152,13 +161,12 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (!isMoving) return;
         UpdateMoveToPoint();
     }
 
     private void UpdateWander()
     {
-        Vector2 currentPos = rectTransform.anchoredPosition; // Deklarasi di awal
+        Vector2 currentPos = rectTransform.anchoredPosition;
 
         if (isPausing)
         {
@@ -167,7 +175,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 isPausing = false;
                 isMoving = true;
-                // Gunakan currentPos (bukan startPosition) untuk target baru
                 fixingPoint = new Vector2(
                     currentPos.x + Random.Range(-wanderRadius.x, wanderRadius.x),
                     currentPos.y + Random.Range(-wanderRadius.y, wanderRadius.y)
@@ -186,6 +193,7 @@ public class PlayerMovement : MonoBehaviour
             wanderPauseTimer = Random.Range(wanderPauseMin, wanderPauseMax);
             isPausing = true;
             isMoving = false;
+            previousY = rectTransform.anchoredPosition.y; // update previousY
             return;
         }
 
@@ -197,6 +205,8 @@ public class PlayerMovement : MonoBehaviour
             rectTransform.anchoredPosition = newPos;
             if (flipOnDirection)
                 UpdateFacing(oldPos, newPos);
+            // Update animasi vertikal setelah posisi berubah
+            UpdateVerticalAnimation(newPos.y);
         }
         else
         {
@@ -207,6 +217,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateMoveToPoint()
     {
+        if (isPatrolPausing)
+        {
+            patrolPauseTimer -= Time.deltaTime;
+            if (patrolPauseTimer <= 0f)
+            {
+                isPatrolPausing = false;
+                isMoving = true;
+                MoveToNextPoint();
+            }
+            return;
+        }
+
+        if (!isMoving) return;
+
         Vector2 currentPos = rectTransform.anchoredPosition;
         float distance = Vector2.Distance(currentPos, fixingPoint);
 
@@ -215,11 +239,18 @@ public class PlayerMovement : MonoBehaviour
             if (snapOnArrival)
                 rectTransform.anchoredPosition = fixingPoint;
 
-            if (mode == MovementMode.Patrol)
-                MoveToNextPoint();
-            else
-                isMoving = false;
+            // ← Reset animasi vertikal saat arrival
+            if (animator != null)
+            {
+                animator.SetBool(upAnimParam, false);
+                animator.SetBool(downAnimParam, false);
+                animator.SetBool(walkAnimParam, false);
+            }
 
+            previousY = rectTransform.anchoredPosition.y; // ← update di sini
+            patrolPauseTimer = Random.Range(wanderPauseMin, wanderPauseMax);
+            isPatrolPausing = true;
+            isMoving = false;
             return;
         }
 
@@ -231,11 +262,13 @@ public class PlayerMovement : MonoBehaviour
             rectTransform.anchoredPosition = newPos;
             if (flipOnDirection)
                 UpdateFacing(oldPos, newPos);
+            UpdateVerticalAnimation(newPos.y);
         }
     }
 
     private void MoveToNextPoint()
     {
+        Debug.Log("MoveToNextPoint called");
         if (setAllPointstoFix == null || setAllPointstoFix.Length == 0)
         {
             isMoving = false;
@@ -262,6 +295,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         fixingPoint = setAllPointstoFix[currentPointIndex];
+        previousY = rectTransform.anchoredPosition.y;
+        isMoving = true;
+        Debug.Log($"New target: {fixingPoint}, isMoving={isMoving}");
     }
 
     public void SetFixingPoint(Vector2 point)
@@ -350,5 +386,27 @@ public class PlayerMovement : MonoBehaviour
             scale.x = -Mathf.Abs(scale.x);
 
         rectTransform.localScale = scale;
+    }
+
+    private void UpdateVerticalAnimation(float currentY)
+    {
+        if (animator == null) return;
+
+        float deltaY = currentY - previousY;
+        bool goingUp = deltaY > 0.1f;
+        bool goingDown = deltaY < -0.1f;
+        bool isMovingNow = isMoving && !isPausing && !isPatrolPausing;
+
+        if (!isMovingNow)
+        {
+            animator.SetBool(upAnimParam, false);
+            animator.SetBool(downAnimParam, false);
+            previousY = currentY;
+            return;
+        }
+
+        animator.SetBool(upAnimParam, goingUp);
+        animator.SetBool(downAnimParam, goingDown);
+        previousY = currentY;
     }
 }

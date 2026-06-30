@@ -59,10 +59,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12d75b87ecd5372429854c60294ffd3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  mode: 2
+  mode: 1
   speed: 150
-  fixingPoint: {x: -470, y: -100}
-  setAllPointstoFix: []
+  fixingPoint: {x: 0, y: 0}
+  setAllPointstoFix:
+  - {x: -830, y: 180}
+  - {x: -830, y: -340}
   snapOnArrival: 1
   arrivalThreshold: 5
   autoStart: 1
@@ -96,7 +98,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3479645283096473487, guid: c94585967e02362489a0403e302b5fe3, type: 3}
+  m_Sprite: {fileID: -2657643171687171680, guid: 8c62f755196f69d4387fe2d3bd099a1e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
