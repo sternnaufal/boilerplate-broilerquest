@@ -30,14 +30,19 @@ public class UIAlertPanel : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(Instance.gameObject);
-            Instance = null;
+            Destroy(gameObject);
+            return;
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // Nonaktifkan semua panel di awal
         SetAllPanelsActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
     }
 
     private void SetAllPanelsActive(bool active)

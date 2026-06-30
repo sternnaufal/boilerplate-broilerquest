@@ -15,6 +15,7 @@ public class SceneTransition : Singleton<SceneTransition>
 
     private CanvasGroup overlay;
     private bool isTransitioning;
+    private float transitionElapsed;
 
     protected override bool PersistAcrossScenes => true;
 
@@ -68,6 +69,19 @@ public class SceneTransition : Singleton<SceneTransition>
         overlay = panel.AddComponent<CanvasGroup>();
         overlay.alpha = 0f;
         overlay.blocksRaycasts = false;
+    }
+
+    private void Update()
+    {
+        if (!isTransitioning) { transitionElapsed = 0f; return; }
+        transitionElapsed += Time.unscaledDeltaTime;
+        if (transitionElapsed > 8f)
+        {
+            overlay.alpha = 0f;
+            overlay.blocksRaycasts = false;
+            isTransitioning = false;
+            transitionElapsed = 0f;
+        }
     }
 
     public void LoadScene(string sceneName, Action onComplete = null)
