@@ -11,6 +11,8 @@ public class LevelSceneInitializer : MonoBehaviour
 
     private void Start()
     {
+        Debug.LogWarning($"[LevelSceneInitializer] Start — loadSavedState={loadSavedState}, chickenShop={chickenShop}");
+
         if (initializeCoinManager && CoinManager.Instance != null)
             CoinManager.Instance.Initialize();
 

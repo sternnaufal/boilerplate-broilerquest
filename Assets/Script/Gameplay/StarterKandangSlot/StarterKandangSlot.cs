@@ -517,6 +517,8 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         RecalculateSellReward();
         SaveManager.SaveAll();
 
+        UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.NeedFulfilled);
+
         if (IsReadyToSell())
         {
             ShowSellBubble();
@@ -533,6 +535,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         ShowBubble(sellBubbleSprite, sellBubbleText);
         currentState = SlotState.WaitingForSellClick;
         NotifyStateChanged();
+        UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.ReadyToSell);
         GameLog.Info($"{name}: Semua kebutuhan terpenuhi, ayam siap dijual.");
     }
 
@@ -699,7 +702,11 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         if (prefab == null)
             prefab = chickenVisual;
 
-        if (prefab == null) return;
+        if (prefab == null)
+        {
+            Debug.LogWarning($"{name}: RestoreFromSave gagal — prefab '{data.prefabName}' tidak ditemukan dan chickenVisual tidak di-assign di Inspector.");
+            return;
+        }
 
         int visualCount = Mathf.Max(1, chickensPerPurchase);
         for (int i = 0; i < visualCount; i++)

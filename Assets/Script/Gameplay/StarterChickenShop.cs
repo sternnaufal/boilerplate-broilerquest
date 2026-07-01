@@ -125,11 +125,10 @@ public class StarterChickenShop : MonoBehaviour
             return;
         }
 
-        if (HasNoChickens() && CoinManager.Instance.GetTotalCoin() - cost < GameConstants.Economy.ChickenPrice)
+        if (HasNoChickens())
         {
             ShowMessage("Beli ayam dulu sebelum beli pakan!");
             if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
-            RefreshShopState();
             return;
         }
 
@@ -154,7 +153,7 @@ public class StarterChickenShop : MonoBehaviour
             return false;
         }
 
-        if (CoinManager.Instance == null || !CoinManager.Instance.SpendCoin(option.price))
+        if (CoinManager.Instance == null || !CoinManager.Instance.CanAfford(option.price))
         {
             ShowMessage(noCoinMessage);
             UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.CoinOut);
@@ -162,6 +161,17 @@ public class StarterChickenShop : MonoBehaviour
             RefreshShopState();
             return false;
         }
+
+        int feedCount = FeedManager.Instance != null ? FeedManager.Instance.GetFeedCount() : 0;
+        int coinsAfterBuy = CoinManager.Instance.GetTotalCoin() - option.price;
+        if (!HasNoChickens() && feedCount == 0 && coinsAfterBuy < GameConstants.Economy.FeedCost)
+        {
+            ShowMessage("Beli pakan dulu sebelum tambah ayam!");
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
+            return false;
+        }
+
+        CoinManager.Instance.SpendCoin(option.price);
 
         if (!availableSlot.TryPlaceChicken(option.chickenPrefab))
         {
@@ -203,6 +213,9 @@ public class StarterChickenShop : MonoBehaviour
             }
         }
 
+        int feedCount = FeedManager.Instance != null ? FeedManager.Instance.GetFeedCount() : 0;
+        int currentCoins = CoinManager.Instance != null ? CoinManager.Instance.GetTotalCoin() : 0;
+
         for (int i = 0; i < options.Length; i++)
         {
             StarterChickenOption option = options[i];
@@ -210,23 +223,24 @@ public class StarterChickenShop : MonoBehaviour
                 continue;
 
             bool canAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(option.price);
+            bool feedSafe = hasNoChickens || feedCount > 0 || (currentCoins - option.price >= GameConstants.Economy.FeedCost);
 
             if (option.buyButton != null)
-                option.buyButton.interactable = hasAvailableSlot && canAfford;
+                option.buyButton.interactable = hasAvailableSlot && canAfford && feedSafe;
         }
 
         if (feedBuyButton != null)
         {
-            bool canAffordFeed = CoinManager.Instance != null && CoinManager.Instance.CanAfford(GameConstants.Economy.FeedCost);
-            if (canAffordFeed && hasNoChickens && CoinManager.Instance != null)
-                canAffordFeed = CoinManager.Instance.GetTotalCoin() - GameConstants.Economy.FeedCost >= GameConstants.Economy.ChickenPrice;
+            bool canAffordFeed = !hasNoChickens
+                && CoinManager.Instance != null
+                && CoinManager.Instance.CanAfford(GameConstants.Economy.FeedCost);
             feedBuyButton.interactable = canAffordFeed;
         }
 
         if (feedBuyLabel != null)
         {
-            int feedCount = FeedManager.Instance != null ? FeedManager.Instance.GetFeedCount() : 0;
-            feedBuyLabel.text = $"{feedBuyButtonText} - {GameConstants.Economy.FeedCost} ({feedCount})";
+            int currentFeedCount = FeedManager.Instance != null ? FeedManager.Instance.GetFeedCount() : 0;
+            feedBuyLabel.text = $"{feedBuyButtonText} - {GameConstants.Economy.FeedCost} ({currentFeedCount})";
         }
     }
 
