@@ -3367,6 +3367,22 @@ PrefabInstance:
       propertyPath: successSprite
       value: 
       objectReference: {fileID: 4036518849894964974, guid: 9125e2279d8555e4eba762b3294dfc89, type: 3}
+    - target: {fileID: 2755324548764031290, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: cardSprites.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2755324548764031290, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: 'cardSprites.Array.data[3]'
+      value: 
+      objectReference: {fileID: -281031179, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+    - target: {fileID: 2755324548764031290, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: 'cardSprites.Array.data[4]'
+      value: 
+      objectReference: {fileID: -1508248940, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+    - target: {fileID: 2755324548764031290, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: 'cardSprites.Array.data[5]'
+      value: 
+      objectReference: {fileID: 57537288, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
     - target: {fileID: 6384904773509121494, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: m_Name
       value: Managers
