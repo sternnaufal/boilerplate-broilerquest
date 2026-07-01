@@ -141,11 +141,8 @@ public static class SaveManager
     {
         StarterKandangSlot[] slots = GameObject.FindObjectsByType<StarterKandangSlot>(
             FindObjectsInactive.Include, FindObjectsSortMode.None);
-        Debug.LogWarning($"[SaveManager] SaveAll — key='{LevelSaveKey}', slots ditemukan={slots?.Length ?? 0}");
         if (slots != null && slots.Length > 0)
         {
-            foreach (var s in slots)
-                Debug.LogWarning($"[SaveManager]   slot '{s?.name}' occupied={s?.IsEmpty == false}");
             var sortedSlots = new StarterKandangSlot[slots.Length];
             System.Array.Copy(slots, sortedSlots, slots.Length);
             System.Array.Sort(sortedSlots, (a, b) => string.Compare(a?.name, b?.name, System.StringComparison.Ordinal));
@@ -176,7 +173,6 @@ public static class SaveManager
     {
         string key = LevelSaveKey;
         string json = PlayerPrefs.GetString(key, "");
-        Debug.LogWarning($"[SaveManager] LoadAndRestoreSlots — key='{key}', json empty={string.IsNullOrEmpty(json)}, slots found={slots?.Length ?? 0}");
 
         // Fallback: try legacy single-key format if level key is empty
         if (string.IsNullOrEmpty(json))
@@ -189,12 +185,10 @@ public static class SaveManager
             }
         }
 
-        if (string.IsNullOrEmpty(json)) { Debug.LogWarning($"[SaveManager] Tidak ada save data untuk key '{key}'."); return; }
+        if (string.IsNullOrEmpty(json)) return;
 
         GameSaveData data = JsonUtility.FromJson<GameSaveData>(json);
-        if (data?.slots == null) { Debug.LogWarning("[SaveManager] Save data ada tapi slots null."); return; }
-
-        Debug.LogWarning($"[SaveManager] Slot data ditemukan: {data.slots.Length} entri.");
+        if (data?.slots == null) return;
 
         if (slots != null)
             System.Array.Sort(slots, (a, b) => string.Compare(a?.name, b?.name, System.StringComparison.Ordinal));
@@ -229,8 +223,6 @@ public static class SaveManager
             SlotSaveData savedSlot = data.slots[i];
             if (savedSlot == null)
                 continue;
-
-            Debug.LogWarning($"[SaveManager] Slot[{i}] slotId='{savedSlot.slotId}' occupied={savedSlot.occupied} prefab='{savedSlot.prefabName}'");
 
             if (string.IsNullOrEmpty(savedSlot.slotId))
             {

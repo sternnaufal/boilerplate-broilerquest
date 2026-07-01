@@ -13,15 +13,11 @@ public class StarterSceneInitializer : MonoBehaviour
 
     private void Start()
     {
-        Debug.LogWarning($"[StarterSceneInitializer] Start — loadSavedState={loadSavedState}, chickenShop={chickenShop}, kandangSlots assigned={kandangSlots?.Length ?? 0}");
-
         if (initializeCoinManager && CoinManager.Instance != null)
             CoinManager.Instance.Initialize();
 
         if (kandangSlots == null || kandangSlots.Length == 0)
             kandangSlots = FindObjectsByType<StarterKandangSlot>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-
-        Debug.LogWarning($"[StarterSceneInitializer] Slots ditemukan: {kandangSlots?.Length ?? 0}");
 
         if (kandangSlots != null && kandangSlots.Length > 0)
         {

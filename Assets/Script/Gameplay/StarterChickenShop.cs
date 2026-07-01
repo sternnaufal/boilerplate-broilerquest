@@ -52,11 +52,29 @@ public class StarterChickenShop : MonoBehaviour
     private bool listenersRegistered;
     private bool isSubscribedToSlots;
     private bool kandangSlotsResolved;
+    private bool saveRestored;
 
     private void Awake()
     {
         ResolveKandangSlots();
         kandangSlotsResolved = true;
+    }
+
+    private void Start()
+    {
+        if (saveRestored) return;
+        saveRestored = true;
+
+        if (kandangSlots == null || kandangSlots.Length == 0)
+            ResolveKandangSlots();
+
+        if (kandangSlots != null && kandangSlots.Length > 0)
+        {
+            SaveManager.LoadAndRestoreSlots(kandangSlots, GetChickenPrefabByName);
+            if (StarterIoTController.Instance != null)
+                SaveManager.LoadIotStates(StarterIoTController.Instance);
+            RefreshShopState();
+        }
     }
 
     private void OnEnable()
