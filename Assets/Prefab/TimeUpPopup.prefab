@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 282}
+  m_AnchoredPosition: {x: 0, y: 125}
   m_SizeDelta: {x: 567.6449, y: 153.562}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &805204857700500167
@@ -308,7 +308,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -25}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3542744027965361035
@@ -447,7 +447,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 220, y: -348}
+  m_AnchoredPosition: {x: 240, y: -201}
   m_SizeDelta: {x: 216.8354, y: 77.0923}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6684247892144969563
@@ -571,8 +571,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -66.01898}
-  m_SizeDelta: {x: -967.3279, y: -132.04}
+  m_AnchoredPosition: {x: 0, y: 61.3127}
+  m_SizeDelta: {x: -967.3279, y: -386.7034}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1167968870423424660
 CanvasRenderer:
@@ -602,8 +602,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -7692286509802534327, guid: 0143f0c0bc580a44a9be4012cdbdcad8, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -664,7 +664,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -251, y: -348}
+  m_AnchoredPosition: {x: -231, y: -201}
   m_SizeDelta: {x: 216.8354, y: 77.0923}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8142822808261985504

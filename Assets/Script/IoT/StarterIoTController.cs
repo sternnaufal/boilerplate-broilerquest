@@ -260,7 +260,7 @@ public class StarterIoTController : MonoBehaviour
             if (!purchased)
             {
                 if (ui.statusText != null)
-                    ui.statusText.text = GetDevicePrice(ui.productKey) + " Koin";
+                    ui.statusText.text = GetDevicePrice(ui.productKey) + "";
             }
             else
             {
