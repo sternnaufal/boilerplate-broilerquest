@@ -12,6 +12,8 @@ public class UIAlertPanel : MonoBehaviour
     [SerializeField] private GameObject coinOutPanel;      // DuidHabis
     [SerializeField] private GameObject timeOutPanel;      // WaktuHabis
     [SerializeField] private GameObject mainMenuConfirmPanel; // MainMenu
+    [SerializeField] private GameObject needFulfilledPanel;   // KebutuhanTerpenuhi
+    [SerializeField] private GameObject readyToSellPanel;     // SiapDijual
 
     [Header("Auto-hide Duration")]
     [SerializeField] private float autoHideDelay = 3f;
@@ -23,21 +25,27 @@ public class UIAlertPanel : MonoBehaviour
         FoodOut,
         CoinOut,
         TimeOut,
-        MainMenuConfirm
+        MainMenuConfirm,
+        NeedFulfilled,
+        ReadyToSell
     }
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(Instance.gameObject);
-            Instance = null;
+            Destroy(gameObject);
+            return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
-        // Nonaktifkan semua panel di awal
         SetAllPanelsActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
     }
 
     private void SetAllPanelsActive(bool active)
@@ -46,6 +54,8 @@ public class UIAlertPanel : MonoBehaviour
         if (coinOutPanel != null) coinOutPanel.SetActive(active);
         if (timeOutPanel != null) timeOutPanel.SetActive(active);
         if (mainMenuConfirmPanel != null) mainMenuConfirmPanel.SetActive(active);
+        if (needFulfilledPanel != null) needFulfilledPanel.SetActive(active);
+        if (readyToSellPanel != null) readyToSellPanel.SetActive(active);
     }
 
     private void EnsureParentActive(GameObject panel)
@@ -101,6 +111,22 @@ public class UIAlertPanel : MonoBehaviour
                     SetupMainMenuButtons(onConfirm, onBack);
                 }
                 break;
+            case NotificationType.NeedFulfilled:
+                if (needFulfilledPanel != null)
+                {
+                    EnsureParentActive(needFulfilledPanel);
+                    needFulfilledPanel.SetActive(true);
+                    autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(needFulfilledPanel));
+                }
+                break;
+            case NotificationType.ReadyToSell:
+                if (readyToSellPanel != null)
+                {
+                    EnsureParentActive(readyToSellPanel);
+                    readyToSellPanel.SetActive(true);
+                    autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(readyToSellPanel));
+                }
+                break;
         }
     }
 
@@ -123,6 +149,7 @@ public class UIAlertPanel : MonoBehaviour
             kembali.onClick.RemoveAllListeners();
             kembali.onClick.AddListener(() =>
             {
+                if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick();
                 HideMainMenuConfirm();
                 onBack?.Invoke();
             });
@@ -132,6 +159,7 @@ public class UIAlertPanel : MonoBehaviour
             lanjutkan.onClick.RemoveAllListeners();
             lanjutkan.onClick.AddListener(() =>
             {
+                if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick();
                 HideMainMenuConfirm();
                 onConfirm?.Invoke();
             });

@@ -15,6 +15,7 @@ public class SceneTransition : Singleton<SceneTransition>
 
     private CanvasGroup overlay;
     private bool isTransitioning;
+    private float transitionElapsed;
 
     protected override bool PersistAcrossScenes => true;
 
@@ -70,6 +71,26 @@ public class SceneTransition : Singleton<SceneTransition>
         overlay.blocksRaycasts = false;
     }
 
+    private void Update()
+    {
+        if (!isTransitioning) { transitionElapsed = 0f; return; }
+        transitionElapsed += Time.unscaledDeltaTime;
+        if (transitionElapsed > 5f)
+            ForceComplete();
+    }
+
+    public void ForceComplete()
+    {
+        StopAllCoroutines();
+        if (overlay != null)
+        {
+            overlay.alpha = 0f;
+            overlay.blocksRaycasts = false;
+        }
+        isTransitioning = false;
+        transitionElapsed = 0f;
+    }
+
     public void LoadScene(string sceneName, Action onComplete = null)
     {
         if (isTransitioning) return;
@@ -103,7 +124,7 @@ public class SceneTransition : Singleton<SceneTransition>
 
         while (elapsed < fadeDuration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / fadeDuration);
             overlay.alpha = Mathf.Lerp(startAlpha, targetAlpha, fadeCurve.Evaluate(t));
             yield return null;

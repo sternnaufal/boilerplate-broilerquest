@@ -21,9 +21,12 @@ public class BGMManager : Singleton<BGMManager>
     [SerializeField] private AudioClip koleksiIoTBGM;
 
     private Coroutine fadeRoutine;
-    private Coroutine loadRoutine;
-    private bool isLoading;
-    private bool playOnLoad;
+    private Coroutine loadMenuRoutine;
+    private Coroutine loadGameRoutine;
+    private bool isLoadingMenu;
+    private bool isLoadingGame;
+    private bool playMenuOnLoad;
+    private bool playGameOnLoad;
 
     protected override void Awake()
     {
@@ -38,60 +41,90 @@ public class BGMManager : Singleton<BGMManager>
         bgmSource.loop = true;
         bgmSource.volume = volume;
 
-        LoadBGMFallback();
+        LoadMenuBGMFallback();
+        LoadGameBGMFallback();
     }
 
-    private void LoadBGMFallback()
+    private void LoadMenuBGMFallback()
     {
         if (mainMenuBGM != null) return;
-        if (isLoading) return;
+        if (isLoadingMenu) return;
 
-        string streamingPath = Path.Combine(Application.streamingAssetsPath, "BGM", "bgm.wav");
-        if (!File.Exists(streamingPath)) return;
+        string path = Path.Combine(Application.streamingAssetsPath, "BGM", "bgm.wav");
+        if (!File.Exists(path)) return;
 
-        loadRoutine = StartCoroutine(LoadFromStreamingRoutine(streamingPath));
+        loadMenuRoutine = StartCoroutine(LoadMenuRoutine(path));
     }
 
-    private IEnumerator LoadFromStreamingRoutine(string path)
+    private void LoadGameBGMFallback()
     {
-        isLoading = true;
-        string url = "file:///" + path.Replace("\\", "/");
+        if (starterBGM != null) return;
+        if (isLoadingGame) return;
+
+        string gamePath = Path.Combine(Application.streamingAssetsPath, "BGM", "bgm_game.wav");
+        if (!File.Exists(gamePath)) return;
+
+        loadGameRoutine = StartCoroutine(LoadGameRoutine(gamePath));
+    }
+
+    private IEnumerator LoadMenuRoutine(string path)
+    {
+        isLoadingMenu = true;
+        string url = new System.Uri(path).AbsoluteUri;
 
         using UnityWebRequest uwr = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.WAV);
         yield return uwr.SendWebRequest();
 
         if (uwr.result != UnityWebRequest.Result.Success)
         {
-            isLoading = false;
+            isLoadingMenu = false;
             yield break;
         }
 
         AudioClip clip = DownloadHandlerAudioClip.GetContent(uwr);
-        if (clip == null)
-        {
-            isLoading = false;
-            yield break;
-        }
+        if (clip == null) { isLoadingMenu = false; yield break; }
 
-        clip.name = "bgm";
-        AssignClips(clip);
-        isLoading = false;
+        clip.name = "bgm_menu";
+        if (mainMenuBGM == null) mainMenuBGM = clip;
+        if (levelSelectBGM == null) levelSelectBGM = clip;
+        if (koleksiIoTBGM == null) koleksiIoTBGM = clip;
+        isLoadingMenu = false;
 
-        if (playOnLoad)
+        if (playMenuOnLoad)
         {
-            playOnLoad = false;
+            playMenuOnLoad = false;
             PlayBGM(clip);
         }
     }
 
-    private void AssignClips(AudioClip clip)
+    private IEnumerator LoadGameRoutine(string path)
     {
-        mainMenuBGM = clip;
-        levelSelectBGM = clip;
-        starterBGM = clip;
-        beginnerBGM = clip;
-        intermediateBGM = clip;
-        koleksiIoTBGM = clip;
+        isLoadingGame = true;
+        string url = new System.Uri(path).AbsoluteUri;
+
+        using UnityWebRequest uwr = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.WAV);
+        yield return uwr.SendWebRequest();
+
+        if (uwr.result != UnityWebRequest.Result.Success)
+        {
+            isLoadingGame = false;
+            yield break;
+        }
+
+        AudioClip clip = DownloadHandlerAudioClip.GetContent(uwr);
+        if (clip == null) { isLoadingGame = false; yield break; }
+
+        clip.name = "bgm_game";
+        if (starterBGM == null) starterBGM = clip;
+        if (beginnerBGM == null) beginnerBGM = clip;
+        if (intermediateBGM == null) intermediateBGM = clip;
+        isLoadingGame = false;
+
+        if (playGameOnLoad)
+        {
+            playGameOnLoad = false;
+            PlayBGM(clip);
+        }
     }
 
     public void SetVolume(float vol)
@@ -103,27 +136,41 @@ public class BGMManager : Singleton<BGMManager>
 
     public float GetVolume() => volume;
 
-    public void PlayMainMenuBGM() => PlayBGM(mainMenuBGM);
-    public void PlayStarterBGM() => PlayBGM(starterBGM);
-    public void PlayBeginnerBGM() => PlayBGM(beginnerBGM);
-    public void PlayIntermediateBGM() => PlayBGM(intermediateBGM);
+    public void PlayMainMenuBGM()
+    {
+        if (mainMenuBGM != null) { PlayBGM(mainMenuBGM); return; }
+        if (isLoadingMenu) playMenuOnLoad = true;
+    }
+
+    public void PlayStarterBGM() => PlayInGameBGM(starterBGM);
+    public void PlayBeginnerBGM() => PlayInGameBGM(beginnerBGM);
+    public void PlayIntermediateBGM() => PlayInGameBGM(intermediateBGM);
+
+    private void PlayInGameBGM(AudioClip clip)
+    {
+        if (clip != null) { PlayBGM(clip); return; }
+        if (isLoadingGame) { playGameOnLoad = true; return; }
+        StopBGM();
+    }
 
     public void PlayMenuBGM()
     {
         AudioClip menuClip = mainMenuBGM != null ? mainMenuBGM : levelSelectBGM;
-        if (menuClip == null) return;
-        if (bgmSource.clip == menuClip && bgmSource.isPlaying) return;
-        PlayBGM(menuClip);
+        if (menuClip != null)
+        {
+            if (bgmSource.clip == menuClip && bgmSource.isPlaying) return;
+            PlayBGM(menuClip);
+        }
+        else if (isLoadingMenu)
+        {
+            playMenuOnLoad = true;
+        }
     }
 
     public void PlayBGM(AudioClip clip)
     {
-        if (clip == null)
-        {
-            if (isLoading)
-                playOnLoad = true;
-            return;
-        }
+        if (clip == null) return;
+        if (bgmSource == null) return;
         if (bgmSource.clip == clip && bgmSource.isPlaying) return;
 
         if (fadeRoutine != null) StopCoroutine(fadeRoutine);
@@ -136,6 +183,7 @@ public class BGMManager : Singleton<BGMManager>
         if (fadeRoutine != null) StopCoroutine(fadeRoutine);
         bgmSource.clip = clip;
         bgmSource.volume = volume;
+        if (!bgmSource.enabled) bgmSource.enabled = true;
         bgmSource.Play();
     }
 
@@ -156,7 +204,10 @@ public class BGMManager : Singleton<BGMManager>
     public void ResumeBGM()
     {
         if (!bgmSource.isPlaying)
+        {
+            if (!bgmSource.enabled) bgmSource.enabled = true;
             bgmSource.Play();
+        }
     }
 
     public void FadeTo(AudioClip clip, float duration)
@@ -184,6 +235,7 @@ public class BGMManager : Singleton<BGMManager>
 
         bgmSource.clip = newClip;
         bgmSource.volume = 0f;
+        if (!bgmSource.enabled) bgmSource.enabled = true;
         bgmSource.Play();
 
         float elapsed2 = 0f;

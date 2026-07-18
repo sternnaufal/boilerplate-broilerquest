@@ -160,11 +160,11 @@ public class StarterGameplayUI : MonoBehaviour
         if (listenersRegistered)
             return;
 
-        ButtonHelper.AddListenerOnce(pauseButton, PauseGame);
-        ButtonHelper.AddListenerOnce(resumeButton, ResumeGame);
-        ButtonHelper.AddListenerOnce(hpToggleButton, ToggleHpPanel);
-        ButtonHelper.AddListenerOnce(closeHpButton, CloseHpPanel);
-        ButtonHelper.AddListenerOnce(exitButton, ReturnToMainMenu);
+        ButtonHelper.AddListenerOnce(pauseButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); PauseGame(); });
+        ButtonHelper.AddListenerOnce(resumeButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); ResumeGame(); });
+        ButtonHelper.AddListenerOnce(hpToggleButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); ToggleHpPanel(); });
+        ButtonHelper.AddListenerOnce(closeHpButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); CloseHpPanel(); });
+        ButtonHelper.AddListenerOnce(exitButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); ReturnToMainMenu(); });
 
         listenersRegistered = true;
     }
@@ -344,21 +344,24 @@ public class StarterGameplayUI : MonoBehaviour
         if (alert == null)
             alert = FindFirstObjectByType<UIAlertPanel>();
 
+        System.Action doReturn = () =>
+        {
+            SaveManager.SaveAll();
+            GameStateManager.ApplyState(GameState.Menu);
+            if (GameManager.Instance != null)
+                GameManager.Instance.ReturnToMainMenu();
+            else
+                SceneController.Instance?.GoToMainMenu();
+        };
+
         if (alert == null)
         {
-            Debug.LogWarning("UIAlertPanel not found in scene! Can't show MainMenu confirmation.");
+            doReturn();
             return;
         }
 
         alert.Show(UIAlertPanel.NotificationType.MainMenuConfirm,
-            onConfirm: () =>
-            {
-                SaveManager.SaveAll();
-                GameStateManager.ApplyState(GameState.Menu);
-
-                if (GameManager.Instance != null)
-                    GameManager.Instance.ReturnToMainMenu();
-            },
+            onConfirm: doReturn,
             onBack: () =>
             {
                 if (pausePanel != null)
@@ -374,7 +377,7 @@ public class StarterGameplayUI : MonoBehaviour
         StyleButton(closeHpButton, closeHpButtonStyle.label, closeHpButtonStyle.color, GetSpriteSafe(3));
 
         if (mainMenuButton != null)
-            ButtonHelper.AddListenerOnce(mainMenuButton, ReturnToMainMenu);
+            ButtonHelper.AddListenerOnce(mainMenuButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); ReturnToMainMenu(); });
 
         //StylePanel(hpPanel, hpPanelStyle.color);
         StylePanel(pausePanel, pausePanelStyle.color);
@@ -493,13 +496,13 @@ public class StarterGameplayUI : MonoBehaviour
     private void SetupHPNavigation()
     {
         if (shopButton != null)
-            ButtonHelper.AddListenerOnce(shopButton, ShowShopAPK);
+            ButtonHelper.AddListenerOnce(shopButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); ShowShopAPK(); });
         if (iotButton != null)
-            ButtonHelper.AddListenerOnce(iotButton, ShowIoTAPK);
+            ButtonHelper.AddListenerOnce(iotButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); ShowIoTAPK(); });
         if (exitShopButton != null)
-            ButtonHelper.AddListenerOnce(exitShopButton, ShowMainHPPage);
+            ButtonHelper.AddListenerOnce(exitShopButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); ShowMainHPPage(); });
         if (exitIoTButton != null)
-            ButtonHelper.AddListenerOnce(exitIoTButton, ShowMainHPPage);
+            ButtonHelper.AddListenerOnce(exitIoTButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); ShowMainHPPage(); });
 
         ConfigureButtonHover(shopButton);
         ConfigureButtonHover(iotButton);

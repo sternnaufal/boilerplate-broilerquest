@@ -40,6 +40,9 @@ public class SFXManager : Singleton<SFXManager>
     [SerializeField] private AudioClip jigsawCompleteSfx;
     [SerializeField] private AudioClip jigsawFailSfx;
 
+    [Header("Pipeline Puzzle")]
+    [SerializeField] private AudioClip pipeRotateSfx;
+
     [Header("Need Bubble")]
     [SerializeField] private AudioClip bubbleNeedSfx;
 
@@ -110,6 +113,8 @@ public class SFXManager : Singleton<SFXManager>
     public void PlayJigsawPieceSwap() { PlaySFX(jigsawPieceSwapSfx); }
     public void PlayJigsawComplete() { PlaySFX(jigsawCompleteSfx); }
     public void PlayJigsawFail() { PlaySFX(jigsawFailSfx); }
+
+    public void PlayPipeRotate() { PlaySFX(pipeRotateSfx); }
 
     public void PlayBubbleNeed() { PlaySFX(bubbleNeedSfx); }
 

@@ -51,7 +51,7 @@ public class KoleksiIoTController : MonoBehaviour
 
         if (backButton != null)
         {
-            ButtonHelper.AddListenerOnce(backButton, GoBack);
+            ButtonHelper.AddListenerOnce(backButton, () => { if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick(); GoBack(); });
             if (backButton.GetComponent<SlideInFromTop>() == null)
                 backButton.gameObject.AddComponent<SlideInFromTop>();
         }

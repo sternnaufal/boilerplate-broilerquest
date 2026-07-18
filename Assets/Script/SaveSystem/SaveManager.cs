@@ -143,33 +143,17 @@ public static class SaveManager
             FindObjectsInactive.Include, FindObjectsSortMode.None);
         if (slots != null && slots.Length > 0)
         {
-            bool allEmpty = true;
-            foreach (var slot in slots)
-            {
-                if (slot != null && !slot.IsEmpty)
-                {
-                    allEmpty = false;
-                    break;
-                }
-            }
-            if (allEmpty)
-            {
-                GameLog.Info("SaveManager: All slots are empty, skipping slot save to prevent overwrite.");
-            }
-            else
-            {
-                var sortedSlots = new StarterKandangSlot[slots.Length];
-                System.Array.Copy(slots, sortedSlots, slots.Length);
-                System.Array.Sort(sortedSlots, (a, b) => string.Compare(a?.name, b?.name, System.StringComparison.Ordinal));
+            var sortedSlots = new StarterKandangSlot[slots.Length];
+            System.Array.Copy(slots, sortedSlots, slots.Length);
+            System.Array.Sort(sortedSlots, (a, b) => string.Compare(a?.name, b?.name, System.StringComparison.Ordinal));
 
-                GameSaveData levelData = LoadLevelData();
-                levelData.slots = new SlotSaveData[sortedSlots.Length];
-                for (int i = 0; i < sortedSlots.Length; i++)
-                {
-                    levelData.slots[i] = sortedSlots[i] != null ? sortedSlots[i].GetSaveData() : null;
-                }
-                SaveLevelData(levelData);
+            GameSaveData levelData = LoadLevelData();
+            levelData.slots = new SlotSaveData[sortedSlots.Length];
+            for (int i = 0; i < sortedSlots.Length; i++)
+            {
+                levelData.slots[i] = sortedSlots[i] != null ? sortedSlots[i].GetSaveData() : null;
             }
+            SaveLevelData(levelData);
         }
 
         // Save global IoT data
@@ -187,8 +171,9 @@ public static class SaveManager
 
     public static void LoadAndRestoreSlots(StarterKandangSlot[] slots, Func<string, GameObject> prefabLookup)
     {
-        string json = PlayerPrefs.GetString(LevelSaveKey, "");
-        
+        string key = LevelSaveKey;
+        string json = PlayerPrefs.GetString(key, "");
+
         // Fallback: try legacy single-key format if level key is empty
         if (string.IsNullOrEmpty(json))
         {

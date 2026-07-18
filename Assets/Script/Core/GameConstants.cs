@@ -109,7 +109,7 @@ public static class GameConstants
     {
         public const float TimeLimit = 30f;
         public const int Columns = 3;
-        public const int TotalPairs = 6;
+        public const int TotalPairs = 3;
         public const float FlipDuration = 0.25f;
         public const float MatchDelay = 0.5f;
         public const float WarningThreshold = 10f;

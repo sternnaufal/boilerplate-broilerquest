@@ -75,12 +75,14 @@ public class PipePrefabMinigameController : MonoBehaviour
 
     private void OnPuzzleCompleted()
     {
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayMinigameSuccess();
         currentListener?.OnHealthCheckSuccess();
         ClosePuzzle();
     }
 
     private void OnPuzzleFailed()
     {
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayMinigameFail();
         currentListener?.OnHealthCheckFailure();
         ClosePuzzle();
     }

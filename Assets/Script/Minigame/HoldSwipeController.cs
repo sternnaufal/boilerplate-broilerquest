@@ -135,12 +135,14 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
     private void CompleteWithSuccess()
     {
         if (!isPlaying) return;
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayMinigameSuccess();
         FinishMinigame(true);
     }
 
     private void CompleteWithFailure()
     {
         if (!isPlaying) return;
+        if (SFXManager.Instance != null) SFXManager.Instance.PlayMinigameFail();
         FinishMinigame(false);
     }
 

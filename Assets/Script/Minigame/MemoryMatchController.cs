@@ -13,13 +13,13 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
     [SerializeField] private Vector2 cardSpacing = new Vector2(12f, 12f);
     [SerializeField] private int columns = GameConstants.MemoryMatch.Columns;
 
-    [Header("Card Sprites (min 6 — indexed by pairId)")]
+    [Header("Card Sprites (min 3 — indexed by pairId)")]
     [SerializeField] private Sprite[] cardSprites;
 
     [Header("Card Back")]
     [SerializeField] private Sprite cardBackSprite;
 
-    private static readonly int[] PairMap = { 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5 };
+    private static readonly int[] PairMap = { 0, 1, 2, 0, 1, 2 };
 
     [Header("Timer Colors")]
     [SerializeField] private Color normalTimerColor = Color.white;
@@ -71,7 +71,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
             return false;
         }
 
-        if (cardSprites == null || cardSprites.Length < 6)
+        if (cardSprites == null || cardSprites.Length < 3)
         {
             Debug.LogWarning("MemoryMatchController: cardSprites (6) belum di-assign di Inspector Managers.prefab.");
             if (errorText != null)
@@ -170,8 +170,8 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
     {
         ClearGrid();
 
-        totalPairs = 6;
-        int totalCards = 12;
+        totalPairs = 3;
+        int totalCards = 6;
 
         int[] indices = new int[totalCards];
         for (int i = 0; i < totalCards; i++)
@@ -358,18 +358,16 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         panelRect.anchorMin = new Vector2(0.5f, 0.5f);
         panelRect.anchorMax = new Vector2(0.5f, 0.5f);
         panelRect.pivot = new Vector2(0.5f, 0.5f);
-        panelRect.sizeDelta = new Vector2(500f, 700f);
+        panelRect.sizeDelta = new Vector2(450f, 480f);
         panelRect.anchoredPosition = new Vector2(350f, 0f);
 
         Image panelImage = panelObject.GetComponent<Image>();
         panelImage.color = new Color(0.08f, 0.22f, 0.12f, 0.96f);
         panelImage.raycastTarget = true;
 
-        // Layout dari atas: title (top) → timer (di bawah title) → grid → padding bawah
-        // Panel half-height = 350. Title top flush dengan panel top.
-        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 325f), new Vector2(460f, 50f), 28f, TextAlignmentOptions.Center);
-        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 265f), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
-        errorText = CreateText(panelObject.transform, "ErrorText", new Vector2(0f, 140f), new Vector2(400f, 60f), 20f, TextAlignmentOptions.Center);
+        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 210f), new Vector2(420f, 50f), 28f, TextAlignmentOptions.Center);
+        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 155f), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
+        errorText = CreateText(panelObject.transform, "ErrorText", new Vector2(0f, 80f), new Vector2(380f, 60f), 20f, TextAlignmentOptions.Center);
         errorText.color = new Color(1f, 0.3f, 0.3f);
         errorText.gameObject.SetActive(false);
 

@@ -1502,7 +1502,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.5, g: 0.8, b: 0.5, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -3367,6 +3367,22 @@ PrefabInstance:
       propertyPath: successSprite
       value: 
       objectReference: {fileID: 4036518849894964974, guid: 9125e2279d8555e4eba762b3294dfc89, type: 3}
+    - target: {fileID: 2755324548764031290, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: cardSprites.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2755324548764031290, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: 'cardSprites.Array.data[3]'
+      value: 
+      objectReference: {fileID: -281031179, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+    - target: {fileID: 2755324548764031290, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: 'cardSprites.Array.data[4]'
+      value: 
+      objectReference: {fileID: -1508248940, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
+    - target: {fileID: 2755324548764031290, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: 'cardSprites.Array.data[5]'
+      value: 
+      objectReference: {fileID: 57537288, guid: 13b1507984c203b44acae8339b8ac8d2, type: 3}
     - target: {fileID: 6384904773509121494, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: m_Name
       value: Managers
@@ -3376,25 +3392,65 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: feedBuySfx
+      value: 
+      objectReference: {fileID: 8300000, guid: a31795ff42e511042ae34538f5fa9fa6, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: navigateSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 3e920735ec4d4a44ea4decfa8f5f5e33, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: bubbleNeedSfx
       value: 
       objectReference: {fileID: 8300000, guid: 30a993e22fb89524087fb2ecc824eb8e, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: buySuccessSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: a31795ff42e511042ae34538f5fa9fa6, type: 3}
     - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: jigsawFailSfx
       value: 
       objectReference: {fileID: 8300000, guid: a807adbc56e9976489a547eac97276aa, type: 3}
     - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: pipeRotateSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 17333e0d8fbcdc64e927ba192875b2bc, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: buttonClickSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 3e920735ec4d4a44ea4decfa8f5f5e33, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: iotToggleOnSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 4d0f46517edb5d14ca6bfebba29eeb62, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: iotToggleOffSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 4d0f46517edb5d14ca6bfebba29eeb62, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: minigameFailSfx
       value: 
       objectReference: {fileID: 8300000, guid: a807adbc56e9976489a547eac97276aa, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: sellCompleteSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: a31795ff42e511042ae34538f5fa9fa6, type: 3}
     - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: jigsawCompleteSfx
       value: 
       objectReference: {fileID: 8300000, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
     - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: jigsawPieceSwapSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 17333e0d8fbcdc64e927ba192875b2bc, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: minigameSuccessSfx
       value: 
       objectReference: {fileID: 8300000, guid: 6dfcdabf568b5044fb202952b924cce6, type: 3}
+    - target: {fileID: 7000000000000000002, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: jigsawPieceClickSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 3e920735ec4d4a44ea4decfa8f5f5e33, type: 3}
     - target: {fileID: 7496414725447378647, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: m_LocalPosition.x
       value: 224.02385

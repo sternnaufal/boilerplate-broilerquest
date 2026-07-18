@@ -165,13 +165,20 @@ public class UIManager : Singleton<UIManager>
     {
         if (pausePanel != null) pausePanel.SetActive(false);
 
-        UIAlertPanel.Instance.Show(UIAlertPanel.NotificationType.MainMenuConfirm,
-            onConfirm: () =>
-            {
-                SaveManager.SaveAll();
-                if (GameManager.Instance != null)
-                    GameManager.Instance.ReturnToMainMenu();
-            },
+        System.Action doReturn = () =>
+        {
+            SaveManager.SaveAll();
+            if (GameManager.Instance != null)
+                GameManager.Instance.ReturnToMainMenu();
+            else
+                SceneController.Instance?.GoToMainMenu();
+        };
+
+        var alert = UIAlertPanel.Instance ?? FindFirstObjectByType<UIAlertPanel>();
+        if (alert == null) { doReturn(); return; }
+
+        alert.Show(UIAlertPanel.NotificationType.MainMenuConfirm,
+            onConfirm: doReturn,
             onBack: () =>
             {
                 if (pausePanel != null) pausePanel.SetActive(true);
