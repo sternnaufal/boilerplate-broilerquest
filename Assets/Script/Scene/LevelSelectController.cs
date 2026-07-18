@@ -119,8 +119,11 @@ public class LevelSelectController : MonoBehaviour
 
         bool beginnerUnlocked = IsBeginnerUnlocked();
         bool intermediateUnlocked = IsIntermediateUnlocked();
-        bool beginnerCanAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(GameConstants.LevelUnlock.BeginnerCost);
-        bool intermediateCanAfford = CoinManager.Instance != null && CoinManager.Instance.CanAfford(GameConstants.LevelUnlock.IntermediateCost);
+        int reserve = GameConstants.Economy.ChickenPrice + GameConstants.Economy.FeedCost;
+        bool beginnerCanAfford = CoinManager.Instance != null
+            && CoinManager.Instance.GetTotalCoin() >= GameConstants.LevelUnlock.BeginnerCost + reserve;
+        bool intermediateCanAfford = CoinManager.Instance != null
+            && CoinManager.Instance.GetTotalCoin() >= GameConstants.LevelUnlock.IntermediateCost + reserve;
 
         beginnerButton.interactable = beginnerUnlocked || beginnerCanAfford;
         intermediateButton.interactable = intermediateUnlocked || intermediateCanAfford;
@@ -247,6 +250,19 @@ public class LevelSelectController : MonoBehaviour
             return;
         }
 
+        Button targetButton = levelName == "Beginner" ? beginnerButton : intermediateButton;
+        Vector2 buttonPos = GetButtonScreenPos(targetButton);
+
+        int reserve = GameConstants.Economy.ChickenPrice + GameConstants.Economy.FeedCost;
+        int coinsAfter = CoinManager.Instance.GetTotalCoin() - cost;
+        if (coinsAfter < reserve)
+        {
+            FloatingFeedback.ShowText("Modal tidak cukup! Sisakan minimal " + reserve + " coin.", buttonPos, new Color(1f, 0.7f, 0.2f));
+            GameLog.Info($"Coin tidak cukup: butuh {cost + reserve} coin (harga {cost} + cadangan {reserve}).");
+            if (SFXManager.Instance != null) SFXManager.Instance.PlayUnlockFail();
+            return;
+        }
+
         if (CoinManager.Instance.SpendCoin(cost))
         {
             PlayerPrefs.SetInt(playerPrefsKey, 1);
@@ -258,9 +274,7 @@ public class LevelSelectController : MonoBehaviour
         }
         else
         {
-            if (messageText != null)
-                messageText.text = $"{levelName}: {insufficientCoinMessage} ({cost} coin)";
-
+            FloatingFeedback.ShowText(insufficientCoinMessage, buttonPos, new Color(1f, 0.3f, 0.3f));
             GameLog.Info($"Coin tidak cukup untuk membuka {levelName}.");
             if (SFXManager.Instance != null) SFXManager.Instance.PlayUnlockFail();
         }
@@ -280,6 +294,13 @@ public class LevelSelectController : MonoBehaviour
     {
         if (messageText != null)
             messageText.text = string.Empty;
+    }
+
+    private static Vector2 GetButtonScreenPos(Button button)
+    {
+        if (button != null)
+            return RectTransformUtility.WorldToScreenPoint(null, button.transform.position);
+        return new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
     }
 
     private void PlayClickSfx()

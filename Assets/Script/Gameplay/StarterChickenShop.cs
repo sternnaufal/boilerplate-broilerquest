@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 [System.Serializable]
 public class StarterChickenOption
 {
@@ -137,7 +138,7 @@ public class StarterChickenShop : MonoBehaviour
 
         if (CoinManager.Instance == null || !CoinManager.Instance.CanAfford(cost))
         {
-            ShowMessage(noCoinFeedMessage);
+            FloatingFeedback.ShowText(noCoinFeedMessage, GetButtonScreenPos(feedBuyButton), new Color(1f, 0.3f, 0.3f));
             UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.CoinOut);
             if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             return;
@@ -145,7 +146,7 @@ public class StarterChickenShop : MonoBehaviour
 
         if (HasNoChickens())
         {
-            ShowMessage("Beli ayam dulu sebelum beli pakan!");
+            FloatingFeedback.ShowText("Beli ayam dulu sebelum beli pakan!", GetButtonScreenPos(feedBuyButton), new Color(1f, 0.3f, 0.3f));
             if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             return;
         }
@@ -163,17 +164,19 @@ public class StarterChickenShop : MonoBehaviour
         if (option == null)
             return false;
 
+        Vector2 buttonPos = GetButtonScreenPos(option?.buyButton);
+
         StarterKandangSlot availableSlot = FindAvailableKandang();
         if (availableSlot == null)
         {
-            ShowMessage(noSlotMessage);
+            FloatingFeedback.ShowText(noSlotMessage, buttonPos, new Color(1f, 0.3f, 0.3f));
             if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             return false;
         }
 
         if (CoinManager.Instance == null || !CoinManager.Instance.CanAfford(option.price))
         {
-            ShowMessage(noCoinMessage);
+            FloatingFeedback.ShowText(noCoinMessage, buttonPos, new Color(1f, 0.3f, 0.3f));
             UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.CoinOut);
             if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             RefreshShopState();
@@ -184,7 +187,7 @@ public class StarterChickenShop : MonoBehaviour
         int coinsAfterBuy = CoinManager.Instance.GetTotalCoin() - option.price;
         if (!HasNoChickens() && feedCount == 0 && coinsAfterBuy < GameConstants.Economy.FeedCost)
         {
-            ShowMessage("Beli pakan dulu sebelum tambah ayam!");
+            FloatingFeedback.ShowText("Beli pakan dulu sebelum tambah ayam!", buttonPos, new Color(1f, 0.7f, 0.2f));
             if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             return false;
         }
@@ -194,7 +197,7 @@ public class StarterChickenShop : MonoBehaviour
         if (!availableSlot.TryPlaceChicken(option.chickenPrefab))
         {
             CoinManager.Instance.AddCoin(option.price);
-            ShowMessage("Gagal menaruh ayam: Prefab/Visual ayam tidak di-assign di Inspector.");
+            FloatingFeedback.ShowText("Gagal menaruh ayam. Cek prefab di Inspector.", buttonPos, new Color(1f, 0.3f, 0.3f));
             if (SFXManager.Instance != null) SFXManager.Instance.PlayBuyFail();
             RefreshShopState();
             return false;
@@ -438,6 +441,13 @@ public class StarterChickenShop : MonoBehaviour
         }
 
         return availableCount;
+    }
+
+    private static Vector2 GetButtonScreenPos(Button button)
+    {
+        if (button != null)
+            return RectTransformUtility.WorldToScreenPoint(null, button.transform.position);
+        return new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
     }
 
     private void ShowMessage(string message)
