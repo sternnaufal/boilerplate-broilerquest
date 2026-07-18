@@ -1796,9 +1796,9 @@ RectTransform:
   - {fileID: 843519374}
   - {fileID: 1085539519}
   - {fileID: 2138907471}
-  - {fileID: 1800779049}
   - {fileID: 1470515687}
   - {fileID: 1772259366}
+  - {fileID: 1800779049}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2132,6 +2132,8 @@ MonoBehaviour:
   coinOutPanel: {fileID: 356094680}
   timeOutPanel: {fileID: 2010696024}
   mainMenuConfirmPanel: {fileID: 371833656}
+  needFulfilledPanel: {fileID: 0}
+  readyToSellPanel: {fileID: 0}
   autoHideDelay: 3
 --- !u!4 &1302066735
 Transform:
