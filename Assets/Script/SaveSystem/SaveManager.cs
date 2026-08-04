@@ -288,4 +288,18 @@ public static class SaveManager
         PlayerPrefs.DeleteKey(SaveKey);
         PlayerPrefs.Save();
     }
+
+    public static void ResetAllData()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+
+        if (CoinManager.Instance != null)
+            CoinManager.Instance.SetTotalCoin(GameConstants.Economy.StartingCoin);
+
+        if (FeedManager.Instance != null)
+            FeedManager.Instance.SetFeedCount(0);
+
+        GameLog.Info("SaveManager: All user data has been reset.");
+    }
 }

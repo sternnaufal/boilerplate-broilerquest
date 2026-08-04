@@ -126,6 +126,10 @@ public partial class StarterKandangSlot
         bubbleRect.sizeDelta = bubbleSize;
         bubbleRect.anchoredPosition = bubbleOffset;
 
+        Canvas bubbleCanvas = bubbleObject.AddComponent<Canvas>();
+        bubbleCanvas.overrideSorting = true;
+        bubbleCanvas.sortingOrder = 100;
+
         bubbleVisual = bubbleObject;
         bubbleImage = bubbleObject.GetComponent<Image>();
         bubbleImage.raycastTarget = false;
@@ -155,5 +159,11 @@ public partial class StarterKandangSlot
 
         slotImage.color = new Color(1f, 1f, 1f, 0f);
         slotImage.raycastTarget = true;
+    }
+
+    public void SetBubbleVisible(bool visible)
+    {
+        if (bubbleVisual != null)
+            bubbleVisual.SetActive(visible);
     }
 }

@@ -1759,9 +1759,9 @@ Canvas:
   m_GameObject: {fileID: 1086103075}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 1098549308}
+  m_PlaneDistance: 10
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -2516,6 +2516,63 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3687340848362763824, guid: 4b910ccd8338fd94d8e35e85efe8030e, type: 3}
   m_PrefabInstance: {fileID: 1085539518}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1708384936
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3794367530822060322, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_Name
+      value: CoinCash_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794367530822060325, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 732.4864
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794367530822060325, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 594.1912
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794367530822060325, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794367530822060325, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794367530822060325, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794367530822060325, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794367530822060325, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794367530822060325, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794367530822060325, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794367530822060325, guid: 9866bd328447045499d97461e5895afa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9866bd328447045499d97461e5895afa, type: 3}
 --- !u!224 &1772259366 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3775845710333425254, guid: b3050683c63c23948a3f8259df691c55, type: 3}
@@ -3695,26 +3752,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
-      propertyPath: bubbleExpiryDuration
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
-      propertyPath: addDryHuskBubbleSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: e4d60b17927362846b41e867db7449c9, type: 3}
-    - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
-      propertyPath: humidityUpBubbleSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: accdb8282d495774a99d736659be83c2, type: 3}
-    - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
-      propertyPath: reduceFeedBubbleSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 2d4e51e070dfc6e42a7c4d0c4caa852e, type: 3}
-    - target: {fileID: 7396551506617627839, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
-      propertyPath: humidityDownBubbleSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 59640ae540e78c6458dc42391ad29efe, type: 3}
     - target: {fileID: 8079685212995240743, guid: dd68c9f2420300a4a8de3bd49b56e6c0, type: 3}
       propertyPath: m_Color.a
       value: 1
@@ -3742,3 +3779,4 @@ SceneRoots:
   - {fileID: 651932100}
   - {fileID: 1525795647}
   - {fileID: 1302066735}
+  - {fileID: 1708384936}

@@ -9,7 +9,7 @@ public class BGMManager : Singleton<BGMManager>
     [SerializeField] private AudioSource bgmSource;
 
     [Header("Settings")]
-    [SerializeField] private float volume = 1f;
+    [SerializeField] private float volume = 0.8f;
     [SerializeField] private float defaultFadeDuration = 1f;
 
     [Header("BGM Clips")]
@@ -51,8 +51,6 @@ public class BGMManager : Singleton<BGMManager>
         if (isLoadingMenu) return;
 
         string path = Path.Combine(Application.streamingAssetsPath, "BGM", "bgm.wav");
-        if (!File.Exists(path)) return;
-
         loadMenuRoutine = StartCoroutine(LoadMenuRoutine(path));
     }
 
@@ -61,9 +59,7 @@ public class BGMManager : Singleton<BGMManager>
         if (starterBGM != null) return;
         if (isLoadingGame) return;
 
-        string gamePath = Path.Combine(Application.streamingAssetsPath, "BGM", "bgm_game.wav");
-        if (!File.Exists(gamePath)) return;
-
+        string gamePath = Path.Combine(Application.streamingAssetsPath, "BGM", "bgm.wav");
         loadGameRoutine = StartCoroutine(LoadGameRoutine(gamePath));
     }
 

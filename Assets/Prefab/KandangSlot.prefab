@@ -90,6 +90,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3fc9d9b758f4b1d8f8f66a87ec8d0f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarterKandangSlot
+  heatVFXPrefab: {fileID: 0}
+  coldVFXPrefab: {fileID: 0}
+  sellVFXPrefab: {fileID: 2031535342909952091, guid: 1229f7a712e9fab40a488f9cb5e2c281, type: 3}
+  vfxOffset: {x: 0, y: 0, z: 5}
+  vfxZDistance: 8
   enableWander: 1
   wanderRadius: {x: 50, y: 20}
   wanderSpeed: 80
@@ -109,10 +114,10 @@ MonoBehaviour:
   feedBubbleSprite: {fileID: -2843893495403024386, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   coolingBubbleSprite: {fileID: 5671498951499757729, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   heatingBubbleSprite: {fileID: 9111825458085843759, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  humidityUpBubbleSprite: {fileID: 5185448939473618498, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  humidityDownBubbleSprite: {fileID: -4857264338737576232, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  addDryHuskBubbleSprite: {fileID: 6576909685032483182, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  reduceFeedBubbleSprite: {fileID: 351520864713326834, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
+  humidityUpBubbleSprite: {fileID: 21300000, guid: accdb8282d495774a99d736659be83c2, type: 3}
+  humidityDownBubbleSprite: {fileID: 21300000, guid: 59640ae540e78c6458dc42391ad29efe, type: 3}
+  addDryHuskBubbleSprite: {fileID: 21300000, guid: e4d60b17927362846b41e867db7449c9, type: 3}
+  reduceFeedBubbleSprite: {fileID: 21300000, guid: 2d4e51e070dfc6e42a7c4d0c4caa852e, type: 3}
   sellBubbleSprite: {fileID: -7574120519656753061, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   bubbleVisual: {fileID: 0}
   bubbleImage: {fileID: 0}
@@ -130,7 +135,7 @@ MonoBehaviour:
   notificationDelay: 1
   needIntervalMin: 3
   needIntervalMax: 8
-  bubbleExpiryDuration: 10
+  bubbleExpiryDuration: 0
   useHealthMinigame: 1
   clearChickenOnHealthFail: 0
   jigsawFeedTexture: {fileID: 2800000, guid: 743387ece6deffe42b9575e6fb1245e0, type: 3}

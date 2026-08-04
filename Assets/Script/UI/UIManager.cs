@@ -23,8 +23,12 @@ public class UIManager : Singleton<UIManager>
 
     [Header("Options Menu")]
     [SerializeField] private Button backToMainButton;
+    [SerializeField] private Button resetDataButton;
     [SerializeField] private Slider musicVolumeSlider;
     [SerializeField] private Slider sfxVolumeSlider;
+
+    [Header("Reset Confirmation (MainMenu fallback)")]
+    [SerializeField] private GameObject resetConfirmationPanel;
 
     [Header("Pause Menu")]
     [SerializeField] private Button resumeButton;
@@ -65,7 +69,7 @@ public class UIManager : Singleton<UIManager>
         ButtonHelper.AddListenerOnce(optionsButton, () => { PlayNavSfx(); ShowOptionsFromMain(); });
         ButtonHelper.AddListenerOnce(exitButton, () => { PlayNavSfx(); RequestExit(); });
         ButtonHelper.AddListenerOnce(koleksiIoTButton, () => { PlayNavSfx(); GoToKoleksiIoT(); });
-        ButtonHelper.AddListenerOnce(backToMainButton, () => { PlayNavSfx(); BackFromOptions(); });
+        ButtonHelper.SetSingleListener(backToMainButton, () => { PlayNavSfx(); BackFromOptions(); });
         ButtonHelper.AddListenerOnce(resumeButton, () => { PlayNavSfx(); ResumeGame(); });
         ButtonHelper.AddListenerOnce(pauseOptionsButton, () => { PlayNavSfx(); ShowOptionsFromPause(); });
         ButtonHelper.AddListenerOnce(pauseMainMenuButton, () => { PlayNavSfx(); ReturnToMainMenuFromPause(); });
@@ -73,6 +77,8 @@ public class UIManager : Singleton<UIManager>
 
         ButtonHelper.AddListenerOnce(musicVolumeSlider, SetMusicVolume);
         ButtonHelper.AddListenerOnce(sfxVolumeSlider, SetSfxVolume);
+
+        ButtonHelper.AddListenerOnce(resetDataButton, () => { PlayNavSfx(); ResetUserData(); });
 
         ButtonHelper.AddListenerOnce(exitYesButton, () => { PlayNavSfx(); ConfirmExitYes(); });
         ButtonHelper.AddListenerOnce(exitNoButton, () => { PlayNavSfx(); ConfirmExitNo(); });
@@ -134,6 +140,9 @@ public class UIManager : Singleton<UIManager>
 
         if (optionsPanel != null)
             optionsPanel.SetActive(true);
+
+        if (resetConfirmationPanel != null)
+            resetConfirmationPanel.SetActive(false);
     }
 
     public void ShowOptionsFromPause()
@@ -198,6 +207,9 @@ public class UIManager : Singleton<UIManager>
 
         if (hudPanel != null)
             hudPanel.SetActive(false);
+
+        if (resetConfirmationPanel != null)
+            resetConfirmationPanel.SetActive(false);
     }
 
     public void SetMusicVolume(float volume)
@@ -261,6 +273,73 @@ public class UIManager : Singleton<UIManager>
             SceneController.Instance.GoToMainMenu();
         else
             ShowMainMenu();
+    }
+
+    private void ResetUserData()
+    {
+        var alert = UIAlertPanel.Instance ?? FindFirstObjectByType<UIAlertPanel>();
+        if (alert != null)
+        {
+            alert.Show(UIAlertPanel.NotificationType.ResetDataConfirm,
+                onConfirm: () =>
+                {
+                    SaveManager.ResetAllData();
+                    ShowMainMenu();
+                },
+                onBack: null);
+            return;
+        }
+
+        // Fallback: ResetConfirmationPanel langsung (MainMenu scene)
+        if (resetConfirmationPanel != null)
+        {
+            resetConfirmationPanel.SetActive(true);
+
+            Button tidakBtn = FindButtonInChildren(resetConfirmationPanel.transform, "TidakButton");
+            Button yaBtn = FindButtonInChildren(resetConfirmationPanel.transform, "YaButton");
+
+            if (tidakBtn != null)
+            {
+                tidakBtn.onClick.RemoveAllListeners();
+                tidakBtn.onClick.AddListener(() =>
+                {
+                    resetConfirmationPanel.SetActive(false);
+                });
+            }
+
+            if (yaBtn != null)
+            {
+                yaBtn.onClick.RemoveAllListeners();
+                yaBtn.onClick.AddListener(() =>
+                {
+                    resetConfirmationPanel.SetActive(false);
+                    SaveManager.ResetAllData();
+                    ShowMainMenu();
+                });
+            }
+
+            return;
+        }
+
+        SaveManager.ResetAllData();
+        ShowMainMenu();
+    }
+
+    private Button FindButtonInChildren(Transform parent, string name)
+    {
+        // ponytail: duplicate of UIAlertPanel.FindButtonInChildren
+        // extract to ButtonHelper if a 3rd caller appears
+        foreach (Transform child in parent)
+        {
+            if (child.name == name)
+            {
+                Button btn = child.GetComponent<Button>();
+                if (btn != null) return btn;
+            }
+            Button found = FindButtonInChildren(child, name);
+            if (found != null) return found;
+        }
+        return null;
     }
 
     private void Update()

@@ -16,13 +16,17 @@ public partial class StarterKandangSlot
 
     private void UpdateAnimationByNeed(ChickenNeed need)
     {
+        StopAllEffects();
+
         switch (need)
         {
             case ChickenNeed.Heating:
                 TrySetAnimationBool(heatAnimParam, true);
+                PlayHeatEffect();
                 break;
             case ChickenNeed.Cooling:
                 TrySetAnimationBool(coldAnimParam, true);
+                PlayColdEffect();
                 break;
             default:
                 ResetAnimationToNormal();
@@ -37,6 +41,7 @@ public partial class StarterKandangSlot
 
         TrySetAnimationBool(heatAnimParam, false);
         TrySetAnimationBool(coldAnimParam, false);
+        StopAllEffects();
     }
 
     private void TrySetAnimationBool(string paramName, bool value)
