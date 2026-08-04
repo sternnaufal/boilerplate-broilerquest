@@ -175,7 +175,7 @@ public class StarterIoTController : MonoBehaviour
     private static int GetSoftlockReserve()
     {
         bool hasChickens = false;
-        bool hasFeed = FeedManager.Instance != null && FeedManager.Instance.GetFeedCount() > 0;
+        int feedCount = FeedManager.Instance != null ? FeedManager.Instance.GetFeedCount() : 0;
 
         var slots = GameObject.FindObjectsByType<StarterKandangSlot>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         foreach (var slot in slots)
@@ -184,7 +184,7 @@ public class StarterIoTController : MonoBehaviour
         }
 
         if (!hasChickens) return GameConstants.Economy.ChickenPrice + GameConstants.Economy.FeedCost;
-        if (!hasFeed) return GameConstants.Economy.FeedCost;
+        if (feedCount <= 1) return GameConstants.Economy.FeedCost;
         return 0;
     }
 
