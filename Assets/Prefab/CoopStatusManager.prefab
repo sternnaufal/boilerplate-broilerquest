@@ -48,16 +48,16 @@ MonoBehaviour:
   rowPrefab: {fileID: 7773894681349173429, guid: df936ed31de78ea4c8a6cc3c3b9fbcb0, type: 3}
   rowContainer: {fileID: 0}
   iconFeedSukses: {fileID: -2843893495403024386, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  iconFeedGagal: {fileID: 21300000, guid: 5c8a74b3accb9fb42be899b2a0fd5835, type: 3}
+  iconFeedGagal: {fileID: -2843893495403024386, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   iconCoolingSukses: {fileID: 5671498951499757729, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  iconCoolingGagal: {fileID: 21300000, guid: dc18e88f0b968d849bd129353e7e61f0, type: 3}
+  iconCoolingGagal: {fileID: 5671498951499757729, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   iconHeatingSukses: {fileID: 9111825458085843759, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  iconHeatingGagal: {fileID: 21300000, guid: bb4eda213892e654cad93fe639d1a383, type: 3}
+  iconHeatingGagal: {fileID: 9111825458085843759, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   iconHumidityUpSukses: {fileID: 5185448939473618498, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  iconHumidityUpGagal: {fileID: 21300000, guid: 3ad108604512d4540ad3251eca99b0ca, type: 3}
+  iconHumidityUpGagal: {fileID: 5185448939473618498, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   iconHumidityDownSukses: {fileID: -4857264338737576232, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  iconHumidityDownGagal: {fileID: 21300000, guid: 296684d2c793bed4883ac379427b6da0, type: 3}
+  iconHumidityDownGagal: {fileID: -4857264338737576232, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   iconAddDryHuskSukses: {fileID: 6576909685032483182, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  iconAddDryHuskGagal: {fileID: 21300000, guid: 5be34f574b2546f43b17696d0ce123a1, type: 3}
+  iconAddDryHuskGagal: {fileID: 6576909685032483182, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
   iconReduceFeedSukses: {fileID: 351520864713326834, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
-  iconReduceFeedGagal: {fileID: 21300000, guid: c9aec516ad0e7b1419a2e236f274dc6d, type: 3}
+  iconReduceFeedGagal: {fileID: 351520864713326834, guid: 4eb7f32ea03d3604bb2e77c6002c0358, type: 3}
