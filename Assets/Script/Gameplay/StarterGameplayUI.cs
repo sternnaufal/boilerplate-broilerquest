@@ -182,6 +182,8 @@ public class StarterGameplayUI : MonoBehaviour
         hpVisibleBeforePause = hpVisible;
         if (hpVisible)
             CloseHpPanel();
+
+        SetAllBubblesVisible(false);
     }
 
     public void ResumeGame()
@@ -196,6 +198,8 @@ public class StarterGameplayUI : MonoBehaviour
 
         if (hpVisibleBeforePause)
             ShowHpPanel(true);
+
+        SetAllBubblesVisible(true);
     }
 
     public void ToggleHpPanel()
@@ -367,6 +371,14 @@ public class StarterGameplayUI : MonoBehaviour
                 if (pausePanel != null)
                     pausePanel.SetActive(true);
             });
+    }
+
+    private void SetAllBubblesVisible(bool visible)
+    {
+        StarterKandangSlot[] slots = FindObjectsByType<StarterKandangSlot>(
+            FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (StarterKandangSlot slot in slots)
+            slot.SetBubbleVisible(visible);
     }
 
     private void PolishStarterUi()

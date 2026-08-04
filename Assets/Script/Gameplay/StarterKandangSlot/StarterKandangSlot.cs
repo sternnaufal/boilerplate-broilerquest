@@ -237,6 +237,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         StopEventTimer();
         StopWander();
         RegisterUntrackedChickenVisuals();
+        StopAllEffects();
 
         foreach (GameObject spawnedChicken in spawnedChickens)
         {
@@ -296,6 +297,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
 
             GameLog.Info($"{name}: {CurrentChickenCount} ayam dijual, +{finalReward} coin.");
             if (SFXManager.Instance != null) SFXManager.Instance.PlaySellComplete();
+            PlaySellEffect();
             ClearChicken();
         }
     }

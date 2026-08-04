@@ -14,6 +14,7 @@ public class UIAlertPanel : MonoBehaviour
     [SerializeField] private GameObject mainMenuConfirmPanel; // MainMenu
     [SerializeField] private GameObject needFulfilledPanel;   // KebutuhanTerpenuhi
     [SerializeField] private GameObject readyToSellPanel;     // SiapDijual
+    [SerializeField] private GameObject resetDataConfirmPanel; // ResetData
 
     [Header("Auto-hide Duration")]
     [SerializeField] private float autoHideDelay = 3f;
@@ -27,7 +28,8 @@ public class UIAlertPanel : MonoBehaviour
         TimeOut,
         MainMenuConfirm,
         NeedFulfilled,
-        ReadyToSell
+        ReadyToSell,
+        ResetDataConfirm
     }
 
     private void Awake()
@@ -56,6 +58,7 @@ public class UIAlertPanel : MonoBehaviour
         if (mainMenuConfirmPanel != null) mainMenuConfirmPanel.SetActive(active);
         if (needFulfilledPanel != null) needFulfilledPanel.SetActive(active);
         if (readyToSellPanel != null) readyToSellPanel.SetActive(active);
+        if (resetDataConfirmPanel != null) resetDataConfirmPanel.SetActive(active);
     }
 
     private void EnsureParentActive(GameObject panel)
@@ -127,6 +130,14 @@ public class UIAlertPanel : MonoBehaviour
                     autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(readyToSellPanel));
                 }
                 break;
+            case NotificationType.ResetDataConfirm:
+                if (resetDataConfirmPanel != null)
+                {
+                    EnsureParentActive(resetDataConfirmPanel);
+                    resetDataConfirmPanel.SetActive(true);
+                    SetupResetDataButtons(onConfirm, onBack);
+                }
+                break;
         }
     }
 
@@ -161,6 +172,35 @@ public class UIAlertPanel : MonoBehaviour
             {
                 if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick();
                 HideMainMenuConfirm();
+                onConfirm?.Invoke();
+            });
+        }
+    }
+
+    private void SetupResetDataButtons(System.Action onConfirm, System.Action onBack = null)
+    {
+        if (resetDataConfirmPanel == null) return;
+
+        Button batal = FindButtonInChildren(resetDataConfirmPanel.transform, "BatalBut");
+        Button hapus = FindButtonInChildren(resetDataConfirmPanel.transform, "HapusBut");
+
+        if (batal != null)
+        {
+            batal.onClick.RemoveAllListeners();
+            batal.onClick.AddListener(() =>
+            {
+                if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick();
+                resetDataConfirmPanel.SetActive(false);
+                onBack?.Invoke();
+            });
+        }
+        if (hapus != null)
+        {
+            hapus.onClick.RemoveAllListeners();
+            hapus.onClick.AddListener(() =>
+            {
+                if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick();
+                resetDataConfirmPanel.SetActive(false);
                 onConfirm?.Invoke();
             });
         }

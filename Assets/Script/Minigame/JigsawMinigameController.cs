@@ -404,7 +404,8 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         panelRect.anchoredPosition = new Vector2(350f, 0f);
 
         Image panelImage = panelObject.GetComponent<Image>();
-        panelImage.color = new Color(0.08f, 0.22f, 0.12f, 0.96f);
+        panelImage.sprite = Resources.Load<Sprite>("bgminigame_pipa1");
+        panelImage.color = Color.white;
         panelImage.raycastTarget = true;
 
         titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 270f), new Vector2(500f, 50f), 28f, TextAlignmentOptions.Center);

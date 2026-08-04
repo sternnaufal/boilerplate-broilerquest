@@ -13,6 +13,9 @@ public class LevelSelectController : MonoBehaviour
     [SerializeField] private Button beginnerButton;
     [SerializeField] private Button intermediateButton;
 
+    [Header("Navigation")]
+    [SerializeField] private Button backButton;
+
     [Header("Locked Level Feedback")]
     [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private string lockedMessage = "Level ini belum tersedia.";
@@ -109,6 +112,7 @@ public class LevelSelectController : MonoBehaviour
         ButtonHelper.AddListenerOnce(starterButton, () => { PlayClickSfx(); PlayStarter(); });
         ButtonHelper.AddListenerOnce(beginnerButton, () => { PlayClickSfx(); PlayBeginner(); });
         ButtonHelper.AddListenerOnce(intermediateButton, () => { PlayClickSfx(); PlayIntermediate(); });
+        ButtonHelper.AddListenerOnce(backButton, () => { PlayClickSfx(); GoToMainMenu(); });
         listenersRegistered = true;
     }
 
@@ -306,5 +310,11 @@ public class LevelSelectController : MonoBehaviour
     private void PlayClickSfx()
     {
         if (SFXManager.Instance != null) SFXManager.Instance.PlayButtonClick();
+    }
+
+    private void GoToMainMenu()
+    {
+        if (SceneController.Instance != null)
+            SceneController.Instance.GoToMainMenu();
     }
 }
