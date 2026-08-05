@@ -339,14 +339,14 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
             }
 
             // Inner label so sack is visually distinguishable
-            TextMeshProUGUI sackLabel = CreateText(sackObj.transform, "Label",
+            /*TextMeshProUGUI sackLabel = CreateText(sackObj.transform, "Label",
                 Vector2.zero, new Vector2(60f, 30f),
                 14f, TextAlignmentOptions.Center, "Sekam");
             if (sackLabel != null)
             {
                 sackLabel.color = new Color(0.25f, 0.15f, 0.05f, 1f);
                 sackLabel.fontStyle = FontStyles.Normal;
-            }
+            }*/
         }
 
         // Remaining count

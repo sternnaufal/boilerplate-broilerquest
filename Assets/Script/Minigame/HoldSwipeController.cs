@@ -23,6 +23,9 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
     [SerializeField] private Color normalTimerColor = Color.white;
     [SerializeField] private Color warningTimerColor = new Color(1f, 0.25f, 0.15f);
 
+    [Header("Feed Sprites")]
+    [SerializeField] private Sprite fullFeedSprite;
+    [SerializeField] private Sprite halfFeedSprite;
     private IHealthCheckListener currentListener;
     private int remainingSwipes;
     private float timeRemaining;
@@ -41,6 +44,11 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         base.Awake();
         EnsureRuntimeUi();
         HidePopup();
+
+        if (fullFeedSprite == null)
+        fullFeedSprite = Resources.Load<Sprite>("Gambar/tempat_makan_penuh");
+        if (halfFeedSprite == null)
+            halfFeedSprite = Resources.Load<Sprite>("Gambar/tempat_makan_setengah");
     }
 
     public bool ShowHoldSwipe(IHealthCheckListener caller)
@@ -261,14 +269,23 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
             feedRect.anchoredPosition = new Vector2(0f, -25f);
 
             Image feedImg = feedObj.GetComponent<Image>();
-            feedImg.color = new Color(0.85f, 0.65f, 0.25f, 1f); // golden yellow
+            if (fullFeedSprite != null)
+            {
+                feedImg.sprite = fullFeedSprite;
+                feedImg.color = Color.white;   // agar sprite tetap asli
+            }
+            else
+            {
+                feedImg.color = new Color(0.85f, 0.65f, 0.25f, 1f); // fallback
+            }
             feedImg.raycastTarget = true;
 
             // Feed Label
+            /*
             CreateText(feedObj.transform, "Label",
                 Vector2.zero, new Vector2(60f, 25f),
                 12f, TextAlignmentOptions.Center, "PAKAN");
-
+*/
             // Progress Bar Background under the pile
             GameObject barBg = CreatePanel(quad.transform, "ProgressBarBg",
                 new Vector2(0f, -65f), new Vector2(70f, 8f),
@@ -292,6 +309,8 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
             interactable.controller = this;
             interactable.progressBarFill = barFillImg;
             interactable.holdDuration = holdDuration;
+            interactable.fullSprite = fullFeedSprite;
+            interactable.halfSprite = halfFeedSprite;
 
             feedPiles[i] = feedObj;
         }
@@ -408,6 +427,15 @@ public class InteractableFeedPile : MonoBehaviour, IPointerDownHandler, IPointer
     private Vector2 startPos;
     private bool isReadyToSwipe;
 
+    public Sprite fullSprite;
+    public Sprite halfSprite;
+    private Image image;
+
+    private void Awake()
+    {
+        image = GetComponent<Image>();
+    }
+
     private void OnDisable()
     {
         ResetState();
@@ -465,6 +493,10 @@ public class InteractableFeedPile : MonoBehaviour, IPointerDownHandler, IPointer
                 if (progressBarFill != null)
                     progressBarFill.color = Color.green;
                 transform.localScale = Vector3.one * 1.1f;
+
+                // Ganti sprite menjadi half
+                if (image != null && halfSprite != null)
+                    image.sprite = halfSprite;
             }
         }
     }
@@ -480,6 +512,8 @@ public class InteractableFeedPile : MonoBehaviour, IPointerDownHandler, IPointer
             progressBarFill.color = Color.yellow;
         }
         transform.localScale = Vector3.one;
+        if (image != null && fullSprite != null)
+            image.sprite = fullSprite;
     }
 
     private IEnumerator AnimateCollectAndNotify()

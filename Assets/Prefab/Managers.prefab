@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 8008893428682441373}
   - component: {fileID: 7156035242539575423}
   - component: {fileID: 2515327718166374347}
+  - component: {fileID: 3502316643396551092}
+  - component: {fileID: 810351215965957356}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -130,6 +132,7 @@ MonoBehaviour:
   jigsawPieceSwapSfx: {fileID: 0}
   jigsawCompleteSfx: {fileID: 0}
   jigsawFailSfx: {fileID: 0}
+  pipeRotateSfx: {fileID: 0}
   bubbleNeedSfx: {fileID: 0}
   minigameSuccessSfx: {fileID: 0}
   minigameFailSfx: {fileID: 0}
@@ -188,3 +191,51 @@ MonoBehaviour:
   displayDuration: 1.5
   successSprite: {fileID: 4036518849894964974, guid: 9125e2279d8555e4eba762b3294dfc89, type: 3}
   failSprite: {fileID: -418081060531236423, guid: bc73c7785d18d11419c72537635ce3d3, type: 3}
+--- !u!114 &3502316643396551092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384904773509121494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721df83872cad7345ba9e7c5ab426738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoldSwipeController
+  popupRoot: {fileID: 0}
+  timerText: {fileID: 0}
+  titleText: {fileID: 0}
+  feedPileImage: {fileID: 0}
+  swipeProgressBar: {fileID: 0}
+  remainingLabel: {fileID: 0}
+  timeLimit: 15
+  swipeCount: 5
+  holdDuration: 0.8
+  normalTimerColor: {r: 1, g: 1, b: 1, a: 1}
+  warningTimerColor: {r: 1, g: 0.25, b: 0.15, a: 1}
+  fullFeedSprite: {fileID: -142460248768393218, guid: 7fa9b949ddefca846b43add7c617dd66, type: 3}
+  halfFeedSprite: {fileID: 5158546120987649199, guid: 24ed37a83ebb35f499a7855ec21bc30d, type: 3}
+--- !u!114 &810351215965957356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384904773509121494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 044d02f8bce19da448c423495cc565c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DragDropSackController
+  popupRoot: {fileID: 0}
+  timerText: {fileID: 0}
+  titleText: {fileID: 0}
+  dropZone: {fileID: 0}
+  sackContainer: {fileID: 0}
+  remainingLabel: {fileID: 0}
+  timeLimit: 20
+  sackCount: 3
+  normalTimerColor: {r: 1, g: 1, b: 1, a: 1}
+  warningTimerColor: {r: 1, g: 0.25, b: 0.15, a: 1}
+  sackSprite: {fileID: 8129068977451122437, guid: 28bbaae83e0ba594bb622457852f3cde, type: 3}
