@@ -26,6 +26,10 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
     [Header("Feed Sprites")]
     [SerializeField] private Sprite fullFeedSprite;
     [SerializeField] private Sprite halfFeedSprite;
+
+    [Header("Panel Sprites")]
+    [SerializeField] private Sprite cagesPanelSprite;
+    [SerializeField] private Sprite infoPanelSprite;
     private IHealthCheckListener currentListener;
     private int remainingSwipes;
     private float timeRemaining;
@@ -225,10 +229,25 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
             new Vector2(-180f, 0f), new Vector2(560f, 480f),
             new Color(0.12f, 0.08f, 0.04f, 0.92f));
 
+        // Terapkan sprite jika ada
+        Image cagesImg = cagesPanel.GetComponent<Image>();
+        if (cagesPanelSprite != null)
+        {
+            cagesImg.sprite = cagesPanelSprite;
+            cagesImg.color = Color.white; // agar sprite original
+        }
+        else
+        {
+            cagesImg.color = new Color(0.12f, 0.08f, 0.04f, 0.92f); // fallback
+        }
+        cagesImg.raycastTarget = true;
+
         // Cages Container Label
+        /*
         CreateText(cagesPanel.transform, "CagesLabel",
             new Vector2(0f, 215f), new Vector2(400f, 40f),
             22f, TextAlignmentOptions.Center, "KANDANG AYAM");
+            */
 
         // Quadrants setup
         Vector2[] quadPositions = new Vector2[]
@@ -246,7 +265,7 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         {
             GameObject quad = CreatePanel(cagesPanel.transform, $"Quadrant_{i}",
                 quadPositions[i], new Vector2(250f, 190f),
-                new Color(0.20f, 0.15f, 0.08f, 0.85f));
+                new Color(0.20f, 0.15f, 0.08f, 0.45f));
 
             // Quadrant Label
             CreateText(quad.transform, "Label",
@@ -319,6 +338,19 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         GameObject infoPanel = CreatePanel(canvasObject.transform, "InfoPanel",
             new Vector2(280f, 0f), new Vector2(360f, 480f),
             new Color(0.06f, 0.20f, 0.10f, 0.95f));
+
+        // Terapkan sprite jika ada
+        Image infoImg = infoPanel.GetComponent<Image>();
+        if (infoPanelSprite != null)
+        {
+            infoImg.sprite = infoPanelSprite;
+            infoImg.color = Color.white;
+        }
+        else
+        {
+            infoImg.color = new Color(0.06f, 0.20f, 0.10f, 0.95f); // fallback
+        }
+        infoImg.raycastTarget = true;
 
         // Title
         titleText = CreateText(infoPanel.transform, "TitleText",

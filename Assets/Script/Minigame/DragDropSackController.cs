@@ -22,6 +22,13 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
     [SerializeField] private Color normalTimerColor = Color.white;
     [SerializeField] private Color warningTimerColor = new Color(1f, 0.25f, 0.15f);
 
+    [Header("Drop Zone Asset")]
+    [SerializeField] private Sprite dropZoneSprite;
+    [SerializeField] private Color dropLabelColor = Color.black;
+
+    [Header("Info Panel Asset")]
+    [SerializeField] private Sprite infoPanelSprite;
+
     [Header("Sack Asset")]
     [SerializeField] private Sprite sackSprite;
 
@@ -249,31 +256,60 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
         // ── Left Panel – Kandang Area (Target Drop Zone) ──
         GameObject kandangPanel = CreatePanel(canvasObj.transform, "KandangPanel",
             new Vector2(-180f, 0f), new Vector2(520f, 440f),
-            new Color(0.12f, 0.08f, 0.04f, 0.92f));
+            new Color(0.12f, 0.08f, 0.04f, 0f));
 
         // Inner kandang area (lighter border effect)
         GameObject kandangInner = CreatePanel(kandangPanel.transform, "KandangInner",
             new Vector2(0f, -10f), new Vector2(490f, 390f),
-            new Color(0.20f, 0.15f, 0.08f, 0.80f));
+            new Color(1f, 1f, 1f, 1f));
 
+        Image innerImage = kandangInner.GetComponent<Image>();
+            if (dropZoneSprite != null)
+            {
+                innerImage.sprite = dropZoneSprite;
+                innerImage.color = Color.white; // agar sprite original
+            }
+            else
+            {
+                // fallback warna jika sprite null
+                innerImage.color = new Color(0.20f, 0.15f, 0.08f, 0.80f);
+            }
+            innerImage.raycastTarget = true;
         // Kandang label
+        /*
         CreateText(kandangPanel.transform, "KandangLabel",
             new Vector2(0f, 195f), new Vector2(400f, 40f),
             22f, TextAlignmentOptions.Center, "KANDANG");
+            */
 
         // Helper label inside KandangInner to tell player to drop here
-        CreateText(kandangInner.transform, "KandangDropLabel",
+        TextMeshProUGUI dropLabel = CreateText(kandangInner.transform, "KandangDropLabel",
             Vector2.zero, new Vector2(450f, 40f),
             18f, TextAlignmentOptions.Center, "Tarik Karung Sekam ke Sini");
+        dropLabel.color = dropLabelColor; // <-- terapkan warna hitam dari Inspector
 
         // Assign dropZone and dropZoneRect to KandangInner
         dropZone = kandangInner.transform;
         dropZoneRect = kandangInner.GetComponent<RectTransform>();
 
         // ── Right Panel – Info & Source Storage ──
+        // ── Right Panel – Info & Source Storage ──
         GameObject infoPanel = CreatePanel(canvasObj.transform, "InfoPanel",
-            new Vector2(280f, 0f), new Vector2(360f, 440f),
-            new Color(0.06f, 0.20f, 0.10f, 0.94f));
+            new Vector2(280f, 0f), new Vector2(360f, 480f),
+            new Color(0.06f, 0.20f, 0.10f, 0.95f)); // warna fallback
+
+        // Terapkan sprite jika ada
+        Image infoImg = infoPanel.GetComponent<Image>();
+        if (infoPanelSprite != null)
+        {
+            infoImg.sprite = infoPanelSprite;
+            infoImg.color = Color.white; // agar sprite asli
+        }
+        else
+        {
+            infoImg.color = new Color(0.06f, 0.20f, 0.10f, 0.95f); // fallback warna
+        }
+        infoImg.raycastTarget = true;
 
         // Title
         titleText = CreateText(infoPanel.transform, "TitleText",
@@ -295,12 +331,12 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
         // Storage panel for sacks (Source Area)
         GameObject storagePanel = CreatePanel(infoPanel.transform, "StoragePanel",
             new Vector2(0f, -30f), new Vector2(280f, 180f),
-            new Color(0.25f, 0.20f, 0.15f, 0.70f));
+            new Color(0.25f, 0.20f, 0.15f, 0f));
 
         // Inner border for storage panel
         CreatePanel(storagePanel.transform, "StorageBorder",
             Vector2.zero, new Vector2(268f, 168f),
-            new Color(0.40f, 0.30f, 0.20f, 0.40f));
+            new Color(0.40f, 0.30f, 0.20f, 0f));
 
         CreateText(storagePanel.transform, "StorageLabel",
             new Vector2(0f, 70f), new Vector2(260f, 30f),

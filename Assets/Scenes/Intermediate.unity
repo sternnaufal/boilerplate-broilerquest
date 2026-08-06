@@ -2722,6 +2722,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 810351215965957356, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: dropZoneSprite
+      value: 
+      objectReference: {fileID: -7451923633976598380, guid: 3f055d5d7fa9dff45afeaad0a6eacbc4, type: 3}
     - target: {fileID: 1925916746256750119, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: coinText
       value: 
@@ -2730,6 +2734,14 @@ PrefabInstance:
       propertyPath: feedText
       value: 
       objectReference: {fileID: 2003529008}
+    - target: {fileID: 3502316643396551092, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: fullFeedSprite
+      value: 
+      objectReference: {fileID: 9087354818932945816, guid: 3f055d5d7fa9dff45afeaad0a6eacbc4, type: 3}
+    - target: {fileID: 3502316643396551092, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
+      propertyPath: halfFeedSprite
+      value: 
+      objectReference: {fileID: 9087354818932945816, guid: 3f055d5d7fa9dff45afeaad0a6eacbc4, type: 3}
     - target: {fileID: 6384904773509121494, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: m_Name
       value: Managers

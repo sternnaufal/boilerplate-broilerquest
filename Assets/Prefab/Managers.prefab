@@ -216,6 +216,8 @@ MonoBehaviour:
   warningTimerColor: {r: 1, g: 0.25, b: 0.15, a: 1}
   fullFeedSprite: {fileID: -142460248768393218, guid: 7fa9b949ddefca846b43add7c617dd66, type: 3}
   halfFeedSprite: {fileID: 5158546120987649199, guid: 24ed37a83ebb35f499a7855ec21bc30d, type: 3}
+  cagesPanelSprite: {fileID: -7451923633976598380, guid: 3f055d5d7fa9dff45afeaad0a6eacbc4, type: 3}
+  infoPanelSprite: {fileID: -2089908947565678126, guid: 48d57e269a7c318419013fffba1879f4, type: 3}
 --- !u!114 &810351215965957356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,4 +240,7 @@ MonoBehaviour:
   sackCount: 3
   normalTimerColor: {r: 1, g: 1, b: 1, a: 1}
   warningTimerColor: {r: 1, g: 0.25, b: 0.15, a: 1}
+  dropZoneSprite: {fileID: -7451923633976598380, guid: 3f055d5d7fa9dff45afeaad0a6eacbc4, type: 3}
+  dropLabelColor: {r: 0, g: 0, b: 0, a: 1}
+  infoPanelSprite: {fileID: -2089908947565678126, guid: 48d57e269a7c318419013fffba1879f4, type: 3}
   sackSprite: {fileID: 8129068977451122437, guid: 28bbaae83e0ba594bb622457852f3cde, type: 3}
