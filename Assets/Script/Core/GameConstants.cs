@@ -32,6 +32,7 @@ public static class GameConstants
         public const string FeedCountKey = "BroilerQuest.FeedCount";
         public const string GameSaveKey = "BroilerQuest.GameSave";
         public const string DemoModeConfigResourcePath = "DemoModeConfig";
+        public const string StarterTutorialDoneKey = "BroilerQuest.StarterTutorialDone";
     }
 
     public static class LevelDuration

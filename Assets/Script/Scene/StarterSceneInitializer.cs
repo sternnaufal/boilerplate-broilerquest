@@ -7,6 +7,9 @@ public class StarterSceneInitializer : MonoBehaviour
     [SerializeField] private StarterChickenShop chickenShop;
     [SerializeField] private StarterKandangSlot[] kandangSlots;
 
+    [Header("Tutorial")]
+    [SerializeField] private StarterTutorialController tutorialController;
+
     [Header("Initialization")]
     [SerializeField] private bool initializeCoinManager = true;
     [SerializeField] private bool loadSavedState = true;
@@ -44,6 +47,39 @@ public class StarterSceneInitializer : MonoBehaviour
                 case 1: BGMManager.Instance.PlayBeginnerBGM(); break;
                 case 2: BGMManager.Instance.PlayIntermediateBGM(); break;
             }
+        }
+
+        InitTutorial();
+    }
+
+    private void InitTutorial()
+    {
+        if (tutorialController == null) return;
+
+        bool needsTutorial = !tutorialController.IsTutorialDone;
+        if (needsTutorial)
+        {
+            if (GameManager.Instance != null)
+                GameManager.Instance.SetDeferTimer(true);
+
+            tutorialController.OnChickenBought += OnTutorialChickenBought;
+            tutorialController.OnTutorialCompleted += OnTutorialCompleted;
+            tutorialController.StartTutorial(chickenShop, kandangSlots);
+        }
+    }
+
+    private void OnTutorialChickenBought()
+    {
+        if (GameManager.Instance != null)
+            GameManager.Instance.StartTimerForLevel();
+    }
+
+    private void OnTutorialCompleted()
+    {
+        if (tutorialController != null)
+        {
+            tutorialController.OnChickenBought -= OnTutorialChickenBought;
+            tutorialController.OnTutorialCompleted -= OnTutorialCompleted;
         }
     }
 

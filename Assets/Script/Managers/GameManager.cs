@@ -23,6 +23,7 @@ public class GameManager : Singleton<GameManager>
     private bool isGameActive = true;
     private bool isPopupShowing = false;
     private bool isRecoveringFromMissingTimeUpUi = false;
+    private bool deferTimer;
 
     void Start()
     {
@@ -109,10 +110,13 @@ public class GameManager : Singleton<GameManager>
             levelTimer.OnTimeUp -= OnTimerUp;
             levelTimer.OnTimeUp += OnTimerUp;
 
-            if (currentLevelIndex >= 0 && currentLevelIndex < levelDurations.Length)
-                levelTimer.StartTimer(levelDurations[currentLevelIndex]);
-            else
-                levelTimer.StartTimer(60f);
+            if (!deferTimer)
+            {
+                if (currentLevelIndex >= 0 && currentLevelIndex < levelDurations.Length)
+                    levelTimer.StartTimer(levelDurations[currentLevelIndex]);
+                else
+                    levelTimer.StartTimer(60f);
+            }
         }
 
         isGameActive = true;
@@ -196,6 +200,27 @@ public class GameManager : Singleton<GameManager>
         isGameActive = active;
         if (active)
             isPopupShowing = false;
+    }
+
+    public void SetDeferTimer(bool defer)
+    {
+        deferTimer = defer;
+    }
+
+    public void StartTimerForLevel()
+    {
+        deferTimer = false;
+        if (levelTimer == null)
+            levelTimer = FindFirstObjectByType<LevelTimer>();
+        if (levelTimer != null)
+        {
+            levelTimer.OnTimeUp -= OnTimerUp;
+            levelTimer.OnTimeUp += OnTimerUp;
+            if (currentLevelIndex >= 0 && currentLevelIndex < levelDurations.Length)
+                levelTimer.StartTimer(levelDurations[currentLevelIndex]);
+            else
+                levelTimer.StartTimer(60f);
+        }
     }
 
     protected override void OnDestroy()

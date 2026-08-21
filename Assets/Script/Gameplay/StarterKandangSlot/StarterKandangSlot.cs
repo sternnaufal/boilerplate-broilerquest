@@ -9,6 +9,7 @@ using SlotStateChanged = System.Action<StarterKandangSlot>;
 public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, IHealthCheckListener
 {
     public event SlotStateChanged StateChanged;
+    public event System.Action<StarterKandangSlot> NeedCompleted;
 
     [Header("Chicken Visual")]
     [SerializeField] private GameObject chickenVisual;
@@ -106,7 +107,7 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         }
     }
 
-    private enum SlotState
+    public enum SlotState
     {
         Empty,
         WaitingForCareEvent,
@@ -519,6 +520,8 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         RecalculateSellReward();
         SaveManager.SaveAll();
 
+        NeedCompleted?.Invoke(this);
+
         UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.NeedFulfilled);
 
         if (IsReadyToSell())
@@ -530,6 +533,13 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
         HideBubble();
         StartNeedTimer();
         GameLog.Info($"{name}: Kebutuhan {GetNeedText(GetNeedAt(idx))} terpenuhi.");
+    }
+
+    public void AutoCompleteNeed()
+    {
+        if (currentState != SlotState.WaitingForCareClick)
+            return;
+        CompleteCurrentNeed();
     }
 
     private void ShowSellBubble()

@@ -4,6 +4,7 @@ public partial class StarterKandangSlot
 {
     public bool IsOccupied => occupied;
     public string SlotLabel => slotLabel != null ? slotLabel.text : gameObject.name;
+    public SlotState CurrentState => currentState;
 
     public IReadOnlyList<ChickenNeed> NeedsQueue => needsQueue;
     public IReadOnlyList<bool> NeedSatisfied => needSatisfied;
