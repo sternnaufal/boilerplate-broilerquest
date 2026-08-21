@@ -36,9 +36,9 @@ public static class GameConstants
 
     public static class LevelDuration
     {
-        public const float Starter = 600f;
-        public const float Beginner = 600f;
-        public const float Intermediate = 600f;
+        public const float Starter = 300f;
+        public const float Beginner = 300f;
+        public const float Intermediate = 300f;
     }
 
     public static class UI
@@ -71,13 +71,28 @@ public static class GameConstants
     {
         public const int StartingCoin = 400;
         public const int ChickenPrice = 40;
-        public const int BaseSellPrice = 90;
         public const int FailPenalty = 30;
         public const int FeedCost = 5;
         public const int FeedIncrement = 1;
         public const int AutoFeederCost = 200;
         public const int AutoFanCost = 300;
         public const int AutoHeaterCost = 300;
+
+        // Per level
+        public const int BaseSellPriceStarter = 90;
+        public const int BaseSellPriceBeginner = 130;
+        public const int BaseSellPriceIntermediate = 180;
+
+        public static int GetBaseSellPrice(int levelIndex)
+        {
+            switch (levelIndex)
+            {
+                case 0: return BaseSellPriceStarter;
+                case 1: return BaseSellPriceBeginner;
+                case 2: return BaseSellPriceIntermediate;
+                default: return BaseSellPriceStarter;
+            }
+        }
     }
 
     public static class LevelUnlock

@@ -554,7 +554,8 @@ public partial class StarterKandangSlot : MonoBehaviour, IPointerClickHandler, I
             for (int i = 0; i < needFailed.Length; i++)
                 if (needFailed[i]) failCount++;
         }
-        sellReward = Mathf.Max(20, GameConstants.Economy.BaseSellPrice - failCount * GameConstants.Economy.FailPenalty);
+        int level = GameManager.Instance != null ? GameManager.Instance.currentLevelIndex : 0;
+sellReward = Mathf.Max(0, GameConstants.Economy.GetBaseSellPrice(level) - failCount * GameConstants.Economy.FailPenalty);
     }
 
     private Sprite GetNeedSprite(ChickenNeed need)

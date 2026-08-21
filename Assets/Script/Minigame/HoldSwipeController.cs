@@ -47,6 +47,7 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
     {
         base.Awake();
         EnsureRuntimeUi();
+        Debug.Log($"HoldSwipe feedPiles count: {(feedPiles != null ? feedPiles.Length : -1)}");
         HidePopup();
 
         if (fullFeedSprite == null)
@@ -66,11 +67,18 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
 
         ShowPopup();
         UpdateTimerUI();
+        SetupFeedPiles();
+
+        // Cek apakah ada pakan yang bisa di-swipe
+        if (feedPiles == null || feedPiles.Length == 0)
+        {
+            Debug.LogError("HoldSwipe: Tidak ada pakan! Minigame gagal.");
+            FinishMinigame(false);
+            return false;
+        }
 
         if (titleText != null)
             titleText.text = "Kurangi Pakan";
-
-        SetupFeedPiles();
 
         CoroutineHelper.StopSafe(this, ref timerCoroutine);
         timerCoroutine = StartCoroutine(TimerRoutine());
@@ -182,16 +190,14 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
 
     private void ShowPopup()
     {
-        if (popupRoot == null) return;
-        foreach (Transform child in popupRoot.transform)
-            child.gameObject.SetActive(true);
+        if (popupRoot != null)
+            popupRoot.SetActive(true);
     }
 
     private void HidePopup()
     {
-        if (popupRoot == null) return;
-        foreach (Transform child in popupRoot.transform)
-            child.gameObject.SetActive(false);
+        if (popupRoot != null)
+            popupRoot.SetActive(false);
     }
 
     private void EnsureRuntimeUi()
@@ -228,7 +234,7 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         GameObject cagesPanel = CreatePanel(canvasObject.transform, "CagesPanel",
             new Vector2(-180f, 0f), new Vector2(560f, 480f),
             new Color(0.12f, 0.08f, 0.04f, 0.92f));
-
+            
         // Terapkan sprite jika ada
         Image cagesImg = cagesPanel.GetComponent<Image>();
         if (cagesPanelSprite != null)
@@ -260,7 +266,7 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         string[] quadNames = new string[] { "Kandang A", "Kandang B", "Kandang C", "Kandang D" };
 
         feedPiles = new GameObject[4];
-
+        
         for (int i = 0; i < 4; i++)
         {
             GameObject quad = CreatePanel(cagesPanel.transform, $"Quadrant_{i}",
@@ -332,6 +338,8 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
             interactable.halfSprite = halfFeedSprite;
 
             feedPiles[i] = feedObj;
+
+            
         }
 
         // ── Right Panel – Info & Controls ──
@@ -432,6 +440,14 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         text.color = Color.white;
         text.raycastTarget = false;
         text.text = defaultText;
+
+        TMP_FontAsset font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LilitaOne-Regular SDF");
+    
+        // Fallback ke font default TMP jika tidak ditemukan
+        if (font == null)
+            font = TMP_Settings.defaultFontAsset;
+        
+        text.font = font;
         return text;
     }
 

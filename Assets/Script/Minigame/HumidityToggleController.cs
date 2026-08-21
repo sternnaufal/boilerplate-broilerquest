@@ -100,9 +100,9 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
 
 #if UNITY_EDITOR
         if (onSprite == null)
-            onSprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Gambar/ON button.png");
+            onSprite = Resources.Load<Sprite>("Gambar/ON_button");
         if (offSprite == null)
-            offSprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Gambar/OFF button.png");
+            offSprite = Resources.Load<Sprite>("Gambar/OFF_button");
 #else
         // Fallback untuk build: coba Resources (kalo masih ada)
         if (onSprite == null)

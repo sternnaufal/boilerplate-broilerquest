@@ -74,9 +74,16 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
         UpdateTimerUI();
         SetupSacks();
 
+        // Cek apakah ada karung yang bisa di-drag
+        if (sackContainer == null || sackContainer.childCount == 0)
+        {
+            Debug.LogError("DragDropSack: Tidak ada karung! Minigame gagal.");
+            FinishMinigame(false);
+            return false;
+        }
+
         if (titleText != null)
             titleText.text = "Tambah Sekam Kering";
-
         if (instructionText != null)
             instructionText.text = "Tarik karung ke dalam kandang";
 
@@ -204,16 +211,14 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
 
     private void ShowPopup()
     {
-        if (popupRoot == null) return;
-        foreach (Transform child in popupRoot.transform)
-            child.gameObject.SetActive(true);
+        if (popupRoot != null)
+            popupRoot.SetActive(true);
     }
 
     private void HidePopup()
     {
-        if (popupRoot == null) return;
-        foreach (Transform child in popupRoot.transform)
-            child.gameObject.SetActive(false);
+        if (popupRoot != null)
+            popupRoot.SetActive(false);
     }
 
     // ── Runtime UI Construction ─────────────────────────────────
@@ -462,6 +467,14 @@ public class DragDropSackController : Singleton<DragDropSackController>, IHealth
         text.color     = Color.white;
         text.raycastTarget = false;
         text.text = defaultText;
+
+        TMP_FontAsset font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LilitaOne-Regular SDF");
+    
+        // Fallback ke font default TMP jika tidak ditemukan
+        if (font == null)
+            font = TMP_Settings.defaultFontAsset;
+        
+        text.font = font;
 
         return text;
     }
