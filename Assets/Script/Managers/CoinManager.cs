@@ -22,7 +22,10 @@ public class CoinManager : Singleton<CoinManager>
 
     void Start()
     {
-        Initialize();
+        if (DemoModeConfig.IsDemoMode)
+            SetTotalCoin(GameConstants.Economy.StartingCoin);
+        else
+            Initialize();
     }
 
     public void Initialize()

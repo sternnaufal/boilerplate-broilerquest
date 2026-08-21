@@ -269,8 +269,12 @@ public class LevelSelectController : MonoBehaviour
 
         if (CoinManager.Instance.SpendCoin(cost))
         {
-            PlayerPrefs.SetInt(playerPrefsKey, 1);
-            PlayerPrefs.Save();
+            if (!DemoModeConfig.IsDemoMode)
+            {
+                PlayerPrefs.SetInt(playerPrefsKey, 1);
+                PlayerPrefs.Save();
+            }
+
             GameLog.Info($"{levelName} berhasil dibuka! -{cost} coin.");
             if (SFXManager.Instance != null) SFXManager.Instance.PlayUnlockSuccess();
             RefreshButtonStates();
@@ -286,11 +290,17 @@ public class LevelSelectController : MonoBehaviour
 
     private static bool IsBeginnerUnlocked()
     {
+        if (DemoModeConfig.IsDemoMode)
+            return false;
+
         return PlayerPrefs.GetInt(GameConstants.Persistence.LevelUnlockBeginnerKey, 0) == 1;
     }
 
     private static bool IsIntermediateUnlocked()
     {
+        if (DemoModeConfig.IsDemoMode)
+            return false;
+
         return PlayerPrefs.GetInt(GameConstants.Persistence.LevelUnlockIntermediateKey, 0) == 1;
     }
 

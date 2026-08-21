@@ -15,11 +15,20 @@ public class FeedManager : Singleton<FeedManager>
 
     private void LoadFeed()
     {
+        if (DemoModeConfig.IsDemoMode)
+        {
+            feedCount = 0;
+            return;
+        }
+
         feedCount = PlayerPrefs.GetInt(GameConstants.Persistence.FeedCountKey, 0);
     }
 
     private void SaveFeed()
     {
+        if (DemoModeConfig.IsDemoMode)
+            return;
+
         PlayerPrefs.SetInt(GameConstants.Persistence.FeedCountKey, feedCount);
         PlayerPrefs.Save();
     }

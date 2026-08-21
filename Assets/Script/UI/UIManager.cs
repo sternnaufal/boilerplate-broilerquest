@@ -257,6 +257,7 @@ public class UIManager : Singleton<UIManager>
 
     private void ConfirmExitYes()
     {
+        SaveManager.ResetDataForDemoMode();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

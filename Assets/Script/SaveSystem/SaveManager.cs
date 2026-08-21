@@ -54,6 +54,9 @@ public static class SaveManager
 
     private static GameSaveData LoadLevelData()
     {
+        if (DemoModeConfig.IsDemoMode)
+            return new GameSaveData();
+
         string json = PlayerPrefs.GetString(LevelSaveKey, "");
         if (!string.IsNullOrEmpty(json))
         {
@@ -70,12 +73,18 @@ public static class SaveManager
 
     private static void SaveLevelData(GameSaveData data)
     {
+        if (DemoModeConfig.IsDemoMode)
+            return;
+
         PlayerPrefs.SetString(LevelSaveKey, JsonUtility.ToJson(data));
         PlayerPrefs.Save();
     }
 
     private static IotSaveContainer LoadIotContainer()
     {
+        if (DemoModeConfig.IsDemoMode)
+            return new IotSaveContainer();
+
         string json = PlayerPrefs.GetString(SaveKey + "_IoT", "");
         if (!string.IsNullOrEmpty(json))
         {
@@ -87,6 +96,9 @@ public static class SaveManager
 
     private static void SaveIotContainer(IotSaveContainer data)
     {
+        if (DemoModeConfig.IsDemoMode)
+            return;
+
         PlayerPrefs.SetString(SaveKey + "_IoT", JsonUtility.ToJson(data));
         PlayerPrefs.Save();
     }
@@ -171,6 +183,9 @@ public static class SaveManager
 
     public static void LoadAndRestoreSlots(StarterKandangSlot[] slots, Func<string, GameObject> prefabLookup)
     {
+        if (DemoModeConfig.IsDemoMode)
+            return;
+
         string key = LevelSaveKey;
         string json = PlayerPrefs.GetString(key, "");
 
@@ -249,6 +264,9 @@ public static class SaveManager
 
     public static void LoadIotStates(StarterIoTController controller)
     {
+        if (DemoModeConfig.IsDemoMode)
+            return;
+
         var container = LoadIotContainer();
         
         // Fallback: try legacy single-key GameSaveData for IoT states
@@ -287,6 +305,14 @@ public static class SaveManager
         PlayerPrefs.DeleteKey(SaveKey + "_IoT");
         PlayerPrefs.DeleteKey(SaveKey);
         PlayerPrefs.Save();
+    }
+
+    public static void ResetDataForDemoMode()
+    {
+        if (!DemoModeConfig.IsDemoMode)
+            return;
+
+        ResetAllData();
     }
 
     public static void ResetAllData()

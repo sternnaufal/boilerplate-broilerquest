@@ -31,6 +31,7 @@ public static class GameConstants
         public const string LevelUnlockIntermediateKey = "Level.Intermediate.Unlocked";
         public const string FeedCountKey = "BroilerQuest.FeedCount";
         public const string GameSaveKey = "BroilerQuest.GameSave";
+        public const string DemoModeConfigResourcePath = "DemoModeConfig";
     }
 
     public static class LevelDuration
