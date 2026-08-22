@@ -61,7 +61,10 @@ public partial class StarterKandangSlot
 
         currentState = SlotState.WaitingForHealthMinigame;
         NotifyStateChanged();
-        if (mm.ShowMemoryMatch(this, GetNeedTitle(need))) return true;
+
+        string instruction = "Cocokkan kartu di bawah ini";
+        if (mm.ShowMemoryMatch(this, GetNeedTitle(need), instruction)) return true;
+
         currentState = SlotState.WaitingForCareClick;
         NotifyStateChanged();
         return false;
@@ -146,10 +149,17 @@ public partial class StarterKandangSlot
 
         Texture puzzleTexture = GetNeedPuzzleTexture(need);
         if (puzzleTexture == null) return false;
+        
+        string title = GetNeedTitle(need);
+        string instruction = "";
+        if (need == ChickenNeed.Feed)
+            instruction = "Tap setiap kotak dan tukar dengan kotak lainnya";
+        else if (need == ChickenNeed.Cooling)
+            instruction = "Cocokkan kartu di bawah ini";
 
         currentState = SlotState.WaitingForHealthMinigame;
         NotifyStateChanged();
-        if (jigsaw.ShowJigsaw(this, puzzleTexture, GetNeedTitle(need))) return true;
+        if (jigsaw.ShowJigsaw(this, puzzleTexture, GetNeedTitle(need), instruction)) return true;
         currentState = SlotState.WaitingForCareClick;
         NotifyStateChanged();
         return false;

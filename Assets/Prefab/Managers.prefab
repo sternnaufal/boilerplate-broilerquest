@@ -100,6 +100,7 @@ MonoBehaviour:
   cardBackSprite: {fileID: 2772318725309764230, guid: 8e2c6403712c2cd48a817950ac108e61, type: 3}
   normalTimerColor: {r: 1, g: 1, b: 1, a: 1}
   warningTimerColor: {r: 1, g: 0.25, b: 0.15, a: 1}
+  instructionText: {fileID: 0}
 --- !u!114 &7000000000000000002
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,6 +25,9 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
     [SerializeField] private Color normalTimerColor = Color.white;
     [SerializeField] private Color warningTimerColor = new Color(1f, 0.25f, 0.15f);
 
+    [Header("UI References")]
+    [SerializeField] private TextMeshProUGUI instructionText;
+
     private IHealthCheckListener currentListener;
     private List<MemoryMatchCard> cards;
     private MemoryMatchCard firstSelected;
@@ -51,7 +54,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         HidePopup();
     }
 
-    public bool ShowMemoryMatch(IHealthCheckListener listener, string eventTitle = "")
+    public bool ShowMemoryMatch(IHealthCheckListener listener, string eventTitle = "", string instruction = "")
     {
         if (isPlaying)
             return false;
@@ -90,6 +93,16 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
 
         if (titleText != null)
             titleText.text = string.IsNullOrWhiteSpace(eventTitle) ? "Memory Match" : eventTitle;
+
+        if (instructionText != null)
+        {
+            if (!string.IsNullOrEmpty(instruction))
+                instructionText.text = instruction;
+            else if (eventTitle.Contains("Dingin"))
+                instructionText.text = "Cocokkan kartu di bawah ini";
+            else
+                instructionText.text = "";
+        }
 
         if (errorText != null)
             errorText.gameObject.SetActive(false);
@@ -366,8 +379,10 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         panelImage.color = Color.white;
         panelImage.raycastTarget = true;
 
-        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 210f), new Vector2(420f, 50f), 28f, TextAlignmentOptions.Center);
-        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 155f), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
+        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 190f), new Vector2(420f, 50f), 28f, TextAlignmentOptions.Center);
+        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 150), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
+        instructionText = CreateText(panelObject.transform, "InstructionText", new Vector2(0f, 110f), new Vector2(400f, 40f), 25f, TextAlignmentOptions.Center, "");
+        instructionText.fontStyle = FontStyles.Normal;
         errorText = CreateText(panelObject.transform, "ErrorText", new Vector2(0f, 80f), new Vector2(380f, 60f), 20f, TextAlignmentOptions.Center);
         errorText.color = new Color(1f, 0.3f, 0.3f);
         errorText.gameObject.SetActive(false);
@@ -398,7 +413,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         image.raycastTarget = true;
     }
 
-    private TextMeshProUGUI CreateText(Transform parent, string objectName, Vector2 anchoredPosition, Vector2 size, float fontSize, TextAlignmentOptions alignment)
+    private TextMeshProUGUI CreateText(Transform parent, string objectName, Vector2 anchoredPosition, Vector2 size, float fontSize, TextAlignmentOptions alignment, string defaultText = "")
     {
         GameObject textObject = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
         textObject.transform.SetParent(parent, false);

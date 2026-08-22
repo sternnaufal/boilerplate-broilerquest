@@ -598,4 +598,16 @@ public class StarterGameplayUI : MonoBehaviour
         page.SetActive(false);
     }
 
+    public void OpenIoTPanel()
+    {
+        // Buka HP panel jika belum terbuka
+        if (!hpPanel.activeSelf)
+        {
+            ShowHpPanel(true);
+        }
+
+        // Navigasi ke halaman IoT
+        ShowIoTAPK();
+    }
+
 }

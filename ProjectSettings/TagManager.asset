@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TimerText
   - KandangSlot
+  - IoTReminder
   layers:
   - Default
   - TransparentFX

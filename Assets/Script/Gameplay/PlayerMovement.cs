@@ -6,7 +6,8 @@ public class PlayerMovement : MonoBehaviour
     {
         SinglePoint,
         Patrol,
-        Wander
+        Wander,
+        Follow
     }
 
     [Header("Mode")]
@@ -27,6 +28,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Vector2 wanderRadius = new Vector2(100f, 80f);
     [SerializeField] private float wanderPauseMin = 1f;
     [SerializeField] private float wanderPauseMax = 3f;
+
+    [Header("Follow")]
+    [SerializeField] private Transform followTarget;
+    [SerializeField] private float followStopDistance = 50f;
 
     [Header("Collision Avoidance")]
     [SerializeField] private bool avoidCollision = true;
@@ -161,7 +166,43 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        else if (mode == MovementMode.Follow)
+        {
+            UpdateFollow();
+            return;
+        }
+
         UpdateMoveToPoint();
+    }
+
+    private void UpdateFollow()
+    {
+        if (followTarget == null) return;
+
+        Vector2 targetPos = followTarget.position; // atau anchoredPosition jika target UI
+        Vector2 currentPos = rectTransform.anchoredPosition;
+        float distance = Vector2.Distance(currentPos, targetPos);
+
+        if (distance <= followStopDistance)
+        {
+            // Berhenti dekat target
+            if (animator != null) animator.SetBool(walkAnimParam, false);
+            return;
+        }
+
+        // Bergerak menuju target
+        Vector2 oldPos = currentPos;
+        Vector2 newPos = Vector2.MoveTowards(currentPos, targetPos, speed * Time.deltaTime);
+        rectTransform.anchoredPosition = newPos;
+        if (flipOnDirection) UpdateFacing(oldPos, newPos);
+        if (animator != null) animator.SetBool(walkAnimParam, true);
+    }
+
+    public void SetFollowTarget(Transform target)
+    {
+        followTarget = target;
+        mode = MovementMode.Follow;
+        isMoving = true;
     }
 
     private void UpdateWander()

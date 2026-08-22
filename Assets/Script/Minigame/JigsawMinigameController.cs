@@ -26,6 +26,9 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
     [SerializeField] private Color normalTimerColor = Color.white;
     [SerializeField] private Color warningTimerColor = new Color(1f, 0.25f, 0.15f);
 
+    [Header("UI References")]
+    [SerializeField] private TextMeshProUGUI instructionText; 
+
     private IHealthCheckListener currentListener;
     private JigsawPiece[] pieces;
     private JigsawPiece selectedPiece;
@@ -45,7 +48,7 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         HidePopup();
     }
 
-    public bool ShowJigsaw(IHealthCheckListener listener, Texture puzzleTexture, string eventTitle = "")
+    public bool ShowJigsaw(IHealthCheckListener listener, Texture puzzleTexture, string eventTitle = "", string instruction = "")
     {
         if (isPlaying)
             return false;
@@ -71,6 +74,16 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
 
         if (titleText != null)
             titleText.text = string.IsNullOrWhiteSpace(eventTitle) ? "Susun Puzzle" : eventTitle;
+
+             if (instructionText != null)
+            {
+                if (!string.IsNullOrEmpty(instruction))
+                    instructionText.text = instruction;
+                else if (eventTitle.Contains("Pakan"))
+                    instructionText.text = "Tap setiap kotak dan tukar dengan kotak lainnya";
+                else
+                    instructionText.text = "";
+            }
 
         BuildGrid(puzzleTexture);
 
@@ -408,8 +421,9 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         panelImage.color = Color.white;
         panelImage.raycastTarget = true;
 
-        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 270f), new Vector2(500f, 50f), 28f, TextAlignmentOptions.Center);
-        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 220f), new Vector2(160f, 48f), 34f, TextAlignmentOptions.Center);
+        titleText = CreateText(panelObject.transform, "TitleText", new Vector2(0f, 270f), new Vector2(500f, 50f), 25f, TextAlignmentOptions.Center);
+        timerText = CreateText(panelObject.transform, "TimerText", new Vector2(0f, 230f), new Vector2(160f, 48f), 30f, TextAlignmentOptions.Center);
+        instructionText = CreateText(panelObject.transform, "InstructionText", new Vector2(0f, 200), new Vector2(500f, 40f), 20f, TextAlignmentOptions.Center, "");
 
         GameObject gridObject = new GameObject("GridContainer", typeof(RectTransform), typeof(GridLayoutGroup));
         gridObject.transform.SetParent(panelObject.transform, false);
@@ -417,8 +431,15 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         gridRect.anchorMin = new Vector2(0.5f, 0.5f);
         gridRect.anchorMax = new Vector2(0.5f, 0.5f);
         gridRect.pivot = new Vector2(0.5f, 0.5f);
-        gridRect.anchoredPosition = new Vector2(0f, -35f);
+        gridRect.anchoredPosition = new Vector2(0f, -60f); // geser ke bawah
+        gridRect.sizeDelta = new Vector2(380f, 380f); // lebih kecil
         gridContainer = gridObject.transform;
+
+        GridLayoutGroup gridLayout = gridObject.GetComponent<GridLayoutGroup>();
+        gridLayout.cellSize = new Vector2(100f, 100f); // ukuran tile
+        gridLayout.spacing = new Vector2(6f, 6f);
+        gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        gridLayout.constraintCount = gridSize;
 
     }
 
@@ -435,7 +456,7 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         image.raycastTarget = true;
     }
 
-    private TextMeshProUGUI CreateText(Transform parent, string objectName, Vector2 anchoredPosition, Vector2 size, float fontSize, TextAlignmentOptions alignment)
+    private TextMeshProUGUI CreateText(Transform parent, string objectName, Vector2 anchoredPosition, Vector2 size, float fontSize, TextAlignmentOptions alignment, string defaultText = "")
     {
         GameObject textObject = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
         textObject.transform.SetParent(parent, false);
