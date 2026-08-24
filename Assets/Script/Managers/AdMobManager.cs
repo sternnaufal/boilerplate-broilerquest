@@ -16,7 +16,7 @@ namespace BroilerQuest.Managers
         [SerializeField] private AdPosition _bannerPosition = AdPosition.Bottom;
 
         [Header("Native Overlay Settings")]
-        [SerializeField] private bool _showNativeOverlay = true;
+        [SerializeField] private bool _showNativeOverlay = false;
         [SerializeField] private AdPosition _nativeOverlayPosition = AdPosition.Bottom;
 
         private BannerView _bannerView;
@@ -121,7 +121,7 @@ namespace BroilerQuest.Managers
 
             Debug.Log($"[AdMobManager] Loading banner ad with ID: {adUnitId}");
 
-            _bannerView = new BannerView(adUnitId, AdSize.Banner, _bannerPosition);
+            _bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom);
 
             _bannerView.OnBannerAdLoaded += () =>
             {

@@ -8,7 +8,7 @@ namespace BroilerQuest.Managers
     {
         [Header("Settings")]
         [SerializeField] private bool _showBanner = true;
-        [SerializeField] private bool _showNativeOverlay = true;
+        [SerializeField] private bool _showNativeOverlay = false;
         [SerializeField] private AdPosition _bannerPosition = AdPosition.Bottom;
         [SerializeField] private AdPosition _nativeOverlayPosition = AdPosition.Bottom;
 
