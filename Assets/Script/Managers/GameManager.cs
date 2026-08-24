@@ -129,6 +129,10 @@ public class GameManager : Singleton<GameManager>
         if (!isGameActive) return;
         SaveManager.SaveAll();
         isGameActive = false;
+
+        if (DemoModeConfig.IsDemoMode)
+            SaveManager.ResetDataForDemoMode();
+
         if (SFXManager.Instance != null) SFXManager.Instance.PlayTimeUp();
         isPopupShowing = true;
         GameStateManager.TrySetGameState(GameState.GameOver);

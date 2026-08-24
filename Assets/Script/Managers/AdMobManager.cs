@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using GoogleMobileAds.Api;
+using GoogleMobileAds.Common;
 
 namespace BroilerQuest.Managers
 {
@@ -12,11 +14,10 @@ namespace BroilerQuest.Managers
         [Header("Banner Settings")]
         [SerializeField] private bool _showBanner = true;
         [SerializeField] private AdPosition _bannerPosition = AdPosition.Bottom;
-        
+
         [Header("Native Overlay Settings")]
         [SerializeField] private bool _showNativeOverlay = true;
         [SerializeField] private AdPosition _nativeOverlayPosition = AdPosition.Bottom;
-        [SerializeField] private NativeTemplateID _nativeTemplateId = NativeTemplateID.Medium;
 
         private BannerView _bannerView;
         private NativeOverlayAd _nativeOverlayAd;
@@ -32,10 +33,47 @@ namespace BroilerQuest.Managers
 
             _instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            DestroyBannerAd();
+            DestroyNativeOverlayAd();
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (DemoModeConfig.IsDemoMode) return;
+
+            if (!_isInitialized)
+            {
+                InitializeMobileAds();
+                return;
+            }
+
+            if (_showBanner)
+            {
+                DestroyBannerAd();
+                LoadBannerAd();
+            }
+
+            if (_showNativeOverlay)
+            {
+                DestroyNativeOverlayAd();
+                LoadNativeOverlayAd();
+            }
         }
 
         private void Start()
         {
+            if (DemoModeConfig.IsDemoMode)
+            {
+                Debug.Log("[AdMobManager] Demo mode aktif — iklan tidak ditampilkan.");
+                return;
+            }
+
             InitializeMobileAds();
         }
 
@@ -56,7 +94,7 @@ namespace BroilerQuest.Managers
                 {
                     if (_showBanner)
                         LoadBannerAd();
-                    
+
                     if (_showNativeOverlay)
                         LoadNativeOverlayAd();
                 });
@@ -65,6 +103,8 @@ namespace BroilerQuest.Managers
 
         private void LoadBannerAd()
         {
+            if (DemoModeConfig.IsDemoMode) return;
+
 #if UNITY_ANDROID
             string adUnitId = "ca-app-pub-3940256099942544/6300978111";
 #elif UNITY_IOS
@@ -73,7 +113,6 @@ namespace BroilerQuest.Managers
             string adUnitId = "unexpected_platform";
 #endif
 
-            // Clean up existing banner
             if (_bannerView != null)
             {
                 _bannerView.Destroy();
@@ -104,6 +143,8 @@ namespace BroilerQuest.Managers
 
         private void LoadNativeOverlayAd()
         {
+            if (DemoModeConfig.IsDemoMode) return;
+
 #if UNITY_ANDROID
             string adUnitId = "ca-app-pub-3940256099942544/2247696110";
 #elif UNITY_IOS
@@ -112,7 +153,6 @@ namespace BroilerQuest.Managers
             string adUnitId = "unexpected_platform";
 #endif
 
-            // Clean up existing native overlay
             if (_nativeOverlayAd != null)
             {
                 DestroyNativeOverlayAd();
@@ -123,8 +163,8 @@ namespace BroilerQuest.Managers
             var adRequest = new AdRequest();
             var options = new NativeAdOptions
             {
-                AdChoicesPosition = AdChoicesPlacement.TopRightCorner,
-                MediaAspectRatio = NativeMediaAspectRatio.Any,
+                AdChoicesPlacement = AdChoicesPlacement.TopRightCorner,
+                MediaAspectRatio = MediaAspectRatio.Any,
             };
 
             NativeOverlayAd.Load(adUnitId, adRequest, options,
@@ -185,40 +225,17 @@ namespace BroilerQuest.Managers
         {
             if (_nativeOverlayAd == null) return;
 
-            var style = new NativeTemplateStyle
-            {
-                TemplateID = _nativeTemplateId,
-                MainBackgroundColor = new Color(0f, 0f, 0f, 0.8f),
-                CallToActionText = new NativeTemplateTextStyles
-                {
-                    BackgroundColor = new Color(0.2f, 0.6f, 1f, 1f),
-                    FontColor = Color.white,
-                    FontSize = 12,
-                    Style = NativeTemplateFontStyle.Bold
-                },
-                PrimaryText = new NativeTemplateTextStyles
-                {
-                    FontColor = Color.white,
-                    FontSize = 14,
-                    Style = NativeTemplateFontStyle.Normal
-                },
-                SecondaryText = new NativeTemplateTextStyles
-                {
-                    FontColor = new Color(0.8f, 0.8f, 0.8f, 1f),
-                    FontSize = 11,
-                    Style = NativeTemplateFontStyle.Normal
-                }
-            };
-
             Debug.Log("[AdMobManager] Rendering Native Overlay ad at bottom.");
-            _nativeOverlayAd.RenderTemplate(style, _nativeOverlayPosition);
+            _nativeOverlayAd.RenderTemplate(new NativeTemplateStyle(), _nativeOverlayPosition);
             _nativeOverlayAd.Show();
         }
 
         public void ShowBanner(bool show = true)
         {
             _showBanner = show;
-            
+
+            if (DemoModeConfig.IsDemoMode) return;
+
             if (_bannerView != null)
             {
                 if (show)
@@ -235,6 +252,8 @@ namespace BroilerQuest.Managers
         public void ShowNativeOverlay(bool show = true)
         {
             _showNativeOverlay = show;
+
+            if (DemoModeConfig.IsDemoMode) return;
 
             if (_nativeOverlayAd != null)
             {
@@ -271,6 +290,8 @@ namespace BroilerQuest.Managers
 
         public void RefreshBannerAd()
         {
+            if (DemoModeConfig.IsDemoMode) return;
+
             if (_bannerView != null)
             {
                 _bannerView.LoadAd(new AdRequest());
@@ -283,11 +304,13 @@ namespace BroilerQuest.Managers
 
         public void RefreshNativeOverlayAd()
         {
+            if (DemoModeConfig.IsDemoMode) return;
+
             if (_nativeOverlayAd != null)
             {
                 DestroyNativeOverlayAd();
             }
-            
+
             if (_isInitialized)
             {
                 LoadNativeOverlayAd();
@@ -308,34 +331,17 @@ namespace BroilerQuest.Managers
             _nativeOverlayPosition = position;
             if (_nativeOverlayAd != null)
             {
-                // Native overlay position is set during RenderTemplate
                 RenderAndShowNativeOverlay();
             }
-        }
-
-        public void SetNativeTemplate(NativeTemplateID templateId)
-        {
-            _nativeTemplateId = templateId;
-            if (_nativeOverlayAd != null)
-            {
-                RenderAndShowNativeOverlay();
-            }
-        }
-
-        private void OnDestroy()
-        {
-            DestroyBannerAd();
-            DestroyNativeOverlayAd();
         }
 
         private void OnApplicationPause(bool pauseStatus)
         {
-            if (!pauseStatus && _isInitialized)
+            if (!pauseStatus && _isInitialized && !DemoModeConfig.IsDemoMode)
             {
-                // App resumed, refresh ads if needed
                 if (_showBanner && _bannerView == null)
                     LoadBannerAd();
-                
+
                 if (_showNativeOverlay && _nativeOverlayAd == null)
                     LoadNativeOverlayAd();
             }
