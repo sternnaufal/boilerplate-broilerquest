@@ -106,9 +106,9 @@ namespace BroilerQuest.Managers
             if (DemoModeConfig.IsDemoMode) return;
 
 #if UNITY_ANDROID
-            string adUnitId = "ca-app-pub-3940256099942544/6300978111";
+            string adUnitId = "ca-app-pub-5735182625942530/5477558464";
 #elif UNITY_IOS
-            string adUnitId = "ca-app-pub-3940256099942544/2934735716";
+            string adUnitId = "ca-app-pub-5735182625942530/5477558464";
 #else
             string adUnitId = "unexpected_platform";
 #endif
@@ -146,9 +146,9 @@ namespace BroilerQuest.Managers
             if (DemoModeConfig.IsDemoMode) return;
 
 #if UNITY_ANDROID
-            string adUnitId = "ca-app-pub-3940256099942544/2247696110";
+            string adUnitId = "ca-app-pub-5735182625942530/5477558464";
 #elif UNITY_IOS
-            string adUnitId = "ca-app-pub-3940256099942544/3986624511";
+            string adUnitId = "ca-app-pub-5735182625942530/5477558464";
 #else
             string adUnitId = "unexpected_platform";
 #endif

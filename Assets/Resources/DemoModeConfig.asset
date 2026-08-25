@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b843b0d2f0f14cb4b74d6c1e7c5d6a51, type: 3}
   m_Name: DemoModeConfig
   m_EditorClassIdentifier: 
-  demoModeEnabled: 0
+  demoModeEnabled: 1
