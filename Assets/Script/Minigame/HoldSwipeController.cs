@@ -176,6 +176,13 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
         IHealthCheckListener listener = currentListener;
         currentListener = null;
 
+        bool listenerValid = listener != null && !(listener is UnityEngine.Object obj && obj == null);
+        if (!listenerValid)
+        {
+            GameLog.Warn("DragDropSack: Listener sudah di-destroy, abaikan callback.");
+            return;
+        }
+
         if (success)
         {
             GameLog.Info("HoldSwipe: Berhasil.");
@@ -194,7 +201,7 @@ public class HoldSwipeController : Singleton<HoldSwipeController>, IHealthCheckL
             popupRoot.SetActive(true);
     }
 
-    private void HidePopup()
+    public void HidePopup()
     {
         if (popupRoot != null)
             popupRoot.SetActive(false);

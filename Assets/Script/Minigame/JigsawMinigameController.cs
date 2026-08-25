@@ -340,7 +340,7 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         UIAlertPanel.Instance?.Show(UIAlertPanel.NotificationType.TimeOut);
 
         if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawFail();
-        HealthCheckResultOverlay.ShowFail();
+        //HealthCheckResultOverlay.ShowFail();
         FinishMinigame(false);
     }
 
@@ -356,19 +356,28 @@ public class JigsawMinigameController : Singleton<JigsawMinigameController>
         currentListener = null;
         selectedPiece = null;
 
+        bool listenerValid = listener != null && !(listener is UnityEngine.Object obj && obj == null);
+        if (!listenerValid)
+        {
+            GameLog.Warn("JigsawMinigame: Listener sudah di-destroy, abaikan callback.");
+            return;
+        }
+
         if (success)
         {
+            HealthCheckResultOverlay.ShowSuccess();
             GameLog.Info("JigsawMinigame: Berhasil.");
-            listener?.OnHealthCheckSuccess();
+            listener.OnHealthCheckSuccess();
         }
         else
         {
+            HealthCheckResultOverlay.ShowFail(); 
             GameLog.Info("JigsawMinigame: Gagal.");
-            listener?.OnHealthCheckFailure();
+            listener.OnHealthCheckFailure();
         }
     }
 
-    private void HidePopup()
+    public void HidePopup()
     {
         if (popupRoot == null)
             return;

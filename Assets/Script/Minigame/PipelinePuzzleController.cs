@@ -351,6 +351,13 @@ public class PipelinePuzzleController : Singleton<PipelinePuzzleController>, IHe
         IHealthCheckListener listener = currentListener;
         currentListener = null;
 
+        bool listenerValid = listener != null && !(listener is UnityEngine.Object obj && obj == null);
+        if (!listenerValid)
+        {
+            GameLog.Warn("DragDropSack: Listener sudah di-destroy, abaikan callback.");
+            return;
+        }
+
         if (success)
             listener?.OnHealthCheckSuccess();
         else
@@ -364,7 +371,7 @@ public class PipelinePuzzleController : Singleton<PipelinePuzzleController>, IHe
             child.gameObject.SetActive(true);
     }
 
-    private void HidePopup()
+    public void HidePopup()
     {
         if (popupRoot == null) return;
         foreach (Transform child in popupRoot.transform)

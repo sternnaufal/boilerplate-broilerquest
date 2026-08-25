@@ -258,6 +258,13 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
         IHealthCheckListener listener = currentListener;
         currentListener = null;
 
+        bool listenerValid = listener != null && !(listener is UnityEngine.Object obj && obj == null);
+        if (!listenerValid)
+        {
+            GameLog.Warn("HumidityToggle: Listener sudah di-destroy, abaikan callback.");
+            return;
+        }
+
         if (success)
         {
             GameLog.Info("HumidityToggle: Berhasil.");
@@ -277,7 +284,7 @@ public class HumidityToggleController : Singleton<HumidityToggleController>, IHe
             child.gameObject.SetActive(true);
     }
 
-    private void HidePopup()
+    public void HidePopup()
     {
         if (popupRoot == null) return;
         foreach (Transform child in popupRoot.transform)

@@ -127,6 +127,17 @@ public class GameManager : Singleton<GameManager>
     private void OnTimerUp()
     {
         if (!isGameActive) return;
+
+        JigsawMinigameController.Instance?.HidePopup();
+        MemoryMatchController.Instance?.HidePopup();
+        WiringMinigameController.Instance?.HidePopup();
+        HumidityToggleController.Instance?.HidePopup();
+        PipelinePuzzleController.Instance?.HidePopup();
+        DragDropSackController.Instance?.HidePopup();
+        HoldSwipeController.Instance?.HidePopup();
+
+
+        if (!isGameActive) return;
         SaveManager.SaveAll();
         isGameActive = false;
 

@@ -926,7 +926,7 @@ MonoBehaviour:
   - 120
   - 180
   levelTimer: {fileID: 0}
-  timeUpPopupPrefab: {fileID: 5686620739718393810, guid: e3f959814f1d81344b175c04511ef24b, type: 3}
+  timeUpPopupPrefab: {fileID: 5686620739718393810, guid: acf3dd6fc31d62d4ea1a95a482ab55ad, type: 3}
   mainCanvas: {fileID: 1086103076}
 --- !u!114 &651932098
 MonoBehaviour:

@@ -298,7 +298,7 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
 
         CameraShake.Trigger();
         if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawFail();
-        HealthCheckResultOverlay.ShowFail();
+        //HealthCheckResultOverlay.ShowFail();
         FinishMinigame(false);
     }
 
@@ -314,19 +314,28 @@ public class MemoryMatchController : Singleton<MemoryMatchController>
         firstSelected = null;
         secondSelected = null;
 
+        bool listenerValid = listener != null && !(listener is UnityEngine.Object obj && obj == null);
+        if (!listenerValid)
+        {
+            GameLog.Warn("MemoryMach: Listener sudah di-destroy, abaikan callback.");
+            return;
+        }
+
         if (success)
         {
+            HealthCheckResultOverlay.ShowSuccess();
             GameLog.Info("MemoryMatch: Berhasil.");
             listener?.OnHealthCheckSuccess();
         }
         else
         {
+            HealthCheckResultOverlay.ShowFail(); 
             GameLog.Info("MemoryMatch: Gagal.");
             listener?.OnHealthCheckFailure();
         }
     }
 
-    private void HidePopup()
+    public void HidePopup()
     {
         if (popupRoot == null)
             return;

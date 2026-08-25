@@ -4900,11 +4900,11 @@ PrefabInstance:
     - target: {fileID: 8008893428682441373, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: starterBGM
       value: 
-      objectReference: {fileID: 8300000, guid: 64b712a891efc4b40bf13002666ecf5f, type: 3}
+      objectReference: {fileID: 8300000, guid: 3c9fd19b7741c9a448c16dbf1e4949b0, type: 3}
     - target: {fileID: 8008893428682441373, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: beginnerBGM
       value: 
-      objectReference: {fileID: 8300000, guid: 64b712a891efc4b40bf13002666ecf5f, type: 3}
+      objectReference: {fileID: 8300000, guid: 3c9fd19b7741c9a448c16dbf1e4949b0, type: 3}
     - target: {fileID: 8008893428682441373, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: mainMenuBGM
       value: 
@@ -4920,7 +4920,7 @@ PrefabInstance:
     - target: {fileID: 8008893428682441373, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
       propertyPath: intermediateBGM
       value: 
-      objectReference: {fileID: 8300000, guid: 64b712a891efc4b40bf13002666ecf5f, type: 3}
+      objectReference: {fileID: 8300000, guid: 3c9fd19b7741c9a448c16dbf1e4949b0, type: 3}
     m_RemovedComponents:
     - {fileID: 7139697148102350401, guid: 7380b44ba7f26d648b89c8441bb76252, type: 3}
     m_RemovedGameObjects: []

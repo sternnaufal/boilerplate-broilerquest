@@ -157,9 +157,9 @@ MonoBehaviour:
   defaultFadeDuration: 1
   mainMenuBGM: {fileID: 0}
   levelSelectBGM: {fileID: 0}
-  starterBGM: {fileID: 0}
-  beginnerBGM: {fileID: 0}
-  intermediateBGM: {fileID: 0}
+  starterBGM: {fileID: 8300000, guid: 3c9fd19b7741c9a448c16dbf1e4949b0, type: 3}
+  beginnerBGM: {fileID: 8300000, guid: 3c9fd19b7741c9a448c16dbf1e4949b0, type: 3}
+  intermediateBGM: {fileID: 8300000, guid: 3c9fd19b7741c9a448c16dbf1e4949b0, type: 3}
   koleksiIoTBGM: {fileID: 0}
 --- !u!114 &7156035242539575423
 MonoBehaviour:

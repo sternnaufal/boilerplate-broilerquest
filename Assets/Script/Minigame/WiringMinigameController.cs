@@ -406,7 +406,7 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
 
         CameraShake.Trigger();
         if (SFXManager.Instance != null) SFXManager.Instance.PlayJigsawFail();
-        HealthCheckResultOverlay.ShowFail();
+        //HealthCheckResultOverlay.ShowFail();
         FinishMinigame(false);
     }
 
@@ -423,13 +423,22 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
         hoveredRightNode = null;
         DestroyTempLine();
 
+        bool listenerValid = listener != null && !(listener is UnityEngine.Object obj && obj == null);
+        if (!listenerValid)
+        {
+            GameLog.Warn("WiringMinigame: Listener sudah di-destroy, abaikan callback.");
+            return;
+        }
+
         if (success)
         {
+            HealthCheckResultOverlay.ShowSuccess();
             GameLog.Info("WiringMinigame: Berhasil.");
             listener?.OnHealthCheckSuccess();
         }
         else
         {
+            HealthCheckResultOverlay.ShowFail(); 
             GameLog.Info("WiringMinigame: Gagal.");
             listener?.OnHealthCheckFailure();
         }
@@ -442,7 +451,7 @@ public class WiringMinigameController : Singleton<WiringMinigameController>
             child.gameObject.SetActive(true);
     }
 
-    private void HidePopup()
+    public void HidePopup()
     {
         if (popupRoot == null) return;
         foreach (Transform child in popupRoot.transform)
